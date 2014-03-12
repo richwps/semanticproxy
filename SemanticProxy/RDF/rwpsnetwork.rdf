@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:rwps="http://localhost:4567/semanticproxy/resources/vocab#">
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#network"/>
+		<rwps:domain>Some string</rwps:domain>
+		<rwps:owner>Max Mustermann</rwps:owner>
+		<rwps:wps rdf:resource="http://localhost:4567/semanticproxy/resources/wps/wps1"/>
+		<rwps:wps rdf:resource="http://localhost:4567/semanticproxy/resources/wps/wps2"/>
+	</rdf:Description>
+
+</rdf:RDF>
