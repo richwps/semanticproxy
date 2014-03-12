@@ -34,7 +34,7 @@ public class CreateAccess {
                     }
                 }
                 else{
-                    response.status(400);
+                    response.status(415);
                     return "Format not supported, use application/xml+rdf";
                 }
                 
@@ -57,7 +57,7 @@ public class CreateAccess {
                     }
                 }
                 else{
-                    response.status(400);
+                    response.status(415);
                     return "Format not supported, use application/xml+rdf";
                 }
                 
