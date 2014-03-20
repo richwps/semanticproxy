@@ -26,10 +26,12 @@ public class Vocabulary {
     public static final String WSDL = VOC+"wsdl";
     public static final String StoreSupported = VOC+"storesupported";
     public static final String StatusSupported = VOC+"statussupported";
+    public static final String WPS = VOC+"wps";
     
     //wps vocabulary
     public static final String WPSType = VOC+"wpsclass";
     public static final String Endpoint = VOC+"endpoint";
+    public static final String Process = VOC+"process";
     
     
     public static boolean isBasicPredicate(String sample){

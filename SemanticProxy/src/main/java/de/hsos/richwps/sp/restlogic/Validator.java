@@ -22,15 +22,7 @@ import org.openrdf.rio.helpers.StatementCollector;
 public class Validator {
    
             
-    public static ValidationResult checkForInsertProcess(String rdfXml) throws Exception{
-        RDFParser rdfParser = Rio.createParser(RDFFormat.RDFXML);
-        ArrayList<Statement> inputList = new ArrayList<Statement>();
-        rdfParser.setRDFHandler(new StatementCollector(inputList));
-        try{
-            rdfParser.parse(new StringReader(rdfXml), URIConfiguration.RESOURCES_URI);
-        }catch(IOException e){
-            throw new Exception("Error cannot check rdf"+ e.getMessage());
-        }
+    public static ValidationResult checkForInsertProcess(ArrayList<Statement> inputList) throws Exception{
         ArrayList<Statement>acceptList = new ArrayList<Statement>();
         
         //get the process
@@ -94,8 +86,11 @@ public class Validator {
             return new ValidationResult(false, "0 or 1 status supported allowed");
         shiftStats(inputList, acceptList, stats);
         
-        //wps uplink
-        //gegenseitige Referenzierung
+        //get wps uplink
+        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.WPS, inputList);
+        if(stats.length  !=1)
+            return new ValidationResult(false, "One wps required");
+        shiftStats(inputList, acceptList, stats);
         
         
         //checks...
@@ -104,6 +99,7 @@ public class Validator {
         //check für jeden input ob die attribute in richtiger anzahl vorhanden sind
         
         //mach das gleiche für die outputs
+        
         
         //check for use of basic vocabulary in remaining statements
         for(int i=0; i<inputList.size();i++){
@@ -166,7 +162,7 @@ public class Validator {
         return retList.toArray(new Statement[retList.size()]);
     }
      
-     private static Statement[] getStatementsByPredicate(String subject, ArrayList<Statement> list){
+     public static Statement[] getStatementsByPredicate(String subject, ArrayList<Statement> list){
          ArrayList<Statement> retList = new ArrayList<Statement>();
          for(int i=0; i<list.size(); i++){
             Statement st = list.get(i);
@@ -207,15 +203,8 @@ public class Validator {
     }
 
      
-    public static ValidationResult checkForInsertWPS(String rdfXml) throws Exception {
-        RDFParser rdfParser = Rio.createParser(RDFFormat.RDFXML);
-        ArrayList<Statement> inputList = new ArrayList<Statement>();
-        rdfParser.setRDFHandler(new StatementCollector(inputList));
-        try{
-            rdfParser.parse(new StringReader(rdfXml), URIConfiguration.RESOURCES_URI);
-        }catch(IOException e){
-            throw new Exception("Error cannot check rdf"+ e.getMessage());
-        }
+     
+    public static ValidationResult checkForInsertWPS(ArrayList<Statement>inputList) throws Exception {
         ArrayList<Statement>acceptList = new ArrayList<Statement>();
         
         //get the wps

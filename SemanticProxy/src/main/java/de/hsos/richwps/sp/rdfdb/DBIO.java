@@ -17,7 +17,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import org.openrdf.model.Resource;
+import org.openrdf.model.Statement;
 import org.openrdf.model.Value;
+import org.openrdf.model.impl.LiteralImpl;
+import org.openrdf.model.impl.StatementImpl;
+import org.openrdf.model.impl.URIImpl;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryEvaluationException;
@@ -359,6 +363,27 @@ public class DBIO {
             throw new Exception("Cannot check if subject "+subject+" exists, " + e.toString() + " " + e.getMessage());
         } catch (QueryEvaluationException e) {
             throw new Exception("Cannot check if subject "+subject+" exists, " + e.toString() + " " + e.getMessage());
+        }
+    }
+    
+    public static void insertTriple(Triple triple) throws Exception{
+        Repository repo = SesameProperties.getInstance().getRepository();
+        if (repo == null) {
+            throw new Exception("Cannot insert triple into sesame RDF-DB, not connected.");
+        }
+        Resource[] resArr = new Resource[0];
+        try {
+            RepositoryConnection con = repo.getConnection();
+            Resource subject = new URIImpl(triple.getSubject().toString());
+            org.openrdf.model.URI predicate = new URIImpl(triple.getPredicate().toString());
+            Value obj = new LiteralImpl(triple.getObjectAsLiteral());
+            Statement st = new StatementImpl(subject, predicate, obj);
+            con.add(st, resArr);
+            con.close();
+        } catch (RepositoryException e) {
+            throw new Exception("Cannot load rdf/xml string into sesame RDF-DB, not connected or not writable.");
+        } catch (UnsupportedRDFormatException e) {
+            throw new Exception("Cannot load rdf/xml string into sesame RDF-DB, " + e.getMessage());
         }
     }
     
