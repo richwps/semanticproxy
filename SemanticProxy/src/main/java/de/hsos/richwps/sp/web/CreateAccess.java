@@ -25,9 +25,9 @@ public class CreateAccess {
                 if(request.contentType().equalsIgnoreCase("application/xml+rdf")){
                     String body = request.body();
                     try{
-                        ContentChanger.pushRawRDFintoDB(body);
+                        ContentChanger.pushProcessRDFintoDB(body);
                         response.status(201);
-                        return "Resource created";
+                        return "Process created";
                     }catch(Exception e){
                         response.status(500);
                         return "Error, "+e.getMessage();
@@ -48,9 +48,9 @@ public class CreateAccess {
                 if(request.contentType().equalsIgnoreCase("application/xml+rdf")){
                     String body = request.body();
                     try{
-                        ContentChanger.pushRawRDFintoDB(body);
+                        ContentChanger.pushWPSRDFintoDB(body);
                         response.status(201);
-                        return "Resource created";
+                        return "WPS created";
                     }catch(Exception e){
                         response.status(500);
                         return "Error, "+e.getMessage();

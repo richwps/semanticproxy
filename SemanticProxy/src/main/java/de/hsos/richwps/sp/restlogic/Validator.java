@@ -5,7 +5,6 @@
 package de.hsos.richwps.sp.restlogic;
 
 import de.hsos.richwps.sp.rdfdb.DBIO;
-import de.hsos.richwps.sp.types.RDFDescription;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
@@ -21,22 +20,6 @@ import org.openrdf.rio.helpers.StatementCollector;
  * @author fbensman
  */
 public class Validator {
-    private static final String RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-    private static final String RDFS="http://www.w3.org/2000/01/rdf-schema#";
-    private static final String VOC="http://localhost:4567/semanticproxy/resources/vocab#";
-    
-    private static String vocType = RDF+"type";
-    private static String vocProcessType = VOC+"process";
-    private static String vocIdentifier = VOC+"identifier";
-    private static String vocTitle = VOC+"title";
-    private static String vocAbstract = VOC+"abstract";
-    private static String vocProcessVersion = VOC+"processversion";
-    private static String vocMetadata = VOC+"metadata";
-    private static String vocProfile = VOC+"profile";
-    private static String vocWSDL = VOC+"wsdl";
-    private static String vocStoreSupported = VOC+"storesupported";
-    private static String vocStatusSupported = VOC+"statussupported";
-    
    
             
     public static ValidationResult checkForInsertProcess(String rdfXml) throws Exception{
@@ -51,7 +34,7 @@ public class Validator {
         ArrayList<Statement>acceptList = new ArrayList<Statement>();
         
         //get the process
-        Statement[] stats= getStatementsByPredicateAndObject(vocType,vocProcessType, inputList);
+        Statement[] stats= getStatementsByPredicateAndObject(Vocabulary.Type,Vocabulary.ProcessType, inputList);
         if(stats.length != 1)
             return new ValidationResult(false, "Just one process allowed");
         shiftStats(inputList, acceptList, stats);
@@ -69,48 +52,66 @@ public class Validator {
         }
         
         //get identifier
-        stats = getStatementsBySubjectAndPredicate(processId, vocIdentifier, inputList);
+        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.Identifier, inputList);
         if(stats.length != 1)
             return new ValidationResult(false, "More than one process identifier found");
         shiftStats(inputList, acceptList, stats);
         
         //get title
-        stats = getStatementsBySubjectAndPredicate(processId, vocTitle, inputList);
+        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.Title, inputList);
         if(stats.length != 1)
             return new ValidationResult(false, "More than one process title found");
         shiftStats(inputList, acceptList, stats);
         
         //get abstract
-        stats = getStatementsBySubjectAndPredicate(processId, vocAbstract, inputList);
+        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.Abstract, inputList);
         if(stats.length > 1)
             return new ValidationResult(false, "More than one 0 or 1 abstracts found");
         shiftStats(inputList, acceptList, stats);
             
         
         //get process version
-        stats = getStatementsBySubjectAndPredicate(processId, vocProcessVersion, inputList);
+        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.ProcessVersion, inputList);
         if(stats.length != 1)
             return new ValidationResult(false, "1 process version required");
         shiftStats(inputList, acceptList, stats);
         
         //get wsdl
-        stats = getStatementsBySubjectAndPredicate(processId, vocWSDL, inputList);
+        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.WSDL, inputList);
         if(stats.length > 1)
             return new ValidationResult(false, "0 or 1 wsdl allowed");
         shiftStats(inputList, acceptList, stats);
         
         //get store supported
-        stats = getStatementsBySubjectAndPredicate(processId, vocStoreSupported, inputList);
+        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.StoreSupported, inputList);
         if(stats.length > 1)
             return new ValidationResult(false, "0 or 1 store supported allowed");
         shiftStats(inputList, acceptList, stats);
         
         //get status supported
-        stats = getStatementsBySubjectAndPredicate(processId, vocStatusSupported, inputList);
+        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.StatusSupported, inputList);
         if(stats.length > 1)
             return new ValidationResult(false, "0 or 1 status supported allowed");
         shiftStats(inputList, acceptList, stats);
         
+        //wps uplink
+        //gegenseitige Referenzierung
+        
+        
+        //checks...
+        //hole alle inputs
+        //check ob alle inputs den prozess beschreiben
+        //check für jeden input ob die attribute in richtiger anzahl vorhanden sind
+        
+        //mach das gleiche für die outputs
+        
+        //check for use of basic vocabulary in remaining statements
+        for(int i=0; i<inputList.size();i++){
+            Statement st = inputList.get(i);
+            String pred = st.getPredicate().stringValue();
+            if(Vocabulary.isBasicPredicate(pred))
+                return new ValidationResult(false, "Unproper use of basic vocabulary");
+        }
         
         return new ValidationResult(true, "No error");
         
@@ -203,6 +204,61 @@ public class Validator {
                 retList.add(st);
         }
         return retList.toArray(new Statement[retList.size()]);
+    }
+
+     
+    public static ValidationResult checkForInsertWPS(String rdfXml) throws Exception {
+        RDFParser rdfParser = Rio.createParser(RDFFormat.RDFXML);
+        ArrayList<Statement> inputList = new ArrayList<Statement>();
+        rdfParser.setRDFHandler(new StatementCollector(inputList));
+        try{
+            rdfParser.parse(new StringReader(rdfXml), URIConfiguration.RESOURCES_URI);
+        }catch(IOException e){
+            throw new Exception("Error cannot check rdf"+ e.getMessage());
+        }
+        ArrayList<Statement>acceptList = new ArrayList<Statement>();
+        
+        //get the wps
+        Statement[] stats= getStatementsByPredicateAndObject(Vocabulary.Type,Vocabulary.WPSType, inputList);
+        if(stats.length != 1)
+            return new ValidationResult(false, "One WPS required");
+        shiftStats(inputList, acceptList, stats);
+        
+        String wpsId = stats[0].getSubject().stringValue();
+        
+        //check if process already exists
+        if(DBIO.subjectExists(new URI(wpsId))){
+             return new ValidationResult(false, "WPS already exists");
+        }
+        
+        //check if name correct
+        if(!wpsId.startsWith(URIConfiguration.RESOURCES_URI)){
+            return new ValidationResult(false, "WPS does not fit into naming schema");
+        }
+        
+        //get endpoint
+        stats = getStatementsBySubjectAndPredicate(wpsId, Vocabulary.Endpoint, inputList);
+        if(stats.length != 1)
+            return new ValidationResult(false, "More than one wps endpoint found");
+        shiftStats(inputList, acceptList, stats);
+        
+        
+        //get the process
+        stats= getStatementsByPredicateAndObject(Vocabulary.Type,Vocabulary.ProcessType, inputList);
+        if(stats.length >0)
+            return new ValidationResult(false, "No process allowed at this point");
+        shiftStats(inputList, acceptList, stats);
+        
+        //check for use of basic vocabulary in remaining statements
+        for(int i=0; i<inputList.size();i++){
+            Statement st = inputList.get(i);
+            String pred = st.getPredicate().stringValue();
+            if(Vocabulary.isBasicPredicate(pred))
+                return new ValidationResult(false, "Unproper use of basic vocabulary");
+        }
+        
+        return new ValidationResult(true, "No error");
+        
     }
      
      

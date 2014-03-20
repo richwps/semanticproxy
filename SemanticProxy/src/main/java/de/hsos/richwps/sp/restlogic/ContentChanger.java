@@ -17,12 +17,12 @@ public class ContentChanger {
     
     
     
-    public static void pushRawRDFintoDB(String rawRDF)throws Exception{
+    public static void pushProcessRDFintoDB(String rawRDF)throws Exception{
         ValidationResult result = Validator.checkForInsertProcess(rawRDF);
         if(result.result)
             DBIO.loadRDFXMLStringIntoDB(rawRDF);
         else{
-            throw new Exception("Error cannot push rdf into db, data malformed: "+result.message);
+            throw new Exception("Error cannot push process rdf into db, data malformed: "+result.message);
         }
     }
     
@@ -34,6 +34,15 @@ public class ContentChanger {
      */
     public static void deleteTriples(String rawRDF) throws Exception{
         DBDelete.deleteTriples(rawRDF);
+    }
+
+    public static void pushWPSRDFintoDB(String rawRDF) throws Exception{
+        ValidationResult result = Validator.checkForInsertWPS(rawRDF);
+        if(result.result)
+            DBIO.loadRDFXMLStringIntoDB(rawRDF);
+        else{
+            throw new Exception("Error cannot push wps rdf into db, data malformed: "+result.message);
+        }
     }
     
     
