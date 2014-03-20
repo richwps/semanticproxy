@@ -10,7 +10,7 @@
 		<rwps:title>Process A</rwps:title>
 		<rwps:abstract>This is the process A</rwps:abstract>
 		<rwps:processversion>v0.1</rwps:processversion>
-		<rwps:process rdf:resource="http://localhost:4567/semanticproxy/resources/wps/wpsA"/>
+		<rwps:wps rdf:resource="http://localhost:4567/semanticproxy/resources/wps/wpsA"/>
 	</rdf:Description>
 	
 	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/process/processB">
@@ -19,7 +19,7 @@
 		<rwps:title>Process B</rwps:title>
 		<rwps:abstract>This is the process B</rwps:abstract>
 		<rwps:processversion>v0.1</rwps:processversion>
-		<rwps:process rdf:resource="http://localhost:4567/semanticproxy/resources/wps/wpsA"/>
+		<rwps:wps rdf:resource="http://localhost:4567/semanticproxy/resources/wps/wpsA"/>
 	</rdf:Description>
 	
 	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/process/processC">
@@ -28,7 +28,7 @@
 		<rwps:title>Process C</rwps:title>
 		<rwps:abstract>This is the process C</rwps:abstract>
 		<rwps:processversion>v0.1</rwps:processversion>
-		<rwps:process rdf:resource="http://localhost:4567/semanticproxy/resources/wps/wpsB"/>
+		<rwps:wps rdf:resource="http://localhost:4567/semanticproxy/resources/wps/wpsB"/>
 	</rdf:Description>
 	
 	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/process/processD">
@@ -37,7 +37,7 @@
 		<rwps:title>Process D</rwps:title>
 		<rwps:abstract>This is the process D</rwps:abstract>
 		<rwps:processversion>v0.1</rwps:processversion>
-		<rwps:process rdf:resource="http://localhost:4567/semanticproxy/resources/wps/wpsB"/>
+		<rwps:wps rdf:resource="http://localhost:4567/semanticproxy/resources/wps/wpsB"/>
 	</rdf:Description>
 
 </rdf:RDF>

@@ -13,8 +13,17 @@ import de.hsos.richwps.sp.rdfdb.DBIO;
  */
 public class ContentChanger {
     
+    
+    
+    
+    
     public static void pushRawRDFintoDB(String rawRDF)throws Exception{
-        DBIO.loadRDFXMLStringIntoDB(rawRDF);
+        ValidationResult result = Validator.checkForInsertProcess(rawRDF);
+        if(result.result)
+            DBIO.loadRDFXMLStringIntoDB(rawRDF);
+        else{
+            throw new Exception("Error cannot push rdf into db, data malformed: "+result.message);
+        }
     }
     
     
@@ -26,6 +35,8 @@ public class ContentChanger {
     public static void deleteTriples(String rawRDF) throws Exception{
         DBDelete.deleteTriples(rawRDF);
     }
+    
+    
     
     
 }

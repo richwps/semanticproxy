@@ -325,4 +325,41 @@ public class DBIO {
         return subjectList;
     }
     
+    
+    /**
+     * Queries all subject of the given resource from the db
+     * @param type URI of type to look for
+     * @return List of Subject URIs
+     * @throws Exception When the db is not accessable
+     */
+    public static boolean subjectExists(URI subject) throws Exception {
+        Repository repo = SesameProperties.getInstance().getRepository();
+        if (repo == null) {
+            throw new Exception("Cannot check if subject exists, not connected.");
+        }
+        String rdfType = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+        String queryString = "SELECT ?s WHERE { <"+subject+"> ?a ?b } ";
+        TupleQueryResult result = null;
+        RepositoryConnection con = null;
+        try {
+            con = repo.getConnection();
+            TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
+            result = tupleQuery.evaluate();
+            if(result.hasNext()){
+                return true;
+            }
+            return false;
+        } catch (RepositoryException e) {
+            throw new Exception("Cannot check if subject "+subject+" exists, unknown connection error.");
+        } catch (IllegalArgumentException e) {
+            throw new Exception("Cannot check if subject "+subject+" exists, " + e.toString() + " " + e.getMessage());
+        } catch (MalformedQueryException e) {
+            throw new Exception("Cannot check if subject "+subject+" exists, " + e.toString() + " " + e.getMessage());
+        } catch (UnsupportedQueryLanguageException e) {
+            throw new Exception("Cannot check if subject "+subject+" exists, " + e.toString() + " " + e.getMessage());
+        } catch (QueryEvaluationException e) {
+            throw new Exception("Cannot check if subject "+subject+" exists, " + e.toString() + " " + e.getMessage());
+        }
+    }
+    
 }
