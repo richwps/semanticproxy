@@ -376,7 +376,11 @@ public class DBIO {
             RepositoryConnection con = repo.getConnection();
             Resource subject = new URIImpl(triple.getSubject().toString());
             org.openrdf.model.URI predicate = new URIImpl(triple.getPredicate().toString());
-            Value obj = new LiteralImpl(triple.getObjectAsLiteral());
+            Value obj = null;
+            if(triple.getObjectAsLiteral()==null)
+                obj = new LiteralImpl(triple.getObjectAsResource().toString());
+            else
+                obj = new LiteralImpl(triple.getObjectAsLiteral());
             Statement st = new StatementImpl(subject, predicate, obj);
             con.add(st, resArr);
             con.close();
