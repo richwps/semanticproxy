@@ -4,6 +4,7 @@
  */
 package de.hsos.richwps.sp.web;
 
+import de.hsos.richwps.sp.rdfdb.DBIO;
 import de.hsos.richwps.sp.restlogic.ContentChanger;
 import spark.Request;
 import spark.Response;

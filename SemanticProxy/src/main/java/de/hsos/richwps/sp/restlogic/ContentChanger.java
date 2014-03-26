@@ -6,17 +6,13 @@ package de.hsos.richwps.sp.restlogic;
 
 import de.hsos.richwps.sp.rdfdb.DBDelete;
 import de.hsos.richwps.sp.rdfdb.DBIO;
+import de.hsos.richwps.sp.types.SubjectList;
 import de.hsos.richwps.sp.types.Triple;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
 import java.util.ArrayList;
-import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
-import org.openrdf.model.Value;
-import org.openrdf.model.impl.LiteralImpl;
-import org.openrdf.model.impl.StatementImpl;
-import org.openrdf.model.impl.URIImpl;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParser;
 import org.openrdf.rio.Rio;
@@ -57,8 +53,16 @@ public class ContentChanger {
      * @param rawRDF An xml/rdf conform document
      * @throws Exception When db cannot be accessed
      */
-    public static void deleteTriples(String rawRDF) throws Exception{
-        DBDelete.deleteTriples(rawRDF);
+    public static boolean deleteProcess(String route) throws Exception{
+        String fullRoute = URIConfiguration.HOST_URI+route;
+        URI process = new URI(fullRoute);
+        SubjectList list = DBIO.getAllSubjectsForType(new URI(Vocabulary.ProcessClass));
+        if(DBIO.subjectExists(process)){
+            DBDelete.deleteProcess(fullRoute);
+            return true;
+        }
+        else
+            return false;
     }
 
     public static void pushWPSRDFintoDB(String rawRDF) throws Exception{

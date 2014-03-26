@@ -5,10 +5,12 @@
 package de.hsos.richwps.sp.rdfdb;
 
 import de.hsos.richwps.sp.restlogic.URIConfiguration;
+import de.hsos.richwps.sp.restlogic.Vocabulary;
 import de.hsos.richwps.sp.types.RDFDescription;
 import de.hsos.richwps.sp.types.RDFDocument;
 import de.hsos.richwps.sp.types.SubjectList;
 import de.hsos.richwps.sp.types.Triple;
+import info.aduna.iteration.Iterations;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
@@ -16,6 +18,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.Value;
@@ -32,6 +35,7 @@ import org.openrdf.query.UnsupportedQueryLanguageException;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
+import org.openrdf.repository.RepositoryResult;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParseException;
 import org.openrdf.rio.UnsupportedRDFormatException;
@@ -257,7 +261,7 @@ public class DBIO {
      * @param str The URL to check
      * @return True if str is a sufficient URL, false if not
      */
-    private static boolean isRDFConformURL(String str) {
+    public static boolean isRDFConformURL(String str) {
         try {
             URL url = new URL(str);
             String pro = url.getProtocol();
@@ -290,7 +294,7 @@ public class DBIO {
         if (repo == null) {
             throw new Exception("Cannot get all subjects for type" + type + ", not connected.");
         }
-        String rdfType = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+        String rdfType = Vocabulary.Type;//"http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
         String queryString = "SELECT ?s WHERE { ?s <" + rdfType + "> <"+ type+"> } ";
         TupleQueryResult result = null;
         RepositoryConnection con = null;
@@ -341,29 +345,23 @@ public class DBIO {
         if (repo == null) {
             throw new Exception("Cannot check if subject exists, not connected.");
         }
-        String rdfType = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
-        String queryString = "SELECT ?s WHERE { <"+subject+"> ?a ?b } ";
-        TupleQueryResult result = null;
-        RepositoryConnection con = null;
+        String rdfType = Vocabulary.Type;
         try {
-            con = repo.getConnection();
-            TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
-            result = tupleQuery.evaluate();
-            if(result.hasNext()){
-                return true;
-            }
-            return false;
+            RepositoryConnection con = repo.getConnection();
+            Resource process = (Resource)new URIImpl(subject.toString());
+            org.openrdf.model.URI hasType = new URIImpl(Vocabulary.Type);
+            Resource[] res = new Resource[0];
+            boolean has =  con.hasStatement(process, hasType, null, false, res);
+            con.close();
+            return has;
+        
         } catch (RepositoryException e) {
             throw new Exception("Cannot check if subject "+subject+" exists, unknown connection error.");
         } catch (IllegalArgumentException e) {
             throw new Exception("Cannot check if subject "+subject+" exists, " + e.toString() + " " + e.getMessage());
-        } catch (MalformedQueryException e) {
-            throw new Exception("Cannot check if subject "+subject+" exists, " + e.toString() + " " + e.getMessage());
         } catch (UnsupportedQueryLanguageException e) {
             throw new Exception("Cannot check if subject "+subject+" exists, " + e.toString() + " " + e.getMessage());
-        } catch (QueryEvaluationException e) {
-            throw new Exception("Cannot check if subject "+subject+" exists, " + e.toString() + " " + e.getMessage());
-        }
+        } 
     }
     
     public static void insertTriple(Triple triple) throws Exception{

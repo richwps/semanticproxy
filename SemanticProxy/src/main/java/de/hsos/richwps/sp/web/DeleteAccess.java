@@ -4,6 +4,7 @@
  */
 package de.hsos.richwps.sp.web;
 
+import de.hsos.richwps.sp.rdfdb.DBIO;
 import de.hsos.richwps.sp.restlogic.ContentChanger;
 import spark.Request;
 import spark.Response;
@@ -21,22 +22,19 @@ public class DeleteAccess {
          delete(new Route("/semanticproxy/resources/process/*") {
             @Override
             public Object handle(Request request, Response response) {
-                if(request.contentType().equalsIgnoreCase("application/xml+rdf")){
-                    String body = request.body();
                     try{
-                        ContentChanger.deleteTriples(body);
-                        response.status(200);
-                        return "Resources deleted";
+                        if(ContentChanger.deleteProcess(request.pathInfo())){
+                            response.status(200);
+                            return "Resource deleted";
+                        }
+                        else{
+                            response.status(404);
+                            return "Resource not found";
+                        }
                     }catch(Exception e){
                         response.status(500);
                         return "Error, "+e.getMessage();
-                    }
-                }
-                else{
-                    response.status(415);
-                    return "Format not supported, use application/xml+rdf";
-                }
-                
+                    } 
             }
         });
     
