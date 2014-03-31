@@ -67,10 +67,9 @@ public class ContentChanger {
     
     public static boolean deleteWPS(String route) throws Exception{
         String fullRoute = URIConfiguration.HOST_URI+route;
-        URI process = new URI(fullRoute);
-        SubjectList list = DBIO.getAllSubjectsForType(new URI(Vocabulary.ProcessClass));
-        if(DBIO.subjectExists(process)){
-            DBDelete.deleteProcess(fullRoute);
+        URI wps = new URI(fullRoute);
+        if(DBIO.subjectExists(wps)){
+            DBDelete.deleteWPS(fullRoute);
             return true;
         }
         else
@@ -81,9 +80,16 @@ public class ContentChanger {
     public static void pushWPSRDFintoDB(String rawRDF) throws Exception{
         ArrayList<Statement> statList = decomposeIntoStatements(rawRDF);
         ValidationResult result = Validator.checkForInsertWPS(statList);
+        
         if(result.result){
             DBIO.loadRDFXMLStringIntoDB(rawRDF);
             
+            Statement[] stats = Validator.getStatementsByPredicate(Vocabulary.Type, statList);
+            URI subject = new URI(URIConfiguration.RESOURCES_URI);
+            URI predicate = new URI(Vocabulary.WPS);
+            URI object = new URI(stats[0].getSubject().stringValue());
+            Triple inverseTriple = new Triple(subject,predicate,object);
+            DBIO.insertTriple(inverseTriple); 
         }
         else{
             throw new Exception("Error cannot push wps rdf into db, data malformed: "+result.message);

@@ -11,7 +11,7 @@
 		<rwps:processversion>v0.1</rwps:processversion>
 		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/inputs/procEInputA"/>
 		<rwps:output rdf:resource="http://localhost:4567/semanticproxy/resources/outputs/procEOutputA"/>
-		<rwps:wps rdf:resource="http://localhost:4567/semanticproxy/resources/wps/wpsA"/>
+		<rwps:wps rdf:resource="http://localhost:4567/semanticproxy/resources/wps/wpsC"/>
 	</rdf:Description>
 	
 	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/inputs/procEInputA">

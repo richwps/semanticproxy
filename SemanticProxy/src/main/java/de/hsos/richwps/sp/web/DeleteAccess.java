@@ -46,6 +46,7 @@ public class DeleteAccess {
                     try{
                         if(ContentChanger.deleteWPS(request.pathInfo())){
                             response.status(200);
+                            System.out.println(DBIO.getWholeDBContent().rDFXMLRepresentation());
                             return "Resource deleted";
                         }
                         else{

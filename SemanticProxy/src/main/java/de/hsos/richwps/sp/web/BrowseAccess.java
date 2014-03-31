@@ -63,6 +63,7 @@ public class BrowseAccess {
 
         
         
+        
         /**
          * Registers the route for vocabulary query
          */
@@ -85,6 +86,30 @@ public class BrowseAccess {
         
         
 
+        
+        /**
+         * Registers the route for resources
+         */
+        get(new Route("/semanticproxy/resources") {
+            @Override
+            public Object handle(Request request, Response response) {
+                 try {
+                    RDFDocument doc =  RouteMapper.getRDFFor(request.pathInfo());
+                    if(doc.getTripleCount() == 0){
+                        response.status(404);
+                        return "Resource not found";
+                    }
+                    response.status(200);
+                    response.type("application/xml"); //normally +rdf, but download in chrome is annoying
+                    return doc.rDFXMLRepresentation();
+                } catch (Exception e) {
+                    System.out.println("Error, " + e.getMessage());
+                    response.status(500);
+                    return "Error. " + e.getMessage();
+                }
+
+            }
+        });
         
         
         

@@ -4,7 +4,9 @@
  */
 package de.hsos.richwps.sp.rdfdb;
 
+import de.hsos.richwps.sp.restlogic.URIConfiguration;
 import de.hsos.richwps.sp.restlogic.Vocabulary;
+import java.util.Stack;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -38,6 +40,7 @@ public class DBDelete {
         TupleQueryResult result = null;
         RepositoryConnection con = null;
         try {
+            
 //            String queryString = "PREFIX rwps:      <"+Vocabulary.VOC+">\n\n"
 //                    + "SELECT ?o WHERE { <"+URIConfiguration.RESOURCES_URI+"/wps/wpsA> <"+Vocabulary.Process+"> ?o }";
 //            con = repo.getConnection();
@@ -59,7 +62,8 @@ public class DBDelete {
           
             URI isProvidedBy = new URIImpl(Vocabulary.WPS);
             con.remove(process,isProvidedBy, null);
-            delete(process,con);
+            con.close();
+            delete(process);
         } catch (RepositoryException e) {
             throw new Exception("Cannot get all subjects for type" + Vocabulary.ProcessClass + ", unknown connection error.");
         } catch (IllegalArgumentException e) {
@@ -78,29 +82,99 @@ public class DBDelete {
     }
     
     
-    private static void delete(Resource resource, RepositoryConnection con)throws Exception{
+    private static void delete(Resource root)throws Exception{
         
-        //delete everything that points from process and its children
-        RepositoryResult result = con.getStatements(resource, null, null, false);
-        while(result.hasNext()){
-            Statement st= (Statement)result.next();
-            if(DBIO.isRDFConformURL(st.getObject().stringValue())){
-                Resource res = (Resource)new URIImpl(st.getObject().stringValue());
-                delete(res,con);
-            } 
+        //connect to db
+        Repository repo = SesameProperties.getInstance().getRepository();
+        if (repo == null) {
+            throw new Exception("Cannot delete process from sesame RDF-DB, not connected.");
         }
-        result.close();
+        RepositoryConnection con = null;
         
-        //delete everything that points to process and it children
-//        result = con.getStatements(null, null, resource, false);
-//        while(result.hasNext()){
-//            Statement st= (Statement)result.next();
-//            Resource res = (Resource)new URIImpl(st.getSubject().stringValue());
-//            delete(res,con);
-//        }
-//        result.close();
+        try{
+            con = repo.getConnection();
         
-        con.remove(resource,null,null);
+            //create and init stack
+            Stack<Statement> stack = new Stack<Statement>();
+            RepositoryResult result = con.getStatements(root, null, null, false);
+            //add children to stack
+            while(result.hasNext()){
+                stack.push((Statement)result.next());
+            }
+            result.close();
+
+            //depth-first search
+            while( !stack.isEmpty() ){
+               //pop top
+                Statement tmp =  stack.pop(); 
+
+                //get children of tmp
+                if( !isLiteral(tmp.getObject().stringValue())){
+                    Resource resource = (Resource)new URIImpl(tmp.getObject().stringValue());
+                    result = con.getStatements(resource, null, null, false);
+
+                    //add children to stack
+                    while(result.hasNext()){
+                        stack.push((Statement)result.next());
+                    }
+                    result.close();
+                }
+
+                //remove tmp
+                con.remove(tmp);
+            }
+        }finally{
+            con.close();
+        }
+    }
+
+    
+    private static boolean isLiteral(String str){
+        if( DBIO.isRDFConformURL(str)){
+            if( str.startsWith("\"") && str.endsWith("\"")){
+                return true;
+            }
+            else
+                return false;
+        }
+        return true;
+    }
+    
+    
+    public static void deleteWPS(String wpsRoute) throws Exception{
+        Repository repo = SesameProperties.getInstance().getRepository();
+        if (repo == null) {
+            throw new Exception("Cannot delete process from sesame RDF-DB, not connected.");
+        }
+        
+        Resource wps = (Resource)new URIImpl(wpsRoute);
+        RepositoryConnection con = null;
+        
+        try {
+            con = repo.getConnection();
+            URI subject = new URIImpl(URIConfiguration.RESOURCES_URI);
+            URI predicate = new URIImpl(Vocabulary.WPS);
+            URI object = new URIImpl(wpsRoute);
+            con.remove(subject, predicate, object);
+            con.close();
+            
+            delete(wps);
+            
+        } catch (RepositoryException e) {
+            throw new Exception("Cannot get all subjects for type" + Vocabulary.ProcessClass + ", unknown connection error.");
+        } catch (IllegalArgumentException e) {
+            throw new Exception("Cannot get all subjects for type" + Vocabulary.ProcessClass + ", " + e.toString() + " " + e.getMessage());
+        } catch (MalformedQueryException e) {
+            throw new Exception("Cannot get all subjects for type" + Vocabulary.ProcessClass + ", " + e.toString() + " " + e.getMessage());
+        } catch (UnsupportedQueryLanguageException e) {
+            throw new Exception("Cannot get all subjects for type" + Vocabulary.ProcessClass + ", " + e.toString() + " " + e.getMessage());
+        } catch (QueryEvaluationException e) {
+            throw new Exception("Cannot get all subjects for type" + Vocabulary.ProcessClass + ", " + e.toString() + " " + e.getMessage());
+        }  
+         finally{
+            con.close();
+        }
+        
     }
     
 }

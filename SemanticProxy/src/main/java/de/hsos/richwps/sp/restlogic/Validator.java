@@ -336,14 +336,14 @@ public class Validator {
 
      
      
-    public static ValidationResult checkForInsertWPS(ArrayList<Statement>inputList) throws Exception {
-        ArrayList<Statement>acceptList = new ArrayList<Statement>();
+    public static ValidationResult checkForInsertWPS(ArrayList<Statement>openList) throws Exception {
+        ArrayList<Statement>analizedList = new ArrayList<Statement>();
         
         //get the wps
-        Statement[] stats= getStatementsByPredicateAndObject(Vocabulary.Type,Vocabulary.WPSClass, inputList);
+        Statement[] stats= getStatementsByPredicateAndObject(Vocabulary.Type,Vocabulary.WPSClass, openList);
         if(stats.length != 1)
             return new ValidationResult(false, "One WPS required");
-        shiftStats(inputList, acceptList, stats);
+        shiftStats(openList, analizedList, stats);
         
         String wpsId = stats[0].getSubject().stringValue();
         
@@ -358,25 +358,26 @@ public class Validator {
         }
         
         //get endpoint
-        stats = getStatementsBySubjectAndPredicate(wpsId, Vocabulary.Endpoint, inputList);
+        stats = getStatementsBySubjectAndPredicate(wpsId, Vocabulary.Endpoint, openList);
         if(stats.length != 1)
             return new ValidationResult(false, "More than one wps endpoint found");
-        shiftStats(inputList, acceptList, stats);
+        shiftStats(openList, analizedList, stats);
         
         
         //get the process
-        stats= getStatementsByPredicateAndObject(Vocabulary.Type,Vocabulary.ProcessClass, inputList);
+        stats = getStatementsByPredicate(Vocabulary.Process, openList);
         if(stats.length >0)
             return new ValidationResult(false, "No process allowed at this point");
-        shiftStats(inputList, acceptList, stats);
+        shiftStats(openList, analizedList, stats);
         
         //check for use of basic vocabulary in remaining statements
-        for(int i=0; i<inputList.size();i++){
-            Statement st = inputList.get(i);
+        for(int i=0; i<openList.size();i++){
+            Statement st = openList.get(i);
             String pred = st.getPredicate().stringValue();
             if(Vocabulary.isBasicPredicate(pred))
                 return new ValidationResult(false, "Unproper use of basic vocabulary");
         }
+        openList.addAll(analizedList);
         
         return new ValidationResult(true, "No error");
         
