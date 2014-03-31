@@ -56,6 +56,18 @@ public class ContentChanger {
     public static boolean deleteProcess(String route) throws Exception{
         String fullRoute = URIConfiguration.HOST_URI+route;
         URI process = new URI(fullRoute);
+        if(DBIO.subjectExists(process)){
+            DBDelete.deleteProcess(fullRoute);
+            return true;
+        }
+        else
+            return false;
+    }
+    
+    
+    public static boolean deleteWPS(String route) throws Exception{
+        String fullRoute = URIConfiguration.HOST_URI+route;
+        URI process = new URI(fullRoute);
         SubjectList list = DBIO.getAllSubjectsForType(new URI(Vocabulary.ProcessClass));
         if(DBIO.subjectExists(process)){
             DBDelete.deleteProcess(fullRoute);
@@ -64,6 +76,7 @@ public class ContentChanger {
         else
             return false;
     }
+    
 
     public static void pushWPSRDFintoDB(String rawRDF) throws Exception{
         ArrayList<Statement> statList = decomposeIntoStatements(rawRDF);

@@ -12,7 +12,7 @@ public class Vocabulary {
         
     private static final String RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#";
     private static final String RDFS="http://www.w3.org/2000/01/rdf-schema#";
-    private static final String VOC="http://localhost:4567/semanticproxy/resources/vocab#";
+    public static final String VOC="http://localhost:4567/semanticproxy/resources/vocab#";
     
     //predicate ids
     public static final String Type = RDF+"type"; //not basic voc but common rdf

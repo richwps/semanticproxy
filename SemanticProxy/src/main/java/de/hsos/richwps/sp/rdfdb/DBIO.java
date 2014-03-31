@@ -10,7 +10,6 @@ import de.hsos.richwps.sp.types.RDFDescription;
 import de.hsos.richwps.sp.types.RDFDocument;
 import de.hsos.richwps.sp.types.SubjectList;
 import de.hsos.richwps.sp.types.Triple;
-import info.aduna.iteration.Iterations;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
@@ -18,7 +17,6 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.Value;
@@ -35,7 +33,6 @@ import org.openrdf.query.UnsupportedQueryLanguageException;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
-import org.openrdf.repository.RepositoryResult;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParseException;
 import org.openrdf.rio.UnsupportedRDFormatException;
@@ -59,11 +56,11 @@ public class DBIO {
             throw new Exception("Cannot load rdf/xml file into sesame RDF-DB, not connected.");
         }
         Resource[] resArr = new Resource[0];
-
+        RepositoryConnection con = null;
         try {
-            RepositoryConnection con = repo.getConnection();
+            con =  repo.getConnection();
             con.add(file, URIConfiguration.RESOURCES_URI, RDFFormat.RDFXML, resArr);
-            con.close();
+            
         } catch (RepositoryException e) {
             throw new Exception("Cannot load rdf/xml file " + file.getName() + " into sesame RDF-DB, not connected or not writable.");
         } catch (RDFParseException e) {
@@ -72,6 +69,8 @@ public class DBIO {
             throw new Exception("Cannot load rdf/xml file " + file.getName() + " into sesame RDF-DB, " + e.getMessage());
         } catch (IOException e) {
             throw new Exception("Cannot load rdf/xml file " + file.getName() + " into sesame RDF-DB, " + e.getMessage());
+        } finally{
+            con.close();
         }
     }
     
@@ -88,17 +87,18 @@ public class DBIO {
             throw new Exception("Cannot load rdf/xml file into sesame RDF-DB, not connected.");
         }
         Resource[] resArr = new Resource[0];
+        RepositoryConnection con = null;
         try {
-            RepositoryConnection con = repo.getConnection();
-            
+            con = repo.getConnection();
             con.add(new StringReader(str), URIConfiguration.RESOURCES_URI, RDFFormat.RDFXML, resArr);
-            con.close();
         } catch (RepositoryException e) {
             throw new Exception("Cannot load rdf/xml string into sesame RDF-DB, not connected or not writable.");
         } catch (RDFParseException e) {
             throw new Exception("Cannot load rdf/xml string into sesame RDF-DB, " + e.getMessage());
         } catch (UnsupportedRDFormatException e) {
             throw new Exception("Cannot load rdf/xml string into sesame RDF-DB, " + e.getMessage());
+        } finally{
+            con.close();
         }
     }
     
@@ -115,13 +115,16 @@ public class DBIO {
         if (repo == null) {
             throw new Exception("Cannot retrieve size of sesame RDF-DB, not connected.");
         }
+        RepositoryConnection con =null;
         try {
-            RepositoryConnection con = repo.getConnection();
+            con = repo.getConnection();
             long size = con.size();
-            con.close();
             return size;
         } catch (RepositoryException e) {
             throw new Exception("Cannot retrieve size of sesame RDF-DB, unknown connection error.");
+        }
+        finally{
+            con.close();
         }
     }
 
@@ -144,8 +147,35 @@ public class DBIO {
         RepositoryConnection con = null;
         try {
             con = repo.getConnection();
-            TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
+            TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString, URIConfiguration.RESOURCES_URI);
             result = tupleQuery.evaluate();
+            
+            
+            RDFDescription retVal = new RDFDescription(resource);
+            try {
+                while (result.hasNext()) {
+                    BindingSet bindingSet = (BindingSet) result.next();
+                    Value valueOfP = bindingSet.getValue("p");
+                    Value valueOfY = bindingSet.getValue("y");
+                    URI predicate = new URI(valueOfP.stringValue());
+                    Triple triple = null;
+                    if (isRDFConformURL(valueOfY.stringValue())) {
+                        URI objectval = new URI(valueOfY.stringValue());
+                        triple = new Triple(resource, predicate, objectval);
+                    } else {
+                        triple = new Triple(resource, predicate, valueOfY.stringValue());
+                    }
+                    retVal.addTriple(triple);
+                }
+                return retVal;
+            } catch (URISyntaxException e) {
+                throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
+            } catch (Exception e) {
+                throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
+            } finally {
+                result.close();
+            }
+     
         } catch (RepositoryException e) {
             throw new Exception("Cannot get resource description for " + resource + ", unknown connection error.");
         } catch (IllegalArgumentException e) {
@@ -156,35 +186,9 @@ public class DBIO {
             throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
         } catch (QueryEvaluationException e) {
             throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
-        }
-
-        RDFDescription retVal = new RDFDescription(resource);
-        try {
-            while (result.hasNext()) {
-                BindingSet bindingSet = (BindingSet) result.next();
-                Value valueOfP = bindingSet.getValue("p");
-                Value valueOfY = bindingSet.getValue("y");
-                URI predicate = new URI(valueOfP.stringValue());
-                Triple triple = null;
-                if (isRDFConformURL(valueOfY.stringValue())) {
-                    URI objectval = new URI(valueOfY.stringValue());
-                    triple = new Triple(resource, predicate, objectval);
-                } else {
-                    triple = new Triple(resource, predicate, valueOfY.stringValue());
-                }
-                retVal.addTriple(triple);
-                
-                
-            }
-        } catch (URISyntaxException e) {
-            throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
-        } catch (Exception e) {
-            throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
-        } finally {
-            result.close();
+        } finally{
             con.close();
         }
-        return retVal;
     }
 
     /**
@@ -204,8 +208,40 @@ public class DBIO {
         RepositoryConnection con = null;
         try {
             con = repo.getConnection();
-            TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
+            TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString, URIConfiguration.RESOURCES_URI);
             result = tupleQuery.evaluate();
+            
+            RDFDocument retVal = new RDFDocument();
+            try {
+                while (result.hasNext()) {
+                    BindingSet bindingSet = (BindingSet) result.next();
+                    Value valueOfS = bindingSet.getValue("s");
+                    Value valueOfP = bindingSet.getValue("p");
+                    Value valueOfY = bindingSet.getValue("y");
+                    URI subject = new URI(valueOfS.stringValue());
+                    URI predicate = new URI(valueOfP.stringValue());
+                    Triple triple = null;
+                    if (isRDFConformURL(valueOfY.stringValue())) {
+                        URI objectval = new URI(valueOfY.stringValue());
+                        triple = new Triple(subject, predicate, objectval);
+                    } else {
+                        triple = new Triple(subject, predicate, valueOfY.stringValue());
+                    }
+
+                    if (!retVal.acceptsTriple(triple)) {
+                        RDFDescription desc = new RDFDescription(triple.getSubject());
+                        retVal.addDescription(desc);
+                    }
+                    retVal.addTriple(triple);
+                }
+                return retVal; 
+            } catch (URISyntaxException e) {
+                throw new Exception("Cannot get db content, " + e.toString() + " " + e.getMessage());
+            } catch (Exception e) {
+                throw new Exception("Cannot get db content, " + e.toString() + " " + e.getMessage());
+            } finally {
+                result.close(); 
+            } 
         } catch (RepositoryException e) {
             throw new Exception("Cannot get db content, unknown connection error.");
         } catch (IllegalArgumentException e) {
@@ -216,42 +252,12 @@ public class DBIO {
             throw new Exception("Cannot get db content, " + e.toString() + " " + e.getMessage());
         } catch (QueryEvaluationException e) {
             throw new Exception("Cannot get db content, " + e.toString() + " " + e.getMessage());
+        } finally{
+             con.close();
         }
 
 
-        RDFDocument retVal = new RDFDocument();
-        try {
-            while (result.hasNext()) {
-                BindingSet bindingSet = (BindingSet) result.next();
-                Value valueOfS = bindingSet.getValue("s");
-                Value valueOfP = bindingSet.getValue("p");
-                Value valueOfY = bindingSet.getValue("y");
-                URI subject = new URI(valueOfS.stringValue());
-                URI predicate = new URI(valueOfP.stringValue());
-                Triple triple = null;
-                if (isRDFConformURL(valueOfY.stringValue())) {
-                    URI objectval = new URI(valueOfY.stringValue());
-                    triple = new Triple(subject, predicate, objectval);
-                } else {
-                    triple = new Triple(subject, predicate, valueOfY.stringValue());
-                }
-
-
-                if (!retVal.acceptsTriple(triple)) {
-                    RDFDescription desc = new RDFDescription(triple.getSubject());
-                    retVal.addDescription(desc);
-                }
-                retVal.addTriple(triple);
-            }
-        } catch (URISyntaxException e) {
-            throw new Exception("Cannot get db content, " + e.toString() + " " + e.getMessage());
-        } catch (Exception e) {
-            throw new Exception("Cannot get db content, " + e.toString() + " " + e.getMessage());
-        } finally {
-            result.close();
-            con.close();
-        }
-        return retVal;
+        
     }
 
     /**
@@ -294,14 +300,31 @@ public class DBIO {
         if (repo == null) {
             throw new Exception("Cannot get all subjects for type" + type + ", not connected.");
         }
-        String rdfType = Vocabulary.Type;//"http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+        String rdfType = Vocabulary.Type;
         String queryString = "SELECT ?s WHERE { ?s <" + rdfType + "> <"+ type+"> } ";
         TupleQueryResult result = null;
         RepositoryConnection con = null;
         try {
             con = repo.getConnection();
-            TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
+            TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString, URIConfiguration.RESOURCES_URI);
             result = tupleQuery.evaluate();
+            
+            SubjectList subjectList = new SubjectList();
+            try {
+                while (result.hasNext()) {
+                    BindingSet bindingSet = (BindingSet) result.next();
+                    Value valueOfS = bindingSet.getValue("s");
+                    URI subject = new URI( valueOfS.stringValue() );
+                    subjectList.add(subject);
+                }
+                return subjectList;  
+            } catch (URISyntaxException e) {
+                throw new Exception("Cannot get all subjects for type" + type + ", " + e.toString() + " " + e.getMessage());
+            } catch (Exception e) {
+                throw new Exception("Cannot get all subjects for type" + type + ", " + e.toString() + " " + e.getMessage());
+            } finally {
+                result.close();
+            }
         } catch (RepositoryException e) {
             throw new Exception("Cannot get all subjects for type" + type + ", unknown connection error.");
         } catch (IllegalArgumentException e) {
@@ -313,24 +336,9 @@ public class DBIO {
         } catch (QueryEvaluationException e) {
             throw new Exception("Cannot get all subjects for type" + type + ", " + e.toString() + " " + e.getMessage());
         }
-
-        SubjectList subjectList = new SubjectList();
-        try {
-            while (result.hasNext()) {
-                BindingSet bindingSet = (BindingSet) result.next();
-                Value valueOfS = bindingSet.getValue("s");
-                URI subject = new URI( valueOfS.stringValue() );
-                subjectList.add(subject);
-            }
-        } catch (URISyntaxException e) {
-            throw new Exception("Cannot get all subjects for type" + type + ", " + e.toString() + " " + e.getMessage());
-        } catch (Exception e) {
-            throw new Exception("Cannot get all subjects for type" + type + ", " + e.toString() + " " + e.getMessage());
-        } finally {
-            result.close();
+        finally{
             con.close();
         }
-        return subjectList;
     }
     
     
@@ -345,16 +353,15 @@ public class DBIO {
         if (repo == null) {
             throw new Exception("Cannot check if subject exists, not connected.");
         }
-        String rdfType = Vocabulary.Type;
+        RepositoryConnection con = null;
         try {
-            RepositoryConnection con = repo.getConnection();
+            con = repo.getConnection();
             Resource process = (Resource)new URIImpl(subject.toString());
             org.openrdf.model.URI hasType = new URIImpl(Vocabulary.Type);
             Resource[] res = new Resource[0];
             boolean has =  con.hasStatement(process, hasType, null, false, res);
-            con.close();
+            
             return has;
-        
         } catch (RepositoryException e) {
             throw new Exception("Cannot check if subject "+subject+" exists, unknown connection error.");
         } catch (IllegalArgumentException e) {
@@ -362,6 +369,9 @@ public class DBIO {
         } catch (UnsupportedQueryLanguageException e) {
             throw new Exception("Cannot check if subject "+subject+" exists, " + e.toString() + " " + e.getMessage());
         } 
+        finally{
+            con.close();
+        }
     }
     
     public static void insertTriple(Triple triple) throws Exception{
@@ -370,23 +380,26 @@ public class DBIO {
             throw new Exception("Cannot insert triple into sesame RDF-DB, not connected.");
         }
         Resource[] resArr = new Resource[0];
+         RepositoryConnection con =null;
         try {
-            RepositoryConnection con = repo.getConnection();
+            con = repo.getConnection();
             Resource subject = new URIImpl(triple.getSubject().toString());
             org.openrdf.model.URI predicate = new URIImpl(triple.getPredicate().toString());
             Value obj = null;
             if(triple.getObjectAsLiteral()==null)
-                obj = new LiteralImpl(triple.getObjectAsResource().toString());
+                obj = new URIImpl(triple.getObjectAsResource().toString());
             else
                 obj = new LiteralImpl(triple.getObjectAsLiteral());
             Statement st = new StatementImpl(subject, predicate, obj);
             con.add(st, resArr);
-            con.close();
         } catch (RepositoryException e) {
             throw new Exception("Cannot load rdf/xml string into sesame RDF-DB, not connected or not writable.");
         } catch (UnsupportedRDFormatException e) {
             throw new Exception("Cannot load rdf/xml string into sesame RDF-DB, " + e.getMessage());
+        } finally{
+            con.close();
         }
+        
     }
     
 }

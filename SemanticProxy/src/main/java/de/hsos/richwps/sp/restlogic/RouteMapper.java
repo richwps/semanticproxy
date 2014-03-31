@@ -59,7 +59,7 @@ public class RouteMapper {
      */
     public static String getAllProcesses() throws Exception{
         
-        URI processTypeURI = new URI(URIConfiguration.RESOURCES_URI+"/vocab#process");
+        URI processTypeURI = new URI(Vocabulary.ProcessClass);
         SubjectList list = DBIO.getAllSubjectsForType(processTypeURI);
         return list.toXMLList();
     }
@@ -72,7 +72,7 @@ public class RouteMapper {
      */
     public static String getAllWPS() throws Exception{
         
-        URI wpsTypeURI = new URI(URIConfiguration.RESOURCES_URI+"/vocab#wps");
+        URI wpsTypeURI = new URI(Vocabulary.WPSClass);
         SubjectList list = DBIO.getAllSubjectsForType(wpsTypeURI);
         return list.toXMLList();
     }

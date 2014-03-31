@@ -5,7 +5,7 @@
 	xmlns:rwps="http://localhost:4567/semanticproxy/resources/vocab#">
 	
 	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/process/processA">
-		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#process"/>
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#processclass"/>
 		<rwps:identifier>rwps.rpwsprocess.processa</rwps:identifier>
 		<rwps:title>Process A</rwps:title>
 		<rwps:abstract>This is the process A</rwps:abstract>
@@ -14,7 +14,7 @@
 	</rdf:Description>
 	
 	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/process/processB">
-		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#process"/>
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#processclass"/>
 		<rwps:identifier>rwps.rpwsprocess.processb</rwps:identifier>
 		<rwps:title>Process B</rwps:title>
 		<rwps:abstract>This is the process B</rwps:abstract>
@@ -23,7 +23,7 @@
 	</rdf:Description>
 	
 	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/process/processC">
-		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#process"/>
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#processclass"/>
 		<rwps:identifier>rwps.rpwsprocess.processc</rwps:identifier>
 		<rwps:title>Process C</rwps:title>
 		<rwps:abstract>This is the process C</rwps:abstract>
@@ -32,7 +32,7 @@
 	</rdf:Description>
 	
 	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/process/processD">
-		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#process"/>
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#processclass"/>
 		<rwps:identifier>rwps.rpwsprocess.processd</rwps:identifier>
 		<rwps:title>Process D</rwps:title>
 		<rwps:abstract>This is the process D</rwps:abstract>
