@@ -5,7 +5,7 @@
 package de.hsos.richwps.sp.restlogic;
 
 /**
- *
+ * Contains various definitions for vocabulary integrity
  * @author fbensman
  */
 public class Vocabulary {

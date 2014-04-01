@@ -12,13 +12,19 @@ import spark.Route;
 import static spark.Spark.*;
 
 /**
- *
+ * The access point for delete queries from the web
  * @author fbensman
  */
 public class DeleteAccess {
     
+    /**
+     * Installs endpoints for the deletion of resources
+     */
     public DeleteAccess(){
         
+        /**
+         * Register endpoint for process deletion
+         */
          delete(new Route("/semanticproxy/resources/process/*") {
             @Override
             public Object handle(Request request, Response response) {
@@ -40,6 +46,9 @@ public class DeleteAccess {
         });
     
          
+         /**
+          * Register endpoint for wps deletion
+          */
          delete(new Route("/semanticproxy/resources/wps/*") {
             @Override
             public Object handle(Request request, Response response) {

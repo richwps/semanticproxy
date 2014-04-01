@@ -16,12 +16,18 @@ import org.openrdf.rio.Rio;
 import org.openrdf.rio.helpers.StatementCollector;
 
 /**
- *
+ * Class containing various methods for rdf validation
  * @author fbensman
  */
 public class Validator {
    
-            
+    
+    /**
+     * Validates rdf statements for a create process
+     * @param openList
+     * @return
+     * @throws Exception 
+     */
     public static ValidationResult checkForInsertProcess(ArrayList<Statement> openList) throws Exception{
         ArrayList<Statement>analizedList = new ArrayList<Statement>();
         
@@ -228,9 +234,7 @@ public class Validator {
             }
             shiftStats(openList, analizedList, stats);
         }
-        
-        //check für jedes verbleibende stmt ob es etwas beschreibt das in einer der beiden listen vorhanden ist...
-        
+       
         
         //check for use of basic vocabulary in remaining statements
         for(int i=0; i<openList.size();i++){
@@ -246,7 +250,12 @@ public class Validator {
     }
     
     
-    
+    /**
+     * Removes certain statements from one list and puts it in another
+     * @param srcList The source list
+     * @param dstList The destination list
+     * @param stats  The statements in question
+     */
     private static void shiftStats(ArrayList<Statement> srcList, ArrayList<Statement> dstList, Statement[] stats){
         for(int i=0; i<stats.length;i++){
             srcList.remove(stats[i]);
@@ -256,7 +265,12 @@ public class Validator {
 
     
     
-    
+    /**
+     * Checks wether a subject is in a list of statements
+     * @param subject RDF resource identifier of subject
+     * @param list The list to look through
+     * @return True if list contains the subject
+     */
     private static boolean containsSubject(String subject, ArrayList<Statement> list){
         for(int i=0; i<list.size(); i++){
             Statement st = list.get(i);
@@ -266,6 +280,13 @@ public class Validator {
         return false;
     }
     
+    
+    /**
+     * Checks wether a predicate is in a list of statements
+     * @param subject RDF resource identifier of predicate
+     * @param list The list to look through
+     * @return True if list contains the predicate
+     */
     private static boolean containsPredicate(String predicate, ArrayList<Statement> list){
         for(int i=0; i<list.size(); i++){
             Statement st = list.get(i);
@@ -275,6 +296,13 @@ public class Validator {
         return false;
     }
     
+    
+    /**
+     * Checks wether an object is in a list of statements
+     * @param subject RDF resource identifier of object
+     * @param list The list to look through
+     * @return True if list contains the object
+     */
     private static boolean containsObject(String object, ArrayList<Statement> list){
         for(int i=0; i<list.size(); i++){
             Statement st = list.get(i);
@@ -283,6 +311,8 @@ public class Validator {
         }
         return false;
     }
+    
+    
     
      private static Statement[] getStatementsBySubject(String subject, ArrayList<Statement> list){
          ArrayList<Statement> retList = new ArrayList<Statement>();
@@ -335,7 +365,13 @@ public class Validator {
     }
 
      
-     
+    
+    /**
+     * Validates a list of statements for insertion of a wps
+     * @param openList List of statements to validate
+     * @return Result of the validation
+     * @throws Exception 
+     */
     public static ValidationResult checkForInsertWPS(ArrayList<Statement>openList) throws Exception {
         ArrayList<Statement>analizedList = new ArrayList<Statement>();
         
@@ -383,7 +419,15 @@ public class Validator {
         
     }
 
-    static ValidationResult checkForUpdateWPS(ArrayList<Statement> openList) throws Exception{
+    
+    
+    /**
+     * Validates a list of statements for update of a wps
+     * @param openList List of statements to validate
+     * @return Result of validation
+     * @throws Exception 
+     */
+    public static ValidationResult checkForUpdateWPS(ArrayList<Statement> openList) throws Exception{
         ArrayList<Statement>analizedList = new ArrayList<Statement>();
         
         //get the wps
@@ -433,7 +477,12 @@ public class Validator {
     
     
     
-    
+    /**
+     * Validates a list of statements for update of a process
+     * @param openList List of statements to validate
+     * @return Result of validation
+     * @throws Exception 
+     */
     public static ValidationResult checkForUpdateProcess(ArrayList<Statement> openList) throws Exception{
         ArrayList<Statement>analizedList = new ArrayList<Statement>();
         

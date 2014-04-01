@@ -94,15 +94,13 @@ public class BrowseAccess {
             @Override
             public Object handle(Request request, Response response) {
                  try {
-                    //RDFDocument doc =  RouteMapper.getRDFFor(request.pathInfo());
                     String rdf =  RouteMapper.getRDFFor(request.pathInfo());
-//                    if(doc.getTripleCount() == 0){
-//                        response.status(404);
-//                        return "Resource not found";
-//                    }
+                    if(rdf == null){
+                        response.status(404);
+                        return "Resource not found";
+                    }
                     response.status(200);
                     response.type("application/xml"); //normally +rdf, but download in chrome is annoying
-                    //return doc.rDFXMLRepresentation();
                     return rdf;
                 } catch (Exception e) {
                     System.out.println("Error, " + e.getMessage());
@@ -165,15 +163,13 @@ public class BrowseAccess {
             @Override
             public Object handle(Request request, Response response) {
                  try {
-                    //RDFDocument doc =  RouteMapper.getRDFFor(request.pathInfo());
                      String rdf =  RouteMapper.getRDFFor(request.pathInfo());
-//                    if(doc.getTripleCount() == 0){
-//                        response.status(404);
-//                        return "Resource not found";
-//                    }
+                    if(rdf == null){
+                        response.status(404);
+                        return "Resource not found";
+                    }
                     response.status(200);
                     response.type("application/xml"); //normally +rdf, but download in chrome is annoying
-                    //return doc.rDFXMLRepresentation();
                     return rdf;
                 } catch (Exception e) {
                     System.out.println("Error, " + e.getMessage());

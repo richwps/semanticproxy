@@ -144,16 +144,19 @@ public class DBIO {
             throw new Exception("Cannot get resource description for " + resource + ", not connected.");
         }
 
+        //define query
         String queryString = "SELECT ?p ?y WHERE { <" + resource + "> ?p ?y } ";
         TupleQueryResult result = null;
         RepositoryConnection con = null;
         try {
             con = repo.getConnection();
+            //execute query
             TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString, URIConfiguration.RESOURCES_URI);
             result = tupleQuery.evaluate();
 
 
             RDFDescription retVal = new RDFDescription(resource);
+            //collect query result
             try {
                 while (result.hasNext()) {
                     BindingSet bindingSet = (BindingSet) result.next();
@@ -197,7 +200,7 @@ public class DBIO {
      * Gets an RDF description for a resource URI
      *
      * @param resource The resource to describe as URI
-     * @return A collection of all triples describing the resource
+     * @return A string containing the description as RDF document
      * @throws Exception When the db is not accessable or the resource is
      * malformed
      */
@@ -211,14 +214,17 @@ public class DBIO {
         try {
             con = repo.getConnection();
             Resource subject = new URIImpl(resource.toString());
+            //query all statement about the resource
             RepositoryResult<Statement> result = con.getStatements(subject, null, null, true);
-
             ArrayList<Statement> list = new ArrayList<Statement>();
+            //put statements into a list an feed 'em to an rdf writer
             try {
                 while (result.hasNext()) {
                     list.add(result.next());
                 }
                 result.close();
+                if(list.size()==0)
+                    return null;
                 StringWriter sw = new StringWriter();
                 RDFWriter writer = Rio.createWriter(RDFFormat.RDFXML, sw);
                 try {
@@ -266,16 +272,19 @@ public class DBIO {
             throw new Exception("Cannot get whole DB content, not connected.");
         }
 
+        //create query that matches every statement in db
         String queryString = "SELECT ?s ?p ?y WHERE { ?s ?p ?y } ";
         TupleQueryResult result = null;
         RepositoryConnection con = null;
         try {
             con = repo.getConnection();
+            //execute query
             TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString, URIConfiguration.RESOURCES_URI);
             result = tupleQuery.evaluate();
 
             RDFDocument retVal = new RDFDocument();
             try {
+                //collect results
                 while (result.hasNext()) {
                     BindingSet bindingSet = (BindingSet) result.next();
                     Value valueOfS = bindingSet.getValue("s");
@@ -351,7 +360,7 @@ public class DBIO {
     }
 
     /**
-     * Queries all subject of the given resource from the db
+     * Queries all subject of the given type uri from the db
      *
      * @param type URI of type to look for
      * @return List of Subject URIs
@@ -362,17 +371,22 @@ public class DBIO {
         if (repo == null) {
             throw new Exception("Cannot get all subjects for type" + type + ", not connected.");
         }
+        if(!Vocabulary.isBasicType(type.toString()))
+            throw new Exception("Cannot get all subjects for type" + type + ", parameter is not a type.");
         String rdfType = Vocabulary.Type;
+        //define query
         String queryString = "SELECT ?s WHERE { ?s <" + rdfType + "> <" + type + "> } ";
         TupleQueryResult result = null;
         RepositoryConnection con = null;
         try {
             con = repo.getConnection();
+            //execute query
             TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString, URIConfiguration.RESOURCES_URI);
             result = tupleQuery.evaluate();
 
             SubjectList subjectList = new SubjectList();
             try {
+                //collect results
                 while (result.hasNext()) {
                     BindingSet bindingSet = (BindingSet) result.next();
                     Value valueOfS = bindingSet.getValue("s");
@@ -420,6 +434,7 @@ public class DBIO {
             Resource process = (Resource) new URIImpl(subject.toString());
             org.openrdf.model.URI hasType = new URIImpl(Vocabulary.Type);
             Resource[] res = new Resource[0];
+            //decicive call
             boolean has = con.hasStatement(process, hasType, null, false, res);
 
             return has;
@@ -434,6 +449,12 @@ public class DBIO {
         }
     }
 
+    
+    /**
+     * Inserts a triple into db
+     * @param triple
+     * @throws Exception 
+     */
     public static void insertTriple(Triple triple) throws Exception {
         Repository repo = SesameProperties.getInstance().getRepository();
         if (repo == null) {
@@ -443,6 +464,7 @@ public class DBIO {
         RepositoryConnection con = null;
         try {
             con = repo.getConnection();
+            //triple to statement
             Resource subject = new URIImpl(triple.getSubject().toString());
             org.openrdf.model.URI predicate = new URIImpl(triple.getPredicate().toString());
             Value obj = null;
@@ -452,6 +474,7 @@ public class DBIO {
                 obj = new LiteralImpl(triple.getObjectAsLiteral());
             }
             Statement st = new StatementImpl(subject, predicate, obj);
+            //add stmt to db
             con.add(st, resArr);
         } catch (RepositoryException e) {
             throw new Exception("Cannot load rdf/xml string into sesame RDF-DB, not connected or not writable.");
@@ -463,6 +486,12 @@ public class DBIO {
 
     }
 
+    
+    /**
+     * Validates wether a certain string is a literal or a resource
+     * @param str
+     * @return 
+     */
     public static boolean isLiteral(String str) {
         if (DBIO.isRDFConformURL(str)) {
             if (str.startsWith("\"") && str.endsWith("\"")) {

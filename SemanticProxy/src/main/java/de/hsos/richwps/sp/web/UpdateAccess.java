@@ -12,14 +12,19 @@ import spark.Route;
 import static spark.Spark.*;
 
 /**
- *
+ * The access point for delete queries from the web
  * @author fbensman
  */
 public class UpdateAccess {
     
-    
+    /**
+     * Installs endpoints for resource updates
+     */
     public UpdateAccess(){
         
+        /**
+         * Register endpoint for process update
+         */
          put(new Route("/semanticproxy/resources/process/*") {
             @Override
             public Object handle(Request request, Response response) {
@@ -43,6 +48,9 @@ public class UpdateAccess {
         });
     
          
+         /**
+          * Register endpoint for wps update
+          */
          put(new Route("/semanticproxy/resources/wps/*") {
             @Override
             public Object handle(Request request, Response response) {

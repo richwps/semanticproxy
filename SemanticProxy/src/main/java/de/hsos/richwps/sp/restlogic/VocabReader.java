@@ -13,18 +13,24 @@ import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.UnsupportedCharsetException;
 
 /**
- *
+ * Contains methods to read vocabulary files
  * @author fbensman
  */
 public class VocabReader {
     
     
+    /**
+     * Reads the content of the vocabulary file as raw text
+     * @return Content of file
+     * @throws Exception 
+     */
     public static String readPlainText() throws Exception{
         try{
             File vocab = new File("."+File.separator+"vocab.rdf");
             FileInputStream fis = new FileInputStream(vocab);
             byte[] raw = new byte[(int)vocab.length()];
             fis.read(raw);
+            fis.close();
             String str = new String(raw, Charset.forName("UTF-8"));
             return str;
         }catch(IllegalCharsetNameException e){

@@ -27,7 +27,11 @@ public class ContentChanger {
     
     
     
-    
+    /**
+     * Pushs process rdf into db
+     * @param rawRDF
+     * @throws Exception 
+     */
     public static void pushProcessRDFintoDB(String rawRDF)throws Exception{
         ArrayList<Statement> statList = decomposeIntoStatements(rawRDF);
         ValidationResult result = Validator.checkForInsertProcess(statList);
@@ -48,10 +52,12 @@ public class ContentChanger {
     }
     
     
-     /**
-     * Deletes the content of the string directry into db
-     * @param rawRDF An xml/rdf conform document
-     * @throws Exception When db cannot be accessed
+     
+    /**
+     * Deletes a process from the db
+     * @param route An rdf resource identifiere for the process
+     * @return True if success
+     * @throws Exception When sth is wrong with the db
      */
     public static boolean deleteProcess(String route) throws Exception{
         String fullRoute = URIConfiguration.HOST_URI+route;
@@ -65,6 +71,12 @@ public class ContentChanger {
     }
     
     
+    /**
+     * Deletes a wps from the db
+     * @param route An rdf resource identifiere for the wps
+     * @return True if success
+     * @throws Exception When sth is wrong with the db
+     */
     public static boolean deleteWPS(String route) throws Exception{
         String fullRoute = URIConfiguration.HOST_URI+route;
         URI wps = new URI(fullRoute);
@@ -77,6 +89,11 @@ public class ContentChanger {
     }
     
 
+    /**
+     * pushes raw rdf into db
+     * @param rawRDF
+     * @throws Exception 
+     */
     public static void pushWPSRDFintoDB(String rawRDF) throws Exception{
         ArrayList<Statement> statList = decomposeIntoStatements(rawRDF);
         ValidationResult result = Validator.checkForInsertWPS(statList);
@@ -97,6 +114,12 @@ public class ContentChanger {
     }
     
     
+    /**
+     * Decompoeses an rdf string into separate statements
+     * @param rdfXml
+     * @return
+     * @throws Exception 
+     */
     private static ArrayList<Statement> decomposeIntoStatements(String rdfXml) throws Exception{
         RDFParser rdfParser = Rio.createParser(RDFFormat.RDFXML);
         ArrayList<Statement> inputList = new ArrayList<Statement>();
@@ -109,6 +132,12 @@ public class ContentChanger {
         return inputList;
     }
 
+    /**
+     * Validates and updates a wps
+     * @param rawRDF The rdf descripton of the wps
+     * @param route The wps to update
+     * @throws Exception 
+     */
     public static void updateWPS(String rawRDF, String route) throws Exception {
         String fullRoute = URIConfiguration.HOST_URI+route;
         if(DBIO.subjectExists(new URI(fullRoute))){
@@ -131,6 +160,13 @@ public class ContentChanger {
         
     }
 
+    
+    /**
+     * Validates and updates a process
+     * @param rawRDF The rdf descripton of the process
+     * @param route The wps to update
+     * @throws Exception 
+     */
     public static void updateProcess(String rawRDF, String route) throws Exception{
         
         
