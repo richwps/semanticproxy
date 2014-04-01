@@ -27,7 +27,7 @@ public class RouteMapper {
      * @return RDFDocument describing the resource
      * @throws Exception When the URI is malformed or the db cannot be accessed
      */
-    public static RDFDocument getRDFFor(String route) throws Exception {
+    public static String getRDFFor(String route) throws Exception {
 
         //cut off fragment from uri - jetty already removes fragments
         String refinedRoute = null;
@@ -45,10 +45,11 @@ public class RouteMapper {
         } catch (URISyntaxException e) {
             throw new Exception("Cannot parse URI " + refinedRoute + ", " + e.getMessage());
         }
-        RDFDescription desc = DBIO.getResourceDescription(resource);
-        RDFDocument doc = new RDFDocument();
-        doc.addDescription(desc);
-        return doc;
+        //RDFDescription desc = DBIO.getResourceDescription(resource);
+        //RDFDocument doc = new RDFDocument();
+        //doc.addDescription(desc);
+        //return doc;
+        return DBIO.getResourceDescriptionV2(resource);
     }
     
     
