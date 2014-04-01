@@ -130,6 +130,27 @@ public class ContentChanger {
         }
         
     }
+
+    public static void updateProcess(String rawRDF, String route) throws Exception{
+        
+        
+        String fullRoute = URIConfiguration.HOST_URI+route;
+        if(DBIO.subjectExists(new URI(fullRoute))){
+            ArrayList<Statement> statList = decomposeIntoStatements(rawRDF);
+            ValidationResult result = Validator.checkForUpdateProcess(statList);
+            if(result.result){
+                Statement[] stats = Validator.getStatementsByPredicateAndObject(Vocabulary.Type,Vocabulary.WPSClass,statList);
+                DBDelete.deleteProcess(fullRoute);
+                DBIO.loadRDFXMLStringIntoDB(rawRDF);
+            }
+            else{
+                throw new Exception(result.message);
+            }
+        }
+        else{
+            throw new Exception("No such process");
+        }
+    }
     
     
     

@@ -23,20 +23,22 @@ public class UpdateAccess {
          put(new Route("/semanticproxy/resources/process/*") {
             @Override
             public Object handle(Request request, Response response) {
+                    if(request.contentType().equalsIgnoreCase("application/xml+rdf")){
+                    String body = request.body();
+                    String route = request.pathInfo();
                     try{
-                        if(ContentChanger.deleteProcess(request.pathInfo())){
-                            response.status(200);
-                            System.out.println(DBIO.getWholeDBContent().rDFXMLRepresentation());
-                            return "Resource deleted";
-                        }
-                        else{
-                            response.status(404);
-                            return "Resource not found";
-                        }
+                        ContentChanger.updateProcess(body, route);
+                        response.status(200);
+                        return "Process updated";
                     }catch(Exception e){
                         response.status(500);
                         return "Error, "+e.getMessage();
-                    } 
+                    }
+                }
+                else{
+                    response.status(415);
+                    return "Format not supported, use application/xml+rdf";
+                }    
             }
         });
     
