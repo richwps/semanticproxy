@@ -4,8 +4,10 @@
  */
 package de.hsos.richwps.sp.rdfdb;
 
+import static de.hsos.richwps.sp.rdfdb.DBIO.isLiteral;
 import de.hsos.richwps.sp.restlogic.URIConfiguration;
 import de.hsos.richwps.sp.restlogic.Vocabulary;
+import java.util.ArrayList;
 import java.util.Stack;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -20,6 +22,7 @@ import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.RepositoryResult;
+import org.openrdf.rio.UnsupportedRDFormatException;
 
 /**
  *
@@ -109,7 +112,7 @@ public class DBDelete {
                 Statement tmp =  stack.pop(); 
 
                 //get children of tmp
-                if( !isLiteral(tmp.getObject().stringValue())){
+                if( !DBIO.isLiteral(tmp.getObject().stringValue())){
                     Resource resource = (Resource)new URIImpl(tmp.getObject().stringValue());
                     result = con.getStatements(resource, null, null, false);
 
@@ -129,16 +132,7 @@ public class DBDelete {
     }
 
     
-    private static boolean isLiteral(String str){
-        if( DBIO.isRDFConformURL(str)){
-            if( str.startsWith("\"") && str.endsWith("\"")){
-                return true;
-            }
-            else
-                return false;
-        }
-        return true;
-    }
+    
     
     
     public static void deleteWPS(String wpsRoute) throws Exception{
@@ -176,5 +170,54 @@ public class DBDelete {
         }
         
     }
+    
+    
+    public static void deleteWPSForUpdate(java.net.URI wps) throws Exception {
+        
+        //delete endpoint (literal)
+        //delete various other statements
+        Repository repo = SesameProperties.getInstance().getRepository();
+        if (repo == null) {
+            throw new Exception("Cannot insert triple into sesame RDF-DB, not connected.");
+        }
+        Resource[] resArr = new Resource[0];
+        RepositoryConnection con =null;
+        try {
+            con = repo.getConnection();
+            Resource subject = new URIImpl(wps.toString());
+            RepositoryResult<Statement> result =  con.getStatements(subject, null, null,false,resArr);
+            ArrayList<Statement> list = new ArrayList<Statement>();
+            while(result.hasNext()){
+                list.add(result.next());
+            }
+            result.close();
+            con.close();
+            for(int i=0;i<list.size(); i++){
+                Statement st = list.get(i);
+                String pred = st.getPredicate().stringValue();
+                if( !pred.equals(Vocabulary.Process) && !pred.equals(Vocabulary.Type)){
+                    //wenn object literal dann direkt weglöschen
+                    if(isLiteral(st.getObject().stringValue())){
+                        con = repo.getConnection();
+                        con.remove(st);
+                        con.close();
+                    }
+                    else{
+                        Resource r = new URIImpl(st.getObject().stringValue());
+                        delete(r);
+                    }
+                    
+                }
+            } 
+        } catch (RepositoryException e) {
+            throw new Exception("Cannot load rdf/xml string into sesame RDF-DB, not connected or not writable.");
+        } catch (UnsupportedRDFormatException e) {
+            throw new Exception("Cannot load rdf/xml string into sesame RDF-DB, " + e.getMessage());
+        } finally{
+            con.close(); 
+        }
+    }
+    
+    
     
 }

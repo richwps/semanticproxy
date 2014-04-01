@@ -108,6 +108,28 @@ public class ContentChanger {
         }
         return inputList;
     }
+
+    public static void updateWPS(String rawRDF, String route) throws Exception {
+        String fullRoute = URIConfiguration.HOST_URI+route;
+        if(DBIO.subjectExists(new URI(fullRoute))){
+            ArrayList<Statement> statList = decomposeIntoStatements(rawRDF);
+            ValidationResult result = Validator.checkForUpdateWPS(statList);
+
+            if(result.result){
+                Statement[] stats = Validator.getStatementsByPredicateAndObject(Vocabulary.Type,Vocabulary.WPSClass,statList);
+                URI subject = new URI(stats[0].getSubject().stringValue());
+                DBDelete.deleteWPSForUpdate(subject);
+                DBIO.loadRDFXMLStringIntoDB(rawRDF);
+            }
+            else{
+                throw new Exception(result.message);
+            }
+        }
+        else{
+            throw new Exception("No such WPS");
+        }
+        
+    }
     
     
     

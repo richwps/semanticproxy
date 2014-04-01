@@ -6,6 +6,7 @@ import de.hsos.richwps.sp.types.RDFDocument;
 import de.hsos.richwps.sp.web.BrowseAccess;
 import de.hsos.richwps.sp.web.CreateAccess;
 import de.hsos.richwps.sp.web.DeleteAccess;
+import de.hsos.richwps.sp.web.UpdateAccess;
 import java.io.File;
 
 /**
@@ -50,6 +51,7 @@ public class App {
         new BrowseAccess();
         new CreateAccess();
         new DeleteAccess();
+        new UpdateAccess();
         System.out.println("Semantic Proxy is listening");
     }
 }

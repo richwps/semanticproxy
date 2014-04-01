@@ -314,7 +314,7 @@ public class Validator {
         return retList.toArray(new Statement[retList.size()]);
     }
      
-     private static Statement[] getStatementsByPredicateAndObject(String predicate, String object, ArrayList<Statement> list){
+     public static Statement[] getStatementsByPredicateAndObject(String predicate, String object, ArrayList<Statement> list){
          ArrayList<Statement> retList = new ArrayList<Statement>();
          for(int i=0; i<list.size(); i++){
             Statement st = list.get(i);
@@ -381,6 +381,52 @@ public class Validator {
         
         return new ValidationResult(true, "No error");
         
+    }
+
+    static ValidationResult checkForUpdateWPS(ArrayList<Statement> openList) throws Exception{
+        ArrayList<Statement>analizedList = new ArrayList<Statement>();
+        
+        //get the wps
+        Statement[] stats= getStatementsByPredicateAndObject(Vocabulary.Type,Vocabulary.WPSClass, openList);
+        if(stats.length != 1)
+            return new ValidationResult(false, "One WPS required");
+        shiftStats(openList, analizedList, stats);
+        
+        String wpsId = stats[0].getSubject().stringValue();
+        
+        //check if process already exists
+        if( !DBIO.subjectExists(new URI(wpsId))){
+             return new ValidationResult(false, "WPS does not exist");
+        }
+        
+        //check if name correct
+        if(!wpsId.startsWith(URIConfiguration.RESOURCES_URI)){
+            return new ValidationResult(false, "WPS does not fit into naming schema");
+        }
+        
+        //get endpoint
+        stats = getStatementsBySubjectAndPredicate(wpsId, Vocabulary.Endpoint, openList);
+        if(stats.length != 1)
+            return new ValidationResult(false, "More than one wps endpoint found");
+        shiftStats(openList, analizedList, stats);
+        
+        //get the process
+        stats = getStatementsByPredicate(Vocabulary.Process, openList);
+        if(stats.length >0)
+            return new ValidationResult(false, "No process allowed at this point");
+        shiftStats(openList, analizedList, stats);
+        
+        
+        //check for use of basic vocabulary in remaining statements
+        for(int i=0; i<openList.size();i++){
+            Statement st = openList.get(i);
+            String pred = st.getPredicate().stringValue();
+            if(Vocabulary.isBasicPredicate(pred))
+                return new ValidationResult(false, "Unproper use of basic vocabulary");
+        }
+        openList.addAll(analizedList);
+        
+        return new ValidationResult(true, "No error");
     }
      
      

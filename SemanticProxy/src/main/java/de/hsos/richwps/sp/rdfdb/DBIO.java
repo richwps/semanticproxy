@@ -30,9 +30,11 @@ import org.openrdf.query.QueryLanguage;
 import org.openrdf.query.TupleQuery;
 import org.openrdf.query.TupleQueryResult;
 import org.openrdf.query.UnsupportedQueryLanguageException;
+import org.openrdf.query.algebra.IsLiteral;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
+import org.openrdf.repository.RepositoryResult;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParseException;
 import org.openrdf.rio.UnsupportedRDFormatException;
@@ -400,6 +402,21 @@ public class DBIO {
             con.close();
         }
         
+    }
+
+    
+    
+    
+    
+    public static boolean isLiteral(String str){
+        if( DBIO.isRDFConformURL(str)){
+            if( str.startsWith("\"") && str.endsWith("\"")){
+                return true;
+            }
+            else
+                return false;
+        }
+        return true;
     }
     
 }
