@@ -5,7 +5,7 @@
 package de.hsos.richwps.sp.restlogic;
 
 /**
- *
+ * Small class to store information about a validation
  * @author fbensman
  */
 public class ValidationResult {

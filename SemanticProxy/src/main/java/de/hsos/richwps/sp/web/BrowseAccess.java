@@ -6,7 +6,7 @@ package de.hsos.richwps.sp.web;
 
 import de.hsos.richwps.sp.restlogic.RouteMapper;
 import de.hsos.richwps.sp.restlogic.VocabReader;
-import de.hsos.richwps.sp.types.RDFDocument;
+import java.util.Set;
 import static spark.Spark.*;
 import spark.*;
 
@@ -93,6 +93,16 @@ public class BrowseAccess {
         get(new Route("/semanticproxy/resources") {
             @Override
             public Object handle(Request request, Response response) {
+                Set<String> set = request.headers();
+                
+               
+                String[] s = set.toArray(new String[set.size()]);
+                
+                for(int i=0; i<s.length; i++){
+                    System.out.println(s[i]+" "+request.headers(s[i]));
+                }
+                System.out.println(request.contentType());
+                
                  try {
                     String rdf =  RouteMapper.getRDFFor(request.pathInfo());
                     if(rdf == null){
@@ -100,7 +110,8 @@ public class BrowseAccess {
                         return "Resource not found";
                     }
                     response.status(200);
-                    response.type("application/xml"); //normally +rdf, but download in chrome is annoying
+                    response.type("application/xml+rdf"); //normally +rdf, but download in chrome is annoying
+                    System.out.println("\n response: "+response.raw().toString());
                     return rdf;
                 } catch (Exception e) {
                     System.out.println("Error, " + e.getMessage());

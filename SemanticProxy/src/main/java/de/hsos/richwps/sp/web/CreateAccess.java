@@ -12,14 +12,21 @@ import spark.Route;
 import static spark.Spark.*;
 
 /**
- *
+ * The access point for the create queries from the web
  * @author fbensman
  */
 public class CreateAccess {
     
+    
+    /**
+     * Installs endpoints for http post
+     */
     public CreateAccess(){
     
     
+        /**
+         * Register endpoint for process creation
+         */
         post(new Route("/semanticproxy/resources/processes") {
             @Override
             public Object handle(Request request, Response response) {
@@ -43,6 +50,9 @@ public class CreateAccess {
         });
         
         
+        /**
+         * Register endpoint for wps creation
+         */
         post(new Route("/semanticproxy/resources/wps") {
             @Override
             public Object handle(Request request, Response response) {
