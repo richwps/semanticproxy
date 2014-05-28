@@ -5,6 +5,7 @@
 package de.hsos.richwps.sp.client;
 
 /**
+ * Class to store literal properties of an rdf resource
  *
  * @author fbensman
  */

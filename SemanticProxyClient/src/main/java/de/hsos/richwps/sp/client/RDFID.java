@@ -5,19 +5,22 @@
 package de.hsos.richwps.sp.client;
 
 /**
+ * Class that stores an RDF resource id
  *
  * @author fbensman
  */
 public class RDFID {
+
     public String rdfID = null;
-    
-    public RDFID(){}
-    
-    public RDFID(String rdfID){
+
+    public RDFID() {
+    }
+
+    public RDFID(String rdfID) {
         this.rdfID = rdfID;
     }
-    
-    public RDFID(RDFID clone){
+
+    public RDFID(RDFID clone) {
         this.rdfID = clone.rdfID;
     }
 }

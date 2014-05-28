@@ -5,76 +5,103 @@
 package de.hsos.richwps.sp.client;
 
 /**
+ * Client for SemanticProxy interaction, implements Singleton pattern.
  *
  * @author fbensman
  */
 public class SPClient {
-    
+
     private RDFClient rdfClient = null;
-    
     private static SPClient instance = null;
-    private String rootURI = "http://localhost:4567/semanticproxy/resources";
-    
+    private String rootURL = "http://localhost:4567/semanticproxy/resources";
+
     private SPClient() {
         rdfClient = new RDFClient();
-       
-        
+
     }
 
-    public static SPClient getInstance(){
-        if(instance == null)
+    /**
+     * For singleton
+     *
+     * @return
+     */
+    public static SPClient getInstance() {
+        if (instance == null) {
             instance = new SPClient();
+        }
         return instance;
     }
-    
-    public boolean testConnection(){
-        try{
+
+    /**
+     * Tests the connection to the root URL. The root URL is
+     * "http://localhost:4567/semanticproxy/resources" if not specified
+     * otherwise.
+     *
+     * @return True if connection is ok, false else
+     */
+    public boolean testConnection() {
+        try {
             Network network = null;
             network = getNetwork();
-            if(network == null)
+            if (network == null) {
                 return false;
+            }
             return true;
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
-        
-    }
-    
-    
-    public String getRootURI() {
-        return rootURI;
+
     }
 
-    public void setRootURI(String rootURI) {
-        this.rootURI = rootURI;
+    public String getRootURL() {
+        return rootURL;
     }
 
-    
-    
-    
-    
+    /**
+     * Sets the URL of the root element of the SemanticProxy, usually this is
+     * the network resource.
+     *
+     * @param rootURL
+     */
+    public void setRootURL(String rootURL) {
+        this.rootURL = rootURL;
+    }
+
     public RDFClient getRdfClient() {
         return rdfClient;
     }
-    
 
-    
-    public Network getNetwork() throws Exception{
-        RDFResource res = rdfClient.retrieveResource(new RDFID(rootURI));
+    /**
+     * Gets an RDFResource with Network-Wrapper class, uses the rootURL
+     *
+     * @return RDFResource with Network-Wrapper class
+     * @throws Exception
+     */
+    public Network getNetwork() throws Exception {
+        RDFResource res = rdfClient.retrieveResource(new RDFID(rootURL));
         return Network.createWrapper(res);
     }
-    
-    
-    public WPS getWPS(RDFID rdfID) throws Exception{
+
+    /**
+     * Gets an RDFResource with WPS-Wrapper class, uses the specified RDF ID
+     *
+     * @return RDFResource with WPS-Wrapper class
+     * @throws Exception
+     */
+    public WPS getWPS(RDFID rdfID) throws Exception {
         RDFResource res = rdfClient.retrieveResource(rdfID);
         return WPS.createWrapper(res);
     }
-    
-    
-    public Process getProcess(RDFID rdfID) throws Exception{
+
+    /**
+     * Gets an RDFResource with Process-Wrapper class, uses the specified RDF ID
+     *
+     * @return RDFResource with Process-Wrapper class
+     * @throws Exception
+     */
+    public Process getProcess(RDFID rdfID) throws Exception {
         RDFResource res = rdfClient.retrieveResource(rdfID);
         return Process.createWrapper(res);
     }
-    
 }

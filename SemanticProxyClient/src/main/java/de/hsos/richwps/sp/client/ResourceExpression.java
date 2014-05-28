@@ -5,6 +5,7 @@
 package de.hsos.richwps.sp.client;
 
 /**
+ * Class to store refernced resource ids
  *
  * @author fbensman
  */

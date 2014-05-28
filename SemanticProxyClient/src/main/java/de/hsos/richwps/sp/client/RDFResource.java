@@ -7,20 +7,28 @@ package de.hsos.richwps.sp.client;
 import java.util.ArrayList;
 
 /**
+ * Represents an RDF resource and stores describing statements as properties and
+ * object references. Class operates on RDF level.
  *
  * @author fbensman
  */
 public class RDFResource {
-    
- 
+
+    /**
+     * RDF id of the RDF resource that this object stands for.
+     */
     private RDFID rdfID = null;
     private LiteralExpression[] fields = null;
     private ResourceExpression[] resources = null;
-    
-    
-    public RDFResource(RDFID rdfID){
+
+    /**
+     * Creates an empty RDFResource with out properties etc.
+     *
+     * @param rdfID
+     */
+    public RDFResource(RDFID rdfID) {
         this.rdfID = rdfID;
-        
+
     }
 
     public RDFID getRdfID() {
@@ -46,32 +54,42 @@ public class RDFResource {
     public void setResources(ResourceExpression[] resources) {
         this.resources = resources;
     }
-    
-    protected String[] findLiterals(String predicate){
+
+    /**
+     * Helper for wrapper classes.
+     *
+     * @param predicate
+     * @return
+     */
+    protected String[] findLiterals(String predicate) {
         ArrayList<String> list = new ArrayList<String>();
-        for(int i=0; i< fields.length; i++){
-            if(fields[i].predicate.equals(predicate)){
-                list.add( fields[i].literal );
+        for (int i = 0; i < fields.length; i++) {
+            if (fields[i].predicate.equals(predicate)) {
+                list.add(fields[i].literal);
             }
         }
-        if(list.size()==0)
+        if (list.size() == 0) {
             return null;
+        }
         return list.toArray(new String[list.size()]);
     }
-    
-    
-    protected RDFID[] findResources(String predicate){
+
+    /**
+     * Helper for wrapper classes.
+     *
+     * @param predicate
+     * @return
+     */
+    protected RDFID[] findResources(String predicate) {
         ArrayList<RDFID> list = new ArrayList<RDFID>();
-        for(int i=0; i< resources.length; i++){
-            if(resources[i].predicate.equals(predicate)){
+        for (int i = 0; i < resources.length; i++) {
+            if (resources[i].predicate.equals(predicate)) {
                 list.add(resources[i].rdfID);
             }
         }
-        if(list.size()==0)
+        if (list.isEmpty()) {
             return null;
+        }
         return list.toArray(new RDFID[list.size()]);
     }
-    
-    
-    
 }

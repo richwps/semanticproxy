@@ -4,7 +4,6 @@
  */
 package de.hsos.richwps.sp.client;
 
-
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -16,16 +15,22 @@ import org.openrdf.rio.Rio;
 import org.openrdf.rio.helpers.StatementCollector;
 
 /**
+ * Client to interact with the SemanticProxy on RDF level
  *
  * @author fbensman
  */
 public class RDFClient {
-    
+
+    /**
+     * Client for handling http level calls, uses HTTP client
+     */
     private HTTPClient httpClient = null;
+    /**
+     * Cache for RDF resources
+     */
     private LRUCache<String, RDFResource> cache = null;
-    
-    
-    public RDFClient(){
+
+    public RDFClient() {
         httpClient = new HTTPClient();
         cache = new LRUCache<String, RDFResource>();
     }
@@ -33,70 +38,71 @@ public class RDFClient {
     public HTTPClient getHttpClient() {
         return httpClient;
     }
-    
-    
-    
-    
-    
-    public RDFResource retrieveResource(RDFID rdfID) throws Exception{
-        try{
+
+    /**
+     * Retrieves a resource from the SemanticProxy and parses it into an
+     * RDFResource object
+     *
+     * @param rdfID RDF id of the resource to retrieve
+     * @return The resource as an RDFResource object
+     * @throws Exception
+     */
+    public RDFResource retrieveResource(RDFID rdfID) throws Exception {
+        try {
             RDFResource tmp = cache.get(rdfID.rdfID);
-            if(tmp != null){
+            if (tmp != null) {
                 return tmp;
             }
-            
+
             String body = httpClient.getRawRDF(rdfID.rdfID);
             ArrayList<Statement> stmtList = decomposeIntoStatements(body);
-            ArrayList<LiteralExpression>litExList = new ArrayList<LiteralExpression>();
-            ArrayList<ResourceExpression>resExList = new ArrayList<ResourceExpression>();
+            ArrayList<LiteralExpression> litExList = new ArrayList<LiteralExpression>();
+            ArrayList<ResourceExpression> resExList = new ArrayList<ResourceExpression>();
             RDFResource res = new RDFResource(rdfID);
-            
-            for(int i=0; i< stmtList.size();i++){                
+
+            for (int i = 0; i < stmtList.size(); i++) {
                 Statement stmt = stmtList.get(i);
                 String predicate = stmt.getPredicate().stringValue();
                 Value obj = stmt.getObject();
-                
-                if(obj instanceof org.openrdf.model.Literal){
+
+                if (obj instanceof org.openrdf.model.Literal) {
                     LiteralExpression exp = new LiteralExpression(predicate, obj.stringValue());
                     litExList.add(exp);
-                }
-                else if(obj instanceof org.openrdf.model.URI){
-                    ResourceExpression exp = new ResourceExpression(predicate,new RDFID(obj.stringValue()));
+                } else if (obj instanceof org.openrdf.model.URI) {
+                    ResourceExpression exp = new ResourceExpression(predicate, new RDFID(obj.stringValue()));
                     resExList.add(exp);
-                }
-                else{
+                } else {
                     throw new Exception("Error, unexpected object type");
                 }
             }
             res.setFields(litExList.toArray(new LiteralExpression[litExList.size()]));
             res.setResources(resExList.toArray(new ResourceExpression[resExList.size()]));
-            
+
             cache.put(res.getRdfID().rdfID, res);
-            
+
             return res;
-        }catch(Exception e){
+        } catch (Exception e) {
             throw e;
         }
-        
+
     }
-    
-    
+
     /**
      * Decompoeses an rdf string into separate statements
+     *
      * @param rdfXml
      * @return
-     * @throws Exception 
+     * @throws Exception
      */
-    private static ArrayList<Statement> decomposeIntoStatements(String rdfXml) throws Exception{
+    private static ArrayList<Statement> decomposeIntoStatements(String rdfXml) throws Exception {
         RDFParser rdfParser = Rio.createParser(RDFFormat.RDFXML);
         ArrayList<Statement> inputList = new ArrayList<Statement>();
         rdfParser.setRDFHandler(new StatementCollector(inputList));
-        try{
+        try {
             rdfParser.parse(new StringReader(rdfXml), URIConfiguration.RESOURCES_URI);
-        }catch(IOException e){
-            throw new Exception("Error, cannot parse rdf"+ e.getMessage());
+        } catch (IOException e) {
+            throw new Exception("Error, cannot parse rdf" + e.getMessage());
         }
         return inputList;
     }
-    
 }
