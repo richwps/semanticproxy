@@ -57,7 +57,7 @@ public class DBIO {
      * @throws Exception When the file is malformed or not accessable
      */
     public static void loadRDFXMLFile(File file) throws Exception {
-        Repository repo = SesameProperties.getInstance().getRepository();
+        Repository repo = DBAdministration.getRepository();
         if (repo == null) {
             throw new Exception("Cannot load rdf/xml file into sesame RDF-DB, not connected.");
         }
@@ -87,7 +87,7 @@ public class DBIO {
      * @throws Exception When the string is malformede
      */
     public static void loadRDFXMLStringIntoDB(String str) throws Exception {
-        Repository repo = SesameProperties.getInstance().getRepository();
+        Repository repo = DBAdministration.getRepository();
         if (repo == null) {
             throw new Exception("Cannot load rdf/xml file into sesame RDF-DB, not connected.");
         }
@@ -114,7 +114,7 @@ public class DBIO {
      * @throws Exception When the db cannot be accessed
      */
     public static long size() throws Exception {
-        Repository repo = SesameProperties.getInstance().getRepository();
+        Repository repo = DBAdministration.getRepository();
         if (repo == null) {
             throw new Exception("Cannot retrieve size of sesame RDF-DB, not connected.");
         }
@@ -139,7 +139,7 @@ public class DBIO {
      * malformed
      */
     public static RDFDescription getResourceDescription(URI resource) throws Exception {
-        Repository repo = SesameProperties.getInstance().getRepository();
+        Repository repo = DBAdministration.getRepository();
         if (repo == null) {
             throw new Exception("Cannot get resource description for " + resource + ", not connected.");
         }
@@ -205,7 +205,7 @@ public class DBIO {
      * malformed
      */
     public static String getResourceDescriptionV2(URI resource) throws Exception {
-        Repository repo = SesameProperties.getInstance().getRepository();
+        Repository repo = DBAdministration.getRepository();
         if (repo == null) {
             throw new Exception("Cannot get resource description for " + resource + ", not connected.");
         }
@@ -267,7 +267,7 @@ public class DBIO {
      * @throws Exception When the db is not accessable
      */
     public static RDFDocument getWholeDBContent() throws Exception {
-        Repository repo = SesameProperties.getInstance().getRepository();
+        Repository repo = DBAdministration.getRepository();
         if (repo == null) {
             throw new Exception("Cannot get whole DB content, not connected.");
         }
@@ -367,7 +367,7 @@ public class DBIO {
      * @throws Exception When the db is not accessable
      */
     public static SubjectList getAllSubjectsForType(URI type) throws Exception {
-        Repository repo = SesameProperties.getInstance().getRepository();
+        Repository repo = DBAdministration.getRepository();
         if (repo == null) {
             throw new Exception("Cannot get all subjects for type" + type + ", not connected.");
         }
@@ -424,7 +424,7 @@ public class DBIO {
      * @throws Exception When the db is not accessable
      */
     public static boolean subjectExists(URI subject) throws Exception {
-        Repository repo = SesameProperties.getInstance().getRepository();
+        Repository repo = DBAdministration.getRepository();
         if (repo == null) {
             throw new Exception("Cannot check if subject exists, not connected.");
         }
@@ -456,7 +456,7 @@ public class DBIO {
      * @throws Exception 
      */
     public static void insertTriple(Triple triple) throws Exception {
-        Repository repo = SesameProperties.getInstance().getRepository();
+        Repository repo = DBAdministration.getRepository();
         if (repo == null) {
             throw new Exception("Cannot insert triple into sesame RDF-DB, not connected.");
         }

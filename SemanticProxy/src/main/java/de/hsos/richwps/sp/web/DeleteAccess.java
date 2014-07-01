@@ -6,6 +6,7 @@ package de.hsos.richwps.sp.web;
 
 import de.hsos.richwps.sp.rdfdb.DBIO;
 import de.hsos.richwps.sp.restlogic.ContentChanger;
+import java.net.URL;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -20,12 +21,12 @@ public class DeleteAccess {
     /**
      * Installs endpoints for the deletion of resources
      */
-    public DeleteAccess(){
+    public DeleteAccess(URL processNamingURL, URL wpsNamingURL){
         
         /**
          * Register endpoint for process deletion
          */
-         delete(new Route("/semanticproxy/resources/process/*") {
+         delete(new Route(processNamingURL.getPath()+"/*") {
             @Override
             public Object handle(Request request, Response response) {
                     try{
@@ -49,7 +50,7 @@ public class DeleteAccess {
          /**
           * Register endpoint for wps deletion
           */
-         delete(new Route("/semanticproxy/resources/wps/*") {
+         delete(new Route(wpsNamingURL.getPath()+"/*") {
             @Override
             public Object handle(Request request, Response response) {
                     try{

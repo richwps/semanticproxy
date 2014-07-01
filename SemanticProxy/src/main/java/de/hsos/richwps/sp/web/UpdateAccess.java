@@ -6,6 +6,7 @@ package de.hsos.richwps.sp.web;
 
 import de.hsos.richwps.sp.rdfdb.DBIO;
 import de.hsos.richwps.sp.restlogic.ContentChanger;
+import java.net.URL;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -20,12 +21,12 @@ public class UpdateAccess {
     /**
      * Installs endpoints for resource updates
      */
-    public UpdateAccess(){
+    public UpdateAccess(URL processNamingURL, URL wpsNamingURL){
         
         /**
          * Register endpoint for process update
          */
-         put(new Route("/semanticproxy/resources/process/*") {
+         put(new Route(processNamingURL.getPath()+"/*") {
             @Override
             public Object handle(Request request, Response response) {
                     if(request.contentType().equalsIgnoreCase("application/xml+rdf")){
@@ -51,7 +52,7 @@ public class UpdateAccess {
          /**
           * Register endpoint for wps update
           */
-         put(new Route("/semanticproxy/resources/wps/*") {
+         put(new Route(wpsNamingURL.getPath()+"/*") {
             @Override
             public Object handle(Request request, Response response) {
                 if(request.contentType().equalsIgnoreCase("application/xml+rdf")){

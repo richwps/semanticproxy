@@ -5,7 +5,8 @@
 package de.hsos.richwps.sp.web;
 
 import de.hsos.richwps.sp.restlogic.RouteMapper;
-import de.hsos.richwps.sp.restlogic.VocabReader;
+import de.hsos.richwps.sp.restlogic.Vocabulary;
+import java.net.URL;
 import java.util.Set;
 import static spark.Spark.*;
 import spark.*;
@@ -20,7 +21,12 @@ public class BrowseAccess {
     /**
      * Registeres the required routes an handlers
      */
-    public BrowseAccess() {
+    public BrowseAccess(URL applicationURL,
+            URL resources,
+            URL vocabularyURL,
+            URL networkURL,
+            URL processListURL,
+            URL wpsList) {
 
 
         /**
@@ -45,7 +51,7 @@ public class BrowseAccess {
         /**
          * Registers the route for user information
          */
-        get(new Route("/semanticproxy") {
+        get(new Route(applicationURL.getPath()) {
             @Override
             public Object handle(Request request, Response response) {
                 String str = "<html>\n"
@@ -67,11 +73,12 @@ public class BrowseAccess {
         /**
          * Registers the route for vocabulary query
          */
-        get(new Route("/semanticproxy/resources/vocab") {
+        get(new Route(vocabularyURL.getPath()) {
             @Override
             public Object handle(Request request, Response response) {
                 try {
-                    String str = VocabReader.readPlainText();
+                    //String str = VocabReader.readPlainText();
+                    String str = Vocabulary.getRDF_XML_Representation();
                     response.status(200);
                     response.type("application/xml"); //normally +rdf, but download in chrome is annoying
                     return str;
@@ -88,9 +95,9 @@ public class BrowseAccess {
 
         
         /**
-         * Registers the route for resources
+         * Registers the route for network
          */
-        get(new Route("/semanticproxy/resources") {
+        get(new Route(networkURL.getPath()) {
             @Override
             public Object handle(Request request, Response response) {
                 Set<String> set = request.headers();
@@ -128,7 +135,7 @@ public class BrowseAccess {
         /**
          * Registers the route for process list
          */
-        get(new Route("/semanticproxy/resources/processes") {
+        get(new Route(processListURL.getPath()) {
             @Override
             public Object handle(Request request, Response response) {
                  try {
@@ -149,7 +156,7 @@ public class BrowseAccess {
         /**
          * Registers the route for wps list
          */
-        get(new Route("/semanticproxy/resources/wps") {
+        get(new Route(wpsList.getPath()) {
             @Override
             public Object handle(Request request, Response response) {
                 try {
@@ -170,7 +177,7 @@ public class BrowseAccess {
         /**
          * Registers the route for resources
          */
-        get(new Route("/semanticproxy/resources/*") {
+        get(new Route(resources.getPath()+ "/*") {
             @Override
             public Object handle(Request request, Response response) {
                  try {

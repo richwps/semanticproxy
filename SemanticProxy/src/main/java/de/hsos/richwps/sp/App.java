@@ -2,12 +2,14 @@ package de.hsos.richwps.sp;
 
 import de.hsos.richwps.sp.rdfdb.DBAdministration;
 import de.hsos.richwps.sp.rdfdb.DBIO;
+import de.hsos.richwps.sp.restlogic.Vocabulary;
 import de.hsos.richwps.sp.types.RDFDocument;
 import de.hsos.richwps.sp.web.BrowseAccess;
 import de.hsos.richwps.sp.web.CreateAccess;
 import de.hsos.richwps.sp.web.DeleteAccess;
 import de.hsos.richwps.sp.web.UpdateAccess;
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Home of the main routine
@@ -24,21 +26,52 @@ public class App {
     public static void main(String[] args) {
         System.out.println("Semantic Proxy is starting...");
 
+        //Load configuration
+        Configuration config = new Configuration();
+        File configFile = new File("." + File.separator + "config.xml");
+        try{
+            if (!config.load(configFile)) {
+                config.writeDefaultConfiguration();
+                config.load(configFile);
+            }
+        }catch(Exception e){
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+            System.out.println("Shutdown due to error");
+            System.exit(-1);
+        }
+        System.out.println(config.toString());
+
+        //Initialize vacabulary
+        try{
+            Vocabulary.init(config.getVocabularyURL());
+        }
+        catch(Exception e){
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+            System.out.println("Shutdown due to error");
+            System.exit(-1);
+        }
+            
         //Prepare db
         try {
-            DBAdministration.connect();
-            DBAdministration.clear();
-            if (DBIO.size() == 0) {
-                String s = File.separator;
-                File rdfFile = new File("." + s + "RDF" + s + "rwpsnetwork.rdf");
-                DBIO.loadRDFXMLFile(rdfFile);
-                rdfFile = new File("." + s + "RDF" + s + "rwpswps.rdf");
-                DBIO.loadRDFXMLFile(rdfFile);
-                rdfFile = new File("." + s + "RDF" + s + "rwpsprocess.rdf");
-                DBIO.loadRDFXMLFile(rdfFile);
+            DBAdministration.connect(config.getRdfMemoryDir());
+            if (config.isStartClean()) {
+                DBAdministration.clear();
             }
+
+            //load initial data
+            if (DBIO.size() == 0) {
+                ArrayList<File> list = config.getPreloadRDF();
+                for (int i = 0; i < list.size(); i++) {
+                    DBIO.loadRDFXMLFile(list.get(i));
+                    System.out.println("File " + list.get(i).getAbsolutePath() + " loaded");
+                }
+            }
+
             //write whole db content to stdout
             RDFDocument doc = DBIO.getWholeDBContent();
+            System.out.println("--- Current DB content ---");
             System.out.println(doc.rDFXMLRepresentation());
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -47,11 +80,15 @@ public class App {
             System.exit(-1);
         }
 
+
         //prepare web frontend
-        new BrowseAccess();
-        new CreateAccess();
-        new DeleteAccess();
-        new UpdateAccess();
+        new BrowseAccess(config.getApplicationURL(), config.getResourcesURL(), 
+                config.getVocabularyURL(), config.getNetworkURL(), 
+                config.getProcessListURL(), config.getWpsListURL());
+        new CreateAccess(config.getProcessListURL(),config.getWpsListURL());
+        new DeleteAccess(config.getProcessNamingURL(), config.getWpsNamingURL());
+        new UpdateAccess(config.getProcessNamingURL(), config.getWpsNamingURL());
+        
         System.out.println("Semantic Proxy is listening");
     }
 }

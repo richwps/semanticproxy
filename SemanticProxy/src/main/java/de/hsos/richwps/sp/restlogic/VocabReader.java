@@ -27,6 +27,7 @@ public class VocabReader {
     public static String readPlainText() throws Exception{
         try{
             File vocab = new File("."+File.separator+"vocab.rdf");
+            System.out.println(vocab.getAbsolutePath());
             FileInputStream fis = new FileInputStream(vocab);
             byte[] raw = new byte[(int)vocab.length()];
             fis.read(raw);

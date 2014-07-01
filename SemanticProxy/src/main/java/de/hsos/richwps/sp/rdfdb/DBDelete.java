@@ -38,7 +38,7 @@ public class DBDelete {
      */
     public static void deleteProcess(String processRoute) throws Exception {
         //get db
-        Repository repo = SesameProperties.getInstance().getRepository();
+        Repository repo = DBAdministration.getRepository();
         if (repo == null) {
             throw new Exception("Cannot delete process from sesame RDF-DB, not connected.");
         }
@@ -82,7 +82,7 @@ public class DBDelete {
     private static void delete(Resource root) throws Exception {
 
         //connect to db
-        Repository repo = SesameProperties.getInstance().getRepository();
+        Repository repo = DBAdministration.getRepository();
         if (repo == null) {
             throw new Exception("Cannot delete process from sesame RDF-DB, not connected.");
         }
@@ -132,7 +132,7 @@ public class DBDelete {
      * @throws Exception When sth. goes wrong with the db
      */
     public static void deleteWPS(String wpsRoute) throws Exception {
-        Repository repo = SesameProperties.getInstance().getRepository();
+        Repository repo = DBAdministration.getRepository();
         if (repo == null) {
             throw new Exception("Cannot delete process from sesame RDF-DB, not connected.");
         }
@@ -175,7 +175,7 @@ public class DBDelete {
      */
     public static void deleteWPSForUpdate(java.net.URI wps) throws Exception {
         //get the db
-        Repository repo = SesameProperties.getInstance().getRepository();
+        Repository repo = DBAdministration.getRepository();
         if (repo == null) {
             throw new Exception("Cannot insert triple into sesame RDF-DB, not connected.");
         }

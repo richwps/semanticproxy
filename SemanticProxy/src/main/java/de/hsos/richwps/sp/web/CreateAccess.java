@@ -4,8 +4,8 @@
  */
 package de.hsos.richwps.sp.web;
 
-import de.hsos.richwps.sp.rdfdb.DBIO;
 import de.hsos.richwps.sp.restlogic.ContentChanger;
+import java.net.URL;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -21,13 +21,13 @@ public class CreateAccess {
     /**
      * Installs endpoints for http post
      */
-    public CreateAccess(){
+    public CreateAccess(URL processListURL, URL wpsListURL){
     
     
         /**
          * Register endpoint for process creation
          */
-        post(new Route("/semanticproxy/resources/processes") {
+        post(new Route(processListURL.getPath()) {
             @Override
             public Object handle(Request request, Response response) {
                 if(request.contentType().equalsIgnoreCase("application/xml+rdf")){
@@ -53,7 +53,7 @@ public class CreateAccess {
         /**
          * Register endpoint for wps creation
          */
-        post(new Route("/semanticproxy/resources/wps") {
+        post(new Route(wpsListURL.getPath()) {
             @Override
             public Object handle(Request request, Response response) {
                 if(request.contentType().equalsIgnoreCase("application/xml+rdf")){

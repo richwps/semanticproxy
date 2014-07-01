@@ -6,10 +6,10 @@
 	
 	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources">
 		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#network"/>
-		<rwps:domain>Some string</rwps:domain>
-		<rwps:owner>Max Mustermann</rwps:owner>
-		<rwps:wps rdf:resource="http://localhost:4567/semanticproxy/resources/wps/wpsA"/>
-		<rwps:wps rdf:resource="http://localhost:4567/semanticproxy/resources/wps/wpsB"/>
+		<rwps:domain>RichWPS test domain</rwps:domain>
+		<rwps:owner>HS-OS</rwps:owner>
+		<rwps:wps rdf:resource="http://localhost:4567/semanticproxy/resources/wps/MacrophyteWPS"/>
+		<rwps:wps rdf:resource="http://localhost:4567/semanticproxy/resources/wps/ModelValidationWPS"/>
 	</rdf:Description>
 
 </rdf:RDF>
