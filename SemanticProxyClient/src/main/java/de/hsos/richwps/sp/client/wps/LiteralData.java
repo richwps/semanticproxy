@@ -2,17 +2,16 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.hsos.richwps.sp.client;
+package de.hsos.richwps.sp.client.wps;
 
-import de.hsos.richwps.sp.client.Vocabulary;
+import de.hsos.richwps.sp.client.rdf.RDFID;
+import de.hsos.richwps.sp.client.rdf.RDFResource;
 
 /**
- * Wraps an RDFResource object that represents a wps process. This wrapper
- * abstracts the rdf handling
  *
  * @author fbensman
  */
-public class Process {
+public class LiteralData extends InAndOutputForm {
 
     private RDFResource res = null;
 
@@ -21,7 +20,7 @@ public class Process {
      *
      * @param res Resource to wrap
      */
-    private Process(RDFResource res) {
+    private LiteralData(RDFResource res) {
         this.res = res;
     }
 
@@ -31,11 +30,11 @@ public class Process {
      * @param res Resource to wrap
      * @return The wrapper, null if the resource is not a network objekt
      */
-    public static Process createWrapper(RDFResource res) {
+    public static LiteralData createWrapper(RDFResource res) {
         RDFID[] type = res.findResources(Vocabulary.Type);
         if (type.length == 1) {
-            if (type[0].rdfID.equals(Vocabulary.ProcessClass)) {
-                return new Process(res);
+            if (type[0].rdfID.equals(Vocabulary.LiteralDataClass)) {
+                return new LiteralData(res);
             }
         }
         return null;
@@ -49,19 +48,9 @@ public class Process {
         return null;
     }
 
-    public String getIdentifier() {
-        return getSingleAttribute(Vocabulary.Identifier);
+    @Override
+    public int getDataType() {
+        return LITERAL_TYPE;
     }
-
-    public String getTitle() {
-        return getSingleAttribute(Vocabulary.Title);
-    }
-
-    public String getAbstract() {
-        return getSingleAttribute(Vocabulary.Abstract);
-    }
-
-    public String getProcessVersion() {
-        return getSingleAttribute(Vocabulary.ProcessVersion);
-    }
+    //TODO: Make further attributes accessible
 }

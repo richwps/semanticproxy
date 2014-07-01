@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.hsos.richwps.sp.client;
+package de.hsos.richwps.sp.client.rdf;
 
 import java.util.ArrayList;
 
@@ -61,7 +61,7 @@ public class RDFResource {
      * @param predicate
      * @return
      */
-    protected String[] findLiterals(String predicate) {
+    public String[] findLiterals(String predicate) {
         ArrayList<String> list = new ArrayList<String>();
         for (int i = 0; i < fields.length; i++) {
             if (fields[i].predicate.equals(predicate)) {
@@ -80,7 +80,7 @@ public class RDFResource {
      * @param predicate
      * @return
      */
-    protected RDFID[] findResources(String predicate) {
+    public RDFID[] findResources(String predicate) {
         ArrayList<RDFID> list = new ArrayList<RDFID>();
         for (int i = 0; i < resources.length; i++) {
             if (resources[i].predicate.equals(predicate)) {

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.hsos.richwps.sp.client;
+package de.hsos.richwps.sp.client.rdf;
 
 /**
  * Class that stores an RDF resource id

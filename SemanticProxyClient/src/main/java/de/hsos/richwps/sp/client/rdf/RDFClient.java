@@ -2,8 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.hsos.richwps.sp.client;
+package de.hsos.richwps.sp.client.rdf;
 
+import de.hsos.richwps.sp.client.HTTPClient;
+import de.hsos.richwps.sp.client.LRUCache;
+import de.hsos.richwps.sp.client.URIConfiguration;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;

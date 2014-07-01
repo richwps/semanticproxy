@@ -30,7 +30,7 @@ public class HTTPClient {
      */
     public String getRawRDF(String url) throws Exception {
         try {
-            System.out.println("uri: " + url);
+            //System.out.println("uri: " + url);
             Client client = ClientBuilder.newClient();
             WebTarget webTarget = client.target(url);
 

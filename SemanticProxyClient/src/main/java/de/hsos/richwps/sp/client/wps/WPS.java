@@ -2,9 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.hsos.richwps.sp.client;
+package de.hsos.richwps.sp.client.wps;
 
-import de.hsos.richwps.sp.client.Vocabulary;
+import de.hsos.richwps.sp.client.rdf.RDFID;
+import de.hsos.richwps.sp.client.rdf.RDFResource;
+import de.hsos.richwps.sp.client.wps.Vocabulary;
 
 /**
  * Wraps an RDFResource object that represents a wps server. This wrapper
