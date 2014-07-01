@@ -1,0 +1,106 @@
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:rwps="http://localhost:4567/semanticproxy/resources/vocab#">
+	
+	<!-- process -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/process/selectTopography">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#processclass"/>
+		<rwps:identifier>lkn.macrophyte.selecttopography</rwps:identifier>
+		<rwps:title>Select topography</rwps:title>
+		<rwps:abstract>Selects topography in macrophyte assessment use case</rwps:abstract>
+		<rwps:processversion>1.0</rwps:processversion>
+		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/input/in_topography"/>
+		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/input/in_relevantyears"/>
+		<rwps:output rdf:resource="http://localhost:4567/semanticproxy/resources/output/out_relevanttopographies"/>
+		<rwps:output rdf:resource="http://localhost:4567/semanticproxy/resources/output/out_relevanttopographyyears"/>
+		<rwps:output rdf:resource="http://localhost:4567/semanticproxy/resources/output/out_existingtopographyyears"/>
+		<rwps:wps rdf:resource="http://localhost:4567/semanticproxy/resources/wps/MacrophyteWPS"/>
+	</rdf:Description>
+	
+	
+	<!-- complex input -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/input/in_topography">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#datainputclass"/>
+		<rwps:identifier>in.topography</rwps:identifier>
+		<rwps:title>Topography data</rwps:title>
+		<rwps:abstract>Ingoing topography data</rwps:abstract>
+		<rwps:minoccurs>1</rwps:minoccurs>
+		<rwps:maxoccurs>1</rwps:maxoccurs>
+		<rwps:metadata>http://www.metadata.de/metadata</rwps:metadata>
+		<rwps:inputformchoice rdf:resource="http://localhost:4567/semanticproxy/resources/complexdata/complex_topography"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/complexdata/complex_topography">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#complexdataclass"/>
+	</rdf:Description>
+	
+	
+	<!-- complex input -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/input/in_relevantyears">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#datainputclass"/>
+		<rwps:identifier>in.relevantyears</rwps:identifier>
+		<rwps:title>Relevant years</rwps:title>
+		<rwps:abstract>Ingoing relevant years</rwps:abstract>
+		<rwps:minoccurs>1</rwps:minoccurs>
+		<rwps:maxoccurs>1</rwps:maxoccurs>
+		<rwps:metadata>http://www.metadata.de/metadata</rwps:metadata>
+		<rwps:inputformchoice rdf:resource="http://localhost:4567/semanticproxy/resources/complexdata/complex_relevantyears"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/complexdata/complex_relevantyears">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#complexdataclass"/>
+	</rdf:Description>
+	
+	<!-- complex output -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/output/out_relevanttopographies">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#processoutputclass"/>
+		<rwps:identifier>out.relevanttopographies</rwps:identifier>
+		<rwps:title>Relevant topographies</rwps:title>
+		<rwps:abstract>Outgoing relevant topographies</rwps:abstract>
+		<rwps:metadata>http://www.metadata.de/metadata</rwps:metadata>
+		<rwps:outputformchoice rdf:resource="http://localhost:4567/semanticproxy/resources/complexdata/complex_relevanttopographies"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/complexdata/complex_relevanttopographies">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#complexdataclass"/>
+	</rdf:Description>
+	
+	
+	<!-- complex output -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/output/out_relevanttopographyyears">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#processoutputclass"/>
+		<rwps:identifier>out.relevanttopographyyears</rwps:identifier>
+		<rwps:title>Relevant topography years</rwps:title>
+		<rwps:abstract>Outgoing relevant topography years</rwps:abstract>
+		<rwps:metadata>http://www.metadata.de/metadata</rwps:metadata>
+		<rwps:outputformchoice rdf:resource="http://localhost:4567/semanticproxy/resources/complexdata/complex_relevanttopographyyears"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/complexdata/complex_relevanttopographyyears">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#complexdataclass"/>
+	</rdf:Description>
+	
+	<!-- complex output -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/output/out_existingtopographyyears">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#processoutputclass"/>
+		<rwps:identifier>out.existingtopographyyears</rwps:identifier>
+		<rwps:title>Existing topography years</rwps:title>
+		<rwps:abstract>Outgoing existing topography years</rwps:abstract>
+		<rwps:metadata>http://www.metadata.de/metadata</rwps:metadata>
+		<rwps:outputformchoice rdf:resource="http://localhost:4567/semanticproxy/resources/complexdata/complex_existingtopographyyears"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/complexdata/complex_existingtopographyyears">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#complexdataclass"/>
+	</rdf:Description>
+	
+	
+
+</rdf:RDF>
