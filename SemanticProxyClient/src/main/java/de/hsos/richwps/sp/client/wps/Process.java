@@ -4,6 +4,10 @@
  */
 package de.hsos.richwps.sp.client.wps;
 
+import de.hsos.richwps.sp.client.CommunicationException;
+import de.hsos.richwps.sp.client.InternalSPException;
+import de.hsos.richwps.sp.client.RDFException;
+import de.hsos.richwps.sp.client.ResourceNotFoundException;
 import de.hsos.richwps.sp.client.rdf.RDFID;
 import de.hsos.richwps.sp.client.rdf.RDFResource;
 
@@ -32,75 +36,59 @@ public class Process {
      * @param res Resource to wrap
      * @return The wrapper, null if the resource is not a network objekt
      */
-    public static Process createWrapper(RDFResource res) {
+    public static Process createWrapper(RDFResource res) throws RDFException{
         RDFID[] type = res.findResources(Vocabulary.Type);
         if (type.length == 1) {
             if (type[0].rdfID.equals(Vocabulary.ProcessClass)) {
                 return new Process(res);
             }
         }
-        return null;
+        throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found "+type.length+" type-attributes");
     }
 
-    private String getSingleAttribute(String pred) {
+    private String getSingleAttribute(String pred) throws RDFException {
         String[] val = res.findLiterals(pred);
         if (val.length == 1) {
             return val[0];
         }
-        return null;
+        throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found "+val.length+" "+pred+"-attributes");
     }
 
-    public String getIdentifier() {
+    public String getIdentifier() throws RDFException{
         return getSingleAttribute(Vocabulary.Identifier);
     }
 
-    public String getTitle() {
+    public String getTitle() throws RDFException{
         return getSingleAttribute(Vocabulary.Title);
     }
 
-    public String getAbstract() {
+    public String getAbstract() throws RDFException{
         return getSingleAttribute(Vocabulary.Abstract);
     }
 
-    public String getProcessVersion() {
+    public String getProcessVersion() throws RDFException{
         return getSingleAttribute(Vocabulary.ProcessVersion);
     }
-    
-    public Input[] getInputs(){
+
+    public Input[] getInputs() throws ResourceNotFoundException, InternalSPException, CommunicationException, RDFException {
         RDFID[] rdfids = res.findResources(Vocabulary.Input);
         Input[] inputs = new Input[rdfids.length];
         SPClient spc = SPClient.getInstance();
-        
-        try {
-            for (int i = 0; i < rdfids.length; i++) {
-                inputs[i] = spc.getInput(rdfids[i]);
-            }
-        } catch (Exception e) {
-            return null;
+
+        for (int i = 0; i < rdfids.length; i++) {
+            inputs[i] = spc.getInput(rdfids[i]);
         }
+
         return inputs;
     }
-    
-    
-    public Output[] getOutputs(){
+
+    public Output[] getOutputs() throws ResourceNotFoundException, InternalSPException, CommunicationException, RDFException {
         RDFID[] rdfids = res.findResources(Vocabulary.Output);
         Output[] outputs = new Output[rdfids.length];
         SPClient spc = SPClient.getInstance();
-        
-        try {
-            for (int i = 0; i < rdfids.length; i++) {
-                outputs[i] = spc.getOutput(rdfids[i]);
-            }
-        } catch (Exception e) {
-            return null;
+        for (int i = 0; i < rdfids.length; i++) {
+            outputs[i] = spc.getOutput(rdfids[i]);
         }
         return outputs;
     }
-    
-    
-        
-        
-        
-        
-    
 }

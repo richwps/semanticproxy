@@ -4,6 +4,7 @@
  */
 package de.hsos.richwps.sp.client.wps;
 
+import de.hsos.richwps.sp.client.RDFException;
 import de.hsos.richwps.sp.client.rdf.RDFID;
 import de.hsos.richwps.sp.client.rdf.RDFResource;
 
@@ -32,24 +33,17 @@ public class ComplexData extends InAndOutputForm{
      * @param res Resource to wrap
      * @return The wrapper, null if the resource is not a network objekt
      */
-    public static ComplexData createWrapper(RDFResource res) {
+    public static ComplexData createWrapper(RDFResource res) throws RDFException {
         RDFID[] type = res.findResources(Vocabulary.Type);
         if (type.length == 1) {
             if (type[0].rdfID.equals(Vocabulary.ComplexDataClass)) {
                 return new ComplexData(res);
             }
         }
-        return null;
+        throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found "+type.length+" type-attributes");
     }
 
-    private String getSingleAttribute(String pred) {
-        String[] val = res.findLiterals(pred);
-        if (val.length == 1) {
-            return val[0];
-        }
-        return null;
-    }
-     
+  
     
     @Override
     public int getDataType() {

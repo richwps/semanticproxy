@@ -11,6 +11,8 @@ import de.hsos.richwps.sp.client.wps.Network;
 import de.hsos.richwps.sp.client.wps.SPClient;
 import de.hsos.richwps.sp.client.wps.InAndOutputForm;
 import de.hsos.richwps.sp.client.wps.Output;
+import de.hsos.richwps.sp.client.wps.Vocabulary;
+import java.net.URL;
 
 /**
  * Main class contains client setup and some operations with it
@@ -28,13 +30,13 @@ public class App {
     public static void main(String[] args) {
         System.out.println("Semantic Proxy Client is starting...");
         try {
+            Vocabulary.init(new URL("http://localhost:4567/semanticproxy/resources/vocab"));
+            
             //client setup
             SPClient spClient = SPClient.getInstance();
             spClient.setRootURL("http://localhost:4567/semanticproxy/resources");
 
             //Testing/Demonstration
-            boolean res = spClient.testConnection();
-            System.out.println("Connection ok: " + res);
             Network net = spClient.getNetwork();
             
             System.out.println("Network:");
@@ -120,9 +122,23 @@ public class App {
 //            }
 
 
-        } catch (Exception e) {
+        }catch(ResourceNotFoundException e){
+            System.err.println("Caught exception: "+e.getMessage());
+            e.printStackTrace();
+        }catch(RDFException e){
+            System.err.println("Caught exception: "+e.getMessage());
+            e.printStackTrace();
+        }catch(CommunicationException e){
+            System.err.println("Caught exception: "+e.getMessage());
+            e.printStackTrace();
+        }catch(InternalSPException e){
+            System.err.println("Caught exception: "+e.getMessage());
+            e.printStackTrace();
+        }catch(Exception e){
+            System.err.println("Unexpected exception: "+e.getMessage());
             e.printStackTrace();
         }
+        
         System.out.println("Semantic Proxy Client has stopped");
     }
 }

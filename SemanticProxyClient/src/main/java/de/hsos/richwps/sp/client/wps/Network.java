@@ -4,6 +4,10 @@
  */
 package de.hsos.richwps.sp.client.wps;
 
+import de.hsos.richwps.sp.client.CommunicationException;
+import de.hsos.richwps.sp.client.InternalSPException;
+import de.hsos.richwps.sp.client.RDFException;
+import de.hsos.richwps.sp.client.ResourceNotFoundException;
 import de.hsos.richwps.sp.client.rdf.RDFID;
 import de.hsos.richwps.sp.client.rdf.RDFResource;
 import de.hsos.richwps.sp.client.wps.Vocabulary;
@@ -33,30 +37,36 @@ public class Network {
      * @param res Resource to wrap
      * @return The wrapper, null if the resource is not a network objekt
      */
-    public static Network createWrapper(RDFResource res) {
-        String owner = res.findLiterals(Vocabulary.Owner)[0];
-        String domain = res.findLiterals(Vocabulary.Domain)[0];
-
-        if (owner != null && domain != null) {
-            return new Network(res);
+    public static Network createWrapper(RDFResource res) throws RDFException {
+        RDFID[] type = res.findResources(Vocabulary.Type);
+        if (type.length == 1) {
+            if (type[0].rdfID.equals(Vocabulary.NetworkClass)) {
+                return new Network(res);
+            }
         }
-        return null;
+        throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found "+type.length+" type-attributes");
+    }
+    
+    
+    
+    
+    
+    
+    private String getSingleAttribute(String pred) throws RDFException {
+        String[] val = res.findLiterals(pred);
+        if (val.length == 1) {
+            return val[0];
+        }
+        throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found "+val.length+" "+pred+"-attributes");
+    }
+    
+
+    public String getOwner() throws RDFException{
+        return getSingleAttribute(Vocabulary.Owner);
     }
 
-    public String getOwner() {
-        String[] owner = res.findLiterals(Vocabulary.Owner);
-        if (owner.length == 1) {
-            return owner[0];
-        }
-        return null;
-    }
-
-    public String getDomain() {
-        String[] domain = res.findLiterals(Vocabulary.Domain);
-        if (domain.length == 1) {
-            return domain[0];
-        }
-        return null;
+    public String getDomain() throws RDFException{
+       return getSingleAttribute(Vocabulary.Domain);
     }
 
     /**
@@ -64,17 +74,15 @@ public class Network {
      *
      * @return Wrapper for RDF resources that describe WPSs
      */
-    public WPS[] getWPSs() {
+    public WPS[] getWPSs() throws ResourceNotFoundException, InternalSPException, CommunicationException, RDFException{
         RDFID[] rdfids = res.findResources(Vocabulary.WPS);
         SPClient spc = SPClient.getInstance();
         WPS[] wpss = new WPS[rdfids.length];
-        try {
-            for (int i = 0; i < rdfids.length; i++) {
-                wpss[i] = spc.getWPS(rdfids[i]);
-            }
-        } catch (Exception e) {
-            return null;
+       
+        for (int i = 0; i < rdfids.length; i++) {
+            wpss[i] = spc.getWPS(rdfids[i]);
         }
+        
         return wpss;
     }
 }

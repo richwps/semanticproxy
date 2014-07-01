@@ -4,6 +4,7 @@
  */
 package de.hsos.richwps.sp.client.wps;
 
+import de.hsos.richwps.sp.client.RDFException;
 import de.hsos.richwps.sp.client.rdf.RDFID;
 import de.hsos.richwps.sp.client.rdf.RDFResource;
 
@@ -30,22 +31,22 @@ public class LiteralData extends InAndOutputForm {
      * @param res Resource to wrap
      * @return The wrapper, null if the resource is not a network objekt
      */
-    public static LiteralData createWrapper(RDFResource res) {
+    public static LiteralData createWrapper(RDFResource res) throws RDFException{
         RDFID[] type = res.findResources(Vocabulary.Type);
         if (type.length == 1) {
             if (type[0].rdfID.equals(Vocabulary.LiteralDataClass)) {
                 return new LiteralData(res);
             }
         }
-        return null;
+        throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found "+type.length+" type-attributes");
     }
 
-    private String getSingleAttribute(String pred) {
+     private String getSingleAttribute(String pred) throws RDFException {
         String[] val = res.findLiterals(pred);
         if (val.length == 1) {
             return val[0];
         }
-        return null;
+        throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found "+val.length+" "+pred+"-attributes");
     }
 
     @Override

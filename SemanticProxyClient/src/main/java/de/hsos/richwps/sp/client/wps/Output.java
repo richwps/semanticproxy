@@ -4,6 +4,10 @@
  */
 package de.hsos.richwps.sp.client.wps;
 
+import de.hsos.richwps.sp.client.CommunicationException;
+import de.hsos.richwps.sp.client.InternalSPException;
+import de.hsos.richwps.sp.client.RDFException;
+import de.hsos.richwps.sp.client.ResourceNotFoundException;
 import de.hsos.richwps.sp.client.rdf.RDFClient;
 import de.hsos.richwps.sp.client.rdf.RDFID;
 import de.hsos.richwps.sp.client.rdf.RDFResource;
@@ -28,40 +32,40 @@ public class Output {
      * @param res Resource to wrap
      * @return The wrapper, null if the resource is not a network objekt
      */
-    public static Output createWrapper(RDFResource res) {
+    public static Output createWrapper(RDFResource res) throws RDFException{
         RDFID[] type = res.findResources(Vocabulary.Type);
         if (type.length == 1) {
             if (type[0].rdfID.equals(Vocabulary.ProcessOutputClass)) {
                 return new Output(res);
             }
         }
-        return null;
+        throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found "+type.length+" type-attributes");
     }
     
     
     
-    private String getSingleAttribute(String pred) {
+    private String getSingleAttribute(String pred) throws RDFException {
         String[] val = res.findLiterals(pred);
         if (val.length == 1) {
             return val[0];
         }
-        return null;
+        throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found "+val.length+" "+pred+"-attributes");
     }
 
-    public String getIdentifier() {
+    public String getIdentifier() throws RDFException{
         return getSingleAttribute(Vocabulary.Identifier);
     }
 
-    public String getTitle() {
+    public String getTitle() throws RDFException{
         return getSingleAttribute(Vocabulary.Title);
     }
 
-    public String getAbstract() {
+    public String getAbstract() throws RDFException{
         return getSingleAttribute(Vocabulary.Abstract);
     }
     
    
-    public URL getMetadata(){
+    public URL getMetadata()throws RDFException{
         String tmp = getSingleAttribute(Vocabulary.Metadata);
         if(tmp == null)
             return null;
@@ -77,13 +81,13 @@ public class Output {
     }
     
     
-    public InAndOutputForm getOutputFormChoice(){
+    public InAndOutputForm getOutputFormChoice() throws RDFException, CommunicationException, ResourceNotFoundException, InternalSPException{
         //get the statement about the input form choice
         RDFID[] ofc = res.findResources(Vocabulary.OutputFormChoice);
         if (ofc.length == 1) { //if there is only one...
             SPClient spc = SPClient.getInstance();
             RDFClient rdfc = spc.getRdfClient();
-            try{
+            
                 //get the data type resource... 
                 RDFResource oufoch = rdfc.retrieveResource(ofc[0]);
                 //determine its type (complex, literal, ...)
@@ -94,11 +98,7 @@ public class Output {
                     return spc.getLiteralData(ofc[0]);
                 else
                     return spc.getBoundingBoxData(ofc[0]);
-            }catch(Exception e){
-                return null;
-            }
-  
         }
-        return null;
+        throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found "+ofc.length+" OutputFormChoices");
     }
 }

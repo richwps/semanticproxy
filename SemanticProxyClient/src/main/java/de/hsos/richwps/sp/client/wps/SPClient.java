@@ -4,6 +4,10 @@
  */
 package de.hsos.richwps.sp.client.wps;
 
+import de.hsos.richwps.sp.client.CommunicationException;
+import de.hsos.richwps.sp.client.InternalSPException;
+import de.hsos.richwps.sp.client.RDFException;
+import de.hsos.richwps.sp.client.ResourceNotFoundException;
 import de.hsos.richwps.sp.client.rdf.RDFClient;
 import de.hsos.richwps.sp.client.rdf.RDFID;
 import de.hsos.richwps.sp.client.rdf.RDFResource;
@@ -36,28 +40,6 @@ public class SPClient {
         return instance;
     }
 
-    /**
-     * Tests the connection to the root URL. The root URL is
-     * "http://localhost:4567/semanticproxy/resources" if not specified
-     * otherwise.
-     *
-     * @return True if connection is ok, false else
-     */
-    public boolean testConnection() {
-        try {
-            Network network = null;
-            network = getNetwork();
-            if (network == null) {
-                return false;
-            }
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-
-    }
-
     public String getRootURL() {
         return rootURL;
     }
@@ -82,7 +64,7 @@ public class SPClient {
      * @return RDFResource with Network-Wrapper class
      * @throws Exception
      */
-    public Network getNetwork() throws Exception {
+    public Network getNetwork() throws ResourceNotFoundException, InternalSPException, CommunicationException, RDFException {
         RDFResource res = rdfClient.retrieveResource(new RDFID(rootURL));
         return Network.createWrapper(res);
     }
@@ -93,7 +75,7 @@ public class SPClient {
      * @return RDFResource with WPS-Wrapper class
      * @throws Exception
      */
-    public WPS getWPS(RDFID rdfID) throws Exception {
+    public WPS getWPS(RDFID rdfID) throws ResourceNotFoundException, InternalSPException, CommunicationException, RDFException {
         RDFResource res = rdfClient.retrieveResource(rdfID);
         return WPS.createWrapper(res);
     }
@@ -104,69 +86,66 @@ public class SPClient {
      * @return RDFResource with Process-Wrapper class
      * @throws Exception
      */
-    public Process getProcess(RDFID rdfID) throws Exception {
+    public Process getProcess(RDFID rdfID) throws ResourceNotFoundException, InternalSPException, CommunicationException, RDFException {
         RDFResource res = rdfClient.retrieveResource(rdfID);
         return Process.createWrapper(res);
     }
-    
-    
-    
+
     /**
      * Gets an RDFResource with Input-Wrapper class, uses the specified RDF ID
      *
      * @return RDFResource with Input-Wrapper class
      * @throws Exception
      */
-    public Input getInput(RDFID rdfID) throws Exception {
+    public Input getInput(RDFID rdfID) throws ResourceNotFoundException, InternalSPException, CommunicationException, RDFException {
         RDFResource res = rdfClient.retrieveResource(rdfID);
         return Input.createWrapper(res);
     }
-    
-    
+
     /**
      * Gets an RDFResource with Output-Wrapper class, uses the specified RDF ID
      *
      * @return RDFResource with Output-Wrapper class
      * @throws Exception
      */
-    public Output getOutput(RDFID rdfID) throws Exception {
+    public Output getOutput(RDFID rdfID) throws ResourceNotFoundException, InternalSPException, CommunicationException, RDFException {
         RDFResource res = rdfClient.retrieveResource(rdfID);
         return Output.createWrapper(res);
     }
-    
-    
+
     /**
-     * Gets an RDFResource with ComplexData-Wrapper class, uses the specified RDF ID
+     * Gets an RDFResource with ComplexData-Wrapper class, uses the specified
+     * RDF ID
      *
      * @return RDFResource with ComplexData-Wrapper class
      * @throws Exception
      */
-    public ComplexData getComplexData(RDFID rdfID) throws Exception {
+    public ComplexData getComplexData(RDFID rdfID) throws ResourceNotFoundException, InternalSPException, CommunicationException, RDFException {
         RDFResource res = rdfClient.retrieveResource(rdfID);
         return ComplexData.createWrapper(res);
     }
-    
+
     /**
-     * Gets an RDFResource with LiteralData-Wrapper class, uses the specified RDF ID
+     * Gets an RDFResource with LiteralData-Wrapper class, uses the specified
+     * RDF ID
      *
      * @return RDFResource with LiteralData-Wrapper class
      * @throws Exception
      */
-    public LiteralData getLiteralData(RDFID rdfID) throws Exception {
+    public LiteralData getLiteralData(RDFID rdfID) throws ResourceNotFoundException, InternalSPException, CommunicationException, RDFException {
         RDFResource res = rdfClient.retrieveResource(rdfID);
         return LiteralData.createWrapper(res);
     }
-    
-    
+
     /**
-     * Gets an RDFResource with BoundingBoxData-Wrapper class, uses the specified RDF ID
+     * Gets an RDFResource with BoundingBoxData-Wrapper class, uses the
+     * specified RDF ID
      *
      * @return RDFResource with BoundingBoxData-Wrapper class
      * @throws Exception
      */
-    public BoundingBoxData getBoundingBoxData(RDFID rdfID) throws Exception {
+    public BoundingBoxData getBoundingBoxData(RDFID rdfID) throws ResourceNotFoundException, InternalSPException, CommunicationException, RDFException {
         RDFResource res = rdfClient.retrieveResource(rdfID);
         return BoundingBoxData.createWrapper(res);
     }
-    
 }

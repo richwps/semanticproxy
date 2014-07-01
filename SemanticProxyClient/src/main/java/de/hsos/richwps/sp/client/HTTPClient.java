@@ -8,7 +8,6 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
@@ -28,8 +27,8 @@ public class HTTPClient {
      * @return The resource as a string
      * @throws Exception If sth goes wrong
      */
-    public String getRawRDF(String url) throws Exception {
-        try {
+    public String getRawRDF(String url) throws ResourceNotFoundException, InternalSPException, CommunicationException {
+        try{
             //System.out.println("uri: " + url);
             Client client = ClientBuilder.newClient();
             WebTarget webTarget = client.target(url);
@@ -38,13 +37,23 @@ public class HTTPClient {
             invocationBuilder.accept("application/xml+rdf");
 
             Response response = invocationBuilder.get();
-
+ 
             if (response.getStatus() != 200) {
-                throw new Exception("Error, SemanticProxy returned " + response.getStatus() + " for " + url);
+                if(response.getStatus() == 404 ){
+                    throw new ResourceNotFoundException("Resource: "+ url +" not found.");
+                }
+                throw new InternalSPException("SemanticProxy returned " + response.getStatus() + " for GET" + url);
             }
             return response.readEntity(String.class);
-        } catch (Exception e) {
+            
+        }catch(ResourceNotFoundException e){
             throw e;
+        }
+        catch(InternalSPException e){
+            throw e;
+        }
+        catch(Exception e){
+            throw new CommunicationException("Communication to SemanticProxy at "+ url +" failed. Original message: "+e.getMessage());
         }
     }
 }
