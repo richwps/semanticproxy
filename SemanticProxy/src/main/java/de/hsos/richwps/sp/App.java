@@ -2,6 +2,7 @@ package de.hsos.richwps.sp;
 
 import de.hsos.richwps.sp.rdfdb.DBAdministration;
 import de.hsos.richwps.sp.rdfdb.DBIO;
+import de.hsos.richwps.sp.restlogic.ContentChanger;
 import de.hsos.richwps.sp.restlogic.Vocabulary;
 import de.hsos.richwps.sp.types.RDFDocument;
 import de.hsos.richwps.sp.web.BrowseAccess;
@@ -64,9 +65,19 @@ public class App {
 
             //load initial data
             if (DBIO.size() == 0) {
-                ArrayList<File> list = config.getPreloadRDF();
+                ContentChanger.insertNetwork(config.getOwner(), config.getDomain());
+                
+                ArrayList<File> list = config.getWpsRDFFiles();
                 for (int i = 0; i < list.size(); i++) {
-                    DBIO.loadRDFXMLFile(list.get(i));
+                    String content = TextFileReader.readPlainText(list.get(i));
+                    ContentChanger.pushWPSRDFintoDB(content);
+                    System.out.println("File " + list.get(i).getAbsolutePath() + " loaded");
+                }
+                
+                list = config.getProcessRDFFiles();
+                for (int i = 0; i < list.size(); i++) {
+                    String content = TextFileReader.readPlainText(list.get(i));
+                    ContentChanger.pushProcessRDFintoDB(content);
                     System.out.println("File " + list.get(i).getAbsolutePath() + " loaded");
                 }
             }

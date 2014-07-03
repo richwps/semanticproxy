@@ -7,6 +7,7 @@ package de.hsos.richwps.sp.rdfdb;
 import de.hsos.richwps.sp.restlogic.Vocabulary;
 import de.hsos.richwps.sp.types.RDFDescription;
 import de.hsos.richwps.sp.types.RDFDocument;
+
 import de.hsos.richwps.sp.types.SubjectList;
 import de.hsos.richwps.sp.types.Triple;
 import java.io.File;
@@ -17,6 +18,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.sql.Connection;
 import java.util.ArrayList;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -512,6 +514,32 @@ public class DBIO {
 
     }
 
+    
+    /**
+     * Inserts an RDF statement into db
+     * @param triple
+     * @throws Exception 
+     */
+    public static void insertStatement(Statement stmt) throws Exception{
+        Repository repo = DBAdministration.getRepository();
+        if (repo == null) {
+            throw new Exception("Cannot insert Statement into sesame RDF-DB, not connected.");
+        }
+        Resource[] resArr = new Resource[0];
+        RepositoryConnection con = repo.getConnection();
+        try {
+            con.add(stmt, resArr);
+        } catch (RepositoryException e) {
+            throw new Exception("Cannot load rdf/xml string into sesame RDF-DB, not connected or not writable.");
+        } catch (UnsupportedRDFormatException e) {
+            throw new Exception("Cannot load rdf/xml string into sesame RDF-DB, " + e.getMessage());
+        } finally {
+            con.close();
+        }
+    
+    }
+    
+    
     
     /**
      * Validates wether a certain string is a literal or a resource

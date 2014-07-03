@@ -11,7 +11,6 @@ import de.hsos.rwps.semanticproxy.config.RDFNamingEndpoints;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
-//import de.hsos.rwps.semanticproxy.config.*;
 import java.io.FileWriter;
 
 /**
@@ -22,7 +21,10 @@ public class Configuration {
     
     private File rdfMemoryDir = null;
     private boolean startClean = true;
-    private ArrayList<File> preloadRDF = null;
+    private String domain = null;
+    private String owner = null;
+    private ArrayList<File> processRDFFiles = null;
+    private ArrayList<File> wpsRDFFiles = null;
    
     //http endpoints
     private URL hostURL = null;
@@ -46,7 +48,8 @@ public class Configuration {
     private static Configuration instance = null;
     
     public Configuration (){
-        preloadRDF = new ArrayList<File>();
+        wpsRDFFiles = new ArrayList<>();
+        processRDFFiles = new ArrayList<>();
     }
     
     
@@ -59,16 +62,38 @@ public class Configuration {
 //    
     
     public boolean loadDefault() throws Exception{
-        preloadRDF = new ArrayList<File>();
-        File networkRDF = new File("." + File.separator + "RDF" + File.separator +"rwpsnetwork.rdf");
-        File wpsRDF = new File("." + File.separator + "RDF" + File.separator + "rwpswps.rdf");
-        File processRDF = new File("." + File.separator + "RDF" + File.separator + "rwpsprocess.rdf");
-        preloadRDF.add(networkRDF);
-        preloadRDF.add(wpsRDF);
-        preloadRDF.add(processRDF);
+        wpsRDFFiles = new ArrayList<>();
+        processRDFFiles = new ArrayList<>();
+        File wpsFileLKN1 = new File("." + File.separator + "RDF" + File.separator + "LKN"+File.separator+"WPSMacrophyte.rdf");
+        File proFileLKN1 = new File("." + File.separator + "RDF" + File.separator + "LKN"+File.separator+"ProcessSelectReportingArea.rdf");
+        File proFileLKN2 = new File("." + File.separator + "RDF" + File.separator + "LKN"+File.separator+"ProcessMSRLD5.rdf");
+        File proFileLKN3 = new File("." + File.separator + "RDF" + File.separator + "LKN"+File.separator+"ProcessIntersect.rdf");
+        File proFileLKN4 = new File("." + File.separator + "RDF" + File.separator + "LKN"+File.separator+"ProcessSelectTopography.rdf");
+        File proFileLKN5 = new File("." + File.separator + "RDF" + File.separator + "LKN"+File.separator+"ProcessCharacteristics.rdf");
+        
+        File wpsFileBAW1 = new File("." + File.separator + "RDF" + File.separator + "LKN"+File.separator+"WPSModelValidation.rdf");
+        File proFileBAW1 = new File("." + File.separator + "RDF" + File.separator + "LKN"+File.separator+"ProcessReadData.rdf");
+        File proFileBAW2 = new File("." + File.separator + "RDF" + File.separator + "LKN"+File.separator+"ProcessHarmonize.rdf");
+        File proFileBAW3 = new File("." + File.separator + "RDF" + File.separator + "LKN"+File.separator+"ProcessCompare.rdf");
+        File proFileBAW4 = new File("." + File.separator + "RDF" + File.separator + "LKN"+File.separator+"ProcessFormat.rdf");
+        
+        wpsRDFFiles.add(wpsFileLKN1);
+        wpsRDFFiles.add(wpsFileBAW1);
+        processRDFFiles.add(proFileLKN1);
+        processRDFFiles.add(proFileLKN2);
+        processRDFFiles.add(proFileLKN3);
+        processRDFFiles.add(proFileLKN4);
+        processRDFFiles.add(proFileLKN5);
+        processRDFFiles.add(proFileBAW1);
+        processRDFFiles.add(proFileBAW2);
+        processRDFFiles.add(proFileBAW3);
+        processRDFFiles.add(proFileBAW4);
+        
+        
         rdfMemoryDir = new File(".");
         startClean = true;
-
+        owner = "HS-OS";
+        domain = "RichWPS test domain";
 
         //http endpoints
         hostURL = new URL("http://localhost:4567");
@@ -102,6 +127,8 @@ public class Configuration {
         ConfigurationDocument.Configuration config = configDoc.getConfiguration();
         String tmpRDFDir = config.getRDFDirectory();
         boolean tmpStartClean = config.getStartClean();
+        String tmpOwner = config.getOwner();
+        String tmpDomain = config.getDomain();
         PreloadFiles tmpFileList =  config.getPreloadFiles();
         HTTPEndpoints  tmpHTTPEndpoints = config.getHTTPEndpoints();
         RDFNamingEndpoints tmpRDFNamingEndpoints = config.getRDFNamingEndpoints();
@@ -110,9 +137,17 @@ public class Configuration {
       
         rdfMemoryDir = new File(tmpRDFDir);
         startClean = tmpStartClean;
-        for(int i=0; i< tmpFileList.sizeOfFileArray();i++){
-            preloadRDF.add(new File(tmpFileList.getFileArray(i)));
+        owner = tmpOwner;
+        domain = tmpDomain;
+        
+        for(int i=0; i<tmpFileList.sizeOfWPSArray();i++){
+            wpsRDFFiles.add(new File(tmpFileList.getWPSArray(i)));
         }
+        
+        for(int i=0; i<tmpFileList.sizeOfProcessArray();i++){
+            processRDFFiles.add(new File(tmpFileList.getProcessArray(i)));
+        }
+        
 
         //HTTP endpoints
         hostURL = new URL(tmpHTTPEndpoints.getHost());
@@ -138,12 +173,19 @@ public class Configuration {
         loadDefault();
         ConfigurationDocument doc = ConfigurationDocument.Factory.newInstance();
         ConfigurationDocument.Configuration config = doc.addNewConfiguration();
+        
         config.setRDFDirectory(".");
         config.setStartClean(startClean);
+        config.setOwner(owner);
+        config.setDomain(domain);
         PreloadFiles tmpPreloadFiles =  config.addNewPreloadFiles();
-        for(int i=0; i< preloadRDF.size(); i++){
-            tmpPreloadFiles.addFile("."+File.separator+"RDF"+File.separator+preloadRDF.get(i).getName());
+        for(int i=0; i<wpsRDFFiles.size();i++){
+            tmpPreloadFiles.addWPS(wpsRDFFiles.get(i).getAbsolutePath());
         }
+        for(int i=0; i<processRDFFiles.size();i++){
+            tmpPreloadFiles.addWPS(processRDFFiles.get(i).getAbsolutePath());
+        }
+        
         HTTPEndpoints tmpHttpEndpoints = config.addNewHTTPEndpoints();
         tmpHttpEndpoints.setHost(hostURL.toString());
         tmpHttpEndpoints.setApplication(diffSegments(hostURL.toString(), applicationURL.toString()));
@@ -201,9 +243,6 @@ public class Configuration {
         return resourcesURL;
     }
 
-    public ArrayList<File> getPreloadRDF() {
-        return preloadRDF;
-    }
 
     public File getRdfMemoryDir() {
         return rdfMemoryDir;
@@ -263,7 +302,24 @@ public class Configuration {
         return processNamingEndpoint;
     }
 
-  
+    public String getDomain() {
+        return domain;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public ArrayList<File> getProcessRDFFiles() {
+        return processRDFFiles;
+    }
+
+    public ArrayList<File> getWpsRDFFiles() {
+        return wpsRDFFiles;
+    }
+
+    
+    
     
     
     

@@ -4,6 +4,7 @@
  */
 package de.hsos.richwps.sp.types;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -12,6 +13,22 @@ import java.util.ArrayList;
  * @author fbensman
  */
 public class SubjectList extends ArrayList<URL>{
+    
+    
+    public static SubjectList fromXML(String xml) throws MalformedURLException{
+        int lastIdx = 0;
+        SubjectList list = new SubjectList();
+        while(xml.contains("<subject>")){
+            int sIdx = xml.indexOf("<subject>",lastIdx);
+            int eIdx = xml.indexOf("</subject>",lastIdx);
+            String urlStr = xml.substring(sIdx+"<subject>".length(), eIdx);
+            lastIdx = eIdx+"</subject>".length();
+            URL url = new URL(urlStr);
+            list.add(url);
+        }
+        return list;
+    }
+    
     
     public String toXMLList(){
         String tab = "    ";

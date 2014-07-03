@@ -13,7 +13,12 @@ import java.io.StringReader;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
+import org.openrdf.model.Literal;
+import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
+import org.openrdf.model.impl.LiteralImpl;
+import org.openrdf.model.impl.StatementImpl;
+import org.openrdf.model.impl.URIImpl;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParser;
 import org.openrdf.rio.Rio;
@@ -183,6 +188,33 @@ public class ContentChanger {
         }
     }
     
+    
+    
+    /**
+     * Validates and updates a process
+     * @param rawRDF The rdf descripton of the process
+     * @param route The wps to update
+     * @throws Exception 
+     */
+    public static void insertNetwork(String owner, String domain) throws Exception{
+        if(DBIO.subjectExists(DBAdministration.getResourceURL())){
+           throw new Exception("Network already existing.");
+        }
+        
+        Resource networkSubject = new URIImpl(DBAdministration.getResourceURL().toString());
+        
+        org.openrdf.model.URI typePred = new URIImpl(Vocabulary.Type);
+        org.openrdf.model.URI networkClassObj = new URIImpl(Vocabulary.NetworkClass);
+        DBIO.insertStatement(new StatementImpl(networkSubject,typePred,networkClassObj));
+        
+        org.openrdf.model.URI ownerPred = new URIImpl(Vocabulary.Owner);
+        Literal ownerObj = new LiteralImpl(owner);
+        DBIO.insertStatement(new StatementImpl(networkSubject,ownerPred,ownerObj));
+        
+        org.openrdf.model.URI domainPred = new URIImpl(Vocabulary.Domain);
+        Literal domainObj = new LiteralImpl(domain);
+        DBIO.insertStatement(new StatementImpl(networkSubject,domainPred,domainObj)); 
+    }
     
     
 }
