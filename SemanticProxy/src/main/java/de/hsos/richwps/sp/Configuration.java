@@ -32,6 +32,7 @@ public class Configuration {
     private URL networkURL = null;
     private URL wpsListURL = null;
     private URL processListURL = null;
+    private URL searchURL = null;
     
     //naming endpoints
     private URL wpsNamingEndpoint = null;
@@ -50,12 +51,12 @@ public class Configuration {
     
     
     
-    public static Configuration getInstance(){
-        if(instance == null)
-            instance = new Configuration();
-        return instance;
-    }
-    
+//    public static Configuration getInstance(){
+//        if(instance == null)
+//            instance = new Configuration();
+//        return instance;
+//    }
+//    
     
     public boolean loadDefault() throws Exception{
         preloadRDF = new ArrayList<File>();
@@ -77,7 +78,7 @@ public class Configuration {
         networkURL = resourcesURL;
         wpsListURL = new URL(resourcesURL.toString()+"/wpss");
         processListURL = new URL(resourcesURL.toString()+"/processes");
-
+        searchURL = new URL(applicationURL.toString()+"/search");
 
         //naming endpoints
         wpsNamingEndpoint = new URL(resourcesURL.toString()+"/wps");
@@ -121,6 +122,7 @@ public class Configuration {
         networkURL = resourcesURL;
         wpsListURL = new URL(resourcesURL.toString()+"/"+tmpHTTPEndpoints.getWPSList());
         processListURL = new URL(resourcesURL.toString()+"/"+tmpHTTPEndpoints.getProcessList());
+        searchURL = new URL(applicationURL.toString()+"/"+tmpHTTPEndpoints.getSearch());
 
         //naming endpoints
         wpsNamingEndpoint = new URL(resourcesURL.toString()+"/"+tmpRDFNamingEndpoints.getWPSNaming());
@@ -128,7 +130,6 @@ public class Configuration {
         inputNamingEndpoint = new URL(resourcesURL.toString()+"/"+tmpRDFNamingEndpoints.getInputNaming());
         outputNamingEndpoint = new URL(resourcesURL.toString()+"/"+tmpRDFNamingEndpoints.getOutputNaming());
 
-        
         return true;
     }
 
@@ -150,6 +151,7 @@ public class Configuration {
         tmpHttpEndpoints.setVocabulary(diffSegments(resourcesURL.toString(), vocabularyURL.toString()));
         tmpHttpEndpoints.setWPSList(diffSegments(resourcesURL.toString(),wpsListURL.toString()));
         tmpHttpEndpoints.setProcessList(diffSegments(resourcesURL.toString(),processListURL.toString()));
+        tmpHttpEndpoints.setSearch(diffSegments(applicationURL.toString(), searchURL.toString()));
         
         RDFNamingEndpoints tmpRDFNamingEndpoints = config.addNewRDFNamingEndpoints();
         tmpRDFNamingEndpoints.setInputNaming(diffSegments(resourcesURL.toString(),inputNamingEndpoint.toString()));
@@ -247,6 +249,18 @@ public class Configuration {
 
     public URL getProcessListURL() {
         return processListURL;
+    }
+
+    public URL getSearchURL() {
+        return searchURL;
+    }
+
+    public URL getWpsNamingEndpoint() {
+        return wpsNamingEndpoint;
+    }
+
+    public URL getProcessNamingEndpoint() {
+        return processNamingEndpoint;
     }
 
   

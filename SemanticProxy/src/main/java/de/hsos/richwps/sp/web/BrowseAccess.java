@@ -17,6 +17,8 @@ import spark.*;
  * @author fbensman
  */
 public class BrowseAccess {
+    
+   
 
     /**
      * Registeres the required routes an handlers
@@ -28,6 +30,9 @@ public class BrowseAccess {
             URL processListURL,
             URL wpsList) {
 
+        
+       
+        
 
         /**
          * Registers the route for root for user convenience
@@ -100,18 +105,19 @@ public class BrowseAccess {
         get(new Route(networkURL.getPath()) {
             @Override
             public Object handle(Request request, Response response) {
-                Set<String> set = request.headers();
-                
+//                Set<String> set = request.headers();
+//                
+//               
+//                String[] s = set.toArray(new String[set.size()]);
+//                
+//                for(int i=0; i<s.length; i++){
+//                    System.out.println(s[i]+" "+request.headers(s[i]));
+//                }
+//                System.out.println(request.contentType());
                
-                String[] s = set.toArray(new String[set.size()]);
-                
-                for(int i=0; i<s.length; i++){
-                    System.out.println(s[i]+" "+request.headers(s[i]));
-                }
-                System.out.println(request.contentType());
-                
                  try {
-                    String rdf =  RouteMapper.getRDFFor(request.pathInfo());
+                    
+                    String rdf =  RouteMapper.getRDFFor(request.url());
                     if(rdf == null){
                         response.status(404);
                         return "Resource not found";
@@ -181,7 +187,7 @@ public class BrowseAccess {
             @Override
             public Object handle(Request request, Response response) {
                  try {
-                     String rdf =  RouteMapper.getRDFFor(request.pathInfo());
+                    String rdf =  RouteMapper.getRDFFor(request.url());
                     if(rdf == null){
                         response.status(404);
                         return "Resource not found";

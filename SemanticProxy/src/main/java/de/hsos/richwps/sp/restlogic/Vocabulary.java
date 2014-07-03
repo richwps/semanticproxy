@@ -59,6 +59,7 @@ public class Vocabulary {
     //output
     public static String OutputFormChoice = null;
     //types
+    public static String NetworkClass = null;
     public static String WPSClass = null;
     public static String ProcessClass = null;
     public static String DataInputClass = null;
@@ -155,6 +156,11 @@ public class Vocabulary {
             writer.handleStatement(stmt);
             
         //types
+        NetworkClass = VOC+"networkclass";
+            stmt = new StatementImpl(new URIImpl(NetworkClass), new URIImpl(Type), new URIImpl(SchemaClass));
+            writer.handleStatement(stmt);
+            stmt = new StatementImpl(new URIImpl(NetworkClass), new URIImpl(Label), new LiteralImpl("Network"));
+            writer.handleStatement(stmt);    
         WPSClass = VOC+"wpsclass";
             stmt = new StatementImpl(new URIImpl(WPSClass), new URIImpl(Type), new URIImpl(SchemaClass));
             writer.handleStatement(stmt);

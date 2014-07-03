@@ -31,7 +31,7 @@ public class UpdateAccess {
             public Object handle(Request request, Response response) {
                     if(request.contentType().equalsIgnoreCase("application/xml+rdf")){
                     String body = request.body();
-                    String route = request.pathInfo();
+                    String route = request.url();
                     try{
                         ContentChanger.updateProcess(body, route);
                         response.status(200);
@@ -57,7 +57,7 @@ public class UpdateAccess {
             public Object handle(Request request, Response response) {
                 if(request.contentType().equalsIgnoreCase("application/xml+rdf")){
                     String body = request.body();
-                    String route = request.pathInfo();
+                    String route = request.url();
                     try{
                         ContentChanger.updateWPS(body, route);
                         response.status(200);

@@ -7,6 +7,7 @@ import de.hsos.richwps.sp.types.RDFDocument;
 import de.hsos.richwps.sp.web.BrowseAccess;
 import de.hsos.richwps.sp.web.CreateAccess;
 import de.hsos.richwps.sp.web.DeleteAccess;
+import de.hsos.richwps.sp.web.SearchAccess;
 import de.hsos.richwps.sp.web.UpdateAccess;
 import java.io.File;
 import java.util.ArrayList;
@@ -52,10 +53,11 @@ public class App {
             System.out.println("Shutdown due to error");
             System.exit(-1);
         }
+        
             
         //Prepare db
         try {
-            DBAdministration.connect(config.getRdfMemoryDir());
+            DBAdministration.init(config.getRdfMemoryDir(),config.getResourcesURL());
             if (config.isStartClean()) {
                 DBAdministration.clear();
             }
@@ -88,6 +90,7 @@ public class App {
         new CreateAccess(config.getProcessListURL(),config.getWpsListURL());
         new DeleteAccess(config.getProcessNamingURL(), config.getWpsNamingURL());
         new UpdateAccess(config.getProcessNamingURL(), config.getWpsNamingURL());
+        new SearchAccess(config.getSearchURL());
         
         System.out.println("Semantic Proxy is listening");
     }

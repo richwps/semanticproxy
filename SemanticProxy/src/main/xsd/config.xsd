@@ -34,6 +34,7 @@ RichWPS-SemanticProxy configuration schema
             <xs:element name="Vocabulary" type="xs:string" default="vocab"/>
             <xs:element name="WPSList" type="xs:string" default="wpss"/>
             <xs:element name="ProcessList" type="xs:string" default="processes"/>
+			<xs:element name="Search" type="xs:string" default="search"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="RDFNamingEndpoints">

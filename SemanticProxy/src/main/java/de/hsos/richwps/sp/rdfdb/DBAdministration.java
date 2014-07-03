@@ -5,35 +5,30 @@
 package de.hsos.richwps.sp.rdfdb;
 
 import java.io.File;
+import java.net.URL;
 import org.openrdf.model.Resource;
-import org.openrdf.model.Value;
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.QueryLanguage;
-import org.openrdf.query.TupleQuery;
-import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.sail.SailRepository;
-import org.openrdf.rio.RDFFormat;
 import org.openrdf.sail.memory.MemoryStore;
 
 /**
- * Contains methods for basic db administration like connect, close clear
+ * Contains methods for basic db administration like init, close clear
  *
  * @author fbensman
  */
 public class DBAdministration {
 
     private static Repository repository = null;
-    
+    private static URL resourceURL = null;
     
     /**
      * Connects to an RDF-DB, if DB not exists it is created.
      *
      * @throws Exception if a repository is already open
      */
-    public static void connect(File rdfRepositoryDir) throws Exception {
+    public static void init(File rdfRepositoryDir, URL baseResourceURL) throws Exception {
         if (repository == null) {
             repository = new SailRepository(new MemoryStore(rdfRepositoryDir));
             try {
@@ -46,6 +41,7 @@ public class DBAdministration {
         {
             throw new Exception("Cannot connect to sesame RDF-DB. A repository is still open in " + repository.getDataDir().toString());
         }
+        resourceURL = baseResourceURL;
     }
 
     /**
@@ -92,4 +88,15 @@ public class DBAdministration {
     public static Repository getRepository(){
         return repository;
     }
+    
+    
+    /**
+     * Static access to the RDF repository object
+     * @return 
+     */
+    public static URL getResourceURL(){
+        return resourceURL;
+    }
+    
+    
 }

@@ -4,13 +4,14 @@
  */
 package de.hsos.richwps.sp.restlogic;
 
+import de.hsos.richwps.sp.rdfdb.DBAdministration;
 import de.hsos.richwps.sp.rdfdb.DBDelete;
 import de.hsos.richwps.sp.rdfdb.DBIO;
-import de.hsos.richwps.sp.types.SubjectList;
 import de.hsos.richwps.sp.types.Triple;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import org.openrdf.model.Statement;
 import org.openrdf.rio.RDFFormat;
@@ -60,10 +61,9 @@ public class ContentChanger {
      * @throws Exception When sth is wrong with the db
      */
     public static boolean deleteProcess(String route) throws Exception{
-        String fullRoute = URIConfiguration.HOST_URI+route;
-        URI process = new URI(fullRoute);
+        URL process = new URL(route);
         if(DBIO.subjectExists(process)){
-            DBDelete.deleteProcess(fullRoute);
+            DBDelete.deleteProcess(route);
             return true;
         }
         else
@@ -78,10 +78,9 @@ public class ContentChanger {
      * @throws Exception When sth is wrong with the db
      */
     public static boolean deleteWPS(String route) throws Exception{
-        String fullRoute = URIConfiguration.HOST_URI+route;
-        URI wps = new URI(fullRoute);
+        URL wps = new URL(route);
         if(DBIO.subjectExists(wps)){
-            DBDelete.deleteWPS(fullRoute);
+            DBDelete.deleteWPS(route);
             return true;
         }
         else
@@ -101,8 +100,8 @@ public class ContentChanger {
         if(result.result){
             DBIO.loadRDFXMLStringIntoDB(rawRDF);
             
-            Statement[] stats = Validator.getStatementsByPredicate(Vocabulary.Type, statList);
-            URI subject = new URI(URIConfiguration.RESOURCES_URI);
+            Statement[] stats = Validator.getStatementsByPredicate(Vocabulary.Type, statList);            
+            URI subject = new URI(DBAdministration.getResourceURL().toString());
             URI predicate = new URI(Vocabulary.WPS);
             URI object = new URI(stats[0].getSubject().stringValue());
             Triple inverseTriple = new Triple(subject,predicate,object);
@@ -125,7 +124,7 @@ public class ContentChanger {
         ArrayList<Statement> inputList = new ArrayList<Statement>();
         rdfParser.setRDFHandler(new StatementCollector(inputList));
         try{
-            rdfParser.parse(new StringReader(rdfXml), URIConfiguration.RESOURCES_URI);
+            rdfParser.parse(new StringReader(rdfXml), DBAdministration.getResourceURL().toString());
         }catch(IOException e){
             throw new Exception("Error cannot check rdf"+ e.getMessage());
         }
@@ -139,8 +138,7 @@ public class ContentChanger {
      * @throws Exception 
      */
     public static void updateWPS(String rawRDF, String route) throws Exception {
-        String fullRoute = URIConfiguration.HOST_URI+route;
-        if(DBIO.subjectExists(new URI(fullRoute))){
+        if(DBIO.subjectExists(new URL(route))){
             ArrayList<Statement> statList = decomposeIntoStatements(rawRDF);
             ValidationResult result = Validator.checkForUpdateWPS(statList);
 
@@ -168,15 +166,12 @@ public class ContentChanger {
      * @throws Exception 
      */
     public static void updateProcess(String rawRDF, String route) throws Exception{
-        
-        
-        String fullRoute = URIConfiguration.HOST_URI+route;
-        if(DBIO.subjectExists(new URI(fullRoute))){
+        if(DBIO.subjectExists(new URL(route))){
             ArrayList<Statement> statList = decomposeIntoStatements(rawRDF);
             ValidationResult result = Validator.checkForUpdateProcess(statList);
             if(result.result){
                 Statement[] stats = Validator.getStatementsByPredicateAndObject(Vocabulary.Type,Vocabulary.WPSClass,statList);
-                DBDelete.deleteProcess(fullRoute);
+                DBDelete.deleteProcess(route);
                 DBIO.loadRDFXMLStringIntoDB(rawRDF);
             }
             else{

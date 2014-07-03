@@ -5,11 +5,9 @@
 package de.hsos.richwps.sp.restlogic;
 
 import de.hsos.richwps.sp.rdfdb.DBIO;
-import de.hsos.richwps.sp.types.RDFDescription;
-import de.hsos.richwps.sp.types.RDFDocument;
 import de.hsos.richwps.sp.types.SubjectList;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Translates resource requests and executes the queries for data retrieval from
@@ -38,18 +36,14 @@ public class RouteMapper {
         } else {
             refinedRoute = route;
         }
-        refinedRoute = URIConfiguration.HOST_URI + refinedRoute;
-        URI resource = null;
+        URL resource = null;
         try {
-            resource = new URI(refinedRoute);
-        } catch (URISyntaxException e) {
+            resource = new URL(refinedRoute);
+        } catch (MalformedURLException e) {
             throw new Exception("Cannot parse URI " + refinedRoute + ", " + e.getMessage());
         }
-        //RDFDescription desc = DBIO.getResourceDescription(resource);
-        //RDFDocument doc = new RDFDocument();
-        //doc.addDescription(desc);
-        //return doc;
-        return DBIO.getResourceDescriptionV2(resource);
+       
+        return DBIO.getResourceDescription(resource);
     }
     
     
@@ -60,7 +54,7 @@ public class RouteMapper {
      */
     public static String getAllProcesses() throws Exception{
         
-        URI processTypeURI = new URI(Vocabulary.ProcessClass);
+        URL processTypeURI = new URL(Vocabulary.ProcessClass);
         SubjectList list = DBIO.getAllSubjectsForType(processTypeURI);
         return list.toXMLList();
     }
@@ -73,8 +67,8 @@ public class RouteMapper {
      */
     public static String getAllWPS() throws Exception{
         
-        URI wpsTypeURI = new URI(Vocabulary.WPSClass);
-        SubjectList list = DBIO.getAllSubjectsForType(wpsTypeURI);
+        URL wpsTypeURL = new URL(Vocabulary.WPSClass);
+        SubjectList list = DBIO.getAllSubjectsForType(wpsTypeURL);
         return list.toXMLList();
     }
     

@@ -4,14 +4,14 @@
  */
 package de.hsos.richwps.sp.types;
 
-import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
  *
  * @author fbensman
  */
-public class SubjectList extends ArrayList<URI>{
+public class SubjectList extends ArrayList<URL>{
     
     public String toXMLList(){
         String tab = "    ";

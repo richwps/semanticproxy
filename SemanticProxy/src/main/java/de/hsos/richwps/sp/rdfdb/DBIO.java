@@ -4,7 +4,6 @@
  */
 package de.hsos.richwps.sp.rdfdb;
 
-import de.hsos.richwps.sp.restlogic.URIConfiguration;
 import de.hsos.richwps.sp.restlogic.Vocabulary;
 import de.hsos.richwps.sp.types.RDFDescription;
 import de.hsos.richwps.sp.types.RDFDocument;
@@ -65,7 +64,7 @@ public class DBIO {
         RepositoryConnection con = null;
         try {
             con = repo.getConnection();
-            con.add(file, URIConfiguration.RESOURCES_URI, RDFFormat.RDFXML, resArr);
+            con.add(file, DBAdministration.getResourceURL().toString(), RDFFormat.RDFXML, resArr);
 
         } catch (RepositoryException e) {
             throw new Exception("Cannot load rdf/xml file " + file.getName() + " into sesame RDF-DB, not connected or not writable.");
@@ -95,7 +94,7 @@ public class DBIO {
         RepositoryConnection con = null;
         try {
             con = repo.getConnection();
-            con.add(new StringReader(str), URIConfiguration.RESOURCES_URI, RDFFormat.RDFXML, resArr);
+            con.add(new StringReader(str), DBAdministration.getResourceURL().toString(), RDFFormat.RDFXML, resArr);
         } catch (RepositoryException e) {
             throw new Exception("Cannot load rdf/xml string into sesame RDF-DB, not connected or not writable.");
         } catch (RDFParseException e) {
@@ -138,63 +137,63 @@ public class DBIO {
      * @throws Exception When the db is not accessable or the resource is
      * malformed
      */
-    public static RDFDescription getResourceDescription(URI resource) throws Exception {
-        Repository repo = DBAdministration.getRepository();
-        if (repo == null) {
-            throw new Exception("Cannot get resource description for " + resource + ", not connected.");
-        }
-
-        //define query
-        String queryString = "SELECT ?p ?y WHERE { <" + resource + "> ?p ?y } ";
-        TupleQueryResult result = null;
-        RepositoryConnection con = null;
-        try {
-            con = repo.getConnection();
-            //execute query
-            TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString, URIConfiguration.RESOURCES_URI);
-            result = tupleQuery.evaluate();
-
-
-            RDFDescription retVal = new RDFDescription(resource);
-            //collect query result
-            try {
-                while (result.hasNext()) {
-                    BindingSet bindingSet = (BindingSet) result.next();
-                    Value valueOfP = bindingSet.getValue("p");
-                    Value valueOfY = bindingSet.getValue("y");
-                    URI predicate = new URI(valueOfP.stringValue());
-                    Triple triple = null;
-                    if (isRDFConformURL(valueOfY.stringValue())) {
-                        URI objectval = new URI(valueOfY.stringValue());
-                        triple = new Triple(resource, predicate, objectval);
-                    } else {
-                        triple = new Triple(resource, predicate, valueOfY.stringValue());
-                    }
-                    retVal.addTriple(triple);
-                }
-                return retVal;
-            } catch (URISyntaxException e) {
-                throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
-            } catch (Exception e) {
-                throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
-            } finally {
-                result.close();
-            }
-
-        } catch (RepositoryException e) {
-            throw new Exception("Cannot get resource description for " + resource + ", unknown connection error.");
-        } catch (IllegalArgumentException e) {
-            throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
-        } catch (MalformedQueryException e) {
-            throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
-        } catch (UnsupportedQueryLanguageException e) {
-            throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
-        } catch (QueryEvaluationException e) {
-            throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
-        } finally {
-            con.close();
-        }
-    }
+//    public static RDFDescription getResourceDescription(URI resource) throws Exception {
+//        Repository repo = DBAdministration.getRepository();
+//        if (repo == null) {
+//            throw new Exception("Cannot get resource description for " + resource + ", not connected.");
+//        }
+//
+//        //define query
+//        String queryString = "SELECT ?p ?y WHERE { <" + resource + "> ?p ?y } ";
+//        TupleQueryResult result = null;
+//        RepositoryConnection con = null;
+//        try {
+//            con = repo.getConnection();
+//            //execute query
+//            TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString, DBAdministration.getResourceURL().toString());
+//            result = tupleQuery.evaluate();
+//
+//
+//            RDFDescription retVal = new RDFDescription(resource);
+//            //collect query result
+//            try {
+//                while (result.hasNext()) {
+//                    BindingSet bindingSet = (BindingSet) result.next();
+//                    Value valueOfP = bindingSet.getValue("p");
+//                    Value valueOfY = bindingSet.getValue("y");
+//                    URI predicate = new URI(valueOfP.stringValue());
+//                    Triple triple = null;
+//                    if (isRDFConformURL(valueOfY.stringValue())) {
+//                        URI objectval = new URI(valueOfY.stringValue());
+//                        triple = new Triple(resource, predicate, objectval);
+//                    } else {
+//                        triple = new Triple(resource, predicate, valueOfY.stringValue());
+//                    }
+//                    retVal.addTriple(triple);
+//                }
+//                return retVal;
+//            } catch (URISyntaxException e) {
+//                throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
+//            } catch (Exception e) {
+//                throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
+//            } finally {
+//                result.close();
+//            }
+//
+//        } catch (RepositoryException e) {
+//            throw new Exception("Cannot get resource description for " + resource + ", unknown connection error.");
+//        } catch (IllegalArgumentException e) {
+//            throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
+//        } catch (MalformedQueryException e) {
+//            throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
+//        } catch (UnsupportedQueryLanguageException e) {
+//            throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
+//        } catch (QueryEvaluationException e) {
+//            throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
+//        } finally {
+//            con.close();
+//        }
+//    }
 
     /**
      * Gets an RDF description for a resource URI
@@ -204,7 +203,7 @@ public class DBIO {
      * @throws Exception When the db is not accessable or the resource is
      * malformed
      */
-    public static String getResourceDescriptionV2(URI resource) throws Exception {
+    public static String getResourceDescription(URL resource) throws Exception {
         Repository repo = DBAdministration.getRepository();
         if (repo == null) {
             throw new Exception("Cannot get resource description for " + resource + ", not connected.");
@@ -259,6 +258,33 @@ public class DBIO {
             con.close();
         }
     }
+    
+    
+    
+    
+    public static Statement[] getStatementsForSubjAndPred(URL subject, URL predicate) throws Exception{
+        Repository repo = DBAdministration.getRepository();
+        if (repo == null) {
+            throw new Exception("Cannot get resource description for " + subject.toString() + ", not connected.");
+        }
+
+        RepositoryConnection con = repo.getConnection();
+       
+        con = repo.getConnection();
+        Resource sesamSubject = new URIImpl(subject.toString());
+        org.openrdf.model.URI sesamPredicate = new URIImpl(predicate.toString());
+        //query all statement about the resource
+        RepositoryResult<Statement> result = con.getStatements(sesamSubject, sesamPredicate, null, true);
+        ArrayList<Statement> list = new ArrayList<Statement>();
+        //put statements into a list
+
+        while (result.hasNext()) {
+            list.add(result.next());
+        }
+        result.close();
+        return list.toArray(new Statement[list.size()]);
+    }
+    
 
     /**
      * Returns the whole db in an RDFDocument
@@ -279,7 +305,7 @@ public class DBIO {
         try {
             con = repo.getConnection();
             //execute query
-            TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString, URIConfiguration.RESOURCES_URI);
+            TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString, DBAdministration.getResourceURL().toString());
             result = tupleQuery.evaluate();
 
             RDFDocument retVal = new RDFDocument();
@@ -366,7 +392,7 @@ public class DBIO {
      * @return List of Subject URIs
      * @throws Exception When the db is not accessable
      */
-    public static SubjectList getAllSubjectsForType(URI type) throws Exception {
+    public static SubjectList getAllSubjectsForType(URL type) throws Exception {
         Repository repo = DBAdministration.getRepository();
         if (repo == null) {
             throw new Exception("Cannot get all subjects for type" + type + ", not connected.");
@@ -381,7 +407,7 @@ public class DBIO {
         try {
             con = repo.getConnection();
             //execute query
-            TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString, URIConfiguration.RESOURCES_URI);
+            TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString, DBAdministration.getResourceURL().toString());
             result = tupleQuery.evaluate();
 
             SubjectList subjectList = new SubjectList();
@@ -390,11 +416,11 @@ public class DBIO {
                 while (result.hasNext()) {
                     BindingSet bindingSet = (BindingSet) result.next();
                     Value valueOfS = bindingSet.getValue("s");
-                    URI subject = new URI(valueOfS.stringValue());
+                    URL subject = new URL(valueOfS.stringValue());
                     subjectList.add(subject);
                 }
                 return subjectList;
-            } catch (URISyntaxException e) {
+            } catch (MalformedURLException e) {
                 throw new Exception("Cannot get all subjects for type" + type + ", " + e.toString() + " " + e.getMessage());
             } catch (Exception e) {
                 throw new Exception("Cannot get all subjects for type" + type + ", " + e.toString() + " " + e.getMessage());
@@ -423,7 +449,7 @@ public class DBIO {
      * @return List of Subject URIs
      * @throws Exception When the db is not accessable
      */
-    public static boolean subjectExists(URI subject) throws Exception {
+    public static boolean subjectExists(URL subject) throws Exception {
         Repository repo = DBAdministration.getRepository();
         if (repo == null) {
             throw new Exception("Cannot check if subject exists, not connected.");

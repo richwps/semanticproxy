@@ -5,7 +5,6 @@
 package de.hsos.richwps.sp.rdfdb;
 
 import static de.hsos.richwps.sp.rdfdb.DBIO.isLiteral;
-import de.hsos.richwps.sp.restlogic.URIConfiguration;
 import de.hsos.richwps.sp.restlogic.Vocabulary;
 import java.util.ArrayList;
 import java.util.Stack;
@@ -16,7 +15,6 @@ import org.openrdf.model.Value;
 import org.openrdf.model.impl.URIImpl;
 import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.TupleQueryResult;
 import org.openrdf.query.UnsupportedQueryLanguageException;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
@@ -142,7 +140,7 @@ public class DBDelete {
 
         try {
             con = repo.getConnection();
-            URI subject = new URIImpl(URIConfiguration.RESOURCES_URI);
+            URI subject = new URIImpl(DBAdministration.getResourceURL().toString());
             URI predicate = new URIImpl(Vocabulary.WPS);
             URI object = new URIImpl(wpsRoute);
             //removes link from network to wps

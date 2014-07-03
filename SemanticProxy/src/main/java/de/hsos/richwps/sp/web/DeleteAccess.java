@@ -21,7 +21,7 @@ public class DeleteAccess {
     /**
      * Installs endpoints for the deletion of resources
      */
-    public DeleteAccess(URL processNamingURL, URL wpsNamingURL){
+    public DeleteAccess(final URL processNamingURL, final URL wpsNamingURL){
         
         /**
          * Register endpoint for process deletion
@@ -30,6 +30,7 @@ public class DeleteAccess {
             @Override
             public Object handle(Request request, Response response) {
                     try{
+                        
                         if(ContentChanger.deleteProcess(request.pathInfo())){
                             response.status(200);
                             System.out.println(DBIO.getWholeDBContent().rDFXMLRepresentation());

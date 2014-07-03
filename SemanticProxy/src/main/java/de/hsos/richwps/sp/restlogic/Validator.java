@@ -4,16 +4,12 @@
  */
 package de.hsos.richwps.sp.restlogic;
 
+import de.hsos.richwps.sp.rdfdb.DBAdministration;
 import de.hsos.richwps.sp.rdfdb.DBIO;
-import java.io.IOException;
-import java.io.StringReader;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import org.openrdf.model.Statement;
-import org.openrdf.rio.RDFFormat;
-import org.openrdf.rio.RDFParser;
-import org.openrdf.rio.Rio;
-import org.openrdf.rio.helpers.StatementCollector;
 
 /**
  * Class containing various methods for rdf validation
@@ -40,12 +36,12 @@ public class Validator {
         String processId = stats[0].getSubject().stringValue();
         
         //check if process already exists
-        if(DBIO.subjectExists(new URI(processId))){
+        if(DBIO.subjectExists(new URL(processId))){
              return new ValidationResult(false, "Process already exists");
         }
         
         //check if name correct
-        if(!processId.startsWith(URIConfiguration.RESOURCES_URI)){
+        if(!processId.startsWith(DBAdministration.getResourceURL().toString())){
             return new ValidationResult(false, "Process does not fit into naming schema");
         }
         
@@ -384,12 +380,12 @@ public class Validator {
         String wpsId = stats[0].getSubject().stringValue();
         
         //check if process already exists
-        if(DBIO.subjectExists(new URI(wpsId))){
+        if(DBIO.subjectExists(new URL(wpsId))){
              return new ValidationResult(false, "WPS already exists");
         }
         
         //check if name correct
-        if(!wpsId.startsWith(URIConfiguration.RESOURCES_URI)){
+        if(!wpsId.startsWith(DBAdministration.getResourceURL().toString())){
             return new ValidationResult(false, "WPS does not fit into naming schema");
         }
         
@@ -439,12 +435,12 @@ public class Validator {
         String wpsId = stats[0].getSubject().stringValue();
         
         //check if process already exists
-        if( !DBIO.subjectExists(new URI(wpsId))){
+        if( !DBIO.subjectExists(new URL(wpsId))){
              return new ValidationResult(false, "WPS does not exist");
         }
         
         //check if name correct
-        if(!wpsId.startsWith(URIConfiguration.RESOURCES_URI)){
+        if(!wpsId.startsWith(DBAdministration.getResourceURL().toString())){
             return new ValidationResult(false, "WPS does not fit into naming schema");
         }
         
@@ -495,12 +491,12 @@ public class Validator {
         String processId = stats[0].getSubject().stringValue();
         
         //check if process already exists
-        if( !DBIO.subjectExists(new URI(processId))){
+        if( !DBIO.subjectExists(new URL(processId))){
              return new ValidationResult(false, "Process does not exists");
         }
         
         //check if name correct
-        if(!processId.startsWith(URIConfiguration.RESOURCES_URI)){
+        if(!processId.startsWith(DBAdministration.getResourceURL().toString())){
             return new ValidationResult(false, "Process does not fit into naming schema");
         }
         
