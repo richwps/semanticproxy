@@ -35,7 +35,8 @@ public class App {
             //client setup
             SPClient spClient = SPClient.getInstance();
             spClient.setRootURL("http://localhost:4567/semanticproxy/resources");
-
+            spClient.setSearchURL("http://localhost:4567/semanticproxy/search");
+            
             //Testing/Demonstration
             Network net = spClient.getNetwork();
             
@@ -121,8 +122,13 @@ public class App {
 //                }
 //            }
 
+            System.out.println("Search for <<topo>>");
+            Process[] procArr = spClient.searchProcessByKeyword("topo");
+            for(int i=0; i<procArr.length;i++){
+                System.out.println(i+1+". "+procArr[i].getIdentifier());
+            }
 
-        }catch(ResourceNotFoundException e){
+        }catch(BadRequestException e){
             System.err.println("Caught exception: "+e.getMessage());
             e.printStackTrace();
         }catch(RDFException e){

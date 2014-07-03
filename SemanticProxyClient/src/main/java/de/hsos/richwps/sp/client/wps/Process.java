@@ -7,7 +7,7 @@ package de.hsos.richwps.sp.client.wps;
 import de.hsos.richwps.sp.client.CommunicationException;
 import de.hsos.richwps.sp.client.InternalSPException;
 import de.hsos.richwps.sp.client.RDFException;
-import de.hsos.richwps.sp.client.ResourceNotFoundException;
+import de.hsos.richwps.sp.client.BadRequestException;
 import de.hsos.richwps.sp.client.rdf.RDFID;
 import de.hsos.richwps.sp.client.rdf.RDFResource;
 
@@ -70,7 +70,7 @@ public class Process {
         return getSingleAttribute(Vocabulary.ProcessVersion);
     }
 
-    public Input[] getInputs() throws ResourceNotFoundException, InternalSPException, CommunicationException, RDFException {
+    public Input[] getInputs() throws BadRequestException, InternalSPException, CommunicationException, RDFException {
         RDFID[] rdfids = res.findResources(Vocabulary.Input);
         Input[] inputs = new Input[rdfids.length];
         SPClient spc = SPClient.getInstance();
@@ -82,7 +82,7 @@ public class Process {
         return inputs;
     }
 
-    public Output[] getOutputs() throws ResourceNotFoundException, InternalSPException, CommunicationException, RDFException {
+    public Output[] getOutputs() throws BadRequestException, InternalSPException, CommunicationException, RDFException {
         RDFID[] rdfids = res.findResources(Vocabulary.Output);
         Output[] outputs = new Output[rdfids.length];
         SPClient spc = SPClient.getInstance();

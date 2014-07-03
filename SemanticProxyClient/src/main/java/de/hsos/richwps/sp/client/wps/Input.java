@@ -7,7 +7,7 @@ package de.hsos.richwps.sp.client.wps;
 import de.hsos.richwps.sp.client.CommunicationException;
 import de.hsos.richwps.sp.client.InternalSPException;
 import de.hsos.richwps.sp.client.RDFException;
-import de.hsos.richwps.sp.client.ResourceNotFoundException;
+import de.hsos.richwps.sp.client.BadRequestException;
 import de.hsos.richwps.sp.client.rdf.RDFClient;
 import de.hsos.richwps.sp.client.rdf.RDFID;
 import de.hsos.richwps.sp.client.rdf.RDFResource;
@@ -91,7 +91,7 @@ public class Input {
     }
     
     
-    public InAndOutputForm getInputFormChoice() throws RDFException, CommunicationException, ResourceNotFoundException, InternalSPException {
+    public InAndOutputForm getInputFormChoice() throws RDFException, CommunicationException, BadRequestException, InternalSPException {
         //get the statement about the input form choice
         RDFID[] ifc = res.findResources(Vocabulary.InputFormChoice);
         if (ifc.length == 1) { //if there is only one...

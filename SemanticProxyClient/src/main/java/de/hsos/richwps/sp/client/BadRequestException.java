@@ -8,9 +8,9 @@ package de.hsos.richwps.sp.client;
  *
  * @author fbensman
  */
-public class ResourceNotFoundException extends Exception{
+public class BadRequestException extends Exception{
     
-    public ResourceNotFoundException(String msg){
+    public BadRequestException(String msg){
         super(msg);
     }
     

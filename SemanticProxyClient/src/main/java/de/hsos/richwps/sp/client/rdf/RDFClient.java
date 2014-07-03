@@ -9,15 +9,14 @@ import de.hsos.richwps.sp.client.HTTPClient;
 import de.hsos.richwps.sp.client.InternalSPException;
 import de.hsos.richwps.sp.client.LRUCache;
 import de.hsos.richwps.sp.client.RDFException;
-import de.hsos.richwps.sp.client.ResourceNotFoundException;
-import de.hsos.richwps.sp.client.URIConfiguration;
-import java.io.IOException;
+import de.hsos.richwps.sp.client.BadRequestException;
 import java.io.StringReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import org.openrdf.model.Statement;
 import org.openrdf.model.Value;
 import org.openrdf.rio.RDFFormat;
-import org.openrdf.rio.RDFParseException;
 import org.openrdf.rio.RDFParser;
 import org.openrdf.rio.Rio;
 import org.openrdf.rio.helpers.StatementCollector;
@@ -55,7 +54,7 @@ public class RDFClient {
      * @return The resource as an RDFResource object
      * @throws Exception
      */
-    public RDFResource retrieveResource(RDFID rdfID) throws ResourceNotFoundException, InternalSPException, CommunicationException, RDFException{
+    public RDFResource retrieveResource(RDFID rdfID) throws BadRequestException, InternalSPException, CommunicationException, RDFException{
         try {
             RDFResource tmp = cache.get(rdfID.rdfID);
             if (tmp != null) {
@@ -65,7 +64,7 @@ public class RDFClient {
             String body = httpClient.getRawRDF(rdfID.rdfID);
             ArrayList<Statement> stmtList = null;
             try{
-                stmtList = decomposeIntoStatements(body);
+                stmtList = decomposeIntoStatements(body, rdfID);
             }catch(Exception e){
                 throw new RDFException("Unexpected error when parsing resource "+rdfID.rdfID+ ". Original message was: "+ e.getMessage());
             }
@@ -94,7 +93,7 @@ public class RDFClient {
             cache.put(res.getRdfID().rdfID, res);
 
             return res;
-        }catch(ResourceNotFoundException e){
+        }catch(BadRequestException e){
             throw e;
         }catch(InternalSPException e){
             throw e;
@@ -111,12 +110,31 @@ public class RDFClient {
      * @return
      * @throws Exception
      */
-    private static ArrayList<Statement> decomposeIntoStatements(String rdfXml) throws Exception {
+    private static ArrayList<Statement> decomposeIntoStatements(String rdfXml, RDFID id) throws Exception {
         RDFParser rdfParser = Rio.createParser(RDFFormat.RDFXML);
         ArrayList<Statement> inputList = new ArrayList<Statement>();
         rdfParser.setRDFHandler(new StatementCollector(inputList));
-        rdfParser.parse(new StringReader(rdfXml), URIConfiguration.RESOURCES_URI);
- 
+        //rdfParser.parse(new StringReader(rdfXml), URIConfiguration.RESOURCES_URI);
+        rdfParser.parse(new StringReader(rdfXml), id.rdfID);
+        
         return inputList;
     }
+    
+    
+    
+    public RDFID[] getSearchResults(String keyword, URL searchEndpoint) throws BadRequestException, InternalSPException, CommunicationException, MalformedURLException{
+        
+        String xml = httpClient.getRawSearchResults(keyword, searchEndpoint);
+        try{
+            SubjectList list = SubjectList.fromXML(xml);
+            RDFID[] rdfArr = new RDFID[list.size()];
+            for(int i=0; i<list.size();i++){
+                rdfArr[i]= new RDFID(list.get(i).toString());
+            }
+            return rdfArr;
+        }catch(MalformedURLException e){
+            throw new MalformedURLException("Parsing result list failed: "+e.getMessage());
+        }
+    }
+    
 }

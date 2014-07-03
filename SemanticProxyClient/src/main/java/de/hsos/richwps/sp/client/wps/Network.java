@@ -7,7 +7,7 @@ package de.hsos.richwps.sp.client.wps;
 import de.hsos.richwps.sp.client.CommunicationException;
 import de.hsos.richwps.sp.client.InternalSPException;
 import de.hsos.richwps.sp.client.RDFException;
-import de.hsos.richwps.sp.client.ResourceNotFoundException;
+import de.hsos.richwps.sp.client.BadRequestException;
 import de.hsos.richwps.sp.client.rdf.RDFID;
 import de.hsos.richwps.sp.client.rdf.RDFResource;
 import de.hsos.richwps.sp.client.wps.Vocabulary;
@@ -74,7 +74,7 @@ public class Network {
      *
      * @return Wrapper for RDF resources that describe WPSs
      */
-    public WPS[] getWPSs() throws ResourceNotFoundException, InternalSPException, CommunicationException, RDFException{
+    public WPS[] getWPSs() throws BadRequestException, InternalSPException, CommunicationException, RDFException{
         RDFID[] rdfids = res.findResources(Vocabulary.WPS);
         SPClient spc = SPClient.getInstance();
         WPS[] wpss = new WPS[rdfids.length];
