@@ -2,17 +2,18 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.hsos.richwps.sp.client.wps;
+package de.hsos.richwps.sp.client.wps.gettypes;
 
 import de.hsos.richwps.sp.client.RDFException;
 import de.hsos.richwps.sp.client.rdf.RDFID;
 import de.hsos.richwps.sp.client.rdf.RDFResource;
+import de.hsos.richwps.sp.client.wps.Vocabulary;
 
 /**
  *
  * @author fbensman
  */
-public class BoundingBoxData extends InAndOutputForm {
+public class LiteralData extends InAndOutputForm {
 
     private RDFResource res = null;
 
@@ -21,7 +22,7 @@ public class BoundingBoxData extends InAndOutputForm {
      *
      * @param res Resource to wrap
      */
-    private BoundingBoxData(RDFResource res) {
+    private LiteralData(RDFResource res) {
         this.res = res;
     }
 
@@ -31,21 +32,27 @@ public class BoundingBoxData extends InAndOutputForm {
      * @param res Resource to wrap
      * @return The wrapper, null if the resource is not a network objekt
      */
-    public static BoundingBoxData createWrapper(RDFResource res) throws RDFException{
+    public static LiteralData createWrapper(RDFResource res) throws RDFException{
         RDFID[] type = res.findResources(Vocabulary.Type);
         if (type.length == 1) {
-            if (type[0].rdfID.equals(Vocabulary.BoundingBoxDataClass)) {
-                return new BoundingBoxData(res);
+            if (type[0].rdfID.equals(Vocabulary.LiteralDataClass)) {
+                return new LiteralData(res);
             }
         }
         throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found "+type.length+" type-attributes");
     }
 
- 
+     private String getSingleAttribute(String pred) throws RDFException {
+        String[] val = res.findLiterals(pred);
+        if (val.length == 1) {
+            return val[0];
+        }
+        throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found "+val.length+" "+pred+"-attributes");
+    }
 
     @Override
     public int getDataType() {
-        return BOUNDING_BOX_TYPE;
+        return LITERAL_TYPE;
     }
     //TODO: Make further attributes accessible
 }

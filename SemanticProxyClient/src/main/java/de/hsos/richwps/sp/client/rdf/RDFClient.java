@@ -137,4 +137,14 @@ public class RDFClient {
         }
     }
     
+    
+    public void postRDF(RDFResource[] rdfRess, URL endpoint) throws RDFException, BadRequestException, InternalSPException, CommunicationException{
+        RDFDocBuilder builder = new RDFDocBuilder();
+        for(int i=0; i<rdfRess.length;i++){
+            builder.addResource(rdfRess[i]);
+        }
+        String xmlrdf = builder.toXMLRDF();
+        httpClient.postRDFDoc(xmlrdf, endpoint);
+    }
+    
 }

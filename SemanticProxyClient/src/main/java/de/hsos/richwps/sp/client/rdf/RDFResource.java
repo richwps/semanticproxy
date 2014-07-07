@@ -28,7 +28,8 @@ public class RDFResource {
      */
     public RDFResource(RDFID rdfID) {
         this.rdfID = rdfID;
-
+        fields = new LiteralExpression[0];
+        resources = new ResourceExpression[0];
     }
 
     public RDFID getRdfID() {
@@ -67,9 +68,6 @@ public class RDFResource {
             if (fields[i].predicate.equals(predicate)) {
                 list.add(fields[i].literal);
             }
-        }
-        if (list.size() == 0) {
-            return null;
         }
         return list.toArray(new String[list.size()]);
     }
