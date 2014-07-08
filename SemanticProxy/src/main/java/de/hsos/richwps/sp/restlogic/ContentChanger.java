@@ -197,9 +197,9 @@ public class ContentChanger {
      * @throws Exception 
      */
     public static void insertNetwork(String owner, String domain) throws Exception{
-        if(DBIO.subjectExists(DBAdministration.getResourceURL())){
-           throw new Exception("Network already existing.");
-        }
+//        if(DBIO.subjectExists(DBAdministration.getResourceURL())){
+//           throw new Exception("Network already existing.");
+//        }
         
         Resource networkSubject = new URIImpl(DBAdministration.getResourceURL().toString());
         

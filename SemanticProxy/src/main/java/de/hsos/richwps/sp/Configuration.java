@@ -4,10 +4,11 @@
  */
 package de.hsos.richwps.sp;
 
-import de.hsos.rwps.semanticproxy.config.ConfigurationDocument;
-import de.hsos.rwps.semanticproxy.config.HTTPEndpoints;
-import de.hsos.rwps.semanticproxy.config.PreloadFiles;
-import de.hsos.rwps.semanticproxy.config.RDFNamingEndpoints;
+
+import de.hsos.richwps.sp.config.ConfigurationDocument;
+import de.hsos.richwps.sp.config.HTTPEndpoints;
+import de.hsos.richwps.sp.config.PreloadFiles;
+import de.hsos.richwps.sp.config.RDFNamingEndpoints;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
@@ -64,18 +65,18 @@ public class Configuration {
     public boolean loadDefault() throws Exception{
         wpsRDFFiles = new ArrayList<>();
         processRDFFiles = new ArrayList<>();
-        File wpsFileLKN1 = new File("." + File.separator + "RDF" + File.separator + "LKN"+File.separator+"WPSMacrophyte.rdf");
-        File proFileLKN1 = new File("." + File.separator + "RDF" + File.separator + "LKN"+File.separator+"ProcessSelectReportingArea.rdf");
-        File proFileLKN2 = new File("." + File.separator + "RDF" + File.separator + "LKN"+File.separator+"ProcessMSRLD5.rdf");
-        File proFileLKN3 = new File("." + File.separator + "RDF" + File.separator + "LKN"+File.separator+"ProcessIntersect.rdf");
-        File proFileLKN4 = new File("." + File.separator + "RDF" + File.separator + "LKN"+File.separator+"ProcessSelectTopography.rdf");
-        File proFileLKN5 = new File("." + File.separator + "RDF" + File.separator + "LKN"+File.separator+"ProcessCharacteristics.rdf");
+        File wpsFileLKN1 = new File("RDF" + File.separator + "LKN"+File.separator+"WPSMacrophyte.rdf");
+        File proFileLKN1 = new File("RDF" + File.separator + "LKN"+File.separator+"ProcessSelectReportingArea.rdf");
+        File proFileLKN2 = new File("RDF" + File.separator + "LKN"+File.separator+"ProcessSelectMSRLD5.rdf");
+        File proFileLKN3 = new File("RDF" + File.separator + "LKN"+File.separator+"ProcessIntersect.rdf");
+        File proFileLKN4 = new File("RDF" + File.separator + "LKN"+File.separator+"ProcessSelectTopography.rdf");
+        File proFileLKN5 = new File("RDF" + File.separator + "LKN"+File.separator+"ProcessCharacteristics.rdf");
         
-        File wpsFileBAW1 = new File("." + File.separator + "RDF" + File.separator + "LKN"+File.separator+"WPSModelValidation.rdf");
-        File proFileBAW1 = new File("." + File.separator + "RDF" + File.separator + "LKN"+File.separator+"ProcessReadData.rdf");
-        File proFileBAW2 = new File("." + File.separator + "RDF" + File.separator + "LKN"+File.separator+"ProcessHarmonize.rdf");
-        File proFileBAW3 = new File("." + File.separator + "RDF" + File.separator + "LKN"+File.separator+"ProcessCompare.rdf");
-        File proFileBAW4 = new File("." + File.separator + "RDF" + File.separator + "LKN"+File.separator+"ProcessFormat.rdf");
+        File wpsFileBAW1 = new File("RDF" + File.separator + "BAW"+File.separator+"WPSModelValidation.rdf");
+        File proFileBAW1 = new File("RDF" + File.separator + "BAW"+File.separator+"ProcessReadData.rdf");
+        File proFileBAW2 = new File("RDF" + File.separator + "BAW"+File.separator+"ProcessHarmonize.rdf");
+        File proFileBAW3 = new File("RDF" + File.separator + "BAW"+File.separator+"ProcessCompare.rdf");
+        File proFileBAW4 = new File("RDF" + File.separator + "BAW"+File.separator+"ProcessFormat.rdf");
         
         wpsRDFFiles.add(wpsFileLKN1);
         wpsRDFFiles.add(wpsFileBAW1);
@@ -115,6 +116,12 @@ public class Configuration {
     }
     
     
+    /**
+     * Loads configuration from the specified file.
+     * @param file
+     * @return
+     * @throws Exception 
+     */
     public boolean load(File file) throws Exception{
         
         ConfigurationDocument configDoc = null;
@@ -140,10 +147,12 @@ public class Configuration {
         owner = tmpOwner;
         domain = tmpDomain;
         
+        wpsRDFFiles.clear();
         for(int i=0; i<tmpFileList.sizeOfWPSArray();i++){
             wpsRDFFiles.add(new File(tmpFileList.getWPSArray(i)));
         }
         
+        processRDFFiles.clear();
         for(int i=0; i<tmpFileList.sizeOfProcessArray();i++){
             processRDFFiles.add(new File(tmpFileList.getProcessArray(i)));
         }
@@ -169,6 +178,10 @@ public class Configuration {
     }
 
     
+    /**
+     * Writes a default configuration to cwd
+     * @throws Exception 
+     */
     public void writeDefaultConfiguration() throws Exception{
         loadDefault();
         ConfigurationDocument doc = ConfigurationDocument.Factory.newInstance();
@@ -183,7 +196,7 @@ public class Configuration {
             tmpPreloadFiles.addWPS(wpsRDFFiles.get(i).getAbsolutePath());
         }
         for(int i=0; i<processRDFFiles.size();i++){
-            tmpPreloadFiles.addWPS(processRDFFiles.get(i).getAbsolutePath());
+            tmpPreloadFiles.addProcess(processRDFFiles.get(i).getAbsolutePath());
         }
         
         HTTPEndpoints tmpHttpEndpoints = config.addNewHTTPEndpoints();

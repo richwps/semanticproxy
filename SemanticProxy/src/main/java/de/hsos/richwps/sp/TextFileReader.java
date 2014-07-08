@@ -27,16 +27,16 @@ public class TextFileReader {
             String str = new String(raw, Charset.forName("UTF-8"));
             return str;
         }catch(IllegalCharsetNameException e){
-            throw new Exception("Cannot load file" + file.getName()+", "+e.toString()+" "+e.getMessage());
+            throw new Exception("Cannot load file " + file.getName()+", "+e.toString()+" "+e.getMessage());
         }
         catch(IllegalArgumentException e){
-            throw new Exception("Cannot load file" + file.getName()+", "+e.toString()+" "+e.getMessage());
+            throw new Exception("Cannot load file " + file.getName()+", "+e.toString()+" "+e.getMessage());
         }
         catch(FileNotFoundException e){
-            throw new Exception("Cannot load file" + file.getName()+", "+e.toString()+" "+e.getMessage());
+            throw new Exception("Cannot load file " + file.getName()+", "+e.toString()+" "+e.getMessage());
         }
         catch(IOException e){
-            throw new Exception("Cannot load file" + file.getName()+", "+e.toString()+" "+e.getMessage());
+            throw new Exception("Cannot load file " + file.getName()+", "+e.toString()+" "+e.getMessage());
         }
     }
 }

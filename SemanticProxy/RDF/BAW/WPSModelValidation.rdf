@@ -7,10 +7,6 @@
 	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/wps/ModelValidationWPS">
 		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#wpsclass"/>
 		<rwps:endpoint>http://www.baw.de/geo/wps/modelfieldcomparator</rwps:endpoint>
-		<rwps:process rdf:resource="http://localhost:4567/semanticproxy/resources/process/readData"/>
-		<rwps:process rdf:resource="http://localhost:4567/semanticproxy/resources/process/harmonize"/>
-		<rwps:process rdf:resource="http://localhost:4567/semanticproxy/resources/process/compare"/>
-		<rwps:process rdf:resource="http://localhost:4567/semanticproxy/resources/process/format"/>
 	</rdf:Description>
 
 </rdf:RDF>

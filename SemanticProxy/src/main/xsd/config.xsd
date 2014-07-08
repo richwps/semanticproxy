@@ -5,8 +5,8 @@ RichWPS-SemanticProxy configuration schema
 
 <xs:schema version="1.0"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           xmlns:cg="http://www.hsos.de/rwps/semanticproxy/config"
-           targetNamespace="http://www.hsos.de/rwps/semanticproxy/config"
+           xmlns:cg="http://www.hsos.de/richwps/sp/config"
+           targetNamespace="http://www.hsos.de/richwps/sp/config"
            elementFormDefault="qualified">
 
     
@@ -15,6 +15,8 @@ RichWPS-SemanticProxy configuration schema
             <xs:sequence>
                 <xs:element name="RDFDirectory" type="xs:string"/>
                 <xs:element name="StartClean" type="xs:boolean"/>
+				<xs:element name="Owner" type="xs:string"/>
+				<xs:element name="Domain" type="xs:string"/>
                 <xs:element name="PreloadFiles" type="cg:PreloadFiles"/>
                 <xs:element name="HTTPEndpoints" type="cg:HTTPEndpoints"/>
                 <xs:element name="RDFNamingEndpoints" type="cg:RDFNamingEndpoints"/>
@@ -23,7 +25,9 @@ RichWPS-SemanticProxy configuration schema
     </xs:element>
     <xs:complexType name="PreloadFiles">
         <xs:sequence>
-            <xs:element name="File" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="File" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="WPS" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Process" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="HTTPEndpoints">

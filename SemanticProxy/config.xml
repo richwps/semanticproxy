@@ -1,22 +1,20 @@
-<Configuration xmlns="http://www.hsos.de/rwps/semanticproxy/config">
+<Configuration xmlns="http://www.hsos.de/richwps/sp/config">
   <RDFDirectory>.</RDFDirectory>
   <StartClean>true</StartClean>
   <Owner>HS-OS</Owner>
   <Domain>RichWPS test domain</Domain>
   <PreloadFiles>
-    <WPS>.\RDF\LKN\WPSMacrophyte.rdf</WPS>
-	<Process>.\RDF\LKN\ProcessSelectReportingArea.rdf</Process>
-	<Process>.\RDF\LKN\ProcessSelectMSRLD5.rdf</Process>
-	<Process>.\RDF\LKN\ProcessSelectTopography.rdf</Process>
-	<Process>.\RDF\LKN\ProcessIntersect.rdf</Process>
-	<Process>.\RDF\LKN\ProcessCharacteristics.rdf</Process>
-	
-    <WPS>.\RDF\BAW\WPSModelValidation.rdf</WPS>
-	<Process>.\RDF\BAW\ProcessReadData.rdf</Process>
-	<Process>.\RDF\BAW\ProcessHarmonize.rdf</Process>
-	<Process>.\RDF\BAW\ProcessCompare.rdf</Process>
-	<Process>.\RDF\BAW\ProcessFormat.rdf</Process>
-	
+    <WPS>C:\Users\fbensman\richwps-spv2\SemanticProxy\RDF\LKN\WPSMacrophyte.rdf</WPS>
+    <WPS>C:\Users\fbensman\richwps-spv2\SemanticProxy\RDF\BAW\WPSModelValidation.rdf</WPS>
+    <Process>C:\Users\fbensman\richwps-spv2\SemanticProxy\RDF\LKN\ProcessSelectReportingArea.rdf</Process>
+    <Process>C:\Users\fbensman\richwps-spv2\SemanticProxy\RDF\LKN\ProcessSelectMSRLD5.rdf</Process>
+    <Process>C:\Users\fbensman\richwps-spv2\SemanticProxy\RDF\LKN\ProcessIntersect.rdf</Process>
+    <Process>C:\Users\fbensman\richwps-spv2\SemanticProxy\RDF\LKN\ProcessSelectTopography.rdf</Process>
+    <Process>C:\Users\fbensman\richwps-spv2\SemanticProxy\RDF\LKN\ProcessCharacteristics.rdf</Process>
+    <Process>C:\Users\fbensman\richwps-spv2\SemanticProxy\RDF\BAW\ProcessReadData.rdf</Process>
+    <Process>C:\Users\fbensman\richwps-spv2\SemanticProxy\RDF\BAW\ProcessHarmonize.rdf</Process>
+    <Process>C:\Users\fbensman\richwps-spv2\SemanticProxy\RDF\BAW\ProcessCompare.rdf</Process>
+    <Process>C:\Users\fbensman\richwps-spv2\SemanticProxy\RDF\BAW\ProcessFormat.rdf</Process>
   </PreloadFiles>
   <HTTPEndpoints>
     <Host>http://localhost:4567</Host>
@@ -25,7 +23,7 @@
     <Vocabulary>vocab</Vocabulary>
     <WPSList>wpss</WPSList>
     <ProcessList>processes</ProcessList>
-	<Search>search</Search>
+    <Search>search</Search>
   </HTTPEndpoints>
   <RDFNamingEndpoints>
     <WPSNaming>wps</WPSNaming>
