@@ -13,6 +13,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
+ * Mutable class that represents a process description
  *
  * @author fbensman
  */
@@ -27,9 +28,9 @@ public class PostProcess {
     private ArrayList<URL> profileList = null;
     private URL wsdl = null;
     private boolean storeSupported = false;
-        private boolean useStoreSupported = false;
+    private boolean useStoreSupported = false;
     private boolean statusSupported = false;
-        private boolean useStatusSupported = false;
+    private boolean useStatusSupported = false;
     private ArrayList<PostInput> inputs = null;
     private ArrayList<PostOutput> outputs = null;
     private PostWPS wps = null;
@@ -39,11 +40,20 @@ public class PostProcess {
 
     }
 
+    public RDFID getRdfId() {
+        return rdfId;
+    }
+
+    /**
+     * Creates an RDFResource from object
+     *
+     * @return
+     */
     public RDFResource toRDFResource() {
         RDFResource res = new RDFResource(rdfId);
         ArrayList<LiteralExpression> literalList = new ArrayList<LiteralExpression>();
         ArrayList<ResourceExpression> resourceList = new ArrayList<ResourceExpression>();
-        
+
         if (identifier == null) {
             throw new NullPointerException("Process identifier has not been set.");
         }
@@ -79,28 +89,28 @@ public class PostProcess {
             lexp = new LiteralExpression(Vocabulary.WSDL, wsdl.toString());
             literalList.add(lexp);
         }
-        if(useStoreSupported){
+        if (useStoreSupported) {
             lexp = new LiteralExpression(Vocabulary.StoreSupported, Boolean.toString(storeSupported));
             literalList.add(lexp);
         }
-        if(useStatusSupported){
+        if (useStatusSupported) {
             lexp = new LiteralExpression(Vocabulary.StatusSupported, Boolean.toString(statusSupported));
             literalList.add(lexp);
         }
         res.setFields(literalList.toArray(new LiteralExpression[literalList.size()]));
-        
+
         ResourceExpression rexp = new ResourceExpression(Vocabulary.Type, new RDFID(Vocabulary.ProcessClass));
         resourceList.add(rexp);
-        for(PostInput r : inputs){
+        for (PostInput r : inputs) {
             rexp = new ResourceExpression(Vocabulary.Input, r.getRdfId());
             resourceList.add(rexp);
         }
-        for(PostOutput r : outputs){
+        for (PostOutput r : outputs) {
             rexp = new ResourceExpression(Vocabulary.Output, r.getRdfId());
             resourceList.add(rexp);
         }
-        
-        if(wps == null){
+
+        if (wps == null) {
             throw new NullPointerException("Parent WPS has not been set.");
         }
         rexp = new ResourceExpression(Vocabulary.WPS, wps.getRdfId());
@@ -110,7 +120,6 @@ public class PostProcess {
         return res;
     }
 
-    
     public String getIdentifier() {
         return identifier;
     }
@@ -188,7 +197,7 @@ public class PostProcess {
     }
 
     public void setStoreSupported(boolean storeSupported) {
-        this.useStoreSupported=true;
+        this.useStoreSupported = true;
         this.storeSupported = storeSupported;
     }
 
@@ -224,6 +233,4 @@ public class PostProcess {
     public void setWps(PostWPS wps) {
         this.wps = wps;
     }
-    
-    
 }

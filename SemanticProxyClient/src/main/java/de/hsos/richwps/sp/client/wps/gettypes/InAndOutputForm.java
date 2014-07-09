@@ -9,11 +9,10 @@ package de.hsos.richwps.sp.client.wps.gettypes;
  * @author fbensman
  */
 public abstract class InAndOutputForm {
-    
+
     public static final int LITERAL_TYPE = 0;
     public static final int BOUNDING_BOX_TYPE = 1;
     public static final int COMPLEX_TYPE = 2;
-    
+
     public abstract int getDataType();
-    
 }

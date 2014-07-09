@@ -5,6 +5,7 @@
 package de.hsos.richwps.sp.client.wps.posttypes;
 
 /**
+ * Base class for InputFormChoice and OutputFormChoice
  *
  * @author fbensman
  */

@@ -5,13 +5,14 @@
 package de.hsos.richwps.sp.client;
 
 /**
+ * Exception used for error appearing due to an erroneous client request to the
+ * SemanticProxy
  *
  * @author fbensman
  */
-public class BadRequestException extends Exception{
-    
-    public BadRequestException(String msg){
+public class BadRequestException extends Exception {
+
+    public BadRequestException(String msg) {
         super(msg);
     }
-    
 }

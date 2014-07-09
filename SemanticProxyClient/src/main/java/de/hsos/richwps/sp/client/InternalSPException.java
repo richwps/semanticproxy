@@ -5,12 +5,13 @@
 package de.hsos.richwps.sp.client;
 
 /**
+ * Exception used for errors on the server side
  *
  * @author fbensman
  */
-public class InternalSPException extends Exception{
-    
-    public InternalSPException(String msg){
+public class InternalSPException extends Exception {
+
+    public InternalSPException(String msg) {
         super(msg);
     }
 }

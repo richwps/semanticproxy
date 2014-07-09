@@ -42,6 +42,11 @@ public class RDFClient {
         cache = new LRUCache<String, RDFResource>();
     }
 
+    /**
+     * Returns the underlying HTTP client
+     *
+     * @return
+     */
     public HTTPClient getHttpClient() {
         return httpClient;
     }
@@ -54,7 +59,7 @@ public class RDFClient {
      * @return The resource as an RDFResource object
      * @throws Exception
      */
-    public RDFResource retrieveResource(RDFID rdfID) throws BadRequestException, InternalSPException, CommunicationException, RDFException{
+    public RDFResource retrieveResource(RDFID rdfID) throws BadRequestException, InternalSPException, CommunicationException, RDFException {
         try {
             RDFResource tmp = cache.get(rdfID.rdfID);
             if (tmp != null) {
@@ -63,10 +68,10 @@ public class RDFClient {
 
             String body = httpClient.getRawRDF(rdfID.rdfID);
             ArrayList<Statement> stmtList = null;
-            try{
+            try {
                 stmtList = decomposeIntoStatements(body, rdfID);
-            }catch(Exception e){
-                throw new RDFException("Unexpected error when parsing resource "+rdfID.rdfID+ ". Original message was: "+ e.getMessage());
+            } catch (Exception e) {
+                throw new RDFException("Unexpected error when parsing resource " + rdfID.rdfID + ". Original message was: " + e.getMessage());
             }
             ArrayList<LiteralExpression> litExList = new ArrayList<LiteralExpression>();
             ArrayList<ResourceExpression> resExList = new ArrayList<ResourceExpression>();
@@ -84,7 +89,7 @@ public class RDFClient {
                     ResourceExpression exp = new ResourceExpression(predicate, new RDFID(obj.stringValue()));
                     resExList.add(exp);
                 } else {
-                    throw new RDFException("Unexpected object type in resoure "+rdfID.rdfID);
+                    throw new RDFException("Unexpected object type in resoure " + rdfID.rdfID);
                 }
             }
             res.setFields(litExList.toArray(new LiteralExpression[litExList.size()]));
@@ -93,11 +98,11 @@ public class RDFClient {
             cache.put(res.getRdfID().rdfID, res);
 
             return res;
-        }catch(BadRequestException e){
+        } catch (BadRequestException e) {
             throw e;
-        }catch(InternalSPException e){
+        } catch (InternalSPException e) {
             throw e;
-        }catch(CommunicationException e){
+        } catch (CommunicationException e) {
             throw e;
         }
 
@@ -116,35 +121,84 @@ public class RDFClient {
         rdfParser.setRDFHandler(new StatementCollector(inputList));
         //rdfParser.parse(new StringReader(rdfXml), URIConfiguration.RESOURCES_URI);
         rdfParser.parse(new StringReader(rdfXml), id.rdfID);
-        
+
         return inputList;
     }
-    
-    
-    
-    public RDFID[] getSearchResults(String keyword, URL searchEndpoint) throws BadRequestException, InternalSPException, CommunicationException, MalformedURLException{
-        
+
+    /**
+     * Issues a keyword based search request to the SemanticProxy
+     *
+     * @param keyword
+     * @param searchEndpoint Endpoint of SemanticProxy where to send the request
+     * @return List of RDF IDs, sorted descenting by matches
+     * @throws BadRequestException
+     * @throws InternalSPException
+     * @throws CommunicationException
+     * @throws MalformedURLException
+     */
+    public RDFID[] getSearchResults(String keyword, URL searchEndpoint) throws BadRequestException, InternalSPException, CommunicationException, MalformedURLException {
+
         String xml = httpClient.getRawSearchResults(keyword, searchEndpoint);
-        try{
+        try {
             SubjectList list = SubjectList.fromXML(xml);
             RDFID[] rdfArr = new RDFID[list.size()];
-            for(int i=0; i<list.size();i++){
-                rdfArr[i]= new RDFID(list.get(i).toString());
+            for (int i = 0; i < list.size(); i++) {
+                rdfArr[i] = new RDFID(list.get(i).toString());
             }
             return rdfArr;
-        }catch(MalformedURLException e){
-            throw new MalformedURLException("Parsing result list failed: "+e.getMessage());
+        } catch (MalformedURLException e) {
+            throw new MalformedURLException("Parsing result list failed: " + e.getMessage());
         }
     }
-    
-    
-    public void postRDF(RDFResource[] rdfRess, URL endpoint) throws RDFException, BadRequestException, InternalSPException, CommunicationException{
+
+    /**
+     * Issues a post request for multiple RDF resources
+     *
+     * @param rdfRess
+     * @param endpoint Endpoint for the request
+     * @throws RDFException
+     * @throws BadRequestException
+     * @throws InternalSPException
+     * @throws CommunicationException
+     */
+    public void postRDF(RDFResource[] rdfRess, URL endpoint) throws RDFException, BadRequestException, InternalSPException, CommunicationException {
         RDFDocBuilder builder = new RDFDocBuilder();
-        for(int i=0; i<rdfRess.length;i++){
+        for (int i = 0; i < rdfRess.length; i++) {
             builder.addResource(rdfRess[i]);
         }
         String xmlrdf = builder.toXMLRDF();
         httpClient.postRDFDoc(xmlrdf, endpoint);
     }
-    
+
+    /**
+     * Issues a delete request to the SemanticProxy
+     *
+     * @param rdfId Resource to delete
+     * @throws BadRequestException
+     * @throws InternalSPException
+     * @throws CommunicationException
+     */
+    public void deleteResource(RDFID rdfId) throws BadRequestException, InternalSPException, CommunicationException {
+        httpClient.delete(rdfId.rdfID);
+    }
+
+    /**
+     * Issues a request to change the specified RDF resource according to the
+     * new resource
+     *
+     * @param rdfResource The new form of the resource
+     * @param url Endpoint of SemanticProxy where the resource resides
+     * @throws RDFException
+     * @throws BadRequestException
+     * @throws InternalSPException
+     * @throws CommunicationException
+     */
+    public void putRDF(RDFResource[] rdfResource, URL url) throws RDFException, BadRequestException, InternalSPException, CommunicationException {
+        RDFDocBuilder builder = new RDFDocBuilder();
+        for (int i = 0; i < rdfResource.length; i++) {
+            builder.addResource(rdfResource[i]);
+        }
+        String xmlrdf = builder.toXMLRDF();
+        httpClient.putRDFDoc(xmlrdf, url);
+    }
 }

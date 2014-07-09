@@ -14,13 +14,12 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
+ * Mutable class that represents an input description
  *
  * @author fbensman
  */
 public class PostInput {
-   
 
-    
     private RDFID rdfId = null;
     private String identifier = null;
     private String title = null;
@@ -35,11 +34,16 @@ public class PostInput {
 
     }
 
+    /**
+     * Creates an RDFResource from object
+     *
+     * @return
+     */
     public RDFResource toRDFResource() {
         RDFResource res = new RDFResource(rdfId);
         ArrayList<LiteralExpression> literalList = new ArrayList<LiteralExpression>();
         ArrayList<ResourceExpression> resourceList = new ArrayList<ResourceExpression>();
-        
+
         if (identifier == null) {
             throw new NullPointerException("Process identifier has not been set.");
         }
@@ -54,7 +58,7 @@ public class PostInput {
             lexp = new LiteralExpression(Vocabulary.Abstract, bstract);
             literalList.add(lexp);
         }
-        
+
         if (metadataList != null) {
             for (URL md : metadataList) {
                 lexp = new LiteralExpression(Vocabulary.Metadata, md.toString());
@@ -62,42 +66,40 @@ public class PostInput {
             }
         }
         if (minOcc < 0) {
-            throw new ArithmeticException("No negativ values for min. occurence in input "+identifier+" permitted");
+            throw new ArithmeticException("No negativ values for min. occurence in input " + identifier + " permitted");
         }
-        lexp = new LiteralExpression(Vocabulary.MinOccurs, ""+minOcc);
+        lexp = new LiteralExpression(Vocabulary.MinOccurs, "" + minOcc);
         literalList.add(lexp);
-        if (maxOcc < 0 ) {
-            throw new ArithmeticException("No negativ values for max. occurence in input "+identifier+" permitted");
+        if (maxOcc < 0) {
+            throw new ArithmeticException("No negativ values for max. occurence in input " + identifier + " permitted");
         }
-        if (maxOcc < minOcc ) {
-            throw new ArithmeticException("Max. occurence needs to be larger than min. occurence in input "+identifier+" permitted");
+        if (maxOcc < minOcc) {
+            throw new ArithmeticException("Max. occurence needs to be larger than min. occurence in input " + identifier + " permitted");
         }
-        lexp = new LiteralExpression(Vocabulary.MaxOccurs, ""+maxOcc);
+        lexp = new LiteralExpression(Vocabulary.MaxOccurs, "" + maxOcc);
         literalList.add(lexp);
         res.setFields(literalList.toArray(new LiteralExpression[literalList.size()]));
-        
+
         ResourceExpression rexp = new ResourceExpression(Vocabulary.Type, new RDFID(Vocabulary.DataInputClass));
         resourceList.add(rexp);
-        
-        if(inputFormChoice == null){
-            throw new NullPointerException("Data type has not been set for input "+ identifier);
+
+        if (inputFormChoice == null) {
+            throw new NullPointerException("Data type has not been set for input " + identifier);
         }
-        if(inputFormChoice.getDataType() == InAndOutputForm.LITERAL_TYPE){
+        if (inputFormChoice.getDataType() == InAndOutputForm.LITERAL_TYPE) {
             PostLiteralData literal = (PostLiteralData) inputFormChoice;
             rexp = new ResourceExpression(Vocabulary.InputFormChoice, literal.getRdfId());
-        }
-        else if(inputFormChoice.getDataType() == InAndOutputForm.COMPLEX_TYPE){
+        } else if (inputFormChoice.getDataType() == InAndOutputForm.COMPLEX_TYPE) {
             PostComplexData complex = (PostComplexData) inputFormChoice;
             rexp = new ResourceExpression(Vocabulary.InputFormChoice, complex.getRdfId());
-        }
-        else{
+        } else {
             PostBoundingBoxData boundingBox = (PostBoundingBoxData) inputFormChoice;
             rexp = new ResourceExpression(Vocabulary.InputFormChoice, boundingBox.getRdfId());
         }
         resourceList.add(rexp);
         res.setResources(resourceList.toArray(new ResourceExpression[resourceList.size()]));
-        
-        
+
+
         return res;
     }
 
@@ -164,9 +166,4 @@ public class PostInput {
     public void setPostInputFormChoice(PostInAndOutputForm inputFormChoice) {
         this.inputFormChoice = inputFormChoice;
     }
-
-    
-   
-    
-    
 }

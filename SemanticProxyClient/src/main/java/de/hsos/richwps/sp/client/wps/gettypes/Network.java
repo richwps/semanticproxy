@@ -46,29 +46,23 @@ public class Network {
                 return new Network(res);
             }
         }
-        throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found "+type.length+" type-attributes");
+        throw new RDFException("Resource " + res.getRdfID().rdfID + "malformed. Found " + type.length + " type-attributes");
     }
-    
-    
-    
-    
-    
-    
+
     private String getSingleAttribute(String pred) throws RDFException {
         String[] val = res.findLiterals(pred);
         if (val.length == 1) {
             return val[0];
         }
-        throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found "+val.length+" "+pred+"-attributes");
+        throw new RDFException("Resource " + res.getRdfID().rdfID + "malformed. Found " + val.length + " " + pred + "-attributes");
     }
-    
 
-    public String getOwner() throws RDFException{
+    public String getOwner() throws RDFException {
         return getSingleAttribute(Vocabulary.Owner);
     }
 
-    public String getDomain() throws RDFException{
-       return getSingleAttribute(Vocabulary.Domain);
+    public String getDomain() throws RDFException {
+        return getSingleAttribute(Vocabulary.Domain);
     }
 
     /**
@@ -76,15 +70,15 @@ public class Network {
      *
      * @return Wrapper for RDF resources that describe WPSs
      */
-    public WPS[] getWPSs() throws BadRequestException, InternalSPException, CommunicationException, RDFException{
+    public WPS[] getWPSs() throws BadRequestException, InternalSPException, CommunicationException, RDFException {
         RDFID[] rdfids = res.findResources(Vocabulary.WPS);
         SPClient spc = SPClient.getInstance();
         WPS[] wpss = new WPS[rdfids.length];
-       
+
         for (int i = 0; i < rdfids.length; i++) {
             wpss[i] = spc.getWPS(rdfids[i]);
         }
-        
+
         return wpss;
     }
 }

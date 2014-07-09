@@ -13,11 +13,9 @@ import de.hsos.richwps.sp.client.wps.Vocabulary;
  *
  * @author fbensman
  */
-public class ComplexData extends InAndOutputForm{
+public class ComplexData extends InAndOutputForm {
 
-    
-    
-     private RDFResource res = null;
+    private RDFResource res = null;
 
     /**
      * Ctor
@@ -41,17 +39,12 @@ public class ComplexData extends InAndOutputForm{
                 return new ComplexData(res);
             }
         }
-        throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found "+type.length+" type-attributes");
+        throw new RDFException("Resource " + res.getRdfID().rdfID + "malformed. Found " + type.length + " type-attributes");
     }
 
-  
-    
     @Override
     public int getDataType() {
         return COMPLEX_TYPE;
     }
-    
-    
     //TODO: Make further attributes accessible
-    
 }

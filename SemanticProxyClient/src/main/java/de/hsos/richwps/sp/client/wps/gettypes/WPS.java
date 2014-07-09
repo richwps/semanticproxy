@@ -30,26 +30,25 @@ public class WPS {
      * @param res Resource to wrap
      * @return The wrapper, null if the resource is not a network objekt
      */
-    public static WPS createWrapper(RDFResource res) throws RDFException{
+    public static WPS createWrapper(RDFResource res) throws RDFException {
         RDFID[] type = res.findResources(Vocabulary.Type);
         if (type.length == 1) {
             if (type[0].rdfID.equals(Vocabulary.WPSClass)) {
                 return new WPS(res);
             }
         }
-        throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found "+type.length+" type-attributes");
+        throw new RDFException("Resource " + res.getRdfID().rdfID + "malformed. Found " + type.length + " type-attributes");
     }
-    
-    
+
     private String getSingleAttribute(String pred) throws RDFException {
         String[] val = res.findLiterals(pred);
         if (val.length == 1) {
             return val[0];
         }
-        throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found "+val.length+" "+pred+"-attributes");
+        throw new RDFException("Resource " + res.getRdfID().rdfID + "malformed. Found " + val.length + " " + pred + "-attributes");
     }
 
-    public String getEndpoint() throws RDFException{
+    public String getEndpoint() throws RDFException {
         return getSingleAttribute(Vocabulary.Endpoint);
     }
 

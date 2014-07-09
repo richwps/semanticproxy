@@ -5,12 +5,13 @@
 package de.hsos.richwps.sp.client;
 
 /**
+ * Indicates an error during an RDF parsing/generating operation
  *
  * @author fbensman
  */
-public class RDFException extends Exception{
-    
-    public RDFException(String msg){
+public class RDFException extends Exception {
+
+    public RDFException(String msg) {
         super(msg);
     }
 }

@@ -5,7 +5,7 @@
 package de.hsos.richwps.sp.client.rdf;
 
 /**
- * Class to store refernced resource ids
+ * Class to store referenced resource ids
  *
  * @author fbensman
  */

@@ -14,11 +14,12 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
+ * Mutable class that represents an output description
  *
  * @author fbensman
  */
 public class PostOutput {
-    
+
     private RDFID rdfId = null;
     private String identifier = null;
     private String title = null;
@@ -31,11 +32,16 @@ public class PostOutput {
 
     }
 
+    /**
+     * Creates an RDFResource from object
+     *
+     * @return
+     */
     public RDFResource toRDFResource() {
         RDFResource res = new RDFResource(rdfId);
         ArrayList<LiteralExpression> literalList = new ArrayList<LiteralExpression>();
         ArrayList<ResourceExpression> resourceList = new ArrayList<ResourceExpression>();
-        
+
         if (identifier == null) {
             throw new NullPointerException("Process identifier has not been set.");
         }
@@ -50,7 +56,7 @@ public class PostOutput {
             lexp = new LiteralExpression(Vocabulary.Abstract, bstract);
             literalList.add(lexp);
         }
-        
+
         if (metadataList != null) {
             for (URL md : metadataList) {
                 lexp = new LiteralExpression(Vocabulary.Metadata, md.toString());
@@ -58,28 +64,26 @@ public class PostOutput {
             }
         }
         res.setFields(literalList.toArray(new LiteralExpression[literalList.size()]));
-        
+
         ResourceExpression rexp = new ResourceExpression(Vocabulary.Type, new RDFID(Vocabulary.ProcessOutputClass));
         resourceList.add(rexp);
-        if(outputFormChoice == null){
-            throw new NullPointerException("Data type has not been set for input "+ identifier);
+        if (outputFormChoice == null) {
+            throw new NullPointerException("Data type has not been set for input " + identifier);
         }
-        if(outputFormChoice.getDataType() == InAndOutputForm.LITERAL_TYPE){
+        if (outputFormChoice.getDataType() == InAndOutputForm.LITERAL_TYPE) {
             PostLiteralData literal = (PostLiteralData) outputFormChoice;
             rexp = new ResourceExpression(Vocabulary.OutputFormChoice, literal.getRdfId());
-        }
-        else if(outputFormChoice.getDataType() == InAndOutputForm.COMPLEX_TYPE){
+        } else if (outputFormChoice.getDataType() == InAndOutputForm.COMPLEX_TYPE) {
             PostComplexData complex = (PostComplexData) outputFormChoice;
             rexp = new ResourceExpression(Vocabulary.OutputFormChoice, complex.getRdfId());
-        }
-        else{
+        } else {
             PostBoundingBoxData boundingBox = (PostBoundingBoxData) outputFormChoice;
             rexp = new ResourceExpression(Vocabulary.OutputFormChoice, boundingBox.getRdfId());
         }
         resourceList.add(rexp);
         res.setResources(resourceList.toArray(new ResourceExpression[resourceList.size()]));
-        
-        
+
+
         return res;
     }
 
@@ -130,10 +134,4 @@ public class PostOutput {
     public void setPostOutputFormChoice(PostInAndOutputForm outputFormChoice) {
         this.outputFormChoice = outputFormChoice;
     }
-
-   
-    
-    
-    
-    
 }

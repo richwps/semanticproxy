@@ -20,9 +20,7 @@ import java.net.URL;
  * @author fbensman
  */
 public class Input {
-    
-    
-    
+
     private RDFResource res = null;
 
     private Input(RDFResource res) {
@@ -42,20 +40,18 @@ public class Input {
                 return new Input(res);
             }
         }
-        throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found "+type.length+" type-attributes");
+        throw new RDFException("Resource " + res.getRdfID().rdfID + "malformed. Found " + type.length + " type-attributes");
     }
-    
-    
-    
+
     private String getSingleAttribute(String pred) throws RDFException {
         String[] val = res.findLiterals(pred);
         if (val.length == 1) {
             return val[0];
         }
-        throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found "+val.length+" "+pred+"-attributes");
+        throw new RDFException("Resource " + res.getRdfID().rdfID + "malformed. Found " + val.length + " " + pred + "-attributes");
     }
 
-    public String getIdentifier() throws RDFException{
+    public String getIdentifier() throws RDFException {
         return getSingleAttribute(Vocabulary.Identifier);
     }
 
@@ -63,55 +59,54 @@ public class Input {
         return getSingleAttribute(Vocabulary.Title);
     }
 
-    public String getAbstract() throws RDFException{
+    public String getAbstract() throws RDFException {
         return getSingleAttribute(Vocabulary.Abstract);
     }
-    
-    public int getMinOccurs()throws RDFException{
+
+    public int getMinOccurs() throws RDFException {
         String tmp = getSingleAttribute(Vocabulary.MinOccurs);
         return Integer.valueOf(tmp);
     }
-    
-    public int getMaxOccurs()throws RDFException{
+
+    public int getMaxOccurs() throws RDFException {
         String tmp = getSingleAttribute(Vocabulary.MaxOccurs);
         return Integer.valueOf(tmp);
     }
-    
-    public URL getMetadata() throws RDFException{
+
+    public URL getMetadata() throws RDFException {
         String tmp = getSingleAttribute(Vocabulary.Metadata);
-        if(tmp == null)
+        if (tmp == null) {
             return null;
-        else{
+        } else {
             URL md = null;
-            try{
+            try {
                 md = new URL(tmp);
-            }catch(Exception e){
+            } catch (Exception e) {
                 return null;
             }
             return md;
         }
     }
-    
-    
+
     public InAndOutputForm getInputFormChoice() throws RDFException, CommunicationException, BadRequestException, InternalSPException {
         //get the statement about the input form choice
         RDFID[] ifc = res.findResources(Vocabulary.InputFormChoice);
         if (ifc.length == 1) { //if there is only one...
             SPClient spc = SPClient.getInstance();
             RDFClient rdfc = spc.getRdfClient();
-            
+
             //get the data type resource... 
             RDFResource infoch = rdfc.retrieveResource(ifc[0]);
             //determine its type (complex, literal, ...)
             RDFID[] type = infoch.findResources(Vocabulary.Type);
-            if(type[0].rdfID.equals(Vocabulary.ComplexDataClass))
+            if (type[0].rdfID.equals(Vocabulary.ComplexDataClass)) {
                 return spc.getComplexData(ifc[0]);
-            else if (type[0].rdfID.equals(Vocabulary.LiteralDataClass))
+            } else if (type[0].rdfID.equals(Vocabulary.LiteralDataClass)) {
                 return spc.getLiteralData(ifc[0]);
-            else
+            } else {
                 return spc.getBoundingBoxData(ifc[0]);
+            }
         }
-        throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found "+ifc.length+" InputFormChoices");
+        throw new RDFException("Resource " + res.getRdfID().rdfID + "malformed. Found " + ifc.length + " InputFormChoices");
     }
-    
 }

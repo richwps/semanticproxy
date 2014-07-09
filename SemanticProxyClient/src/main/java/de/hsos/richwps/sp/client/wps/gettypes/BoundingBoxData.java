@@ -32,17 +32,15 @@ public class BoundingBoxData extends InAndOutputForm {
      * @param res Resource to wrap
      * @return The wrapper, null if the resource is not a network objekt
      */
-    public static BoundingBoxData createWrapper(RDFResource res) throws RDFException{
+    public static BoundingBoxData createWrapper(RDFResource res) throws RDFException {
         RDFID[] type = res.findResources(Vocabulary.Type);
         if (type.length == 1) {
             if (type[0].rdfID.equals(Vocabulary.BoundingBoxDataClass)) {
                 return new BoundingBoxData(res);
             }
         }
-        throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found "+type.length+" type-attributes");
+        throw new RDFException("Resource " + res.getRdfID().rdfID + "malformed. Found " + type.length + " type-attributes");
     }
-
- 
 
     @Override
     public int getDataType() {
