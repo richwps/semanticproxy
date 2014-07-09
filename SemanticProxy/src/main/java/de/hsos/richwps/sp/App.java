@@ -4,7 +4,6 @@ import de.hsos.richwps.sp.rdfdb.DBAdministration;
 import de.hsos.richwps.sp.rdfdb.DBIO;
 import de.hsos.richwps.sp.restlogic.ContentChanger;
 import de.hsos.richwps.sp.restlogic.Vocabulary;
-import de.hsos.richwps.sp.types.RDFDocument;
 import de.hsos.richwps.sp.web.BrowseAccess;
 import de.hsos.richwps.sp.web.CreateAccess;
 import de.hsos.richwps.sp.web.DeleteAccess;
@@ -42,8 +41,10 @@ public class App {
             System.out.println("Shutdown due to error");
             System.exit(-1);
         }
+        System.out.println("*** Used configuration");
         System.out.println(config.toString());
-
+        System.out.println("***");
+        
         //Initialize vacabulary
         try{
             Vocabulary.init(config.getVocabularyURL());
@@ -82,10 +83,7 @@ public class App {
                 }
             }
 
-            //write whole db content to stdout
-            RDFDocument doc = DBIO.getWholeDBContent();
-            System.out.println("--- Current DB content ---");
-            System.out.println(doc.rDFXMLRepresentation());
+           
         } catch (Exception e) {
             System.err.println(e.getMessage());
             e.printStackTrace();

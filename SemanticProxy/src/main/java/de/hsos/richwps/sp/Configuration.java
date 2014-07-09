@@ -15,10 +15,13 @@ import java.util.ArrayList;
 import java.io.FileWriter;
 
 /**
- *
+ * Loads and stores a configuration
  * @author fbensman
  */
 public class Configuration {
+    
+    private File configSource = null;
+    private boolean loaded = false;
     
     private File rdfMemoryDir = null;
     private boolean startClean = true;
@@ -46,7 +49,7 @@ public class Configuration {
     
     
     
-    private static Configuration instance = null;
+    
     
     public Configuration (){
         wpsRDFFiles = new ArrayList<>();
@@ -55,14 +58,15 @@ public class Configuration {
     
     
     
-//    public static Configuration getInstance(){
-//        if(instance == null)
-//            instance = new Configuration();
-//        return instance;
-//    }
-//    
-    
+
+    /**
+     * Initializes itself with a default configuration
+     * @return
+     * @throws Exception 
+     */
     public boolean loadDefault() throws Exception{
+        configSource = null;
+        loaded = true;
         wpsRDFFiles = new ArrayList<>();
         processRDFFiles = new ArrayList<>();
         File wpsFileLKN1 = new File("RDF" + File.separator + "LKN"+File.separator+"WPSMacrophyte.rdf");
@@ -123,6 +127,7 @@ public class Configuration {
      * @throws Exception 
      */
     public boolean load(File file) throws Exception{
+        configSource = file;
         
         ConfigurationDocument configDoc = null;
         try{
@@ -173,7 +178,7 @@ public class Configuration {
         processNamingEndpoint = new URL(resourcesURL.toString()+"/"+tmpRDFNamingEndpoints.getProcessNaming());
         inputNamingEndpoint = new URL(resourcesURL.toString()+"/"+tmpRDFNamingEndpoints.getInputNaming());
         outputNamingEndpoint = new URL(resourcesURL.toString()+"/"+tmpRDFNamingEndpoints.getOutputNaming());
-
+        loaded = true;
         return true;
     }
 
@@ -333,6 +338,49 @@ public class Configuration {
 
     
     
+    @Override
+    public String toString(){
+        if(! loaded)
+            return "No configuration loaded";
+        
+        String ret = "Configuration:\n";
+        if(configSource == null)
+            ret += "Config file:      default\n";
+        else
+            ret += "Config file:      "+configSource.getAbsolutePath()+"\n";
+        ret += "RDF store:        "+rdfMemoryDir.getAbsolutePath()+"\n";
+        ret += "Start clean:      "+startClean+"\n";
+        ret += "Network domain:   "+domain+"\n";
+        ret += "Network owner:    "+owner+"\n";
+        ret += "WPS:\n";
+        for(int i=0; i<wpsRDFFiles.size();i++){
+            ret+="                  "+wpsRDFFiles.get(i).getAbsolutePath()+"\n";
+        }
+        ret += "Process:\n";
+        for(int i=0; i<processRDFFiles.size();i++){
+            ret+="                  "+processRDFFiles.get(i).getAbsolutePath()+"\n";
+        }
+        ret += "Host URL:        "+hostURL.toString()+"\n";
+        ret += "Resources URL:   "+resourcesURL.toString()+"\n";
+        ret += "Application URL: "+applicationURL.toString()+"\n";
+        ret += "Vocabulary URL:  "+vocabularyURL.toString()+"\n";
+        ret += "Network URL:     "+networkURL.toString()+"\n";
+        ret += "wpsList URL:     "+wpsListURL.toString()+"\n";
+        ret += "processList URL: "+processListURL.toString()+"\n";
+        ret += "search URL:      "+searchURL.toString()+"\n";
+        ret += "WPS naming ep:   "+wpsNamingEndpoint.toString()+"\n";
+        ret += "Proc naming ep:  "+processNamingEndpoint.toString()+"\n";
+        ret += "Input naming ep: "+inputNamingEndpoint.toString()+"\n";
+        ret += "Output naming ep:"+outputNamingEndpoint.toString();
+    
+        return ret;
+
+   
+    
+   
+        
+        
+    }
     
     
     

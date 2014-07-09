@@ -340,6 +340,15 @@ public class Validator {
         return retList.toArray(new Statement[retList.size()]);
     }
      
+     
+     
+     /**
+      * Returns statements with matching predicate and object
+      * @param predicate
+      * @param object
+      * @param list
+      * @return 
+      */
      public static Statement[] getStatementsByPredicateAndObject(String predicate, String object, ArrayList<Statement> list){
          ArrayList<Statement> retList = new ArrayList<Statement>();
          for(int i=0; i<list.size(); i++){

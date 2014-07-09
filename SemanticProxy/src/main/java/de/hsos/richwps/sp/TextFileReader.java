@@ -12,12 +12,18 @@ import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
 
 /**
- *
+ * Provides methods to read text files
  * @author fbensman
  */
 public class TextFileReader {
     
     
+    /**
+     * Reads a text file
+     * @param file
+     * @return
+     * @throws Exception 
+     */
      public static String readPlainText(File file) throws Exception{
         try{
             FileInputStream fis = new FileInputStream(file);

@@ -15,6 +15,12 @@ import java.util.ArrayList;
 public class SubjectList extends ArrayList<URL>{
     
     
+    /**
+     * Creates a SubjectList from xml code
+     * @param xml
+     * @return
+     * @throws MalformedURLException 
+     */
     public static SubjectList fromXML(String xml) throws MalformedURLException{
         int lastIdx = 0;
         SubjectList list = new SubjectList();
@@ -30,6 +36,10 @@ public class SubjectList extends ArrayList<URL>{
     }
     
     
+    /**
+     * Returns an XML representation of the object
+     * @return 
+     */
     public String toXMLList(){
         String tab = "    ";
         String str = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";

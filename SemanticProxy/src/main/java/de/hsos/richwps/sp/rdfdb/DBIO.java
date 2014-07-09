@@ -263,7 +263,13 @@ public class DBIO {
     
     
     
-    
+    /**
+     * Returns all statements with the subject and predicate.
+     * @param subject
+     * @param predicate
+     * @return
+     * @throws Exception 
+     */
     public static Statement[] getStatementsForSubjAndPred(URL subject, URL predicate) throws Exception{
         Repository repo = DBAdministration.getRepository();
         if (repo == null) {

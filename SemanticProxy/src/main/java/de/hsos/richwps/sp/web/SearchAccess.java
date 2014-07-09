@@ -17,7 +17,6 @@ import static spark.Spark.get;
  * @author fbensman
  */
 public class SearchAccess {
-   
 
     /**
      * Registeres the required routes an handlers
@@ -32,17 +31,17 @@ public class SearchAccess {
             @Override
             public Object handle(Request request, Response response) {
                 String keyword = (String) request.queryParams("keyword");
-                if(keyword == null){
+                if (keyword == null) {
                     response.status(400);
                     return "Empty search query.";
                 }
-                try{
+                try {
                     SubjectList list = SearchHandling.processKeywordSearch(keyword);
                     response.status(200);
                     return list.toXMLList();
-                }catch(Exception e){
+                } catch (Exception e) {
                     response.status(500);
-                    return "Internal server error: "+e.getMessage();
+                    return "Internal server error: " + e.getMessage();
                 }
 
             }

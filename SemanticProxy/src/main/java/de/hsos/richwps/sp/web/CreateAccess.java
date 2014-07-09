@@ -13,68 +13,66 @@ import static spark.Spark.*;
 
 /**
  * The access point for the create queries from the web
+ *
  * @author fbensman
  */
 public class CreateAccess {
-    
-    
+
     /**
      * Installs endpoints for http post
      */
-    public CreateAccess(URL processListURL, URL wpsListURL){
-    
-    
+    public CreateAccess(URL processListURL, URL wpsListURL) {
+
+
         /**
          * Register endpoint for process creation
          */
         post(new Route(processListURL.getPath()) {
             @Override
             public Object handle(Request request, Response response) {
-                if(request.contentType().equalsIgnoreCase("application/xml+rdf")){
+                if (request.contentType().equalsIgnoreCase("application/xml+rdf")) {
                     String body = request.body();
-                    try{
+                    try {
                         ContentChanger.pushProcessRDFintoDB(body);
                         response.status(201);
                         return "Process created";
-                    }catch(Exception e){
+                    } catch (Exception e) {
                         response.status(500);
-                        return "Error, "+e.getMessage();
+                        return "Error, " + e.getMessage();
                     }
-                }
-                else{
+                } else {
                     response.status(415);
                     return "Format not supported, use application/xml+rdf";
                 }
-                
+
             }
         });
-        
-        
+
+
         /**
          * Register endpoint for wps creation
          */
         post(new Route(wpsListURL.getPath()) {
             @Override
             public Object handle(Request request, Response response) {
-                if(request.contentType().equalsIgnoreCase("application/xml+rdf")){
+                if (request.contentType().equalsIgnoreCase("application/xml+rdf")) {
                     String body = request.body();
-                    try{
+                    try {
                         ContentChanger.pushWPSRDFintoDB(body);
                         response.status(201);
                         return "WPS created";
-                    }catch(Exception e){
+                    } catch (Exception e) {
                         response.status(500);
-                        return "Error, "+e.getMessage();
+                        return "Error, " + e.getMessage();
                     }
-                }
-                else{
+                } else {
                     response.status(415);
                     return "Format not supported, use application/xml+rdf";
                 }
-                
+
             }
         });
-    
-    
+
+
     }
 }

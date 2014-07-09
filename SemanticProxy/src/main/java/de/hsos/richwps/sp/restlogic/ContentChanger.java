@@ -178,6 +178,14 @@ public class ContentChanger {
                 Statement[] stats = Validator.getStatementsByPredicateAndObject(Vocabulary.Type,Vocabulary.WPSClass,statList);
                 DBDelete.deleteProcess(route);
                 DBIO.loadRDFXMLStringIntoDB(rawRDF);
+                
+                //create inverse link to reference from wps to this process
+                stats = Validator.getStatementsByPredicate(Vocabulary.WPS, statList);
+                URI subject = new URI(stats[0].getObject().stringValue());
+                URI predicate = new URI(Vocabulary.Process);
+                URI object = new URI(stats[0].getSubject().stringValue());
+                Triple inverseTriple = new Triple(subject,predicate,object);
+                DBIO.insertTriple(inverseTriple); 
             }
             else{
                 throw new Exception(result.message);
@@ -197,9 +205,7 @@ public class ContentChanger {
      * @throws Exception 
      */
     public static void insertNetwork(String owner, String domain) throws Exception{
-//        if(DBIO.subjectExists(DBAdministration.getResourceURL())){
-//           throw new Exception("Network already existing.");
-//        }
+
         
         Resource networkSubject = new URIImpl(DBAdministration.getResourceURL().toString());
         

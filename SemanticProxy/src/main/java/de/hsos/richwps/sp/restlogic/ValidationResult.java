@@ -6,13 +6,16 @@ package de.hsos.richwps.sp.restlogic;
 
 /**
  * Small class to store information about a validation
+ *
  * @author fbensman
  */
 public class ValidationResult {
+
     public boolean result = false;
-        public String message = null;
-        public ValidationResult(boolean result, String msg){
-            this.result = result;
-            this.message=msg;
-        }
+    public String message = null;
+
+    public ValidationResult(boolean result, String msg) {
+        this.result = result;
+        this.message = msg;
+    }
 }

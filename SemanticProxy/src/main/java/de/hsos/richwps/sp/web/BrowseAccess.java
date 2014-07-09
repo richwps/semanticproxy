@@ -17,8 +17,6 @@ import spark.*;
  * @author fbensman
  */
 public class BrowseAccess {
-    
-   
 
     /**
      * Registeres the required routes an handlers
@@ -30,9 +28,9 @@ public class BrowseAccess {
             URL processListURL,
             URL wpsList) {
 
-        
-       
-        
+
+
+
 
         /**
          * Registers the route for root for user convenience
@@ -72,9 +70,9 @@ public class BrowseAccess {
             }
         });
 
-        
-        
-        
+
+
+
         /**
          * Registers the route for vocabulary query
          */
@@ -95,10 +93,10 @@ public class BrowseAccess {
 
             }
         });
-        
-        
 
-        
+
+
+
         /**
          * Registers the route for network
          */
@@ -114,17 +112,17 @@ public class BrowseAccess {
 //                    System.out.println(s[i]+" "+request.headers(s[i]));
 //                }
 //                System.out.println(request.contentType());
-               
-                 try {
-                    
-                    String rdf =  RouteMapper.getRDFFor(request.url());
-                    if(rdf == null){
+
+                try {
+
+                    String rdf = RouteMapper.getRDFFor(request.url());
+                    if (rdf == null) {
                         response.status(404);
                         return "Resource not found";
                     }
                     response.status(200);
                     response.type("application/xml+rdf"); //normally +rdf, but download in chrome is annoying
-                    System.out.println("\n response: "+response.raw().toString());
+                    System.out.println("\n response: " + response.raw().toString());
                     return rdf;
                 } catch (Exception e) {
                     System.out.println("Error, " + e.getMessage());
@@ -134,20 +132,20 @@ public class BrowseAccess {
 
             }
         });
-        
-        
-        
-        
+
+
+
+
         /**
          * Registers the route for process list
          */
         get(new Route(processListURL.getPath()) {
             @Override
             public Object handle(Request request, Response response) {
-                 try {
+                try {
                     String str = RouteMapper.getAllProcesses();
                     response.status(200);
-                    response.type("application/xml"); 
+                    response.type("application/xml");
                     return str;
                 } catch (Exception e) {
                     System.out.println("Error, " + e.getMessage());
@@ -157,7 +155,7 @@ public class BrowseAccess {
 
             }
         });
-        
+
 
         /**
          * Registers the route for wps list
@@ -179,16 +177,16 @@ public class BrowseAccess {
             }
         });
 
-        
+
         /**
          * Registers the route for resources
          */
-        get(new Route(resources.getPath()+ "/*") {
+        get(new Route(resources.getPath() + "/*") {
             @Override
             public Object handle(Request request, Response response) {
-                 try {
-                    String rdf =  RouteMapper.getRDFFor(request.url());
-                    if(rdf == null){
+                try {
+                    String rdf = RouteMapper.getRDFFor(request.url());
+                    if (rdf == null) {
                         response.status(404);
                         return "Resource not found";
                     }
@@ -203,7 +201,7 @@ public class BrowseAccess {
 
             }
         });
-        
+
 
     }
 }
