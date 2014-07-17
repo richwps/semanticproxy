@@ -10,7 +10,9 @@ import de.hsos.richwps.sp.web.DeleteAccess;
 import de.hsos.richwps.sp.web.SearchAccess;
 import de.hsos.richwps.sp.web.UpdateAccess;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import org.apache.xmlbeans.XmlException;
 
 /**
  * Home of the main routine
@@ -29,18 +31,26 @@ public class App {
 
         //Load configuration
         Configuration config = new Configuration();
-        File configFile = new File("." + File.separator + "config.xml");
+        File configFile = new File("config.xml");
         try{
-            if (!config.load(configFile)) {
+            config.load(configFile);    
+        }catch(IOException io){
+            try{
                 config.writeDefaultConfiguration();
                 config.load(configFile);
+            }catch(Exception e){
+                System.err.println(e.getMessage());
+                e.printStackTrace();
+                System.out.println("Shutdown due to error");
+                System.exit(-1);
             }
-        }catch(Exception e){
-            System.err.println(e.getMessage());
-            e.printStackTrace();
+        }catch(XmlException xml){
+            System.err.println(xml.getMessage());
+            xml.printStackTrace();
             System.out.println("Shutdown due to error");
             System.exit(-1);
         }
+        
         System.out.println("*** Used configuration");
         System.out.println(config.toString());
         System.out.println("***");
@@ -70,7 +80,15 @@ public class App {
                 
                 ArrayList<File> list = config.getWpsRDFFiles();
                 for (int i = 0; i < list.size(); i++) {
+                    //read rdf file
                     String content = TextFileReader.readPlainText(list.get(i));
+                    //replace wildcard string with host
+                    if(config.getReplaceableHost() != null){
+                        if(content.contains(config.getReplaceableHost())){
+                            content = content.replaceAll(config.getReplaceableHost(), config.getHostURL().toString());
+                        }
+                    }
+                    //insert modified content into db
                     ContentChanger.pushWPSRDFintoDB(content);
                     System.out.println("File " + list.get(i).getAbsolutePath() + " loaded");
                 }

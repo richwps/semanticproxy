@@ -17,7 +17,7 @@ package de.hsos.richwps.sp.config;
 public interface ConfigurationDocument extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(ConfigurationDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sC4987F4EACB0C561DB70AF05FAEFC74D").resolveHandle("configurationa60edoctype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(ConfigurationDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s03304F119F4A08AD48D992D6D1867513").resolveHandle("configurationa60edoctype");
     
     /**
      * Gets the "Configuration" element
@@ -42,7 +42,7 @@ public interface ConfigurationDocument extends org.apache.xmlbeans.XmlObject
     public interface Configuration extends org.apache.xmlbeans.XmlObject
     {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Configuration.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sC4987F4EACB0C561DB70AF05FAEFC74D").resolveHandle("configurationd80celemtype");
+            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Configuration.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s03304F119F4A08AD48D992D6D1867513").resolveHandle("configurationd80celemtype");
         
         /**
          * Gets the "RDFDirectory" element

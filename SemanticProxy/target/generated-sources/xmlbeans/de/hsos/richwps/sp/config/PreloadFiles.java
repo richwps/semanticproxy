@@ -16,77 +16,7 @@ package de.hsos.richwps.sp.config;
 public interface PreloadFiles extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(PreloadFiles.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sC4987F4EACB0C561DB70AF05FAEFC74D").resolveHandle("preloadfiles6054type");
-    
-    /**
-     * Gets array of all "File" elements
-     */
-    java.lang.String[] getFileArray();
-    
-    /**
-     * Gets ith "File" element
-     */
-    java.lang.String getFileArray(int i);
-    
-    /**
-     * Gets (as xml) array of all "File" elements
-     */
-    org.apache.xmlbeans.XmlString[] xgetFileArray();
-    
-    /**
-     * Gets (as xml) ith "File" element
-     */
-    org.apache.xmlbeans.XmlString xgetFileArray(int i);
-    
-    /**
-     * Returns number of "File" element
-     */
-    int sizeOfFileArray();
-    
-    /**
-     * Sets array of all "File" element
-     */
-    void setFileArray(java.lang.String[] fileArray);
-    
-    /**
-     * Sets ith "File" element
-     */
-    void setFileArray(int i, java.lang.String file);
-    
-    /**
-     * Sets (as xml) array of all "File" element
-     */
-    void xsetFileArray(org.apache.xmlbeans.XmlString[] fileArray);
-    
-    /**
-     * Sets (as xml) ith "File" element
-     */
-    void xsetFileArray(int i, org.apache.xmlbeans.XmlString file);
-    
-    /**
-     * Inserts the value as the ith "File" element
-     */
-    void insertFile(int i, java.lang.String file);
-    
-    /**
-     * Appends the value as the last "File" element
-     */
-    void addFile(java.lang.String file);
-    
-    /**
-     * Inserts and returns a new empty value (as xml) as the ith "File" element
-     */
-    org.apache.xmlbeans.XmlString insertNewFile(int i);
-    
-    /**
-     * Appends and returns a new empty value (as xml) as the last "File" element
-     */
-    org.apache.xmlbeans.XmlString addNewFile();
-    
-    /**
-     * Removes the ith "File" element
-     */
-    void removeFile(int i);
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(PreloadFiles.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s03304F119F4A08AD48D992D6D1867513").resolveHandle("preloadfiles6054type");
     
     /**
      * Gets array of all "WPS" elements
@@ -227,6 +157,36 @@ public interface PreloadFiles extends org.apache.xmlbeans.XmlObject
      * Removes the ith "Process" element
      */
     void removeProcess(int i);
+    
+    /**
+     * Gets the "ReplaceableHost" attribute
+     */
+    java.lang.String getReplaceableHost();
+    
+    /**
+     * Gets (as xml) the "ReplaceableHost" attribute
+     */
+    org.apache.xmlbeans.XmlString xgetReplaceableHost();
+    
+    /**
+     * True if has "ReplaceableHost" attribute
+     */
+    boolean isSetReplaceableHost();
+    
+    /**
+     * Sets the "ReplaceableHost" attribute
+     */
+    void setReplaceableHost(java.lang.String replaceableHost);
+    
+    /**
+     * Sets (as xml) the "ReplaceableHost" attribute
+     */
+    void xsetReplaceableHost(org.apache.xmlbeans.XmlString replaceableHost);
+    
+    /**
+     * Unsets the "ReplaceableHost" attribute
+     */
+    void unsetReplaceableHost();
     
     /**
      * A factory class with static methods for creating instances

@@ -20,222 +20,13 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         super(sType);
     }
     
-    private static final javax.xml.namespace.QName FILE$0 = 
-        new javax.xml.namespace.QName("http://www.hsos.de/richwps/sp/config", "File");
-    private static final javax.xml.namespace.QName WPS$2 = 
+    private static final javax.xml.namespace.QName WPS$0 = 
         new javax.xml.namespace.QName("http://www.hsos.de/richwps/sp/config", "WPS");
-    private static final javax.xml.namespace.QName PROCESS$4 = 
+    private static final javax.xml.namespace.QName PROCESS$2 = 
         new javax.xml.namespace.QName("http://www.hsos.de/richwps/sp/config", "Process");
+    private static final javax.xml.namespace.QName REPLACEABLEHOST$4 = 
+        new javax.xml.namespace.QName("", "ReplaceableHost");
     
-    
-    /**
-     * Gets array of all "File" elements
-     */
-    public java.lang.String[] getFileArray()
-    {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            java.util.List targetList = new java.util.ArrayList();
-            get_store().find_all_element_users(FILE$0, targetList);
-            java.lang.String[] result = new java.lang.String[targetList.size()];
-            for (int i = 0, len = targetList.size() ; i < len ; i++)
-                result[i] = ((org.apache.xmlbeans.SimpleValue)targetList.get(i)).getStringValue();
-            return result;
-        }
-    }
-    
-    /**
-     * Gets ith "File" element
-     */
-    public java.lang.String getFileArray(int i)
-    {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(FILE$0, i);
-            if (target == null)
-            {
-                throw new IndexOutOfBoundsException();
-            }
-            return target.getStringValue();
-        }
-    }
-    
-    /**
-     * Gets (as xml) array of all "File" elements
-     */
-    public org.apache.xmlbeans.XmlString[] xgetFileArray()
-    {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            java.util.List targetList = new java.util.ArrayList();
-            get_store().find_all_element_users(FILE$0, targetList);
-            org.apache.xmlbeans.XmlString[] result = new org.apache.xmlbeans.XmlString[targetList.size()];
-            targetList.toArray(result);
-            return result;
-        }
-    }
-    
-    /**
-     * Gets (as xml) ith "File" element
-     */
-    public org.apache.xmlbeans.XmlString xgetFileArray(int i)
-    {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(FILE$0, i);
-            if (target == null)
-            {
-                throw new IndexOutOfBoundsException();
-            }
-            return (org.apache.xmlbeans.XmlString)target;
-        }
-    }
-    
-    /**
-     * Returns number of "File" element
-     */
-    public int sizeOfFileArray()
-    {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            return get_store().count_elements(FILE$0);
-        }
-    }
-    
-    /**
-     * Sets array of all "File" element
-     */
-    public void setFileArray(java.lang.String[] fileArray)
-    {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            arraySetterHelper(fileArray, FILE$0);
-        }
-    }
-    
-    /**
-     * Sets ith "File" element
-     */
-    public void setFileArray(int i, java.lang.String file)
-    {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(FILE$0, i);
-            if (target == null)
-            {
-                throw new IndexOutOfBoundsException();
-            }
-            target.setStringValue(file);
-        }
-    }
-    
-    /**
-     * Sets (as xml) array of all "File" element
-     */
-    public void xsetFileArray(org.apache.xmlbeans.XmlString[]fileArray)
-    {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            arraySetterHelper(fileArray, FILE$0);
-        }
-    }
-    
-    /**
-     * Sets (as xml) ith "File" element
-     */
-    public void xsetFileArray(int i, org.apache.xmlbeans.XmlString file)
-    {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(FILE$0, i);
-            if (target == null)
-            {
-                throw new IndexOutOfBoundsException();
-            }
-            target.set(file);
-        }
-    }
-    
-    /**
-     * Inserts the value as the ith "File" element
-     */
-    public void insertFile(int i, java.lang.String file)
-    {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            org.apache.xmlbeans.SimpleValue target = 
-                (org.apache.xmlbeans.SimpleValue)get_store().insert_element_user(FILE$0, i);
-            target.setStringValue(file);
-        }
-    }
-    
-    /**
-     * Appends the value as the last "File" element
-     */
-    public void addFile(java.lang.String file)
-    {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(FILE$0);
-            target.setStringValue(file);
-        }
-    }
-    
-    /**
-     * Inserts and returns a new empty value (as xml) as the ith "File" element
-     */
-    public org.apache.xmlbeans.XmlString insertNewFile(int i)
-    {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().insert_element_user(FILE$0, i);
-            return target;
-        }
-    }
-    
-    /**
-     * Appends and returns a new empty value (as xml) as the last "File" element
-     */
-    public org.apache.xmlbeans.XmlString addNewFile()
-    {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(FILE$0);
-            return target;
-        }
-    }
-    
-    /**
-     * Removes the ith "File" element
-     */
-    public void removeFile(int i)
-    {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            get_store().remove_element(FILE$0, i);
-        }
-    }
     
     /**
      * Gets array of all "WPS" elements
@@ -246,7 +37,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         {
             check_orphaned();
             java.util.List targetList = new java.util.ArrayList();
-            get_store().find_all_element_users(WPS$2, targetList);
+            get_store().find_all_element_users(WPS$0, targetList);
             java.lang.String[] result = new java.lang.String[targetList.size()];
             for (int i = 0, len = targetList.size() ; i < len ; i++)
                 result[i] = ((org.apache.xmlbeans.SimpleValue)targetList.get(i)).getStringValue();
@@ -263,7 +54,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(WPS$2, i);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(WPS$0, i);
             if (target == null)
             {
                 throw new IndexOutOfBoundsException();
@@ -281,7 +72,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         {
             check_orphaned();
             java.util.List targetList = new java.util.ArrayList();
-            get_store().find_all_element_users(WPS$2, targetList);
+            get_store().find_all_element_users(WPS$0, targetList);
             org.apache.xmlbeans.XmlString[] result = new org.apache.xmlbeans.XmlString[targetList.size()];
             targetList.toArray(result);
             return result;
@@ -297,7 +88,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WPS$2, i);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WPS$0, i);
             if (target == null)
             {
                 throw new IndexOutOfBoundsException();
@@ -314,7 +105,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(WPS$2);
+            return get_store().count_elements(WPS$0);
         }
     }
     
@@ -326,7 +117,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         synchronized (monitor())
         {
             check_orphaned();
-            arraySetterHelper(wpsArray, WPS$2);
+            arraySetterHelper(wpsArray, WPS$0);
         }
     }
     
@@ -339,7 +130,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(WPS$2, i);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(WPS$0, i);
             if (target == null)
             {
                 throw new IndexOutOfBoundsException();
@@ -356,7 +147,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         synchronized (monitor())
         {
             check_orphaned();
-            arraySetterHelper(wpsArray, WPS$2);
+            arraySetterHelper(wpsArray, WPS$0);
         }
     }
     
@@ -369,7 +160,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WPS$2, i);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WPS$0, i);
             if (target == null)
             {
                 throw new IndexOutOfBoundsException();
@@ -387,7 +178,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = 
-                (org.apache.xmlbeans.SimpleValue)get_store().insert_element_user(WPS$2, i);
+                (org.apache.xmlbeans.SimpleValue)get_store().insert_element_user(WPS$0, i);
             target.setStringValue(wps);
         }
     }
@@ -401,7 +192,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(WPS$2);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(WPS$0);
             target.setStringValue(wps);
         }
     }
@@ -415,7 +206,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().insert_element_user(WPS$2, i);
+            target = (org.apache.xmlbeans.XmlString)get_store().insert_element_user(WPS$0, i);
             return target;
         }
     }
@@ -429,7 +220,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(WPS$2);
+            target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(WPS$0);
             return target;
         }
     }
@@ -442,7 +233,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(WPS$2, i);
+            get_store().remove_element(WPS$0, i);
         }
     }
     
@@ -455,7 +246,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         {
             check_orphaned();
             java.util.List targetList = new java.util.ArrayList();
-            get_store().find_all_element_users(PROCESS$4, targetList);
+            get_store().find_all_element_users(PROCESS$2, targetList);
             java.lang.String[] result = new java.lang.String[targetList.size()];
             for (int i = 0, len = targetList.size() ; i < len ; i++)
                 result[i] = ((org.apache.xmlbeans.SimpleValue)targetList.get(i)).getStringValue();
@@ -472,7 +263,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PROCESS$4, i);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PROCESS$2, i);
             if (target == null)
             {
                 throw new IndexOutOfBoundsException();
@@ -490,7 +281,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         {
             check_orphaned();
             java.util.List targetList = new java.util.ArrayList();
-            get_store().find_all_element_users(PROCESS$4, targetList);
+            get_store().find_all_element_users(PROCESS$2, targetList);
             org.apache.xmlbeans.XmlString[] result = new org.apache.xmlbeans.XmlString[targetList.size()];
             targetList.toArray(result);
             return result;
@@ -506,7 +297,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PROCESS$4, i);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PROCESS$2, i);
             if (target == null)
             {
                 throw new IndexOutOfBoundsException();
@@ -523,7 +314,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(PROCESS$4);
+            return get_store().count_elements(PROCESS$2);
         }
     }
     
@@ -535,7 +326,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         synchronized (monitor())
         {
             check_orphaned();
-            arraySetterHelper(processArray, PROCESS$4);
+            arraySetterHelper(processArray, PROCESS$2);
         }
     }
     
@@ -548,7 +339,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PROCESS$4, i);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PROCESS$2, i);
             if (target == null)
             {
                 throw new IndexOutOfBoundsException();
@@ -565,7 +356,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         synchronized (monitor())
         {
             check_orphaned();
-            arraySetterHelper(processArray, PROCESS$4);
+            arraySetterHelper(processArray, PROCESS$2);
         }
     }
     
@@ -578,7 +369,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PROCESS$4, i);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PROCESS$2, i);
             if (target == null)
             {
                 throw new IndexOutOfBoundsException();
@@ -596,7 +387,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = 
-                (org.apache.xmlbeans.SimpleValue)get_store().insert_element_user(PROCESS$4, i);
+                (org.apache.xmlbeans.SimpleValue)get_store().insert_element_user(PROCESS$2, i);
             target.setStringValue(process);
         }
     }
@@ -610,7 +401,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PROCESS$4);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PROCESS$2);
             target.setStringValue(process);
         }
     }
@@ -624,7 +415,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().insert_element_user(PROCESS$4, i);
+            target = (org.apache.xmlbeans.XmlString)get_store().insert_element_user(PROCESS$2, i);
             return target;
         }
     }
@@ -638,7 +429,7 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PROCESS$4);
+            target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PROCESS$2);
             return target;
         }
     }
@@ -651,7 +442,99 @@ public class PreloadFilesImpl extends org.apache.xmlbeans.impl.values.XmlComplex
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(PROCESS$4, i);
+            get_store().remove_element(PROCESS$2, i);
+        }
+    }
+    
+    /**
+     * Gets the "ReplaceableHost" attribute
+     */
+    public java.lang.String getReplaceableHost()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_attribute_user(REPLACEABLEHOST$4);
+            if (target == null)
+            {
+                return null;
+            }
+            return target.getStringValue();
+        }
+    }
+    
+    /**
+     * Gets (as xml) the "ReplaceableHost" attribute
+     */
+    public org.apache.xmlbeans.XmlString xgetReplaceableHost()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_attribute_user(REPLACEABLEHOST$4);
+            return target;
+        }
+    }
+    
+    /**
+     * True if has "ReplaceableHost" attribute
+     */
+    public boolean isSetReplaceableHost()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().find_attribute_user(REPLACEABLEHOST$4) != null;
+        }
+    }
+    
+    /**
+     * Sets the "ReplaceableHost" attribute
+     */
+    public void setReplaceableHost(java.lang.String replaceableHost)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_attribute_user(REPLACEABLEHOST$4);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_attribute_user(REPLACEABLEHOST$4);
+            }
+            target.setStringValue(replaceableHost);
+        }
+    }
+    
+    /**
+     * Sets (as xml) the "ReplaceableHost" attribute
+     */
+    public void xsetReplaceableHost(org.apache.xmlbeans.XmlString replaceableHost)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_attribute_user(REPLACEABLEHOST$4);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlString)get_store().add_attribute_user(REPLACEABLEHOST$4);
+            }
+            target.set(replaceableHost);
+        }
+    }
+    
+    /**
+     * Unsets the "ReplaceableHost" attribute
+     */
+    public void unsetReplaceableHost()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_attribute(REPLACEABLEHOST$4);
         }
     }
 }

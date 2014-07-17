@@ -3,18 +3,18 @@
   <StartClean>true</StartClean>
   <Owner>HS-OS</Owner>
   <Domain>RichWPS test domain</Domain>
-  <PreloadFiles>
-    <WPS>C:\Users\fbensman\richwps-spv2\SemanticProxy\RDF\LKN\WPSMacrophyte.rdf</WPS>
-    <WPS>C:\Users\fbensman\richwps-spv2\SemanticProxy\RDF\BAW\WPSModelValidation.rdf</WPS>
-    <Process>C:\Users\fbensman\richwps-spv2\SemanticProxy\RDF\LKN\ProcessSelectReportingArea.rdf</Process>
-    <Process>C:\Users\fbensman\richwps-spv2\SemanticProxy\RDF\LKN\ProcessSelectMSRLD5.rdf</Process>
-    <Process>C:\Users\fbensman\richwps-spv2\SemanticProxy\RDF\LKN\ProcessIntersect.rdf</Process>
-    <Process>C:\Users\fbensman\richwps-spv2\SemanticProxy\RDF\LKN\ProcessSelectTopography.rdf</Process>
-    <Process>C:\Users\fbensman\richwps-spv2\SemanticProxy\RDF\LKN\ProcessCharacteristics.rdf</Process>
-    <Process>C:\Users\fbensman\richwps-spv2\SemanticProxy\RDF\BAW\ProcessReadData.rdf</Process>
-    <Process>C:\Users\fbensman\richwps-spv2\SemanticProxy\RDF\BAW\ProcessHarmonize.rdf</Process>
-    <Process>C:\Users\fbensman\richwps-spv2\SemanticProxy\RDF\BAW\ProcessCompare.rdf</Process>
-    <Process>C:\Users\fbensman\richwps-spv2\SemanticProxy\RDF\BAW\ProcessFormat.rdf</Process>
+  <PreloadFiles ReplaceableHost="http://www.alleswirdgut.de">
+    <WPS>RDF\LKN\WPSMacrophyte.rdf</WPS>
+    <WPS>RDF\BAW\WPSModelValidation.rdf</WPS>
+    <Process>RDF\LKN\ProcessSelectReportingArea.rdf</Process>
+    <Process>RDF\LKN\ProcessIntersect.rdf</Process>
+    <Process>RDF\LKN\ProcessSelectTopography.rdf</Process>
+    <Process>RDF\LKN\ProcessSelectMSRLD5.rdf</Process>
+    <Process>RDF\LKN\ProcessCharacteristics.rdf</Process>
+    <Process>RDF\BAW\ProcessReadData.rdf</Process>
+    <Process>RDF\BAW\ProcessHarmonize.rdf</Process>
+    <Process>RDF\BAW\ProcessCompare.rdf</Process>
+    <Process>RDF\BAW\ProcessFormat.rdf</Process>
   </PreloadFiles>
   <HTTPEndpoints>
     <Host>http://localhost:4567</Host>

@@ -15,20 +15,20 @@ RichWPS-SemanticProxy configuration schema
             <xs:sequence>
                 <xs:element name="RDFDirectory" type="xs:string"/>
                 <xs:element name="StartClean" type="xs:boolean"/>
-				<xs:element name="Owner" type="xs:string"/>
-				<xs:element name="Domain" type="xs:string"/>
+                <xs:element name="Owner" type="xs:string"/>
+                <xs:element name="Domain" type="xs:string"/>
                 <xs:element name="PreloadFiles" type="cg:PreloadFiles"/>
                 <xs:element name="HTTPEndpoints" type="cg:HTTPEndpoints"/>
                 <xs:element name="RDFNamingEndpoints" type="cg:RDFNamingEndpoints"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-    <xs:complexType name="PreloadFiles">
+    <xs:complexType name="PreloadFiles">	      
         <xs:sequence>
-			<xs:element name="File" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="WPS" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="Process" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="WPS" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="Process" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
+        <xs:attribute name="ReplaceableHost" type="xs:string" use="optional"/>
     </xs:complexType>
     <xs:complexType name="HTTPEndpoints">
         <xs:sequence>
@@ -38,7 +38,7 @@ RichWPS-SemanticProxy configuration schema
             <xs:element name="Vocabulary" type="xs:string" default="vocab"/>
             <xs:element name="WPSList" type="xs:string" default="wpss"/>
             <xs:element name="ProcessList" type="xs:string" default="processes"/>
-			<xs:element name="Search" type="xs:string" default="search"/>
+            <xs:element name="Search" type="xs:string" default="search"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="RDFNamingEndpoints">

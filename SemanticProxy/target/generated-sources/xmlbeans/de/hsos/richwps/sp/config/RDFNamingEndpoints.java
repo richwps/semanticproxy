@@ -16,7 +16,7 @@ package de.hsos.richwps.sp.config;
 public interface RDFNamingEndpoints extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(RDFNamingEndpoints.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sC4987F4EACB0C561DB70AF05FAEFC74D").resolveHandle("rdfnamingendpoints06c0type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(RDFNamingEndpoints.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s03304F119F4A08AD48D992D6D1867513").resolveHandle("rdfnamingendpoints06c0type");
     
     /**
      * Gets the "WPSNaming" element

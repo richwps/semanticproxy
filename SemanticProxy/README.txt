@@ -61,8 +61,9 @@ Name or description of the target network
 
 PreloadFiles:
 Specifies RDF data to be loaded at system start; Is only done when there is a clean db.
-	WPS:     A file that contains RDF information on a WPS
-	Process: A file that contains RDF information on a process
+	WPS:             A file that contains RDF information on a WPS
+	Process:         A file that contains RDF information on a process
+	ReplaceableHost: Attribute; Contains wildcard string to be replaced with the host name
 	
 HTTPEndpoints:
 Specifies urls for specialized resources
