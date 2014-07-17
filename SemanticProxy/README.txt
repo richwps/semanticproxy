@@ -39,7 +39,7 @@ Installation
 ----------------------
 Make sure the SP finds a well configured config.xml file in the CWD. If there is no file, start it once and it will generat default configuration file. You edit this to your wishes. See chapter Configuration.
 
-At start a set of RDF data can be loaded automatically. Therefore you need to specify it in the configuration and provide the RDF files. See the sampel data.
+At start a set of RDF data can be loaded automatically. Therefore you need to specify it in the configuration and provide the RDF files. See the sample data.
 
 
 
@@ -60,8 +60,7 @@ Domain:
 Name or description of the target network
 
 PreloadFiles:
-Specifies RDF data to be loaded at system start; Is only done when there is a 
-clean db.
+Specifies RDF data to be loaded at system start; Is only done when there is a clean db.
 	WPS:     A file that contains RDF information on a WPS
 	Process: A file that contains RDF information on a process
 	

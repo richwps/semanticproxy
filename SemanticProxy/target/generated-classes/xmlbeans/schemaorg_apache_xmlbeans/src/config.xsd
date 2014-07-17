@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!--
+RichWPS-SemanticProxy configuration schema
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:cg="http://www.hsos.de/richwps/sp/config"
+           targetNamespace="http://www.hsos.de/richwps/sp/config"
+           elementFormDefault="qualified">
+
+    
+    <xs:element name="Configuration">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="RDFDirectory" type="xs:string"/>
+                <xs:element name="StartClean" type="xs:boolean"/>
+				<xs:element name="Owner" type="xs:string"/>
+				<xs:element name="Domain" type="xs:string"/>
+                <xs:element name="PreloadFiles" type="cg:PreloadFiles"/>
+                <xs:element name="HTTPEndpoints" type="cg:HTTPEndpoints"/>
+                <xs:element name="RDFNamingEndpoints" type="cg:RDFNamingEndpoints"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="PreloadFiles">
+        <xs:sequence>
+			<xs:element name="File" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="WPS" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Process" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="HTTPEndpoints">
+        <xs:sequence>
+            <xs:element name="Host" type="xs:anyURI" default="http://localhost:4567"/>
+            <xs:element name="Application" type="xs:string" default="semanticproxy"/>
+            <xs:element name="Resources" type="xs:string" default="resources"/>
+            <xs:element name="Vocabulary" type="xs:string" default="vocab"/>
+            <xs:element name="WPSList" type="xs:string" default="wpss"/>
+            <xs:element name="ProcessList" type="xs:string" default="processes"/>
+			<xs:element name="Search" type="xs:string" default="search"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="RDFNamingEndpoints">
+        <xs:sequence>
+            <xs:element name="WPSNaming" type="xs:string" default="wps"/>
+            <xs:element name="ProcessNaming" type="xs:string" default="process"/>
+            <xs:element name="InputNaming" type="xs:string" default="input"/>
+            <xs:element name="OutputNaming" type="xs:string" default="output"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+</xs:schema>
+
+
+
