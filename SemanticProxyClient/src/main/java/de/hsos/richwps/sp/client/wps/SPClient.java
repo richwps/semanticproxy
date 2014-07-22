@@ -103,6 +103,15 @@ public class SPClient {
         return rdfClient;
     }
 
+    
+    /**
+     * Clears internal cache
+     */
+    public void clearCache(){
+        rdfClient.clearCache();
+    }
+    
+    
     /**
      * Gets an RDFResource with Network-Wrapper class, uses the rootURL
      *

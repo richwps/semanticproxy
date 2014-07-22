@@ -43,4 +43,9 @@ public class LRUCache<K, V> {
     public V get(K key) {
         return internalMap.get(key);
     }
+    
+    public void clear(){
+        internalMap.clear();
+    }
+    
 }

@@ -50,6 +50,17 @@ public class RDFClient {
     public HTTPClient getHttpClient() {
         return httpClient;
     }
+    
+    
+    
+    /**
+     * Clears the cache
+     */
+    public void clearCache(){
+        cache.clear();
+    }
+    
+    
 
     /**
      * Retrieves a resource from the SemanticProxy and parses it into an
