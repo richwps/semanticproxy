@@ -18,6 +18,12 @@ import spark.*;
  */
 public class BrowseAccess {
 
+    private static final String MIMETYPE_RDF = "application/xml";
+    //private static final String MIMETYPE_RDF = "application/rdf+xml";
+    private static final String MIMETYPE_HTML = "text/html";
+    private static final String MIMETYPE_XML = "application/xml";
+    
+    
     /**
      * Registeres the required routes an handlers
      */
@@ -38,6 +44,7 @@ public class BrowseAccess {
         get(new Route("/") {
             @Override
             public Object handle(Request request, Response response) {
+                response.type(MIMETYPE_HTML);
                 String str = "<html>\n"
                         + "<head>\n"
                         + "<title>Sparc root</title>\n"
@@ -57,6 +64,7 @@ public class BrowseAccess {
         get(new Route(applicationURL.getPath()) {
             @Override
             public Object handle(Request request, Response response) {
+                response.type(MIMETYPE_HTML);
                 String str = "<html>\n"
                         + "<head>\n"
                         + "<title>Semantic Proxy</title>\n"
@@ -83,7 +91,7 @@ public class BrowseAccess {
                     //String str = VocabReader.readPlainText();
                     String str = Vocabulary.getRDF_XML_Representation();
                     response.status(200);
-                    response.type("application/xml"); //normally +rdf, but download in chrome is annoying
+                    response.type(MIMETYPE_RDF); 
                     return str;
                 } catch (Exception e) {
                     System.out.println("Error, " + e.getMessage());
@@ -103,15 +111,6 @@ public class BrowseAccess {
         get(new Route(networkURL.getPath()) {
             @Override
             public Object handle(Request request, Response response) {
-//                Set<String> set = request.headers();
-//                
-//               
-//                String[] s = set.toArray(new String[set.size()]);
-//                
-//                for(int i=0; i<s.length; i++){
-//                    System.out.println(s[i]+" "+request.headers(s[i]));
-//                }
-//                System.out.println(request.contentType());
 
                 try {
 
@@ -121,7 +120,7 @@ public class BrowseAccess {
                         return "Resource not found";
                     }
                     response.status(200);
-                    response.type("application/xml+rdf"); //normally +rdf, but download in chrome is annoying
+                    response.type(MIMETYPE_RDF); //normally +rdf, but download in chrome is annoying
                     System.out.println("\n response: " + response.raw().toString());
                     return rdf;
                 } catch (Exception e) {
@@ -145,7 +144,7 @@ public class BrowseAccess {
                 try {
                     String str = RouteMapper.getAllProcesses();
                     response.status(200);
-                    response.type("application/xml");
+                    response.type(MIMETYPE_XML);
                     return str;
                 } catch (Exception e) {
                     System.out.println("Error, " + e.getMessage());
@@ -166,7 +165,7 @@ public class BrowseAccess {
                 try {
                     String str = RouteMapper.getAllWPS();
                     response.status(200);
-                    response.type("application/xml");
+                    response.type(MIMETYPE_XML);
                     return str;
                 } catch (Exception e) {
                     System.out.println("Error, " + e.getMessage());
@@ -191,7 +190,7 @@ public class BrowseAccess {
                         return "Resource not found";
                     }
                     response.status(200);
-                    response.type("application/xml"); //normally +rdf, but download in chrome is annoying
+                    response.type(MIMETYPE_RDF); //normally +rdf, but download in chrome is annoying
                     return rdf;
                 } catch (Exception e) {
                     System.out.println("Error, " + e.getMessage());

@@ -23,41 +23,44 @@ public class DBAdministration {
     private static Repository repository = null;
     private static URL resourceURL = null;
     
+    
     /**
      * Connects to an RDF-DB, if DB not exists it is created.
-     *
-     * @throws Exception if a repository is already open
+     * @param rdfRepositoryDir Directory in which to store the RDF DB and log files.
+     * @param baseResourceURL Base URL for all RDF resources for comparison with following insertions
+     * @throws RepositoryException If the repository cannot be opened
      */
-    public static void init(File rdfRepositoryDir, URL baseResourceURL) throws Exception {
+    public static void init(File rdfRepositoryDir, URL baseResourceURL) throws RepositoryException {
         if (repository == null) {
             repository = new SailRepository(new MemoryStore(rdfRepositoryDir));
             try {
                 repository.initialize();
             } catch (RepositoryException e) {
-                throw new Exception("Cannot connect to sesame RDF-DB in " + rdfRepositoryDir.getAbsolutePath() + ", initialize failed.");
+                throw new RepositoryException("Cannot connect to sesame RDF-DB in " + rdfRepositoryDir.getAbsolutePath() +"",e);
             }
         }
         else
         {
-            throw new Exception("Cannot connect to sesame RDF-DB. A repository is still open in " + repository.getDataDir().toString());
+            throw new IllegalStateException("Cannot connect to sesame RDF-DB. A repository is already open in " + repository.getDataDir().toString());
         }
         resourceURL = baseResourceURL;
     }
 
+    
     /**
      * Closes the connection to the db
-     *
-     * @throws Exception
+     * @throws IllegalStateException If the db has not been opened by SP
+     * @throws RepositoryException  If there is something wrong with the db
      */
-    public static void close() throws Exception {
+    public static void close() throws IllegalStateException, RepositoryException {
         if (repository == null) {
-            throw new Exception("Cannot close sesame RDF-DB, not connected.");
+            throw new IllegalStateException("Cannot close sesame RDF-DB, not connected.");
         }
         try {
             repository.shutDown();
             repository = null;
         } catch (RepositoryException e) {
-            throw new Exception("Cannot shut down sesame RDF-DB, "+e.getMessage());
+            throw new RepositoryException("Cannot shut down sesame RDF-DB, "+e.getMessage());
         }
     }
 
@@ -66,9 +69,9 @@ public class DBAdministration {
      *
      * @throws Exception
      */
-    public static void clear() throws Exception {
+    public static void clear() throws IllegalStateException, RepositoryException {
         if (repository == null) {
-            throw new Exception("Cannot clear sesame RDF-DB, not connected.");
+            throw new IllegalStateException("Cannot clear sesame RDF-DB, not connected.");
         }
         try {
             RepositoryConnection con = repository.getConnection();
@@ -76,7 +79,7 @@ public class DBAdministration {
             con.clear(dummyResources);
             con.close();
         } catch (RepositoryException e) {
-            throw new Exception("Cannot clear sesame RDF-DB, unable to retrieve a connection");
+            throw new RepositoryException("Cannot clear sesame RDF-DB",e);
         }
     }
     

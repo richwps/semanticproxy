@@ -18,16 +18,21 @@ import static spark.Spark.get;
  */
 public class SearchAccess {
 
+    private static final String MIMETYPE_RDF = "application/xml";
+    //private static final String MIMETYPE_RDF = "application/rdf+xml";
+    private static final String MIMETYPE_HTML = "text/html";
+    private static final String MIMETYPE_XML = "application/xml";
+
     /**
      * Registeres the required routes an handlers
      */
     public SearchAccess(URL searchURL) {
 
-
         /**
          * Registers the route for root for user convenience
          */
-        get(new Route(searchURL.getPath()) {
+        get(
+                new Route(searchURL.getPath()) {
             @Override
             public Object handle(Request request, Response response) {
                 String keyword = (String) request.queryParams("keyword");
@@ -38,6 +43,7 @@ public class SearchAccess {
                 try {
                     SubjectList list = SearchHandling.processKeywordSearch(keyword);
                     response.status(200);
+                    response.type(MIMETYPE_XML);
                     return list.toXMLList();
                 } catch (Exception e) {
                     response.status(500);

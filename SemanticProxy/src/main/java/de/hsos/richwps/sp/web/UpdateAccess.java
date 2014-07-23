@@ -71,8 +71,6 @@ public class UpdateAccess {
                     return "Format not supported, use application/xml+rdf";
                 }
 
-
-
             }
         });
 

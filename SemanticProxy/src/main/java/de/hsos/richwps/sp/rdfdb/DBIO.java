@@ -5,8 +5,6 @@
 package de.hsos.richwps.sp.rdfdb;
 
 import de.hsos.richwps.sp.restlogic.Vocabulary;
-import de.hsos.richwps.sp.types.RDFDescription;
-import de.hsos.richwps.sp.types.RDFDocument;
 
 import de.hsos.richwps.sp.types.SubjectList;
 import de.hsos.richwps.sp.types.Triple;
@@ -15,10 +13,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.sql.Connection;
 import java.util.ArrayList;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -54,13 +49,17 @@ public class DBIO {
     /**
      * Loads an xml/rdf file into the db
      *
-     * @param file the file
-     * @throws Exception When the file is malformed or not accessable
+     * @param file
+     * @throws IllegalStateException When the DB is in a false state due to
+     * application use.
+     * @throws RepositoryException When the repository cannot be accessed
+     * @throws RDFException When the RDF data in the file is malformed
+     * @throws IOException When the file cannot be opened
      */
-    public static void loadRDFXMLFile(File file) throws Exception {
+    public static void loadRDFXMLFile(File file) throws IllegalStateException, RepositoryException, RDFException, IOException {
         Repository repo = DBAdministration.getRepository();
         if (repo == null) {
-            throw new Exception("Cannot load rdf/xml file into sesame RDF-DB, not connected.");
+            throw new IllegalStateException("Cannot load rdf/xml file into sesame RDF-DB, not connected.");
         }
         Resource[] resArr = new Resource[0];
         RepositoryConnection con = null;
@@ -68,14 +67,14 @@ public class DBIO {
             con = repo.getConnection();
             con.add(file, DBAdministration.getResourceURL().toString(), RDFFormat.RDFXML, resArr);
 
-        } catch (RepositoryException e) {
-            throw new Exception("Cannot load rdf/xml file " + file.getName() + " into sesame RDF-DB, not connected or not writable.");
-        } catch (RDFParseException e) {
-            throw new Exception("Cannot load rdf/xml file " + file.getName() + " into sesame RDF-DB, " + e.getMessage());
-        } catch (UnsupportedRDFormatException e) {
-            throw new Exception("Cannot load rdf/xml file " + file.getName() + " into sesame RDF-DB, " + e.getMessage());
-        } catch (IOException e) {
-            throw new Exception("Cannot load rdf/xml file " + file.getName() + " into sesame RDF-DB, " + e.getMessage());
+        } catch (RepositoryException re) {
+            throw new RepositoryException("Cannot load rdf/xml file " + file.getName() + " into sesame RDF-DB, not connected or not writable.");
+        } catch (RDFParseException rpe) {
+            throw new RDFException("Cannot load rdf/xml file " + file.getName() + " into sesame RDF-DB, ", rpe);
+        } catch (UnsupportedRDFormatException urfe) {
+            throw new RDFException("Cannot load rdf/xml file " + file.getName() + " into sesame RDF-DB, ", urfe);
+        } catch (IOException ioe) {
+            throw new IOException("Cannot load rdf/xml file " + file.getName() + " into sesame RDF-DB, ", ioe);
         } finally {
             con.close();
         }
@@ -84,25 +83,30 @@ public class DBIO {
     /**
      * Loads an xml/rdf string into the db
      *
-     * @param file the file
-     * @throws Exception When the string is malformede
+     * @param str
+     * @throws IllegalStateException
+     * @throws RepositoryException
+     * @throws RDFException
+     * @throws IOException
      */
-    public static void loadRDFXMLStringIntoDB(String str) throws Exception {
+    public static void loadRDFXMLStringIntoDB(String str) throws IllegalStateException, RepositoryException, RDFException, IOException {
         Repository repo = DBAdministration.getRepository();
         if (repo == null) {
-            throw new Exception("Cannot load rdf/xml file into sesame RDF-DB, not connected.");
+            throw new IllegalStateException("Cannot load rdf/xml file into sesame RDF-DB, not connected.");
         }
         Resource[] resArr = new Resource[0];
         RepositoryConnection con = null;
         try {
             con = repo.getConnection();
             con.add(new StringReader(str), DBAdministration.getResourceURL().toString(), RDFFormat.RDFXML, resArr);
-        } catch (RepositoryException e) {
-            throw new Exception("Cannot load rdf/xml string into sesame RDF-DB, not connected or not writable.");
-        } catch (RDFParseException e) {
-            throw new Exception("Cannot load rdf/xml string into sesame RDF-DB, " + e.getMessage());
-        } catch (UnsupportedRDFormatException e) {
-            throw new Exception("Cannot load rdf/xml string into sesame RDF-DB, " + e.getMessage());
+        } catch (RepositoryException re) {
+            throw new RepositoryException("Cannot insert rdf string into sesame RDF-DB, not connected or not writable.");
+        } catch (RDFParseException rpe) {
+            throw new RDFException("Cannot insert rdf string into sesame RDF-DB, ", rpe);
+        } catch (UnsupportedRDFormatException urfe) {
+            throw new RDFException("Cannot insert rdf string into sesame RDF-DB, ", urfe);
+        } catch (IOException ioe) {
+            throw new IOException("Cannot insert rdf string into sesame RDF-DB, ", ioe);
         } finally {
             con.close();
         }
@@ -111,91 +115,26 @@ public class DBIO {
     /**
      * Returns the size of the db
      *
-     * @return Size in triples
-     * @throws Exception When the db cannot be accessed
+     * @return
+     * @throws IllegalStateException
+     * @throws RepositoryException
      */
-    public static long size() throws Exception {
+    public static long size() throws IllegalStateException, RepositoryException {
         Repository repo = DBAdministration.getRepository();
         if (repo == null) {
-            throw new Exception("Cannot retrieve size of sesame RDF-DB, not connected.");
+            throw new IllegalStateException("Cannot retrieve size of sesame RDF-DB, not connected.");
         }
         RepositoryConnection con = null;
         try {
             con = repo.getConnection();
             long size = con.size();
             return size;
-        } catch (RepositoryException e) {
-            throw new Exception("Cannot retrieve size of sesame RDF-DB, unknown connection error.");
+        } catch (RepositoryException re) {
+            throw new RepositoryException("Cannot retrieve size of sesame RDF-DB, unknown connection error.", re);
         } finally {
             con.close();
         }
     }
-
-    /**
-     * Gets an RDF description for a resource URI
-     *
-     * @param resource The resource to describe as URI
-     * @return A collection of all triples describing the resource
-     * @throws Exception When the db is not accessable or the resource is
-     * malformed
-     */
-//    public static RDFDescription getResourceDescription(URI resource) throws Exception {
-//        Repository repo = DBAdministration.getRepository();
-//        if (repo == null) {
-//            throw new Exception("Cannot get resource description for " + resource + ", not connected.");
-//        }
-//
-//        //define query
-//        String queryString = "SELECT ?p ?y WHERE { <" + resource + "> ?p ?y } ";
-//        TupleQueryResult result = null;
-//        RepositoryConnection con = null;
-//        try {
-//            con = repo.getConnection();
-//            //execute query
-//            TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString, DBAdministration.getResourceURL().toString());
-//            result = tupleQuery.evaluate();
-//
-//
-//            RDFDescription retVal = new RDFDescription(resource);
-//            //collect query result
-//            try {
-//                while (result.hasNext()) {
-//                    BindingSet bindingSet = (BindingSet) result.next();
-//                    Value valueOfP = bindingSet.getValue("p");
-//                    Value valueOfY = bindingSet.getValue("y");
-//                    URI predicate = new URI(valueOfP.stringValue());
-//                    Triple triple = null;
-//                    if (isRDFConformURL(valueOfY.stringValue())) {
-//                        URI objectval = new URI(valueOfY.stringValue());
-//                        triple = new Triple(resource, predicate, objectval);
-//                    } else {
-//                        triple = new Triple(resource, predicate, valueOfY.stringValue());
-//                    }
-//                    retVal.addTriple(triple);
-//                }
-//                return retVal;
-//            } catch (URISyntaxException e) {
-//                throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
-//            } catch (Exception e) {
-//                throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
-//            } finally {
-//                result.close();
-//            }
-//
-//        } catch (RepositoryException e) {
-//            throw new Exception("Cannot get resource description for " + resource + ", unknown connection error.");
-//        } catch (IllegalArgumentException e) {
-//            throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
-//        } catch (MalformedQueryException e) {
-//            throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
-//        } catch (UnsupportedQueryLanguageException e) {
-//            throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
-//        } catch (QueryEvaluationException e) {
-//            throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
-//        } finally {
-//            con.close();
-//        }
-//    }
 
     /**
      * Gets an RDF description for a resource URI
@@ -205,166 +144,94 @@ public class DBIO {
      * @throws Exception When the db is not accessable or the resource is
      * malformed
      */
-    public static String getResourceDescription(URL resource) throws Exception {
+    public static String getResourceDescription(URL resource) throws RDFException, RepositoryException {
         Repository repo = DBAdministration.getRepository();
         if (repo == null) {
-            throw new Exception("Cannot get resource description for " + resource + ", not connected.");
+            throw new IllegalStateException("Cannot get resource description for " + resource + ", not connected.");
         }
 
-        RepositoryConnection con = repo.getConnection();
+        RepositoryConnection con = null;
         try {
             con = repo.getConnection();
             Resource subject = new URIImpl(resource.toString());
             //query all statement about the resource
             RepositoryResult<Statement> result = con.getStatements(subject, null, null, true);
-            ArrayList<Statement> list = new ArrayList<Statement>();
+            ArrayList<Statement> list = new ArrayList<>();
             //put statements into a list an feed 'em to an rdf writer
             try {
                 while (result.hasNext()) {
                     list.add(result.next());
                 }
                 result.close();
-                if(list.size()==0)
+                if (list.isEmpty()) {
                     return null;
+                }
                 StringWriter sw = new StringWriter();
                 RDFWriter writer = Rio.createWriter(RDFFormat.RDFXML, sw);
                 try {
                     writer.startRDF();
-                    for (int i=0; i<list.size();i++) {
+                    for (int i = 0; i < list.size(); i++) {
                         writer.handleStatement(list.get(i));
                     }
                     writer.endRDF();
                     return sw.toString();
-                } catch (RDFHandlerException e) {
-                    throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
+                } catch (RDFHandlerException rhe) {
+                    throw new RDFException("Cannot get resource description for " + resource, rhe);
                 }
-            } catch (URISyntaxException e) {
-                throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
-            } catch (Exception e) {
-                throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
             } finally {
                 result.close();
             }
 
-        } catch (RepositoryException e) {
-            throw new Exception("Cannot get resource description for " + resource + ", unknown connection error.");
-        } catch (IllegalArgumentException e) {
-            throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
-        } catch (MalformedQueryException e) {
-            throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
-        } catch (UnsupportedQueryLanguageException e) {
-            throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
-        } catch (QueryEvaluationException e) {
-            throw new Exception("Cannot get resource description for " + resource + ", " + e.toString() + " " + e.getMessage());
+        } catch (RepositoryException re) {
+            throw new RepositoryException("Cannot get resource description for " + resource, re);
         } finally {
             con.close();
         }
     }
-    
-    
-    
+
     /**
      * Returns all statements with the subject and predicate.
+     *
      * @param subject
      * @param predicate
      * @return
-     * @throws Exception 
+     * @throws Exception
      */
-    public static Statement[] getStatementsForSubjAndPred(URL subject, URL predicate) throws Exception{
+    public static Statement[] getStatementsForSubjAndPred(URL subject, URL predicate) throws IllegalStateException, RepositoryException {
         Repository repo = DBAdministration.getRepository();
         if (repo == null) {
-            throw new Exception("Cannot get resource description for " + subject.toString() + ", not connected.");
+            throw new IllegalStateException("Cannot get resource description for " + subject.toString() + " and " + predicate.toString() + ", not connected.");
         }
 
-        RepositoryConnection con = repo.getConnection();
-       
-        con = repo.getConnection();
-        Resource sesamSubject = new URIImpl(subject.toString());
-        org.openrdf.model.URI sesamPredicate = new URIImpl(predicate.toString());
-        //query all statement about the resource
-        RepositoryResult<Statement> result = con.getStatements(sesamSubject, sesamPredicate, null, true);
-        ArrayList<Statement> list = new ArrayList<Statement>();
-        //put statements into a list
-
-        while (result.hasNext()) {
-            list.add(result.next());
-        }
-        result.close();
-        return list.toArray(new Statement[list.size()]);
-    }
-    
-
-    /**
-     * Returns the whole db in an RDFDocument
-     *
-     * @return RDF document of the db
-     * @throws Exception When the db is not accessable
-     */
-    public static RDFDocument getWholeDBContent() throws Exception {
-        Repository repo = DBAdministration.getRepository();
-        if (repo == null) {
-            throw new Exception("Cannot get whole DB content, not connected.");
-        }
-
-        //create query that matches every statement in db
-        String queryString = "SELECT ?s ?p ?y WHERE { ?s ?p ?y } ";
-        TupleQueryResult result = null;
         RepositoryConnection con = null;
         try {
             con = repo.getConnection();
-            //execute query
-            TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString, DBAdministration.getResourceURL().toString());
-            result = tupleQuery.evaluate();
+            Resource sesamSubject = new URIImpl(subject.toString());
+            org.openrdf.model.URI sesamPredicate = new URIImpl(predicate.toString());
+            //query all statement about the resource
+            RepositoryResult<Statement> result = con.getStatements(sesamSubject, sesamPredicate, null, true);
 
-            RDFDocument retVal = new RDFDocument();
-            try {
-                //collect results
-                while (result.hasNext()) {
-                    BindingSet bindingSet = (BindingSet) result.next();
-                    Value valueOfS = bindingSet.getValue("s");
-                    Value valueOfP = bindingSet.getValue("p");
-                    Value valueOfY = bindingSet.getValue("y");
-                    URI subject = new URI(valueOfS.stringValue());
-                    URI predicate = new URI(valueOfP.stringValue());
-                    Triple triple = null;
-                    if (isRDFConformURL(valueOfY.stringValue())) {
-                        URI objectval = new URI(valueOfY.stringValue());
-                        triple = new Triple(subject, predicate, objectval);
-                    } else {
-                        triple = new Triple(subject, predicate, valueOfY.stringValue());
-                    }
+            ArrayList<Statement> list = new ArrayList<>();
+            //put statements into a list
 
-                    if (!retVal.acceptsTriple(triple)) {
-                        RDFDescription desc = new RDFDescription(triple.getSubject());
-                        retVal.addDescription(desc);
-                    }
-                    retVal.addTriple(triple);
-                }
-                return retVal;
-            } catch (URISyntaxException e) {
-                throw new Exception("Cannot get db content, " + e.toString() + " " + e.getMessage());
-            } catch (Exception e) {
-                throw new Exception("Cannot get db content, " + e.toString() + " " + e.getMessage());
-            } finally {
-                result.close();
+            while (result.hasNext()) {
+                list.add(result.next());
             }
-        } catch (RepositoryException e) {
-            throw new Exception("Cannot get db content, unknown connection error.");
-        } catch (IllegalArgumentException e) {
-            throw new Exception("Cannot get db content, " + e.toString() + " " + e.getMessage());
-        } catch (MalformedQueryException e) {
-            throw new Exception("Cannot get db content, " + e.toString() + " " + e.getMessage());
-        } catch (UnsupportedQueryLanguageException e) {
-            throw new Exception("Cannot get db content, " + e.toString() + " " + e.getMessage());
-        } catch (QueryEvaluationException e) {
-            throw new Exception("Cannot get db content, " + e.toString() + " " + e.getMessage());
-        } finally {
-            con.close();
+            result.close();
+
+            return list.toArray(new Statement[list.size()]);
+        } catch (RepositoryException re) {
+            throw new RepositoryException("Cannot get resource description for " + subject.toString() + " and " + predicate.toString() + ".", re);
         }
 
 
-
     }
+
+    
+
+
+
+    
 
     /**
      * Determines whether a string is a URL with http protocol type, host, and
@@ -393,20 +260,25 @@ public class DBIO {
 
     }
 
+    
+    
     /**
      * Queries all subject of the given type uri from the db
-     *
-     * @param type URI of type to look for
-     * @return List of Subject URIs
-     * @throws Exception When the db is not accessable
+     * @param type
+     * @return
+     * @throws IllegalStateException
+     * @throws MalformedURLException
+     * @throws RepositoryException
+     * @throws RDFException 
      */
-    public static SubjectList getAllSubjectsForType(URL type) throws Exception {
+    public static SubjectList getAllSubjectsForType(URL type) throws IllegalStateException, MalformedURLException, RepositoryException, RDFException{
         Repository repo = DBAdministration.getRepository();
         if (repo == null) {
-            throw new Exception("Cannot get all subjects for type" + type + ", not connected.");
+            throw new IllegalStateException("Cannot get all subjects for type" + type + ", not connected.");
         }
-        if(!Vocabulary.isBasicType(type.toString()))
-            throw new Exception("Cannot get all subjects for type" + type + ", parameter is not a type.");
+        if (!Vocabulary.isBasicType(type.toString())) {
+            throw new IllegalArgumentException("Cannot get all subjects for type" + type + ", parameter is not a type.");
+        }
         String rdfType = Vocabulary.Type;
         //define query
         String queryString = "SELECT ?s WHERE { ?s <" + rdfType + "> <" + type + "> } ";
@@ -428,39 +300,37 @@ public class DBIO {
                     subjectList.add(subject);
                 }
                 return subjectList;
-            } catch (MalformedURLException e) {
-                throw new Exception("Cannot get all subjects for type" + type + ", " + e.toString() + " " + e.getMessage());
-            } catch (Exception e) {
-                throw new Exception("Cannot get all subjects for type" + type + ", " + e.toString() + " " + e.getMessage());
+            } catch (MalformedURLException mue) {
+                throw new MalformedURLException("Cannot get all subjects for type" + type + ".");
             } finally {
                 result.close();
             }
-        } catch (RepositoryException e) {
-            throw new Exception("Cannot get all subjects for type" + type + ", unknown connection error.");
-        } catch (IllegalArgumentException e) {
-            throw new Exception("Cannot get all subjects for type" + type + ", " + e.toString() + " " + e.getMessage());
-        } catch (MalformedQueryException e) {
-            throw new Exception("Cannot get all subjects for type" + type + ", " + e.toString() + " " + e.getMessage());
-        } catch (UnsupportedQueryLanguageException e) {
-            throw new Exception("Cannot get all subjects for type" + type + ", " + e.toString() + " " + e.getMessage());
-        } catch (QueryEvaluationException e) {
-            throw new Exception("Cannot get all subjects for type" + type + ", " + e.toString() + " " + e.getMessage());
-        } finally {
+        } catch (RepositoryException re) {
+            throw new RepositoryException("Cannot get all subjects for type" + type + ", unknown connection error.",re);
+        } catch(MalformedQueryException mqe){
+            throw new RDFException("Cannot get all subjects for type" + type + ", unknown connection error.",mqe);
+        } catch(QueryEvaluationException mqe){
+            throw new RDFException("Cannot get all subjects for type" + type + ", unknown connection error.",mqe);
+        }finally {
             con.close();
         }
     }
+    
+    
+    
 
     /**
      * Queries all subject of the given resource from the db
-     *
-     * @param type URI of type to look for
-     * @return List of Subject URIs
-     * @throws Exception When the db is not accessable
+     * @param subject
+     * @return
+     * @throws IllegalStateException
+     * @throws RepositoryException
+     * @throws RDFException 
      */
-    public static boolean subjectExists(URL subject) throws Exception {
+    public static boolean subjectExists(URL subject) throws IllegalStateException, RepositoryException, RDFException  {
         Repository repo = DBAdministration.getRepository();
         if (repo == null) {
-            throw new Exception("Cannot check if subject exists, not connected.");
+            throw new IllegalStateException("Cannot check if subject exists, not connected.");
         }
         RepositoryConnection con = null;
         try {
@@ -472,27 +342,25 @@ public class DBIO {
             boolean has = con.hasStatement(process, hasType, null, false, res);
 
             return has;
-        } catch (RepositoryException e) {
-            throw new Exception("Cannot check if subject " + subject + " exists, unknown connection error.");
-        } catch (IllegalArgumentException e) {
-            throw new Exception("Cannot check if subject " + subject + " exists, " + e.toString() + " " + e.getMessage());
-        } catch (UnsupportedQueryLanguageException e) {
-            throw new Exception("Cannot check if subject " + subject + " exists, " + e.toString() + " " + e.getMessage());
+        } catch (RepositoryException re) {
+            throw new RepositoryException("Cannot check if subject " + subject + " exists, unknown connection error.",re);
+        } catch (UnsupportedQueryLanguageException uqle) {
+            throw new RDFException("Cannot check if subject " + subject + " exists.",uqle);
         } finally {
             con.close();
         }
     }
 
-    
     /**
      * Inserts a triple into db
+     *
      * @param triple
-     * @throws Exception 
+     * @throws Exception
      */
-    public static void insertTriple(Triple triple) throws Exception {
+    public static void insertTriple(Triple triple) throws IllegalStateException, RepositoryException, RDFException{
         Repository repo = DBAdministration.getRepository();
         if (repo == null) {
-            throw new Exception("Cannot insert triple into sesame RDF-DB, not connected.");
+            throw new IllegalStateException("Cannot insert triple into sesame RDF-DB, not connected.");
         }
         Resource[] resArr = new Resource[0];
         RepositoryConnection con = null;
@@ -510,47 +378,46 @@ public class DBIO {
             Statement st = new StatementImpl(subject, predicate, obj);
             //add stmt to db
             con.add(st, resArr);
-        } catch (RepositoryException e) {
-            throw new Exception("Cannot load rdf/xml string into sesame RDF-DB, not connected or not writable.");
-        } catch (UnsupportedRDFormatException e) {
-            throw new Exception("Cannot load rdf/xml string into sesame RDF-DB, " + e.getMessage());
+        } catch (RepositoryException re) {
+            throw new RepositoryException("Cannot load rdf/xml string into sesame RDF-DB, not connected or not writable.",re);
+        } catch (UnsupportedRDFormatException urfe) {
+            throw new RDFException("Cannot load rdf/xml string into sesame RDF-DB.",urfe);
         } finally {
             con.close();
         }
 
     }
 
-    
     /**
      * Inserts an RDF statement into db
+     *
      * @param triple
-     * @throws Exception 
+     * @throws Exception
      */
-    public static void insertStatement(Statement stmt) throws Exception{
+    public static void insertStatement(Statement stmt) throws Exception {
         Repository repo = DBAdministration.getRepository();
         if (repo == null) {
-            throw new Exception("Cannot insert Statement into sesame RDF-DB, not connected.");
+            throw new IllegalStateException("Cannot insert Statement into sesame RDF-DB, not connected.");
         }
         Resource[] resArr = new Resource[0];
         RepositoryConnection con = repo.getConnection();
         try {
             con.add(stmt, resArr);
-        } catch (RepositoryException e) {
-            throw new Exception("Cannot load rdf/xml string into sesame RDF-DB, not connected or not writable.");
-        } catch (UnsupportedRDFormatException e) {
-            throw new Exception("Cannot load rdf/xml string into sesame RDF-DB, " + e.getMessage());
+        } catch (RepositoryException re) {
+            throw new RepositoryException("Cannot load rdf/xml string into sesame RDF-DB, not connected or not writable.",re);
+        } catch (UnsupportedRDFormatException urfe) {
+            throw new RDFException("Cannot load rdf/xml string into sesame RDF-DB.",urfe);
         } finally {
             con.close();
         }
-    
+
     }
-    
-    
-    
+
     /**
      * Validates wether a certain string is a literal or a resource
+     *
      * @param str
-     * @return 
+     * @return
      */
     public static boolean isLiteral(String str) {
         if (DBIO.isRDFConformURL(str)) {
