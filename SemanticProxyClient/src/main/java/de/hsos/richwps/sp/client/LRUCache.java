@@ -9,25 +9,24 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * A thread-safe LRU cache implementation based on internal LinkedHashMap.
+ * LRU cache
  *
- * @author Benjamin Erb
- *
- * @param <K> Entry Key Type
- * @param <V> Entry Value Type
+ * @author fbensman
+ * @param <K>
+ * @param <V>
  */
 public class LRUCache<K, V> {
 
     public static final int DEFAULT_MAX_SIZE = 1000;
-    private final Map<K, V> internalMap;
+    private final Map<K, V> map;
 
     public LRUCache() {
         this(DEFAULT_MAX_SIZE);
     }
 
     public LRUCache(final int maxSize) {
-        this.internalMap = (Map<K, V>) Collections.synchronizedMap(new LinkedHashMap<K, V>(maxSize + 1, .75F, true) {
-            private static final long serialVersionUID = 5369285290965670135L;
+        this.map = (Map<K, V>) Collections.synchronizedMap(new LinkedHashMap<K, V>(maxSize + 1, .75F, true) {
+            
 
             @Override
             protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
@@ -37,15 +36,14 @@ public class LRUCache<K, V> {
     }
 
     public V put(K key, V value) {
-        return internalMap.put(key, value);
+        return map.put(key, value);
     }
 
     public V get(K key) {
-        return internalMap.get(key);
+        return map.get(key);
     }
-    
-    public void clear(){
-        internalMap.clear();
+
+    public void clear() {
+        map.clear();
     }
-    
 }

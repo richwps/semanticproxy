@@ -90,17 +90,20 @@ public class Output {
             SPClient spc = SPClient.getInstance();
             RDFClient rdfc = spc.getRdfClient();
             
-                //get the data type resource... 
-                RDFResource oufoch = rdfc.retrieveResource(ofc[0]);
-                //determine its type (complex, literal, ...)
-                RDFID[] type = oufoch.findResources(Vocabulary.Type);
-                if(type[0].rdfID.equals(Vocabulary.ComplexDataClass))
-                    return spc.getComplexData(ofc[0]);
-                else if (type[0].rdfID.equals(Vocabulary.LiteralDataClass))
-                    return spc.getLiteralData(ofc[0]);
-                else
-                    return spc.getBoundingBoxData(ofc[0]);
+            //get the data type resource... 
+            RDFResource oufoch = rdfc.retrieveResource(ofc[0]);
+            //determine its type (complex, literal, ...)
+            RDFID[] type = oufoch.findResources(Vocabulary.Type);
+            if(type[0].rdfID.equals(Vocabulary.ComplexDataClass))
+                return spc.getComplexData(ofc[0]);
+            else if (type[0].rdfID.equals(Vocabulary.LiteralDataClass))
+                return spc.getLiteralData(ofc[0]);
+            else if (type[0].rdfID.equals(Vocabulary.BoundingBoxDataClass))
+                return spc.getBoundingBoxData(ofc[0]);
+            else
+                throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found invalid OutputFormChoice:" +type[0].rdfID);
         }
-        throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found "+ofc.length+" OutputFormChoices");
+        else
+            throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found "+ofc.length+" OutputFormChoices");
     }
 }

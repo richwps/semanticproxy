@@ -36,10 +36,16 @@ public class RDFClient {
      * Cache for RDF resources
      */
     private LRUCache<String, RDFResource> cache = null;
-
+    private boolean useCache = true;
+    
+    
+    
     public RDFClient() {
         httpClient = new HTTPClient();
-        cache = new LRUCache<String, RDFResource>();
+        if(useCache)
+            cache = new LRUCache<String, RDFResource>();
+        else
+            cache = null;
     }
 
     /**
@@ -50,6 +56,17 @@ public class RDFClient {
     public HTTPClient getHttpClient() {
         return httpClient;
     }
+
+    public boolean isUseCache() {
+        return useCache;
+    }
+
+    public void setUseCache(boolean useCache) {
+        this.useCache = useCache;
+    }
+    
+    
+    
     
     
     
@@ -57,7 +74,8 @@ public class RDFClient {
      * Clears the cache
      */
     public void clearCache(){
-        cache.clear();
+        if(cache != null)
+            cache.clear();
     }
     
     
@@ -72,9 +90,11 @@ public class RDFClient {
      */
     public RDFResource retrieveResource(RDFID rdfID) throws BadRequestException, InternalSPException, CommunicationException, RDFException {
         try {
-            RDFResource tmp = cache.get(rdfID.rdfID);
-            if (tmp != null) {
-                return tmp;
+            if(cache !=null){
+                RDFResource tmp = cache.get(rdfID.rdfID);
+                if (tmp != null) {
+                    return tmp;
+                }
             }
 
             String body = httpClient.getRawRDF(rdfID.rdfID);
@@ -105,8 +125,8 @@ public class RDFClient {
             }
             res.setFields(litExList.toArray(new LiteralExpression[litExList.size()]));
             res.setResources(resExList.toArray(new ResourceExpression[resExList.size()]));
-
-            cache.put(res.getRdfID().rdfID, res);
+            if(cache != null)
+                cache.put(res.getRdfID().rdfID, res);
 
             return res;
         } catch (BadRequestException e) {

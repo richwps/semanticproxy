@@ -104,6 +104,15 @@ public class SPClient {
     }
 
     
+    public boolean isUseCache() {
+        return rdfClient.isUseCache();
+    }
+
+    public void setUseCache(boolean useCache) {
+        rdfClient.setUseCache(useCache);
+    }
+    
+    
     /**
      * Clears internal cache
      */

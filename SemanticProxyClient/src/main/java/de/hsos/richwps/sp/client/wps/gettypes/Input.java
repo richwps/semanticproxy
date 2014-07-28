@@ -103,9 +103,11 @@ public class Input {
                 return spc.getComplexData(ifc[0]);
             } else if (type[0].rdfID.equals(Vocabulary.LiteralDataClass)) {
                 return spc.getLiteralData(ifc[0]);
-            } else {
+            } else if (type[0].rdfID.equals(Vocabulary.BoundingBoxDataClass)){
                 return spc.getBoundingBoxData(ifc[0]);
             }
+            else
+                throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found invalid InputFormChoice:" +type[0].rdfID);
         }
         throw new RDFException("Resource " + res.getRdfID().rdfID + "malformed. Found " + ifc.length + " InputFormChoices");
     }

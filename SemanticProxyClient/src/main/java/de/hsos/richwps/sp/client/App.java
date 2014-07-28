@@ -85,9 +85,11 @@ public class App {
                             System.out.println("         -> Type:       Literal");
                         } else if (inf.getDataType() == InAndOutputForm.COMPLEX_TYPE) {
                             System.out.println("         -> Type:       Complex");
-                        } else {
+                        } else if (inf.getDataType() == InAndOutputForm.BOUNDING_BOX_TYPE){
                             System.out.println("         -> Type:       BoundingBox");
                         }
+                        else
+                            System.out.println("         -> Type:       No appropriate type");
                         System.out.println("         --");
                     }
 
@@ -120,21 +122,6 @@ public class App {
 
             System.out.println("-------------------------");
 
-            //Repeating requests to test cache
-//            net = spClient.getNetwork();
-//            System.out.println(net.getOwner());
-//            System.out.println(net.getDomain());
-//            wpss = net.getWPSs();
-//            for(int i=0; i<wpss.length;i++){
-//                System.out.println(wpss[i].getEndpoint());
-//                Process[] processes = wpss[i].getProcesses();
-//                for(int j=0; j<processes.length;j++){
-//                    System.out.println(processes[j].getAbstract());
-//                    System.out.println(processes[j].getIdentifier());
-//                    System.out.println(processes[j].getProcessVersion());
-//                    System.out.println(processes[j].getTitle());
-//                }
-//            }
 
             String keyword = "topo";
             System.out.println("Search for <<" + keyword + ">");
@@ -203,6 +190,11 @@ public class App {
             spClient.updateProcess(process);
             System.out.println("Done.\n--");
 
+            //Delete a WPS (processes are removed along) once more
+            System.out.println("Delete a WPS");
+            spClient.deleteWPS(wps.getRdfId());
+            System.out.println("Done.\n--");
+            
         } catch (BadRequestException e) {
             System.err.println("Caught exception: " + e.getMessage());
             e.printStackTrace();
