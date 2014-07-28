@@ -102,6 +102,8 @@ public class ConfigurationDocumentImpl extends org.apache.xmlbeans.impl.values.X
             new javax.xml.namespace.QName("http://www.hsos.de/richwps/sp/config", "HTTPEndpoints");
         private static final javax.xml.namespace.QName RDFNAMINGENDPOINTS$12 = 
             new javax.xml.namespace.QName("http://www.hsos.de/richwps/sp/config", "RDFNamingEndpoints");
+        private static final javax.xml.namespace.QName PORT$14 = 
+            new javax.xml.namespace.QName("http://www.hsos.de/richwps/sp/config", "Port");
         
         
         /**
@@ -523,6 +525,74 @@ public class ConfigurationDocumentImpl extends org.apache.xmlbeans.impl.values.X
                 de.hsos.richwps.sp.config.RDFNamingEndpoints target = null;
                 target = (de.hsos.richwps.sp.config.RDFNamingEndpoints)get_store().add_element_user(RDFNAMINGENDPOINTS$12);
                 return target;
+            }
+        }
+        
+        /**
+         * Gets the "Port" element
+         */
+        public int getPort()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                org.apache.xmlbeans.SimpleValue target = null;
+                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PORT$14, 0);
+                if (target == null)
+                {
+                    return 0;
+                }
+                return target.getIntValue();
+            }
+        }
+        
+        /**
+         * Gets (as xml) the "Port" element
+         */
+        public org.apache.xmlbeans.XmlInt xgetPort()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                org.apache.xmlbeans.XmlInt target = null;
+                target = (org.apache.xmlbeans.XmlInt)get_store().find_element_user(PORT$14, 0);
+                return target;
+            }
+        }
+        
+        /**
+         * Sets the "Port" element
+         */
+        public void setPort(int port)
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                org.apache.xmlbeans.SimpleValue target = null;
+                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PORT$14, 0);
+                if (target == null)
+                {
+                    target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PORT$14);
+                }
+                target.setIntValue(port);
+            }
+        }
+        
+        /**
+         * Sets (as xml) the "Port" element
+         */
+        public void xsetPort(org.apache.xmlbeans.XmlInt port)
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                org.apache.xmlbeans.XmlInt target = null;
+                target = (org.apache.xmlbeans.XmlInt)get_store().find_element_user(PORT$14, 0);
+                if (target == null)
+                {
+                    target = (org.apache.xmlbeans.XmlInt)get_store().add_element_user(PORT$14);
+                }
+                target.set(port);
             }
         }
     }

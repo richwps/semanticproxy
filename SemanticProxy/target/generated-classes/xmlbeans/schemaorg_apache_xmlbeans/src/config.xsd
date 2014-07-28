@@ -20,6 +20,7 @@ RichWPS-SemanticProxy configuration schema
                 <xs:element name="PreloadFiles" type="cg:PreloadFiles"/>
                 <xs:element name="HTTPEndpoints" type="cg:HTTPEndpoints"/>
                 <xs:element name="RDFNamingEndpoints" type="cg:RDFNamingEndpoints"/>
+                <xs:element name="Port" type="xs:int"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

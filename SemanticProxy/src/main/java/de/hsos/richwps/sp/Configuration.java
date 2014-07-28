@@ -28,6 +28,7 @@ public class Configuration {
     private boolean startClean = true;
     private String domain = null;
     private String owner = null;
+    private int port = -1;
     private ArrayList<File> processRDFFiles = null;
     private ArrayList<File> wpsRDFFiles = null;
     private String replaceableHost = null;
@@ -67,6 +68,7 @@ public class Configuration {
     private boolean defaultStartClean = false;
     private String defaultOwner = null;
     private String defaultDomain = null;
+    private int defaultPort = -1;
     //default endpoints
     private String defaultHostURL = null;
     private String defaultResourcesURL = null;
@@ -109,9 +111,9 @@ public class Configuration {
         //admin
         defaultRDFDir = ".";
         defaultStartClean = true;
-        replaceableHost = null;
         defaultOwner = "HS-OS";
         defaultDomain = "RichWPS test domain";
+        defaultPort = 4567;
         //default endpoints
         defaultHostURL = "http://localhost:4567";
         defaultResourcesURL = "resources";
@@ -154,6 +156,7 @@ public class Configuration {
         boolean tmpStartClean = config.getStartClean();
         String tmpOwner = config.getOwner();
         String tmpDomain = config.getDomain();
+        int tmpPort = config.getPort();
         PreloadFiles tmpFileList = config.getPreloadFiles();
         String tmpReplaceableHost = tmpFileList.getReplaceableHost();
         HTTPEndpoints tmpHTTPEndpoints = config.getHTTPEndpoints();
@@ -163,6 +166,7 @@ public class Configuration {
         startClean = tmpStartClean;
         owner = tmpOwner;
         domain = tmpDomain;
+        port = tmpPort;
         if(tmpReplaceableHost != null && ! tmpReplaceableHost.equals(""))
             replaceableHost = tmpReplaceableHost;
         else 
@@ -211,6 +215,7 @@ public class Configuration {
         config.setStartClean(defaultStartClean);
         config.setOwner(defaultOwner);
         config.setDomain(defaultDomain);
+        config.setPort(defaultPort);
         
         PreloadFiles tmpPreloadFiles = config.addNewPreloadFiles();
         tmpPreloadFiles.addWPS(defaultWPSMacrophyte);
@@ -338,6 +343,17 @@ public class Configuration {
         return replaceableHost;
     }
 
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+    
+    
+    
+
     
     
     @Override
@@ -356,6 +372,7 @@ public class Configuration {
         ret += "Start clean:      " + startClean + "\n";
         ret += "Network domain:   " + domain + "\n";
         ret += "Network owner:    " + owner + "\n";
+        ret += "Port:             " + port + "\n";
         ret += "WPS:\n";
         for (int i = 0; i < wpsRDFFiles.size(); i++) {
             ret += "                  " + wpsRDFFiles.get(i).getAbsolutePath() + "\n";

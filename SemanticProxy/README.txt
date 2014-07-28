@@ -4,6 +4,14 @@ RichWPS SemanticProxy
 - System currently under development
 
 
+TOC:
+- System requirements
+- Preceding explanations
+- Installation
+- Configuration
+- Start
+
+
 
 System requirements
 ----------------------
@@ -59,6 +67,9 @@ Person or organization that owns/governs the target infrastructure
 Domain:
 Name or description of the target network
 
+Port:
+Port to use by the web server
+
 PreloadFiles:
 Specifies RDF data to be loaded at system start; Is only done when there is a clean db.
 	WPS:             A file that contains RDF information on a WPS
@@ -88,3 +99,9 @@ Specifies the URLs used for naming of resources
 	InputNaming
 	OutputNaming
 e.g. host/application/resources/<input>/inputA
+
+
+Start
+----------------------
+1. CD to directory [...]\SemanticProxy
+2. type: java -jar target\SemanticProxy-1.0-SNAPSHOT.jar

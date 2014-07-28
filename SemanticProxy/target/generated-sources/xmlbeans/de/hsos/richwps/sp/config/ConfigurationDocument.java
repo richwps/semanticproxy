@@ -17,7 +17,7 @@ package de.hsos.richwps.sp.config;
 public interface ConfigurationDocument extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(ConfigurationDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s03304F119F4A08AD48D992D6D1867513").resolveHandle("configurationa60edoctype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(ConfigurationDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s4C120769099B3A62A73A92D1B3E5F014").resolveHandle("configurationa60edoctype");
     
     /**
      * Gets the "Configuration" element
@@ -42,7 +42,7 @@ public interface ConfigurationDocument extends org.apache.xmlbeans.XmlObject
     public interface Configuration extends org.apache.xmlbeans.XmlObject
     {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Configuration.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s03304F119F4A08AD48D992D6D1867513").resolveHandle("configurationd80celemtype");
+            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Configuration.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s4C120769099B3A62A73A92D1B3E5F014").resolveHandle("configurationd80celemtype");
         
         /**
          * Gets the "RDFDirectory" element
@@ -168,6 +168,26 @@ public interface ConfigurationDocument extends org.apache.xmlbeans.XmlObject
          * Appends and returns a new empty "RDFNamingEndpoints" element
          */
         de.hsos.richwps.sp.config.RDFNamingEndpoints addNewRDFNamingEndpoints();
+        
+        /**
+         * Gets the "Port" element
+         */
+        int getPort();
+        
+        /**
+         * Gets (as xml) the "Port" element
+         */
+        org.apache.xmlbeans.XmlInt xgetPort();
+        
+        /**
+         * Sets the "Port" element
+         */
+        void setPort(int port);
+        
+        /**
+         * Sets (as xml) the "Port" element
+         */
+        void xsetPort(org.apache.xmlbeans.XmlInt port);
         
         /**
          * A factory class with static methods for creating instances

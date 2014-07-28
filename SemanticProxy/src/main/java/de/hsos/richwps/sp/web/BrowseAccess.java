@@ -44,7 +44,7 @@ public class BrowseAccess {
         get(new Route("/") {
             @Override
             public Object handle(Request request, Response response) {
-                response.type(MIMETYPE_HTML);
+                response.type(MIMETYPE_HTML);              
                 String str = "<html>\n"
                         + "<head>\n"
                         + "<title>Sparc root</title>\n"

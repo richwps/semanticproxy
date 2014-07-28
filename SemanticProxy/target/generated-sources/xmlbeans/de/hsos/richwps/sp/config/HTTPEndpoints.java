@@ -16,7 +16,7 @@ package de.hsos.richwps.sp.config;
 public interface HTTPEndpoints extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(HTTPEndpoints.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s03304F119F4A08AD48D992D6D1867513").resolveHandle("httpendpointsc2fetype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(HTTPEndpoints.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s4C120769099B3A62A73A92D1B3E5F014").resolveHandle("httpendpointsc2fetype");
     
     /**
      * Gets the "Host" element

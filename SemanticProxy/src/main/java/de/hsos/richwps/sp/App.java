@@ -32,44 +32,43 @@ public class App {
         //Load configuration
         Configuration config = new Configuration();
         File configFile = new File("config.xml");
-        try{
-            config.load(configFile);    
-        }catch(IOException io){
-            try{
+        try {
+            config.load(configFile);
+        } catch (IOException io) {
+            try {
                 config.writeDefaultConfiguration();
                 config.load(configFile);
-            }catch(Exception e){
+            } catch (Exception e) {
                 System.err.println(e.getMessage());
                 e.printStackTrace();
                 System.out.println("Shutdown due to error");
                 System.exit(-1);
             }
-        }catch(XmlException xml){
+        } catch (XmlException xml) {
             System.err.println(xml.getMessage());
             xml.printStackTrace();
             System.out.println("Shutdown due to error");
             System.exit(-1);
         }
-        
+
         System.out.println("*** Used configuration");
         System.out.println(config.toString());
         System.out.println("***");
-        
+
         //Initialize vacabulary
-        try{
+        try {
             Vocabulary.init(config.getVocabularyURL());
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             System.err.println(e.getMessage());
             e.printStackTrace();
             System.out.println("Shutdown due to error");
             System.exit(-1);
         }
-        
-            
+
+
         //Prepare db
         try {
-            DBAdministration.init(config.getRdfMemoryDir(),config.getResourcesURL());
+            DBAdministration.init(config.getRdfMemoryDir(), config.getResourcesURL());
             if (config.isStartClean()) {
                 DBAdministration.clear();
             }
@@ -77,14 +76,14 @@ public class App {
             //load initial data
             if (DBIO.size() == 0) {
                 ContentChanger.insertNetwork(config.getOwner(), config.getDomain());
-                
+
                 ArrayList<File> list = config.getWpsRDFFiles();
                 for (int i = 0; i < list.size(); i++) {
                     //read rdf file
                     String content = TextFileReader.readPlainText(list.get(i));
                     //replace wildcard string with host
-                    if(config.getReplaceableHost() != null){
-                        if(content.contains(config.getReplaceableHost())){
+                    if (config.getReplaceableHost() != null) {
+                        if (content.contains(config.getReplaceableHost())) {
                             content = content.replaceAll(config.getReplaceableHost(), config.getHostURL().toString());
                         }
                     }
@@ -92,7 +91,7 @@ public class App {
                     ContentChanger.pushWPSRDFintoDB(content);
                     System.out.println("File " + list.get(i).getAbsolutePath() + " loaded");
                 }
-                
+
                 list = config.getProcessRDFFiles();
                 for (int i = 0; i < list.size(); i++) {
                     String content = TextFileReader.readPlainText(list.get(i));
@@ -101,7 +100,7 @@ public class App {
                 }
             }
 
-           
+
         } catch (Exception e) {
             System.err.println(e.getMessage());
             e.printStackTrace();
@@ -111,14 +110,17 @@ public class App {
 
 
         //prepare web frontend
-        new BrowseAccess(config.getApplicationURL(), config.getResourcesURL(), 
-                config.getVocabularyURL(), config.getNetworkURL(), 
+        if (config.getPort() > 0) {
+            spark.Spark.setPort(config.getPort());
+        }
+        new BrowseAccess(config.getApplicationURL(), config.getResourcesURL(),
+                config.getVocabularyURL(), config.getNetworkURL(),
                 config.getProcessListURL(), config.getWpsListURL());
-        new CreateAccess(config.getProcessListURL(),config.getWpsListURL());
+        new CreateAccess(config.getProcessListURL(), config.getWpsListURL());
         new DeleteAccess(config.getProcessNamingURL(), config.getWpsNamingURL());
         new UpdateAccess(config.getProcessNamingURL(), config.getWpsNamingURL());
         new SearchAccess(config.getSearchURL());
-        
+
         System.out.println("Semantic Proxy is listening");
     }
 }
