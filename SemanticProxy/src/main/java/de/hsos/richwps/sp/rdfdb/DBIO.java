@@ -122,7 +122,7 @@ public class DBIO {
     public static long size() throws IllegalStateException, RepositoryException {
         Repository repo = DBAdministration.getRepository();
         if (repo == null) {
-            throw new IllegalStateException("Cannot retrieve size of sesame RDF-DB, not connected.");
+            throw new IllegalStateException("Cannot retrieve size of sesame RDF-DB, not connected."); 
         }
         RepositoryConnection con = null;
         try {

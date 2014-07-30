@@ -7,6 +7,7 @@ package de.hsos.richwps.sp.web;
 import de.hsos.richwps.sp.restlogic.SearchHandling;
 import de.hsos.richwps.sp.types.SubjectList;
 import java.net.URL;
+import org.apache.log4j.Logger;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -36,18 +37,22 @@ public class SearchAccess {
             @Override
             public Object handle(Request request, Response response) {
                 String keyword = (String) request.queryParams("keyword");
+                Logger.getLogger(SearchAccess.class).info("Search by keyword, keyword = "+keyword);
                 if (keyword == null) {
+                    Logger.getLogger(SearchAccess.class).error("Search by keyword: Empty search query");
                     response.status(400);
                     return "Empty search query.";
                 }
                 try {
                     SubjectList list = SearchHandling.processKeywordSearch(keyword);
+                    Logger.getLogger(SearchAccess.class).info("Found "+list.size() + " matches");
                     response.status(200);
                     response.type(MIMETYPE_XML);
                     return list.toXMLList();
                 } catch (Exception e) {
+                    Logger.getLogger(SearchAccess.class).error("Search by keyword",e);
                     response.status(500);
-                    return "Internal server error: " + e.getMessage();
+                    return  e.getMessage();
                 }
 
             }

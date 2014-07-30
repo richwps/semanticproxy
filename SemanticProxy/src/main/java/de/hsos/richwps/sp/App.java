@@ -12,6 +12,7 @@ import de.hsos.richwps.sp.web.UpdateAccess;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import org.apache.log4j.PropertyConfigurator;
 import org.apache.xmlbeans.XmlException;
 
 /**
@@ -28,7 +29,10 @@ public class App {
      */
     public static void main(String[] args) {
         System.out.println("Semantic Proxy is starting...");
-
+        //org.apache.log4j.BasicConfigurator.configure();
+        PropertyConfigurator.configure("log4j.properties");
+       
+        
         //Load configuration
         Configuration config = new Configuration();
         File configFile = new File("config.xml");

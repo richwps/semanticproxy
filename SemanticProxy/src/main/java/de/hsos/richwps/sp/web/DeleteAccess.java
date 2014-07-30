@@ -6,6 +6,7 @@ package de.hsos.richwps.sp.web;
 
 import de.hsos.richwps.sp.restlogic.ContentChanger;
 import java.net.URL;
+import org.apache.log4j.Logger;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -30,18 +31,20 @@ public class DeleteAccess {
             @Override
             public Object handle(Request request, Response response) {
                 try {
-
+                    Logger.getLogger(DeleteAccess.class).info("Delete process request to: "+request.url());
                     if (ContentChanger.deleteProcess(request.url())) {
+                        Logger.getLogger(DeleteAccess.class).info("Process "+request.url() + " deleted");
                         response.status(200);
-                        //System.out.println(DBIO.getWholeDBContent().rDFXMLRepresentation());
                         return "Resource deleted";
                     } else {
+                        Logger.getLogger(DeleteAccess.class).error("Delete process request to: "+request.url()+" - Resource not found.");
                         response.status(404);
                         return "Resource not found";
                     }
                 } catch (Exception e) {
+                    Logger.getLogger(DeleteAccess.class).error("Delete process request to: "+request.url(),e);
                     response.status(500);
-                    return "Error, " + e.getMessage();
+                    return  e.getMessage();
                 }
             }
         });
@@ -54,17 +57,20 @@ public class DeleteAccess {
             @Override
             public Object handle(Request request, Response response) {
                 try {
+                    Logger.getLogger(DeleteAccess.class).info("Delete WPS request to: "+request.url());
                     if (ContentChanger.deleteWPS(request.url())) {
+                        Logger.getLogger(DeleteAccess.class).info("WPS "+request.url() + " deleted");
                         response.status(200);
-                        //System.out.println(DBIO.getWholeDBContent().rDFXMLRepresentation());
                         return "Resource deleted";
                     } else {
+                        Logger.getLogger(DeleteAccess.class).info("Delete WPS request to: "+request.url()+" - Resource not found.");
                         response.status(404);
                         return "Resource not found";
                     }
                 } catch (Exception e) {
+                    Logger.getLogger(DeleteAccess.class).info("Delete WPS request to: "+request.url(),e);
                     response.status(500);
-                    return "Error, " + e.getMessage();
+                    return e.getMessage();
                 }
             }
         });

@@ -7,7 +7,7 @@ package de.hsos.richwps.sp.web;
 import de.hsos.richwps.sp.restlogic.RouteMapper;
 import de.hsos.richwps.sp.restlogic.Vocabulary;
 import java.net.URL;
-import java.util.Set;
+import org.apache.log4j.Logger;
 import static spark.Spark.*;
 import spark.*;
 
@@ -67,10 +67,10 @@ public class BrowseAccess {
                 response.type(MIMETYPE_HTML);
                 String str = "<html>\n"
                         + "<head>\n"
-                        + "<title>Semantic Proxy</title>\n"
+                        + "<title>SemanticProxy</title>\n"
                         + "</head>\n"
                         + "<body>\n"
-                        + "<h1> Semantic Proxy\n</h1>"
+                        + "<h1> SemanticProxy\n</h1>"
                         + "An RDF directory service for RichWPS"
                         + "</body>\n"
                         + "</html>";
@@ -88,15 +88,15 @@ public class BrowseAccess {
             @Override
             public Object handle(Request request, Response response) {
                 try {
-                    //String str = VocabReader.readPlainText();
+                    Logger.getLogger(BrowseAccess.class).info("Get vocabulary request");
                     String str = Vocabulary.getRDF_XML_Representation();
                     response.status(200);
                     response.type(MIMETYPE_RDF); 
                     return str;
                 } catch (Exception e) {
-                    System.out.println("Error, " + e.getMessage());
+                    Logger.getLogger(BrowseAccess.class).error("Get vocabulary request",e);
                     response.status(500);
-                    return "Error. " + e.getMessage();
+                    return e.getMessage();
                 }
 
             }
@@ -113,20 +113,20 @@ public class BrowseAccess {
             public Object handle(Request request, Response response) {
 
                 try {
-
+                    Logger.getLogger(BrowseAccess.class).info("Get resources/network request");
                     String rdf = RouteMapper.getRDFFor(request.url());
                     if (rdf == null) {
+                        Logger.getLogger(BrowseAccess.class).error("Get resources/network request - Resource not found");
                         response.status(404);
                         return "Resource not found";
                     }
                     response.status(200);
                     response.type(MIMETYPE_RDF); //normally +rdf, but download in chrome is annoying
-                    System.out.println("\n response: " + response.raw().toString());
                     return rdf;
                 } catch (Exception e) {
-                    System.out.println("Error, " + e.getMessage());
+                    Logger.getLogger(BrowseAccess.class).error("Get resources/network request",e);
                     response.status(500);
-                    return "Error. " + e.getMessage();
+                    return e.getMessage();
                 }
 
             }
@@ -142,14 +142,15 @@ public class BrowseAccess {
             @Override
             public Object handle(Request request, Response response) {
                 try {
+                    Logger.getLogger(BrowseAccess.class).info("Get process list request.");
                     String str = RouteMapper.getAllProcesses();
                     response.status(200);
                     response.type(MIMETYPE_XML);
                     return str;
                 } catch (Exception e) {
-                    System.out.println("Error, " + e.getMessage());
+                    Logger.getLogger(BrowseAccess.class).error("Get process list request",e);
                     response.status(500);
-                    return "Error. " + e.getMessage();
+                    return e.getMessage();
                 }
 
             }
@@ -163,14 +164,15 @@ public class BrowseAccess {
             @Override
             public Object handle(Request request, Response response) {
                 try {
+                    Logger.getLogger(BrowseAccess.class).info("Get wps list request.");
                     String str = RouteMapper.getAllWPS();
                     response.status(200);
                     response.type(MIMETYPE_XML);
                     return str;
                 } catch (Exception e) {
-                    System.out.println("Error, " + e.getMessage());
+                    Logger.getLogger(BrowseAccess.class).error("Get wps list request",e);
                     response.status(500);
-                    return "Error. " + e.getMessage();
+                    return e.getMessage();
                 }
 
             }
@@ -184,8 +186,10 @@ public class BrowseAccess {
             @Override
             public Object handle(Request request, Response response) {
                 try {
+                    Logger.getLogger(BrowseAccess.class).info("Get resource: "+request.url());
                     String rdf = RouteMapper.getRDFFor(request.url());
                     if (rdf == null) {
+                        Logger.getLogger(BrowseAccess.class).error("Resource not found: "+request.url());
                         response.status(404);
                         return "Resource not found";
                     }
@@ -193,9 +197,9 @@ public class BrowseAccess {
                     response.type(MIMETYPE_RDF); //normally +rdf, but download in chrome is annoying
                     return rdf;
                 } catch (Exception e) {
-                    System.out.println("Error, " + e.getMessage());
+                    Logger.getLogger(BrowseAccess.class).error("Get resource: "+request.url(),e);
                     response.status(500);
-                    return "Error. " + e.getMessage();
+                    return e.getMessage();
                 }
 
             }

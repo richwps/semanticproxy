@@ -34,7 +34,6 @@ public class RouteMapper {
         if (route.contains("#")) {
             int idx = route.lastIndexOf("#");
             refinedRoute = route.substring(0, idx);
-            System.out.println(refinedRoute);
         } else {
             refinedRoute = route;
         }

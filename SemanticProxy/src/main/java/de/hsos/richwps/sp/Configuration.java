@@ -145,9 +145,9 @@ public class Configuration {
         try{
             configDoc = ConfigurationDocument.Factory.parse(file);
         }catch(XmlException x){
-            throw new XmlException("Error on parsing config file "+file.getAbsolutePath()+".", x);
+            throw new XmlException("Cannot parse config file "+file.getAbsolutePath()+".", x);
         }catch(IOException io){
-            throw new IOException("Error on reading config file "+file.getAbsolutePath()+".", io);
+            throw new IOException("Cannot read config file "+file.getAbsolutePath()+".", io);
         }
        
         //read contents
@@ -249,7 +249,7 @@ public class Configuration {
             writer.write(doc.toString());
             writer.close();
         }catch(IOException io){
-            throw new IOException("Error on writing default config to "+defaultConfigFileName,io);
+            throw new IOException("Cannot write default config to "+defaultConfigFileName,io);
         }
     }
 

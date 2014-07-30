@@ -38,6 +38,7 @@ public class Validator {
         shiftStats(openList, analizedList, stats);
 
         String processId = stats[0].getSubject().stringValue();
+        
 
         //check if process already exists
         try {

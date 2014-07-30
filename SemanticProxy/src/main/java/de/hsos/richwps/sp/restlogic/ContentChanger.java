@@ -68,7 +68,7 @@ public class ContentChanger {
                 Triple inverseTriple = new Triple(subject, predicate, object);
                 DBIO.insertTriple(inverseTriple);
             } else {
-                throw new Exception("Error cannot push process rdf into db, data malformed: " + result.message);
+                throw new Exception("Cannot push process rdf into db, data malformed: " + result.message);
             }
         } catch (RepositoryException re) {
             throw new RepositoryException("Cannot insert process into db.", re);
@@ -173,7 +173,7 @@ public class ContentChanger {
                 Triple inverseTriple = new Triple(subject, predicate, object);
                 DBIO.insertTriple(inverseTriple);
             } else {
-                throw new Exception("Error cannot push wps rdf into db, data malformed: " + result.message);
+                throw new Exception("Cannot push wps rdf into db, data malformed: " + result.message);
             }
         } catch (RepositoryException re) {
             throw new RepositoryException("Cannot insert wps into db, decomposition error.", re);
