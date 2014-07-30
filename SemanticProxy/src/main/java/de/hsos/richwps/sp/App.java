@@ -72,15 +72,20 @@ public class App {
 
         //Prepare db
         try {
-            DBAdministration.init(config.getRdfMemoryDir(), config.getResourcesURL());
+            //create connection and provide basic urls 
+            DBAdministration.init(config.getRdfMemoryDir(), config.getResourcesURL(), config.getVocabularyURL());
+            
+            //if configured, clear db
             if (config.isStartClean()) {
                 DBAdministration.clear();
             }
 
             //load initial data
             if (DBIO.size() == 0) {
+                //create the root resource if db was empty
                 ContentChanger.insertNetwork(config.getOwner(), config.getDomain());
 
+                //insert rdf resources from predefined files
                 ArrayList<File> list = config.getWpsRDFFiles();
                 for (int i = 0; i < list.size(); i++) {
                     //read rdf file
@@ -91,7 +96,7 @@ public class App {
                             content = content.replaceAll(config.getReplaceableHost(), config.getHostURL().toString());
                         }
                     }
-                    //insert modified content into db
+                    //insert (modified) content into db
                     ContentChanger.pushWPSRDFintoDB(content);
                     System.out.println("File " + list.get(i).getAbsolutePath() + " loaded");
                 }

@@ -7,7 +7,7 @@ package de.hsos.richwps.sp.rdfdb;
 import de.hsos.richwps.sp.restlogic.Vocabulary;
 
 import de.hsos.richwps.sp.types.SubjectList;
-import de.hsos.richwps.sp.types.Triple;
+import info.aduna.iteration.Iterations;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
@@ -15,12 +15,15 @@ import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import org.openrdf.model.Model;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.Value;
-import org.openrdf.model.impl.LiteralImpl;
-import org.openrdf.model.impl.StatementImpl;
+import org.openrdf.model.impl.LinkedHashModel;
 import org.openrdf.model.impl.URIImpl;
+import org.openrdf.model.vocabulary.RDF;
+import org.openrdf.model.vocabulary.RDFS;
+import org.openrdf.model.vocabulary.XMLSchema;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryEvaluationException;
@@ -35,7 +38,6 @@ import org.openrdf.repository.RepositoryResult;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.RDFParseException;
-import org.openrdf.rio.RDFWriter;
 import org.openrdf.rio.Rio;
 import org.openrdf.rio.UnsupportedRDFormatException;
 
@@ -65,15 +67,20 @@ public class DBIO {
         RepositoryConnection con = null;
         try {
             con = repo.getConnection();
+            con.begin();
             con.add(file, DBAdministration.getResourceURL().toString(), RDFFormat.RDFXML, resArr);
-
+            con.commit();
         } catch (RepositoryException re) {
+            con.rollback();
             throw new RepositoryException("Cannot load rdf/xml file " + file.getName() + " into sesame RDF-DB, not connected or not writable.");
         } catch (RDFParseException rpe) {
+            con.rollback();
             throw new RDFException("Cannot load rdf/xml file " + file.getName() + " into sesame RDF-DB, ", rpe);
         } catch (UnsupportedRDFormatException urfe) {
+            con.rollback();
             throw new RDFException("Cannot load rdf/xml file " + file.getName() + " into sesame RDF-DB, ", urfe);
         } catch (IOException ioe) {
+            con.rollback();
             throw new IOException("Cannot load rdf/xml file " + file.getName() + " into sesame RDF-DB, ", ioe);
         } finally {
             con.close();
@@ -96,16 +103,22 @@ public class DBIO {
         }
         Resource[] resArr = new Resource[0];
         RepositoryConnection con = null;
-        try {
-            con = repo.getConnection();
+        con = repo.getConnection();
+        try { 
+            con.begin();
             con.add(new StringReader(str), DBAdministration.getResourceURL().toString(), RDFFormat.RDFXML, resArr);
+            con.commit();
         } catch (RepositoryException re) {
+            con.rollback();
             throw new RepositoryException("Cannot insert rdf string into sesame RDF-DB, not connected or not writable.");
         } catch (RDFParseException rpe) {
+            con.rollback();
             throw new RDFException("Cannot insert rdf string into sesame RDF-DB, ", rpe);
         } catch (UnsupportedRDFormatException urfe) {
+            con.rollback();
             throw new RDFException("Cannot insert rdf string into sesame RDF-DB, ", urfe);
         } catch (IOException ioe) {
+            con.rollback();
             throw new IOException("Cannot insert rdf string into sesame RDF-DB, ", ioe);
         } finally {
             con.close();
@@ -156,28 +169,25 @@ public class DBIO {
             Resource subject = new URIImpl(resource.toString());
             //query all statement about the resource
             RepositoryResult<Statement> result = con.getStatements(subject, null, null, true);
-            ArrayList<Statement> list = new ArrayList<>();
-            //put statements into a list an feed 'em to an rdf writer
-            try {
-                while (result.hasNext()) {
-                    list.add(result.next());
-                }
-                result.close();
-                if (list.isEmpty()) {
+            //write statements to rdf doc string
+            try {  
+                Model model = Iterations.addAll(result, new LinkedHashModel());
+                
+                if(model.isEmpty())
                     return null;
-                }
-                StringWriter sw = new StringWriter();
-                RDFWriter writer = Rio.createWriter(RDFFormat.RDFXML, sw);
+                
+                model.setNamespace("rdf", RDF.NAMESPACE);
+                model.setNamespace("rdfs", RDFS.NAMESPACE);
+                model.setNamespace("xsd", XMLSchema.NAMESPACE);
+                model.setNamespace("rwps", DBAdministration.getVocabularyURL()+"#");
+                StringWriter sw = new StringWriter();             
                 try {
-                    writer.startRDF();
-                    for (int i = 0; i < list.size(); i++) {
-                        writer.handleStatement(list.get(i));
-                    }
-                    writer.endRDF();
+                    Rio.write(model, sw, RDFFormat.RDFXML);
                     return sw.toString();
                 } catch (RDFHandlerException rhe) {
                     throw new RDFException("Cannot get resource description for " + resource, rhe);
                 }
+                
             } finally {
                 result.close();
             }
@@ -229,38 +239,6 @@ public class DBIO {
 
     
 
-
-
-    
-
-    /**
-     * Determines whether a string is a URL with http protocol type, host, and
-     * path
-     *
-     * @param str The URL to check
-     * @return True if str is a sufficient URL, false if not
-     */
-    public static boolean isRDFConformURL(String str) {
-        try {
-            URL url = new URL(str);
-            String pro = url.getProtocol();
-            String host = url.getHost();
-            String path = url.getPath();
-            if (pro.equals("http")) {
-                if (host != null && !host.equals("")) {
-                    if (path != null && !path.equals("")) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        } catch (MalformedURLException mue) {
-            return false;
-        }
-
-    }
-
-    
     
     /**
      * Queries all subject of the given type uri from the db
@@ -351,42 +329,7 @@ public class DBIO {
         }
     }
 
-    /**
-     * Inserts a triple into db
-     *
-     * @param triple
-     * @throws Exception
-     */
-    public static void insertTriple(Triple triple) throws IllegalStateException, RepositoryException, RDFException{
-        Repository repo = DBAdministration.getRepository();
-        if (repo == null) {
-            throw new IllegalStateException("Cannot insert triple into sesame RDF-DB, not connected.");
-        }
-        Resource[] resArr = new Resource[0];
-        RepositoryConnection con = null;
-        try {
-            con = repo.getConnection();
-            //triple to statement
-            Resource subject = new URIImpl(triple.getSubject().toString());
-            org.openrdf.model.URI predicate = new URIImpl(triple.getPredicate().toString());
-            Value obj = null;
-            if (triple.getObjectAsLiteral() == null) {
-                obj = new URIImpl(triple.getObjectAsResource().toString());
-            } else {
-                obj = new LiteralImpl(triple.getObjectAsLiteral());
-            }
-            Statement st = new StatementImpl(subject, predicate, obj);
-            //add stmt to db
-            con.add(st, resArr);
-        } catch (RepositoryException re) {
-            throw new RepositoryException("Cannot load rdf/xml string into sesame RDF-DB, not connected or not writable.",re);
-        } catch (UnsupportedRDFormatException urfe) {
-            throw new RDFException("Cannot load rdf/xml string into sesame RDF-DB.",urfe);
-        } finally {
-            con.close();
-        }
-
-    }
+    
 
     /**
      * Inserts an RDF statement into db
@@ -394,18 +337,22 @@ public class DBIO {
      * @param triple
      * @throws Exception
      */
-    public static void insertStatement(Statement stmt) throws Exception {
+    public static void insertStatement(Statement stmt) throws IllegalStateException, RepositoryException, RDFException {
         Repository repo = DBAdministration.getRepository();
         if (repo == null) {
             throw new IllegalStateException("Cannot insert Statement into sesame RDF-DB, not connected.");
         }
-        Resource[] resArr = new Resource[0];
+        Resource[] resArr = new Resource[0]; 
         RepositoryConnection con = repo.getConnection();
         try {
+            con.begin();
             con.add(stmt, resArr);
+            con.commit();
         } catch (RepositoryException re) {
+            con.rollback();
             throw new RepositoryException("Cannot load rdf/xml string into sesame RDF-DB, not connected or not writable.",re);
         } catch (UnsupportedRDFormatException urfe) {
+            con.rollback();
             throw new RDFException("Cannot load rdf/xml string into sesame RDF-DB.",urfe);
         } finally {
             con.close();
@@ -413,20 +360,5 @@ public class DBIO {
 
     }
 
-    /**
-     * Validates wether a certain string is a literal or a resource
-     *
-     * @param str
-     * @return
-     */
-    public static boolean isLiteral(String str) {
-        if (DBIO.isRDFConformURL(str)) {
-            if (str.startsWith("\"") && str.endsWith("\"")) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        return true;
-    }
+   
 }

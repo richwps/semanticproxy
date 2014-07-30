@@ -8,7 +8,6 @@ import de.hsos.richwps.sp.rdfdb.DBAdministration;
 import de.hsos.richwps.sp.rdfdb.DBDelete;
 import de.hsos.richwps.sp.rdfdb.DBIO;
 import de.hsos.richwps.sp.rdfdb.RDFException;
-import de.hsos.richwps.sp.types.Triple;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.MalformedURLException;
@@ -62,11 +61,11 @@ public class ContentChanger {
 
                 //create inverse link to reference from wps to this process
                 Statement[] stats = Validator.getStatementsByPredicate(Vocabulary.WPS, statList);
-                URI subject = new URI(stats[0].getObject().stringValue());
-                URI predicate = new URI(Vocabulary.Process);
-                URI object = new URI(stats[0].getSubject().stringValue());
-                Triple inverseTriple = new Triple(subject, predicate, object);
-                DBIO.insertTriple(inverseTriple);
+                Resource subject = new URIImpl(stats[0].getObject().stringValue());
+                org.openrdf.model.URI predicate = new URIImpl(Vocabulary.Process);
+                org.openrdf.model.URI object = new URIImpl(stats[0].getSubject().stringValue());
+                Statement stmt = new StatementImpl(subject, predicate, object);
+                DBIO.insertStatement(stmt);
             } else {
                 throw new Exception("Cannot push process rdf into db, data malformed: " + result.message);
             }
@@ -165,13 +164,13 @@ public class ContentChanger {
         try {
             if (result.result) {
                 DBIO.loadRDFXMLStringIntoDB(rawRDF);
-
+                //Create link from network to new wps
                 Statement[] stats = Validator.getStatementsByPredicate(Vocabulary.Type, statList);
-                URI subject = new URI(DBAdministration.getResourceURL().toString());
-                URI predicate = new URI(Vocabulary.WPS);
-                URI object = new URI(stats[0].getSubject().stringValue());
-                Triple inverseTriple = new Triple(subject, predicate, object);
-                DBIO.insertTriple(inverseTriple);
+                Resource subject = new URIImpl(DBAdministration.getResourceURL().toString());
+                org.openrdf.model.URI predicate = new URIImpl(Vocabulary.WPS);
+                org.openrdf.model.URI object = new URIImpl(stats[0].getSubject().stringValue());
+                Statement stmt = new StatementImpl(subject, predicate, object);
+                DBIO.insertStatement(stmt);
             } else {
                 throw new Exception("Cannot push wps rdf into db, data malformed: " + result.message);
             }
@@ -343,15 +342,13 @@ public class ContentChanger {
                 //create inverse link to reference from wps to this process
                 try {
                     stats = Validator.getStatementsByPredicate(Vocabulary.WPS, statList);
-                    URI subject = new URI(stats[0].getObject().stringValue());
-                    URI predicate = new URI(Vocabulary.Process);
-                    URI object = new URI(stats[0].getSubject().stringValue());
-                    Triple inverseTriple = new Triple(subject, predicate, object);
-                    DBIO.insertTriple(inverseTriple);
+                    Resource subject = new URIImpl(stats[0].getObject().stringValue());
+                    org.openrdf.model.URI predicate = new URIImpl(Vocabulary.Process);
+                    org.openrdf.model.URI object = new URIImpl(stats[0].getSubject().stringValue());
+                    Statement stmt = new StatementImpl(subject, predicate, object);
+                    DBIO.insertStatement(stmt);
                 } catch (RepositoryException re) {
                     throw new RepositoryException("Cannot update process " + route + ", unable to create link from parent wps to process.", re);
-                }catch (URISyntaxException re) {
-                    throw new URISyntaxException("Cannot update process " + route + ", unable to create link from parent wps to process.", re.getMessage());
                 }catch (RDFException re) {
                     throw new RDFException("Cannot update process " + route + ", unable to create link from parent wps to process.", re);
                 }

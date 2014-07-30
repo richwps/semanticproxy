@@ -4,10 +4,10 @@
  */
 package de.hsos.richwps.sp.rdfdb;
 
-import static de.hsos.richwps.sp.rdfdb.DBIO.isLiteral;
 import de.hsos.richwps.sp.restlogic.Vocabulary;
 import java.util.ArrayList;
 import java.util.Stack;
+import org.openrdf.model.Literal;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -41,16 +41,19 @@ public class DBDelete {
         URI hasProcess = new URIImpl(Vocabulary.Process);
 
         RepositoryConnection con = null;
+        con = repo.getConnection();
         try {
-            con = repo.getConnection();
+            con.begin();
             //remove link from wps to process
             con.remove(null, hasProcess, (Value) process);
 
             URI isProvidedBy = new URIImpl(Vocabulary.WPS);
             //remove link from process to wps
             con.remove(process, isProvidedBy, null);
+            con.commit();
             con.close();
         }catch(RepositoryException e){
+            con.rollback();
             throw new RepositoryException("Cannot remove links between process " + processRoute + " and its WPS");
         }
         try{
@@ -82,11 +85,9 @@ public class DBDelete {
             throw new IllegalStateException("Cannot delete resource from sesame RDF-DB, not connected.");
         }
         RepositoryConnection con = null;
-
+        con = repo.getConnection();
         Stack<Statement> stack = null;
         try {
-            con = repo.getConnection();
-
             //create and init stack
             stack = new Stack<Statement>();
             RepositoryResult result = con.getStatements(root, null, null, false);
@@ -105,11 +106,12 @@ public class DBDelete {
         try{
             //depth-first search
             //iterate over stack
+            con.begin();
             while (!stack.isEmpty()) {
                 //pop top
                 top = stack.pop();
                 //get children of top
-                if (!DBIO.isLiteral(top.getObject().stringValue())) {
+                if ( ! (top.getObject() instanceof Literal) ) {
                     Resource resource = (Resource) new URIImpl(top.getObject().stringValue());
                     RepositoryResult result = con.getStatements(resource, null, null, false);
 
@@ -123,9 +125,12 @@ public class DBDelete {
                 //remove top
                 con.remove(top);
             }
+            con.commit();
         }catch(RepositoryException re){
+            con.rollback();
             throw new RepositoryException("Cannot remove top node "+ top.toString() +" from db.",re);
         }catch(Exception e){
+            con.rollback();
             throw new Exception("Cannot close result set of db query.",e);
         } finally {
             con.close();
@@ -146,14 +151,16 @@ public class DBDelete {
 
         Resource wps = (Resource) new URIImpl(wpsRoute);
         RepositoryConnection con = null;
-
+        con = repo.getConnection();
         try {
-            con = repo.getConnection();
+            
             URI subject = new URIImpl(DBAdministration.getResourceURL().toString());
             URI predicate = new URIImpl(Vocabulary.WPS);
             URI object = new URIImpl(wpsRoute);
             //removes link from network to wps
+            con.begin();
             con.remove(subject, predicate, object);
+            con.commit();
             con.close();
         }catch(RepositoryException e){
             throw new RepositoryException("Cannot remove links between wps " + wpsRoute + " and the network",e);
@@ -187,8 +194,8 @@ public class DBDelete {
         }
         Resource[] resArr = new Resource[0];
         RepositoryConnection con = null;
-        try {
-            con = repo.getConnection();
+        con = repo.getConnection();
+        try {           
             Resource subject = new URIImpl(wps.toString());
             //read all statements about wps and put 'em into a list
             RepositoryResult<Statement> result = con.getStatements(subject, null, null, false, resArr);
@@ -203,10 +210,12 @@ public class DBDelete {
                 Statement st = list.get(i);
                 String pred = st.getPredicate().stringValue();
                 if (!pred.equals(Vocabulary.Process) && !pred.equals(Vocabulary.Type)) {
-                    //wenn object literal dann direkt wegloeschen
-                    if (isLiteral(st.getObject().stringValue())) { //TODO: use instance of
+                    //if object is literal then remove directly
+                    if ( st.getObject() instanceof Literal ) { 
                         con = repo.getConnection();
+                        con.begin();
                         con.remove(st);
+                        con.commit();
                         con.close();
                     } else {
                         Resource r = new URIImpl(st.getObject().stringValue());

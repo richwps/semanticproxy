@@ -22,7 +22,13 @@ public class DBAdministration {
 
     private static Repository repository = null;
     private static URL resourceURL = null;
+    private static URL vocabularyURL = null;
     
+    
+    /**
+     * Prevent object creation
+     */
+    private DBAdministration(){}
     
     /**
      * Connects to an RDF-DB, if DB not exists it is created.
@@ -30,7 +36,7 @@ public class DBAdministration {
      * @param baseResourceURL Base URL for all RDF resources for comparison with following insertions
      * @throws RepositoryException If the repository cannot be opened
      */
-    public static void init(File rdfRepositoryDir, URL baseResourceURL) throws RepositoryException {
+    public static void init(File rdfRepositoryDir, URL baseResourceURL, URL aVocabularyURL) throws RepositoryException {
         if (repository == null) {
             repository = new SailRepository(new MemoryStore(rdfRepositoryDir));
             try {
@@ -44,6 +50,7 @@ public class DBAdministration {
             throw new IllegalStateException("Cannot connect to sesame RDF-DB. A repository is already open in " + repository.getDataDir().toString());
         }
         resourceURL = baseResourceURL;
+        vocabularyURL = aVocabularyURL;
     }
 
     
@@ -94,12 +101,22 @@ public class DBAdministration {
     
     
     /**
-     * Static access to the RDF repository object
+     * Static access to the resouce url
      * @return 
      */
     public static URL getResourceURL(){
         return resourceURL;
     }
+
+    
+    /**
+     * Static access to the vocabulary url
+     * @return 
+     */
+    public static URL getVocabularyURL() {
+        return vocabularyURL;
+    }
+    
     
     
 }

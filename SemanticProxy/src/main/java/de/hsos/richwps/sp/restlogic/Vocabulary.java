@@ -10,6 +10,7 @@ import org.openrdf.model.Statement;
 import org.openrdf.model.impl.LiteralImpl;
 import org.openrdf.model.impl.StatementImpl;
 import org.openrdf.model.impl.URIImpl;
+import org.openrdf.model.vocabulary.XMLSchema;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.RDFWriter;
@@ -81,10 +82,14 @@ public class Vocabulary {
         //generate RDF vocabulary document
         StringWriter sw = new StringWriter();
         RDFWriter writer = Rio.createWriter(RDFFormat.RDFXML, sw);
-        Statement stmt = null;
+        Statement stmt = null; 
         try {
             writer.startRDF();
-
+            writer.handleNamespace("rdf", org.openrdf.model.vocabulary.RDF.NAMESPACE);
+            writer.handleNamespace("rdfs", org.openrdf.model.vocabulary.RDFS.NAMESPACE);
+            writer.handleNamespace("xsd", XMLSchema.NAMESPACE);
+            writer.handleNamespace("rwps", vocabularyURL.toString()+"#");
+            
             //network
             Domain = VOC + "domain";
             stmt = new StatementImpl(new URIImpl(Domain), new URIImpl(Label), new LiteralImpl("Has domain"));
