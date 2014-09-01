@@ -1,0 +1,127 @@
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:rwps="http://localhost:4567/semanticproxy/resources/vocab#">
+	
+	<!-- process -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/process/readNetCDF">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#processclass"/>
+		<rwps:statussupported>true</rwps:statussupported>
+		<rwps:storesupported>true</rwps:storesupported>
+		<rwps:processversion>1.0.0</rwps:processversion>
+		<rwps:identifier>de.baw.wps.aws1.ReadNetCDF</rwps:identifier>
+		<rwps:title>de.baw.wps.aws1.ReadNetCDF</rwps:title>
+		<rwps:abstract>Reads data set from NetCDF file and writes it into O&amp;M XML.</rwps:abstract>		
+		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/input/in_readNetCDFEndTime"/>
+		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/input/in_readNetCDFStartTime"/>
+		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/input/in_readNetCDFVarName"/>
+		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/input/in_readNetCDFMetadataUUID"/>
+		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/input/in_readNetCDFInputNC"/>
+		<rwps:output rdf:resource="http://localhost:4567/semanticproxy/resources/output/out_readNetCDFOutputXML"/>
+		<rwps:wps rdf:resource="http://localhost:4567/semanticproxy/resources/wps/ModelValidationWPS"/>
+	</rdf:Description>
+	
+	
+	<!-- literal input -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/input/in_readNetCDFEndTime">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#datainputclass"/>
+		<rwps:identifier>endTime</rwps:identifier>
+		<rwps:title>endTime</rwps:title>
+		<rwps:abstract>End of the choosen time window</rwps:abstract>
+		<rwps:minoccurs>1</rwps:minoccurs>
+		<rwps:maxoccurs>1</rwps:maxoccurs>
+		<rwps:inputformchoice rdf:resource="http://localhost:4567/semanticproxy/resources/literaldata/in_readNetCDFEndTime"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/literaldata/in_readNetCDFEndTime">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#literaldataclass"/>
+	</rdf:Description>
+	
+	
+	<!-- literal input -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/input/in_readNetCDFStartTime">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#datainputclass"/>
+		<rwps:identifier>startTime</rwps:identifier>
+		<rwps:title>startTime</rwps:title>
+		<rwps:abstract>Beginning of the choosen time window</rwps:abstract>
+		<rwps:minoccurs>1</rwps:minoccurs>
+		<rwps:maxoccurs>1</rwps:maxoccurs>
+		<rwps:inputformchoice rdf:resource="http://localhost:4567/semanticproxy/resources/literaldata/in_readNetCDFStartTime"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/literaldata/in_readNetCDFStartTime">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#literaldataclass"/>
+	</rdf:Description>
+	
+	
+	<!-- literal input -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/input/in_readNetCDFVarName">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#datainputclass"/>
+		<rwps:identifier>varName</rwps:identifier>
+		<rwps:title>varName</rwps:title>
+		<rwps:abstract>variable name</rwps:abstract>
+		<rwps:minoccurs>1</rwps:minoccurs>
+		<rwps:maxoccurs>1</rwps:maxoccurs>
+		<rwps:inputformchoice rdf:resource="http://localhost:4567/semanticproxy/resources/literaldata/in_readNetCDFVarName"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/literaldata/in_readNetCDFVarName">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#literaldataclass"/>
+	</rdf:Description>
+	
+	
+	
+	<!-- literal input -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/input/in_readNetCDFMetadataUUID">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#datainputclass"/>
+		<rwps:identifier>metadataUUID</rwps:identifier>
+		<rwps:title>metadataUUID</rwps:title>
+		<rwps:abstract>UUID of the data set belonging metadataset</rwps:abstract>
+		<rwps:minoccurs>1</rwps:minoccurs>
+		<rwps:maxoccurs>1</rwps:maxoccurs>
+		<rwps:inputformchoice rdf:resource="http://localhost:4567/semanticproxy/resources/literaldata/in_readNetCDFMetadataUUID"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/literaldata/in_readNetCDFMetadataUUID">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#literaldataclass"/>
+	</rdf:Description>
+	
+	
+	<!-- complex input -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/input/in_readNetCDFInputNC">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#datainputclass"/>
+		<rwps:identifier>inputNC</rwps:identifier>
+		<rwps:title>inputNC</rwps:title>
+		<rwps:abstract>Link to NetCDF file</rwps:abstract>
+		<rwps:minoccurs>1</rwps:minoccurs>
+		<rwps:maxoccurs>1</rwps:maxoccurs>
+		<rwps:inputformchoice rdf:resource="http://localhost:4567/semanticproxy/resources/complexdata/in_readNetCDFInputNC"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/complexdata/in_readNetCDFInputNC">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#complexdataclass"/>
+	</rdf:Description>
+	
+	
+	
+	<!-- literal output -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/output/out_readNetCDFOutputXML">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#processoutputclass"/>
+		<rwps:identifier>outputXML</rwps:identifier>
+		<rwps:title>outputXML</rwps:title>
+		<rwps:abstract>Extracted time series. O&amp;M-XML</rwps:abstract>
+		<rwps:outputformchoice rdf:resource="http://localhost:4567/semanticproxy/resources/literaldata/out_readNetCDFOutputXML"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/literaldata/out_readNetCDFOutputXML">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#literaldataclass"/>
+	</rdf:Description>
+
+</rdf:RDF>

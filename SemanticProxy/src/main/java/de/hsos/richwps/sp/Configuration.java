@@ -49,7 +49,6 @@ public class Configuration {
     
     
     // ----------   Default values --------------
-    private String defaultConfigFileName = null;
     
     //Default file names
     private String defaultWPSMacrophyte = null;
@@ -93,7 +92,6 @@ public class Configuration {
 
     
     private void buildDefaults(){
-        defaultConfigFileName = "./config.xml";
         
         //filenames
         defaultWPSMacrophyte = "RDF" + File.separator + "LKN" + File.separator + "WPSMacrophyte.rdf";
@@ -203,11 +201,11 @@ public class Configuration {
 
     
     /**
-     * Writes a default configuration to cwd
+     * Writes a default configuration to cwd, current object remains unchanged
      *
      * @throws Exception
      */
-    public void writeDefaultConfiguration() throws IOException {
+    public void writeDefaultConfiguration(File file) throws IOException {
         ConfigurationDocument doc = ConfigurationDocument.Factory.newInstance();
         ConfigurationDocument.Configuration config = doc.addNewConfiguration();
 
@@ -245,11 +243,11 @@ public class Configuration {
         tmpRDFNamingEndpoints.setWPSNaming(defaultWpsNamingEndpoint);
         tmpRDFNamingEndpoints.setProcessNaming(defaultProcessNamingEndpoint);
         try{
-            FileWriter writer = new FileWriter(defaultConfigFileName);
+            FileWriter writer = new FileWriter(file);
             writer.write(doc.toString());
             writer.close();
         }catch(IOException io){
-            throw new IOException("Cannot write default config to "+defaultConfigFileName,io);
+            throw new IOException("Cannot write default config to "+file.getAbsolutePath(),io);
         }
     }
 

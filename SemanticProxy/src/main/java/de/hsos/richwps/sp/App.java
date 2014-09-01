@@ -29,7 +29,8 @@ public class App {
      */
     public static void main(String[] args) {
         System.out.println("Semantic Proxy is starting...");
-        //org.apache.log4j.BasicConfigurator.configure();
+        
+        //configure logging
         PropertyConfigurator.configure("log4j.properties");
        
         
@@ -40,11 +41,11 @@ public class App {
             config.load(configFile);
         } catch (IOException io) {
             try {
-                config.writeDefaultConfiguration();
+                config.writeDefaultConfiguration(configFile);
                 config.load(configFile);
             } catch (Exception e) {
                 System.err.println(e.getMessage());
-                e.printStackTrace();
+                e.printStackTrace(); //TODO: change to logging
                 System.out.println("Shutdown due to error");
                 System.exit(-1);
             }
@@ -54,11 +55,11 @@ public class App {
             System.out.println("Shutdown due to error");
             System.exit(-1);
         }
-
         System.out.println("*** Used configuration");
         System.out.println(config.toString());
         System.out.println("***");
 
+        
         //Initialize vacabulary
         try {
             Vocabulary.init(config.getVocabularyURL());

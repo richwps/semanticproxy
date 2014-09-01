@@ -186,7 +186,7 @@ public class DBDelete {
      * @param wps WPS to recursiveDelete
      * @throws Exception Error with db
      */
-    public static void deleteWPSForUpdate(java.net.URI wps) throws RepositoryException, IllegalStateException, Exception {
+    public static void deleteWPS4Update(java.net.URI wps) throws RepositoryException, IllegalStateException, Exception {
         //get the db
         Repository repo = DBAdministration.getRepository();
         if (repo == null) {
@@ -205,10 +205,12 @@ public class DBDelete {
             }
             result.close();
             con.close();
-            //delete literals, recursiveDelete resources recursively
+            //walk through list...
+            //...delete literals, delete resources recursively
             for (int i = 0; i < list.size(); i++) {
                 Statement st = list.get(i);
                 String pred = st.getPredicate().stringValue();
+                
                 if (!pred.equals(Vocabulary.Process) && !pred.equals(Vocabulary.Type)) {
                     //if object is literal then remove directly
                     if ( st.getObject() instanceof Literal ) { 

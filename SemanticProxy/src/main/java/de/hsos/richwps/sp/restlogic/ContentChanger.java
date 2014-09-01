@@ -248,7 +248,7 @@ public class ContentChanger {
                 try {
                     Statement[] stats = Validator.getStatementsByPredicateAndObject(Vocabulary.Type, Vocabulary.WPSClass, statList);
                     URI subject = new URI(stats[0].getSubject().stringValue());
-                    DBDelete.deleteWPSForUpdate(subject);
+                    DBDelete.deleteWPS4Update(subject);
                 } catch (RepositoryException re) {
                     throw new RepositoryException("Cannot update wps " + route + ", unable to delete older wps", re);
                 } catch (URISyntaxException re) {

@@ -298,9 +298,9 @@ public class DBIO {
     
 
     /**
-     * Queries all subject of the given resource from the db
+     * Determines whether a subject is in the DB by querying its type-statement
      * @param subject
-     * @return
+     * @return True if a type-statement was found for this resource
      * @throws IllegalStateException
      * @throws RepositoryException
      * @throws RDFException 
