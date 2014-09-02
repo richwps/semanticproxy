@@ -98,14 +98,14 @@ public class App {
                         }
                     }
                     //insert (modified) content into db
-                    ContentChanger.pushWPSRDFintoDB(content);
+                    ContentChanger.insertWPS(content);
                     System.out.println("File " + list.get(i).getAbsolutePath() + " loaded");
                 }
 
                 list = config.getProcessRDFFiles();
                 for (int i = 0; i < list.size(); i++) {
                     String content = TextFileReader.readPlainText(list.get(i));
-                    ContentChanger.pushProcessRDFintoDB(content);
+                    ContentChanger.insertProcess(content);
                     System.out.println("File " + list.get(i).getAbsolutePath() + " loaded");
                 }
             }
@@ -120,16 +120,20 @@ public class App {
 
 
         //prepare web frontend
+        
+        // if there is a valid port in the config -> use it...
+        // ...else use default port
         if (config.getPort() > 0) {
             spark.Spark.setPort(config.getPort());
         }
-        new BrowseAccess(config.getApplicationURL(), config.getResourcesURL(),
+        //install http endpoints for web comunication
+        BrowseAccess.activate(config.getApplicationURL(), config.getResourcesURL(),
                 config.getVocabularyURL(), config.getNetworkURL(),
                 config.getProcessListURL(), config.getWpsListURL());
-        new CreateAccess(config.getProcessListURL(), config.getWpsListURL());
-        new DeleteAccess(config.getProcessNamingURL(), config.getWpsNamingURL());
-        new UpdateAccess(config.getProcessNamingURL(), config.getWpsNamingURL());
-        new SearchAccess(config.getSearchURL());
+        CreateAccess.activate(config.getProcessListURL(), config.getWpsListURL());
+        DeleteAccess.activate(config.getProcessNamingURL(), config.getWpsNamingURL());
+        UpdateAccess.activate(config.getProcessNamingURL(), config.getWpsNamingURL());
+        SearchAccess.activate(config.getSearchURL());
 
         System.out.println("Semantic Proxy is listening");
     }

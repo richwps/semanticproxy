@@ -134,7 +134,7 @@ public class DBInsertionTest extends TestCase{
     {
        File testFile = new  File(TESTFILE_NAME);
         try {
-            DBIO.loadRDFXMLFile(testFile);
+            DBIO.insertRDFXMLFileIntoDB(testFile);
             long s = DBIO.size();
             assertTrue("DB content should be larger than the 3 network statements", INITIAL_SIZE < s );
         } catch (IllegalStateException ex) {
@@ -167,7 +167,7 @@ public class DBInsertionTest extends TestCase{
         }
        
         try {
-            DBIO.loadRDFXMLStringIntoDB(content);
+            DBIO.insertRDFXMLStringIntoDB(content);
             long s = DBIO.size();
             assertTrue("DB content should be larger than the 3 network statements", INITIAL_SIZE < s );
         } catch (IllegalStateException ex) {

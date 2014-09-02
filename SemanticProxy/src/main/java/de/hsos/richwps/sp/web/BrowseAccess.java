@@ -4,7 +4,7 @@
  */
 package de.hsos.richwps.sp.web;
 
-import de.hsos.richwps.sp.restlogic.RouteMapper;
+import de.hsos.richwps.sp.restlogic.ContentGetter;
 import de.hsos.richwps.sp.restlogic.Vocabulary;
 import java.net.URL;
 import org.apache.log4j.Logger;
@@ -23,20 +23,39 @@ public class BrowseAccess {
     private static final String MIMETYPE_HTML = "text/html";
     private static final String MIMETYPE_XML = "application/xml";
     
+    private static BrowseAccess instance = null;
+    
+    
+    /**
+     * Registeres the required routes and handlers for browsing
+     * @param applicationURL
+     * @param resources
+     * @param vocabularyURL
+     * @param networkURL
+     * @param processListURL
+     * @param wpsList 
+     */
+    public static void activate(URL applicationURL,
+            URL resources,
+            URL vocabularyURL,
+            URL networkURL,
+            URL processListURL,
+            URL wpsList){
+        if(instance == null){
+            instance = new BrowseAccess(applicationURL, resources, vocabularyURL, networkURL, processListURL, wpsList); 
+        }
+    }
+    
     
     /**
      * Registeres the required routes an handlers
      */
-    public BrowseAccess(URL applicationURL,
+    private BrowseAccess(URL applicationURL,
             URL resources,
             URL vocabularyURL,
             URL networkURL,
             URL processListURL,
             URL wpsList) {
-
-
-
-
 
         /**
          * Registers the route for root for user convenience
@@ -114,7 +133,7 @@ public class BrowseAccess {
 
                 try {
                     Logger.getLogger(BrowseAccess.class).info("Get resources/network request");
-                    String rdf = RouteMapper.getRDFFor(request.url());
+                    String rdf = ContentGetter.getRDFFor(request.url());
                     if (rdf == null) {
                         Logger.getLogger(BrowseAccess.class).error("Get resources/network request - Resource not found");
                         response.status(404);
@@ -143,7 +162,7 @@ public class BrowseAccess {
             public Object handle(Request request, Response response) {
                 try {
                     Logger.getLogger(BrowseAccess.class).info("Get process list request.");
-                    String str = RouteMapper.getAllProcesses();
+                    String str = ContentGetter.getAllProcesses();
                     response.status(200);
                     response.type(MIMETYPE_XML);
                     return str;
@@ -165,7 +184,7 @@ public class BrowseAccess {
             public Object handle(Request request, Response response) {
                 try {
                     Logger.getLogger(BrowseAccess.class).info("Get wps list request.");
-                    String str = RouteMapper.getAllWPS();
+                    String str = ContentGetter.getAllWPS();
                     response.status(200);
                     response.type(MIMETYPE_XML);
                     return str;
@@ -187,7 +206,7 @@ public class BrowseAccess {
             public Object handle(Request request, Response response) {
                 try {
                     Logger.getLogger(BrowseAccess.class).info("Get resource: "+request.url());
-                    String rdf = RouteMapper.getRDFFor(request.url());
+                    String rdf = ContentGetter.getRDFFor(request.url());
                     if (rdf == null) {
                         Logger.getLogger(BrowseAccess.class).error("Resource not found: "+request.url());
                         response.status(404);

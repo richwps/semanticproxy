@@ -17,7 +17,7 @@ import org.openrdf.repository.RepositoryException;
  *
  * @author fbensman
  */
-public class RouteMapper {
+public class ContentGetter {
 
     /**
      * Translates the stub route to a full valid route and retrieves the

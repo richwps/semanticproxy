@@ -31,7 +31,7 @@ public class Validator {
         ArrayList<Statement> analizedList = new ArrayList<>();
 
         //get the process
-        Statement[] stats = getStatementsByPredicateAndObject(Vocabulary.Type, Vocabulary.ProcessClass, openList);
+        Statement[] stats = ValidationUtils.getStatementsByPredicateAndObject(Vocabulary.Type, Vocabulary.ProcessClass, openList);
         if (stats.length != 1) {
             return new ValidationResult(false, "Just one process allowed");
         }
@@ -55,21 +55,21 @@ public class Validator {
         }
 
         //get identifier
-        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.Identifier, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.Identifier, openList);
         if (stats.length != 1) {
             return new ValidationResult(false, "More than one process identifier found");
         }
         shiftStats(openList, analizedList, stats);
 
         //get title
-        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.Title, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.Title, openList);
         if (stats.length != 1) {
             return new ValidationResult(false, "More than one process title found");
         }
         shiftStats(openList, analizedList, stats);
 
         //get abstract
-        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.Abstract, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.Abstract, openList);
         if (stats.length > 1) {
             return new ValidationResult(false, "More than one 0 or 1 abstracts found");
         }
@@ -77,40 +77,40 @@ public class Validator {
 
 
         //get metadata
-        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.Metadata, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.Metadata, openList);
         shiftStats(openList, analizedList, stats);
 
 
         //get process version
-        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.ProcessVersion, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.ProcessVersion, openList);
         if (stats.length != 1) {
             return new ValidationResult(false, "1 process version required");
         }
         shiftStats(openList, analizedList, stats);
 
         //get wsdl
-        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.WSDL, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.WSDL, openList);
         if (stats.length > 1) {
             return new ValidationResult(false, "0 or 1 wsdl allowed");
         }
         shiftStats(openList, analizedList, stats);
 
         //get store supported
-        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.StoreSupported, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.StoreSupported, openList);
         if (stats.length > 1) {
             return new ValidationResult(false, "0 or 1 store supported allowed");
         }
         shiftStats(openList, analizedList, stats);
 
         //get status supported
-        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.StatusSupported, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.StatusSupported, openList);
         if (stats.length > 1) {
             return new ValidationResult(false, "0 or 1 status supported allowed");
         }
         shiftStats(openList, analizedList, stats);
 
         //get wps uplink
-        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.WPS, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.WPS, openList);
         if (stats.length != 1) {
             return new ValidationResult(false, "One wps required");
         }
@@ -120,7 +120,7 @@ public class Validator {
         //checks...
         //hole alle inputs
 
-        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.Input, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.Input, openList);
         //check ob alle inputs den prozess beschreiben
         //check für jeden input ob die attribute in richtiger anzahl vorhanden sind
         String[] inputArr = new String[stats.length];
@@ -131,7 +131,7 @@ public class Validator {
 
         //go through inputs
         for (int i = 0; i < inputArr.length; i++) {
-            stats = getStatementsBySubjectAndPredicate(inputArr[i], Vocabulary.Type, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(inputArr[i], Vocabulary.Type, openList);
             if (stats.length != 1) {
                 return new ValidationResult(false, "Wrong count of type statements for input");
             }
@@ -143,49 +143,49 @@ public class Validator {
             String dataInput = inputArr[i];
 
             //get identifier
-            stats = getStatementsBySubjectAndPredicate(dataInput, Vocabulary.Identifier, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataInput, Vocabulary.Identifier, openList);
             if (stats.length != 1) {
                 return new ValidationResult(false, "Wrong count of data input identifier found");
             }
             shiftStats(openList, analizedList, stats);
 
             //get title
-            stats = getStatementsBySubjectAndPredicate(dataInput, Vocabulary.Title, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataInput, Vocabulary.Title, openList);
             if (stats.length != 1) {
                 return new ValidationResult(false, "Wrong count of data input title found");
             }
             shiftStats(openList, analizedList, stats);
 
             //get abstract
-            stats = getStatementsBySubjectAndPredicate(dataInput, Vocabulary.Abstract, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataInput, Vocabulary.Abstract, openList);
             shiftStats(openList, analizedList, stats);
 
             //get metadata
-            stats = getStatementsBySubjectAndPredicate(dataInput, Vocabulary.Metadata, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataInput, Vocabulary.Metadata, openList);
             shiftStats(openList, analizedList, stats);
 
             //get minoccurs
-            stats = getStatementsBySubjectAndPredicate(dataInput, Vocabulary.MinOccurs, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataInput, Vocabulary.MinOccurs, openList);
             if (stats.length != 1) {
                 return new ValidationResult(false, "Wrong count of minoccurs for data input found");
             }
             shiftStats(openList, analizedList, stats);
 
             //get maxoccurs
-            stats = getStatementsBySubjectAndPredicate(dataInput, Vocabulary.MaxOccurs, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataInput, Vocabulary.MaxOccurs, openList);
             if (stats.length != 1) {
                 return new ValidationResult(false, "Wrong count of maxoccurs for data input found");
             }
             shiftStats(openList, analizedList, stats);
 
             //get input form choice
-            stats = getStatementsBySubjectAndPredicate(dataInput, Vocabulary.InputFormChoice, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataInput, Vocabulary.InputFormChoice, openList);
             if (stats.length != 1) {
                 return new ValidationResult(false, "Wrong count of input form choice for data input found");
             }
             shiftStats(openList, analizedList, stats);
             String dataType = stats[0].getObject().stringValue();
-            stats = getStatementsBySubjectAndPredicate(dataType, Vocabulary.Type, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataType, Vocabulary.Type, openList);
             if (stats.length != 1) {
                 return new ValidationResult(false, "More than one type for data type found");
             }
@@ -200,7 +200,7 @@ public class Validator {
 
         //same thing for the outputs
 
-        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.Output, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.Output, openList);
 
         String[] outputArr = new String[stats.length];
         for (int i = 0; i < stats.length; i++) {
@@ -211,7 +211,7 @@ public class Validator {
         //check für jeden output ob die attribute in richtiger anzahl vorhanden sind
         //go through inputs
         for (int i = 0; i < outputArr.length; i++) {
-            stats = getStatementsBySubjectAndPredicate(outputArr[i], Vocabulary.Type, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(outputArr[i], Vocabulary.Type, openList);
             if (stats.length != 1) {
                 return new ValidationResult(false, "Wrong count of type statements for output");
             }
@@ -223,35 +223,35 @@ public class Validator {
             String processOutput = outputArr[i];
 
             //get identifier
-            stats = getStatementsBySubjectAndPredicate(processOutput, Vocabulary.Identifier, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(processOutput, Vocabulary.Identifier, openList);
             if (stats.length != 1) {
                 return new ValidationResult(false, "Wrong count of data output identifier found");
             }
             shiftStats(openList, analizedList, stats);
 
             //get title
-            stats = getStatementsBySubjectAndPredicate(processOutput, Vocabulary.Title, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(processOutput, Vocabulary.Title, openList);
             if (stats.length != 1) {
                 return new ValidationResult(false, "Wrong count of data output title found");
             }
             shiftStats(openList, analizedList, stats);
 
             //get abstract
-            stats = getStatementsBySubjectAndPredicate(processOutput, Vocabulary.Abstract, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(processOutput, Vocabulary.Abstract, openList);
             shiftStats(openList, analizedList, stats);
 
             //get metadata
-            stats = getStatementsBySubjectAndPredicate(processOutput, Vocabulary.Metadata, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(processOutput, Vocabulary.Metadata, openList);
             shiftStats(openList, analizedList, stats);
 
             //get output form choice
-            stats = getStatementsBySubjectAndPredicate(processOutput, Vocabulary.OutputFormChoice, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(processOutput, Vocabulary.OutputFormChoice, openList);
             if (stats.length != 1) {
                 return new ValidationResult(false, "Wrong count of output form choice for data output found");
             }
             shiftStats(openList, analizedList, stats);
             String dataType = stats[0].getObject().stringValue();
-            stats = getStatementsBySubjectAndPredicate(dataType, Vocabulary.Type, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataType, Vocabulary.Type, openList);
             if (stats.length != 1) {
                 return new ValidationResult(false, "Wrong count of types for data type found");
             }
@@ -293,119 +293,8 @@ public class Validator {
         }
     }
 
-    /**
-     * Checks wether a subject is in a list of statements
-     *
-     * @param subject RDF resource identifier of subject
-     * @param list The list to look through
-     * @return True if list contains the subject
-     */
-    private static boolean containsSubject(String subject, ArrayList<Statement> list) {
-        for (int i = 0; i < list.size(); i++) {
-            Statement st = list.get(i);
-            if (st.getSubject().stringValue().equals(subject)) {
-                return true;
-            }
-        }
-        return false;
-    }
+    
 
-    /**
-     * Checks wether a predicate is in a list of statements
-     *
-     * @param subject RDF resource identifier of predicate
-     * @param list The list to look through
-     * @return True if list contains the predicate
-     */
-    private static boolean containsPredicate(String predicate, ArrayList<Statement> list) {
-        for (int i = 0; i < list.size(); i++) {
-            Statement st = list.get(i);
-            if (st.getPredicate().stringValue().equals(predicate)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Checks wether an object is in a list of statements
-     *
-     * @param subject RDF resource identifier of object
-     * @param list The list to look through
-     * @return True if list contains the object
-     */
-    private static boolean containsObject(String object, ArrayList<Statement> list) {
-        for (int i = 0; i < list.size(); i++) {
-            Statement st = list.get(i);
-            if (st.getObject().stringValue().equals(object)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static Statement[] getStatementsBySubject(String subject, ArrayList<Statement> list) {
-        ArrayList<Statement> retList = new ArrayList<Statement>();
-        for (int i = 0; i < list.size(); i++) {
-            Statement st = list.get(i);
-            if (st.getSubject().stringValue().equals(subject)) {
-                retList.add(st);
-            }
-        }
-        return retList.toArray(new Statement[retList.size()]);
-    }
-
-    public static Statement[] getStatementsByPredicate(String subject, ArrayList<Statement> list) {
-        ArrayList<Statement> retList = new ArrayList<Statement>();
-        for (int i = 0; i < list.size(); i++) {
-            Statement st = list.get(i);
-            if (st.getPredicate().stringValue().equals(subject)) {
-                retList.add(st);
-            }
-        }
-        return retList.toArray(new Statement[retList.size()]);
-    }
-
-    private static Statement[] getStatementsByObject(String object, ArrayList<Statement> list) {
-        ArrayList<Statement> retList = new ArrayList<Statement>();
-        for (int i = 0; i < list.size(); i++) {
-            Statement st = list.get(i);
-            if (st.getObject().stringValue().equals(object)) {
-                retList.add(st);
-            }
-        }
-        return retList.toArray(new Statement[retList.size()]);
-    }
-
-    /**
-     * Returns statements with matching predicate and object
-     *
-     * @param predicate
-     * @param object
-     * @param list
-     * @return
-     */
-    public static Statement[] getStatementsByPredicateAndObject(String predicate, String object, ArrayList<Statement> list) {
-        ArrayList<Statement> retList = new ArrayList<Statement>();
-        for (int i = 0; i < list.size(); i++) {
-            Statement st = list.get(i);
-            if (st.getObject().stringValue().equals(object) && st.getPredicate().stringValue().equals(predicate)) {
-                retList.add(st);
-            }
-        }
-        return retList.toArray(new Statement[retList.size()]);
-    }
-
-    private static Statement[] getStatementsBySubjectAndPredicate(String subject, String predicate, ArrayList<Statement> list) {
-        ArrayList<Statement> retList = new ArrayList<Statement>();
-        for (int i = 0; i < list.size(); i++) {
-            Statement st = list.get(i);
-            if (st.getSubject().stringValue().equals(subject) && st.getPredicate().stringValue().equals(predicate)) {
-                retList.add(st);
-            }
-        }
-        return retList.toArray(new Statement[retList.size()]);
-    }
 
     /**
      * Validates a list of statements for insertion of a wps
@@ -418,7 +307,7 @@ public class Validator {
         ArrayList<Statement> analizedList = new ArrayList<>();
 
         //get the wps
-        Statement[] stats = getStatementsByPredicateAndObject(Vocabulary.Type, Vocabulary.WPSClass, openList);
+        Statement[] stats = ValidationUtils.getStatementsByPredicateAndObject(Vocabulary.Type, Vocabulary.WPSClass, openList);
         if (stats.length != 1) {
             return new ValidationResult(false, "One WPS required");
         }
@@ -441,7 +330,7 @@ public class Validator {
         }
 
         //get endpoint
-        stats = getStatementsBySubjectAndPredicate(wpsId, Vocabulary.Endpoint, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(wpsId, Vocabulary.Endpoint, openList);
         if (stats.length != 1) {
             return new ValidationResult(false, "More than one wps endpoint found");
         }
@@ -449,7 +338,7 @@ public class Validator {
 
 
         //get the process
-        stats = getStatementsByPredicate(Vocabulary.Process, openList);
+        stats = ValidationUtils.getStatementsByPredicate(Vocabulary.Process, openList);
         if (stats.length > 0) {
             return new ValidationResult(false, "No process allowed at this point");
         }
@@ -480,7 +369,7 @@ public class Validator {
         ArrayList<Statement> analizedList = new ArrayList<Statement>();
 
         //get the wps
-        Statement[] stats = getStatementsByPredicateAndObject(Vocabulary.Type, Vocabulary.WPSClass, openList);
+        Statement[] stats = ValidationUtils.getStatementsByPredicateAndObject(Vocabulary.Type, Vocabulary.WPSClass, openList);
         if (stats.length != 1) {
             return new ValidationResult(false, "One WPS required");
         }
@@ -503,14 +392,14 @@ public class Validator {
         }
 
         //get endpoint
-        stats = getStatementsBySubjectAndPredicate(wpsId, Vocabulary.Endpoint, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(wpsId, Vocabulary.Endpoint, openList);
         if (stats.length != 1) {
             return new ValidationResult(false, "More than one wps endpoint found");
         }
         shiftStats(openList, analizedList, stats);
 
         //get the process
-        stats = getStatementsByPredicate(Vocabulary.Process, openList);
+        stats = ValidationUtils.getStatementsByPredicate(Vocabulary.Process, openList);
         if (stats.length > 0) {
             return new ValidationResult(false, "No process allowed at this point");
         }
@@ -545,7 +434,7 @@ public class Validator {
         ArrayList<Statement> analizedList = new ArrayList<Statement>();
 
         //get the process
-        Statement[] stats = getStatementsByPredicateAndObject(Vocabulary.Type, Vocabulary.ProcessClass, openList);
+        Statement[] stats = ValidationUtils.getStatementsByPredicateAndObject(Vocabulary.Type, Vocabulary.ProcessClass, openList);
         if (stats.length != 1) {
             return new ValidationResult(false, "Just one process allowed");
         }
@@ -568,21 +457,21 @@ public class Validator {
         }
 
         //get identifier
-        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.Identifier, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.Identifier, openList);
         if (stats.length != 1) {
             return new ValidationResult(false, "More than one process identifier found");
         }
         shiftStats(openList, analizedList, stats);
 
         //get title
-        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.Title, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.Title, openList);
         if (stats.length != 1) {
             return new ValidationResult(false, "More than one process title found");
         }
         shiftStats(openList, analizedList, stats);
 
         //get abstract
-        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.Abstract, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.Abstract, openList);
         if (stats.length > 1) {
             return new ValidationResult(false, "More than one 0 or 1 abstracts found");
         }
@@ -590,40 +479,40 @@ public class Validator {
 
 
         //get metadata
-        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.Metadata, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.Metadata, openList);
         shiftStats(openList, analizedList, stats);
 
 
         //get process version
-        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.ProcessVersion, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.ProcessVersion, openList);
         if (stats.length != 1) {
             return new ValidationResult(false, "1 process version required");
         }
         shiftStats(openList, analizedList, stats);
 
         //get wsdl
-        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.WSDL, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.WSDL, openList);
         if (stats.length > 1) {
             return new ValidationResult(false, "0 or 1 wsdl allowed");
         }
         shiftStats(openList, analizedList, stats);
 
         //get store supported
-        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.StoreSupported, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.StoreSupported, openList);
         if (stats.length > 1) {
             return new ValidationResult(false, "0 or 1 store supported allowed");
         }
         shiftStats(openList, analizedList, stats);
 
         //get status supported
-        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.StatusSupported, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.StatusSupported, openList);
         if (stats.length > 1) {
             return new ValidationResult(false, "0 or 1 status supported allowed");
         }
         shiftStats(openList, analizedList, stats);
 
         //get wps uplink
-        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.WPS, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.WPS, openList);
         if (stats.length != 1) {
             return new ValidationResult(false, "One wps required");
         }
@@ -633,7 +522,7 @@ public class Validator {
         //checks...
         //hole alle inputs
 
-        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.Input, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.Input, openList);
         //check ob alle inputs den prozess beschreiben
         //check für jeden input ob die attribute in richtiger anzahl vorhanden sind
         String[] inputArr = new String[stats.length];
@@ -644,7 +533,7 @@ public class Validator {
 
         //go through inputs
         for (int i = 0; i < inputArr.length; i++) {
-            stats = getStatementsBySubjectAndPredicate(inputArr[i], Vocabulary.Type, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(inputArr[i], Vocabulary.Type, openList);
             if (stats.length != 1) {
                 return new ValidationResult(false, "Wrong count of type statements for input");
             }
@@ -656,49 +545,49 @@ public class Validator {
             String dataInput = inputArr[i];
 
             //get identifier
-            stats = getStatementsBySubjectAndPredicate(dataInput, Vocabulary.Identifier, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataInput, Vocabulary.Identifier, openList);
             if (stats.length != 1) {
                 return new ValidationResult(false, "Wrong count of data input identifier found");
             }
             shiftStats(openList, analizedList, stats);
 
             //get title
-            stats = getStatementsBySubjectAndPredicate(dataInput, Vocabulary.Title, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataInput, Vocabulary.Title, openList);
             if (stats.length != 1) {
                 return new ValidationResult(false, "Wrong count of data input title found");
             }
             shiftStats(openList, analizedList, stats);
 
             //get abstract
-            stats = getStatementsBySubjectAndPredicate(dataInput, Vocabulary.Abstract, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataInput, Vocabulary.Abstract, openList);
             shiftStats(openList, analizedList, stats);
 
             //get metadata
-            stats = getStatementsBySubjectAndPredicate(dataInput, Vocabulary.Metadata, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataInput, Vocabulary.Metadata, openList);
             shiftStats(openList, analizedList, stats);
 
             //get minoccurs
-            stats = getStatementsBySubjectAndPredicate(dataInput, Vocabulary.MinOccurs, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataInput, Vocabulary.MinOccurs, openList);
             if (stats.length != 1) {
                 return new ValidationResult(false, "Wrong count of minoccurs for data input found");
             }
             shiftStats(openList, analizedList, stats);
 
             //get maxoccurs
-            stats = getStatementsBySubjectAndPredicate(dataInput, Vocabulary.MaxOccurs, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataInput, Vocabulary.MaxOccurs, openList);
             if (stats.length != 1) {
                 return new ValidationResult(false, "Wrong count of maxoccurs for data input found");
             }
             shiftStats(openList, analizedList, stats);
 
             //get input form choice
-            stats = getStatementsBySubjectAndPredicate(dataInput, Vocabulary.InputFormChoice, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataInput, Vocabulary.InputFormChoice, openList);
             if (stats.length != 1) {
                 return new ValidationResult(false, "Wrong count of input form choice for data input found");
             }
             shiftStats(openList, analizedList, stats);
             String dataType = stats[0].getObject().stringValue();
-            stats = getStatementsBySubjectAndPredicate(dataType, Vocabulary.Type, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataType, Vocabulary.Type, openList);
             if (stats.length != 1) {
                 return new ValidationResult(false, "More than one type for data type found");
             }
@@ -713,7 +602,7 @@ public class Validator {
 
         //mach das gleiche für die outputs
 
-        stats = getStatementsBySubjectAndPredicate(processId, Vocabulary.Output, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.Output, openList);
 
         String[] outputArr = new String[stats.length];
         for (int i = 0; i < stats.length; i++) {
@@ -724,7 +613,7 @@ public class Validator {
         //check für jeden output ob die attribute in richtiger anzahl vorhanden sind
         //go through inputs
         for (int i = 0; i < outputArr.length; i++) {
-            stats = getStatementsBySubjectAndPredicate(outputArr[i], Vocabulary.Type, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(outputArr[i], Vocabulary.Type, openList);
             if (stats.length != 1) {
                 return new ValidationResult(false, "Wrong count of type statements for output");
             }
@@ -736,35 +625,35 @@ public class Validator {
             String processOutput = outputArr[i];
 
             //get identifier
-            stats = getStatementsBySubjectAndPredicate(processOutput, Vocabulary.Identifier, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(processOutput, Vocabulary.Identifier, openList);
             if (stats.length != 1) {
                 return new ValidationResult(false, "Wrong count of data output identifier found");
             }
             shiftStats(openList, analizedList, stats);
 
             //get title
-            stats = getStatementsBySubjectAndPredicate(processOutput, Vocabulary.Title, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(processOutput, Vocabulary.Title, openList);
             if (stats.length != 1) {
                 return new ValidationResult(false, "Wrong count of data output title found");
             }
             shiftStats(openList, analizedList, stats);
 
             //get abstract
-            stats = getStatementsBySubjectAndPredicate(processOutput, Vocabulary.Abstract, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(processOutput, Vocabulary.Abstract, openList);
             shiftStats(openList, analizedList, stats);
 
             //get metadata
-            stats = getStatementsBySubjectAndPredicate(processOutput, Vocabulary.Metadata, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(processOutput, Vocabulary.Metadata, openList);
             shiftStats(openList, analizedList, stats);
 
             //get output form choice
-            stats = getStatementsBySubjectAndPredicate(processOutput, Vocabulary.OutputFormChoice, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(processOutput, Vocabulary.OutputFormChoice, openList);
             if (stats.length != 1) {
                 return new ValidationResult(false, "Wrong count of output form choice for data output found");
             }
             shiftStats(openList, analizedList, stats);
             String dataType = stats[0].getObject().stringValue();
-            stats = getStatementsBySubjectAndPredicate(dataType, Vocabulary.Type, openList);
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataType, Vocabulary.Type, openList);
             if (stats.length != 1) {
                 return new ValidationResult(false, "Wrong count of types for data type found");
             }

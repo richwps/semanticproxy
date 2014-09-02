@@ -58,7 +58,7 @@ public class DBIO {
      * @throws RDFException When the RDF data in the file is malformed
      * @throws IOException When the file cannot be opened
      */
-    public static void loadRDFXMLFile(File file) throws IllegalStateException, RepositoryException, RDFException, IOException {
+    public static void insertRDFXMLFileIntoDB(File file) throws IllegalStateException, RepositoryException, RDFException, IOException {
         Repository repo = DBAdministration.getRepository();
         if (repo == null) {
             throw new IllegalStateException("Cannot load rdf/xml file into sesame RDF-DB, not connected.");
@@ -96,7 +96,7 @@ public class DBIO {
      * @throws RDFException
      * @throws IOException
      */
-    public static void loadRDFXMLStringIntoDB(String str) throws IllegalStateException, RepositoryException, RDFException, IOException {
+    public static void insertRDFXMLStringIntoDB(String str) throws IllegalStateException, RepositoryException, RDFException, IOException {
         Repository repo = DBAdministration.getRepository();
         if (repo == null) {
             throw new IllegalStateException("Cannot load rdf/xml file into sesame RDF-DB, not connected.");

@@ -20,10 +20,26 @@ import static spark.Spark.*;
  */
 public class CreateAccess {
 
+    private static CreateAccess instance = null;
+    
+    
+    
+    /**
+     * Registeres the required routes and handlers for create access
+     * @param processListURL
+     * @param wpsListURL 
+     */
+    public static void activate(URL processListURL, URL wpsListURL){
+        if(instance == null){
+            instance = new CreateAccess(processListURL, wpsListURL);
+        }
+    }
+    
+    
     /**
      * Installs endpoints for http post
      */
-    public CreateAccess(URL processListURL, URL wpsListURL) {
+    private CreateAccess(URL processListURL, URL wpsListURL) {
 
 
         /**
@@ -37,7 +53,7 @@ public class CreateAccess {
                     Logger.getLogger(CreateAccess.class).info("Create process request");
                     Logger.getLogger(CreateAccess.class).debug("Create process request "+ body);
                     try {
-                        ContentChanger.pushProcessRDFintoDB(body);
+                        ContentChanger.insertProcess(body);
                         Logger.getLogger(CreateAccess.class).info("Process created");
                         response.status(201);
                         return "Process created";
@@ -67,7 +83,7 @@ public class CreateAccess {
                     Logger.getLogger(CreateAccess.class).info("Create wps request");
                     Logger.getLogger(CreateAccess.class).debug("Create wps request: "+body);
                     try {
-                        ContentChanger.pushWPSRDFintoDB(body);
+                        ContentChanger.insertWPS(body);
                         Logger.getLogger(CreateAccess.class).info("WPS created");
                         response.status(201);
                         return "WPS created";

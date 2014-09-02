@@ -41,7 +41,7 @@ public class ContentChanger {
      * @param rawRDF
      * @throws Exception
      */
-    public static void pushProcessRDFintoDB(String rawRDF) throws RDFException, IOException, RepositoryException, Exception {
+    public static void insertProcess(String rawRDF) throws RDFException, IOException, RepositoryException, Exception {
 
         ArrayList<Statement> statList = null;
         ValidationResult result = null;
@@ -57,10 +57,10 @@ public class ContentChanger {
         }
         try {
             if (result.result) {
-                DBIO.loadRDFXMLStringIntoDB(rawRDF);
+                DBIO.insertRDFXMLStringIntoDB(rawRDF);
 
                 //create inverse link to reference from wps to this process
-                Statement[] stats = Validator.getStatementsByPredicate(Vocabulary.WPS, statList);
+                Statement[] stats = ValidationUtils.getStatementsByPredicate(Vocabulary.WPS, statList);
                 Resource subject = new URIImpl(stats[0].getObject().stringValue());
                 org.openrdf.model.URI predicate = new URIImpl(Vocabulary.Process);
                 org.openrdf.model.URI object = new URIImpl(stats[0].getSubject().stringValue());
@@ -148,7 +148,7 @@ public class ContentChanger {
      * @param rawRDF
      * @throws Exception
      */
-    public static void pushWPSRDFintoDB(String rawRDF) throws RDFException, IOException, RepositoryException, URISyntaxException, Exception {
+    public static void insertWPS(String rawRDF) throws RDFException, IOException, RepositoryException, URISyntaxException, Exception {
         ArrayList<Statement> statList = null;
         ValidationResult result = null;
         try {
@@ -163,9 +163,9 @@ public class ContentChanger {
         }
         try {
             if (result.result) {
-                DBIO.loadRDFXMLStringIntoDB(rawRDF);
+                DBIO.insertRDFXMLStringIntoDB(rawRDF);
                 //Create link from network to new wps
-                Statement[] stats = Validator.getStatementsByPredicate(Vocabulary.Type, statList);
+                Statement[] stats = ValidationUtils.getStatementsByPredicate(Vocabulary.Type, statList);
                 Resource subject = new URIImpl(DBAdministration.getResourceURL().toString());
                 org.openrdf.model.URI predicate = new URIImpl(Vocabulary.WPS);
                 org.openrdf.model.URI object = new URIImpl(stats[0].getSubject().stringValue());
@@ -246,7 +246,7 @@ public class ContentChanger {
 
             if (result.result) {
                 try {
-                    Statement[] stats = Validator.getStatementsByPredicateAndObject(Vocabulary.Type, Vocabulary.WPSClass, statList);
+                    Statement[] stats = ValidationUtils.getStatementsByPredicateAndObject(Vocabulary.Type, Vocabulary.WPSClass, statList);
                     URI subject = new URI(stats[0].getSubject().stringValue());
                     DBDelete.deleteWPS4Update(subject);
                 } catch (RepositoryException re) {
@@ -258,7 +258,7 @@ public class ContentChanger {
                 }
 
                 try {
-                    DBIO.loadRDFXMLStringIntoDB(rawRDF);
+                    DBIO.insertRDFXMLStringIntoDB(rawRDF);
                 } catch (RepositoryException re) {
                     throw new RepositoryException("Cannot update wps " + route + ", unable to insert new wps", re);
                 } catch (RDFException re) {
@@ -319,7 +319,7 @@ public class ContentChanger {
             Statement[] stats = null;
             if (result.result) {
                 try {
-                    stats = Validator.getStatementsByPredicateAndObject(Vocabulary.Type, Vocabulary.WPSClass, statList);
+                    stats = ValidationUtils.getStatementsByPredicateAndObject(Vocabulary.Type, Vocabulary.WPSClass, statList);
                     DBDelete.deleteProcess(route);
                 } catch (RepositoryException re) {
                     throw new RepositoryException("Cannot update process " + route + ", unable to delete older process", re);
@@ -330,7 +330,7 @@ public class ContentChanger {
                 }
 
                 try {
-                    DBIO.loadRDFXMLStringIntoDB(rawRDF);
+                    DBIO.insertRDFXMLStringIntoDB(rawRDF);
                 } catch (RepositoryException re) {
                     throw new RepositoryException("Cannot update process " + route + ", unable to insert new process", re);
                 } catch (RDFException re) {
@@ -341,7 +341,7 @@ public class ContentChanger {
 
                 //create inverse link to reference from wps to this process
                 try {
-                    stats = Validator.getStatementsByPredicate(Vocabulary.WPS, statList);
+                    stats = ValidationUtils.getStatementsByPredicate(Vocabulary.WPS, statList);
                     Resource subject = new URIImpl(stats[0].getObject().stringValue());
                     org.openrdf.model.URI predicate = new URIImpl(Vocabulary.Process);
                     org.openrdf.model.URI object = new URIImpl(stats[0].getSubject().stringValue());

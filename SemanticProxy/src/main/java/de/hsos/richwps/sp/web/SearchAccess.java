@@ -24,10 +24,24 @@ public class SearchAccess {
     private static final String MIMETYPE_HTML = "text/html";
     private static final String MIMETYPE_XML = "application/xml";
 
+    private static SearchAccess instance = null;
+    
+    
+    /**
+     * Registeres the required routes and handlers for search access
+     * @param searchURL 
+     */
+    public static void activate(URL searchURL){
+        if(instance == null){
+            instance = new SearchAccess(searchURL);
+        }
+    }
+    
+    
     /**
      * Registeres the required routes an handlers
      */
-    public SearchAccess(URL searchURL) {
+    private SearchAccess(URL searchURL) {
 
         /**
          * Registers the route for root for user convenience

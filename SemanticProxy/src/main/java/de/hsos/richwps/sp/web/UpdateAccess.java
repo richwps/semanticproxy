@@ -13,16 +13,31 @@ import spark.Route;
 import static spark.Spark.*;
 
 /**
- * The access point for delete queries from the web
+ * The access point for update queries from the web
  *
  * @author fbensman
  */
 public class UpdateAccess {
 
+    private static UpdateAccess instance = null;
+    
+    
+    /**
+     * Registeres the required routes and handlers for update access
+     * @param processNamingURL
+     * @param wpsNamingURL 
+     */
+    public static void activate(URL processNamingURL, URL wpsNamingURL){
+        if(instance == null){
+            instance = new UpdateAccess(processNamingURL, wpsNamingURL);
+        }
+    }
+    
+    
     /**
      * Installs endpoints for resource updates
      */
-    public UpdateAccess(URL processNamingURL, URL wpsNamingURL) {
+    private UpdateAccess(URL processNamingURL, URL wpsNamingURL) {
 
         /**
          * Register endpoint for process update

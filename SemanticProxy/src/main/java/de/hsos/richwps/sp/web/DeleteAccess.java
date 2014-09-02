@@ -19,10 +19,25 @@ import static spark.Spark.*;
  */
 public class DeleteAccess {
 
+    private static DeleteAccess instance = null;
+    
+    
+    /**
+     * Registeres the required routes and handlers for delete access
+     * @param processNamingURL
+     * @param wpsNamingURL 
+     */
+    public static void activate (final URL processNamingURL, final URL wpsNamingURL){
+        if(instance == null){
+            instance = new DeleteAccess(processNamingURL, wpsNamingURL);
+        }
+    }
+    
+    
     /**
      * Installs endpoints for the deletion of resources
      */
-    public DeleteAccess(final URL processNamingURL, final URL wpsNamingURL) {
+    private DeleteAccess(final URL processNamingURL, final URL wpsNamingURL) {
 
         /**
          * Register endpoint for process deletion

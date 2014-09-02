@@ -92,9 +92,9 @@ public class DBDeleteTest extends TestCase{
             Vocabulary.init(vocURL);
             ContentChanger.insertNetwork(OWNER, DOMAIN);
             File testFile = new File(TESTFILE_WPS_NAME);
-            DBIO.loadRDFXMLFile(testFile);
+            DBIO.insertRDFXMLFileIntoDB(testFile);
             testFile = new File(TESTFILE_PROCESS_NAME);
-            DBIO.loadRDFXMLFile(testFile);
+            DBIO.insertRDFXMLFileIntoDB(testFile);
             //create link between wps and process
             org.openrdf.model.URI hasProcessPred = new URIImpl(Vocabulary.Process);
             DBIO.insertStatement(new StatementImpl(wpsResource, hasProcessPred, processResource));

@@ -84,7 +84,7 @@ public class DBReadTest extends TestCase{
             Vocabulary.init(vocURL);
             ContentChanger.insertNetwork(OWNER, DOMAIN);
             File testFile = new  File(TESTFILE_NAME);
-            DBIO.loadRDFXMLFile(testFile);
+            DBIO.insertRDFXMLFileIntoDB(testFile);
         }catch(Exception e){
             fail("Test setup failed: "+e.getMessage());
         }
