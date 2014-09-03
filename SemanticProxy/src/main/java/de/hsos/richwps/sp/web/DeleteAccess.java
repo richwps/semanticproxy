@@ -52,9 +52,9 @@ public class DeleteAccess {
                         response.status(200);
                         return "Resource deleted";
                     } else {
-                        Logger.getLogger(DeleteAccess.class).error("Delete process request to: "+request.url()+" - Resource not found.");
-                        response.status(404);
-                        return "Resource not found";
+                        Logger.getLogger(DeleteAccess.class).error("Delete process request to: "+request.url()+" - Resource not found but nevertheless applauded the client.");
+                        response.status(200);
+                        return "Resource deleted";
                     }
                 } catch (Exception e) {
                     Logger.getLogger(DeleteAccess.class).error("Delete process request to: "+request.url(),e);
@@ -78,9 +78,9 @@ public class DeleteAccess {
                         response.status(200);
                         return "Resource deleted";
                     } else {
-                        Logger.getLogger(DeleteAccess.class).info("Delete WPS request to: "+request.url()+" - Resource not found.");
-                        response.status(404);
-                        return "Resource not found";
+                        Logger.getLogger(DeleteAccess.class).info("Delete WPS request to: "+request.url()+" - Resource not found but nevertheless applauded the client.");
+                        response.status(200);
+                        return "Resource deleted";
                     }
                 } catch (Exception e) {
                     Logger.getLogger(DeleteAccess.class).info("Delete WPS request to: "+request.url(),e);

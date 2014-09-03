@@ -80,7 +80,7 @@ public class ContentChanger {
      * Deletes a process from the db
      *
      * @param route An rdf resource identifiere for the process
-     * @return True if success
+     * @return True if success, false if process not present
      * @throws Exception When sth is wrong with the db
      */
     public static boolean deleteProcess(String route) throws MalformedURLException, RepositoryException, RDFException, Exception {
@@ -356,6 +356,7 @@ public class ContentChanger {
                 throw new Exception(result.message);
             }
         } else {
+            
             throw new Exception("No such process");
         }
     }

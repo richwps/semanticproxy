@@ -252,10 +252,10 @@ public class DBIO {
     public static SubjectList getAllSubjectsForType(URL type) throws IllegalStateException, MalformedURLException, RepositoryException, RDFException{
         Repository repo = DBAdministration.getRepository();
         if (repo == null) {
-            throw new IllegalStateException("Cannot get all subjects for type" + type + ", not connected.");
+            throw new IllegalStateException("Cannot get all subjects for type " + type + ", not connected.");
         }
         if (!Vocabulary.isBasicType(type.toString())) {
-            throw new IllegalArgumentException("Cannot get all subjects for type" + type + ", parameter is not a type.");
+            throw new IllegalArgumentException("Cannot get all subjects for type " + type + ", parameter is not a type.");
         }
         String rdfType = Vocabulary.Type;
         //define query
@@ -279,16 +279,16 @@ public class DBIO {
                 }
                 return subjectList;
             } catch (MalformedURLException mue) {
-                throw new MalformedURLException("Cannot get all subjects for type" + type + ".");
+                throw new MalformedURLException("Cannot get all subjects for type " + type + ".");
             } finally {
                 result.close();
             }
         } catch (RepositoryException re) {
-            throw new RepositoryException("Cannot get all subjects for type" + type + ", unknown connection error.",re);
+            throw new RepositoryException("Cannot get all subjects for type " + type + ", unknown connection error.",re);
         } catch(MalformedQueryException mqe){
-            throw new RDFException("Cannot get all subjects for type" + type + ", unknown connection error.",mqe);
+            throw new RDFException("Cannot get all subjects for type " + type + ", unknown connection error.",mqe);
         } catch(QueryEvaluationException mqe){
-            throw new RDFException("Cannot get all subjects for type" + type + ", unknown connection error.",mqe);
+            throw new RDFException("Cannot get all subjects for type " + type + ", unknown connection error.",mqe);
         }finally {
             con.close();
         }
@@ -350,10 +350,10 @@ public class DBIO {
             con.commit();
         } catch (RepositoryException re) {
             con.rollback();
-            throw new RepositoryException("Cannot load rdf/xml string into sesame RDF-DB, not connected or not writable.",re);
+            throw new RepositoryException("Cannot load rdf/xml string into sesame RDF-DB, not connected or not writable. ",re);
         } catch (UnsupportedRDFormatException urfe) {
             con.rollback();
-            throw new RDFException("Cannot load rdf/xml string into sesame RDF-DB.",urfe);
+            throw new RDFException("Cannot load rdf/xml string into sesame RDF-DB. ",urfe);
         } finally {
             con.close();
         }

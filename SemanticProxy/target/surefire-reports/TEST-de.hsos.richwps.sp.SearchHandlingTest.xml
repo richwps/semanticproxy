@@ -60,5 +60,5 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="pentium_pro+mmx pentium_pro pentium+mmx pentium i486 i386 i86"/>
   </properties>
-  <testcase time="20.021" classname="de.hsos.richwps.sp.SearchHandlingTest" name="testProcessKeywordSearch"/>
+  <testcase time="20.022" classname="de.hsos.richwps.sp.SearchHandlingTest" name="testProcessKeywordSearch"/>
 </testsuite>

@@ -5,6 +5,7 @@
 package de.hsos.richwps.sp.web;
 
 import de.hsos.richwps.sp.restlogic.ContentChanger;
+import de.hsos.richwps.sp.restlogic.ContentGetter;
 import java.net.URL;
 import org.apache.log4j.Logger;
 import spark.Request;
@@ -45,23 +46,33 @@ public class UpdateAccess {
         put(new Route(processNamingURL.getPath() + "/*") {
             @Override
             public Object handle(Request request, Response response) {
-                Logger.getLogger(UpdateAccess.class).info("Update process request to: "+ request.url());
+                Logger.getLogger(UpdateAccess.class).info("PUT process request to: "+ request.url());
                 if (request.contentType().equalsIgnoreCase("application/xml+rdf")) {
                     String body = request.body();
                     String route = request.url();
                     try {
-                        Logger.getLogger(UpdateAccess.class).debug("Updated process "+ request.url() + "\n"+body);
-                        ContentChanger.updateProcess(body, route);
-                        Logger.getLogger(UpdateAccess.class).info("Updated process "+ request.url());
-                        response.status(200);
-                        return "Process updated";
+                        if(ContentGetter.processExists(route)){
+                            Logger.getLogger(UpdateAccess.class).debug("About to update process "+ request.url() + "\n"+body);
+                            ContentChanger.updateProcess(body, route);
+                            Logger.getLogger(UpdateAccess.class).info("Updated process "+ request.url());
+                            response.status(200);
+                            return "Process updated";
+                        }
+                        else{
+                            Logger.getLogger(UpdateAccess.class).debug("About to insert process "+ request.url() + "\n"+body);
+                            ContentChanger.updateProcess(body, route);
+                            Logger.getLogger(UpdateAccess.class).info("Inserted process "+ request.url());
+                            response.status(200);
+                            return "Process updated";
+                        }
+                        
                     } catch (Exception e) {
-                        Logger.getLogger(UpdateAccess.class).error("Update process request",e);
+                        Logger.getLogger(UpdateAccess.class).error("PUT process request",e);
                         response.status(500);
                         return  e.getMessage();
                     }
                 } else {
-                    Logger.getLogger(UpdateAccess.class).error("Update process request. - Format not supported, use application/xml+rdf");
+                    Logger.getLogger(UpdateAccess.class).error("PUT process request. - Format not supported, use application/xml+rdf");
                     response.status(415);
                     return "Format not supported, use application/xml+rdf";
                 }
@@ -75,23 +86,32 @@ public class UpdateAccess {
         put(new Route(wpsNamingURL.getPath() + "/*") {
             @Override
             public Object handle(Request request, Response response) {
-                Logger.getLogger(UpdateAccess.class).info("Update WPS request to: "+ request.url());
+                Logger.getLogger(UpdateAccess.class).info("PUT WPS request to: "+ request.url());
                 if (request.contentType().equalsIgnoreCase("application/xml+rdf")) {
                     String body = request.body();
                     String route = request.url();
                     try {
-                        Logger.getLogger(UpdateAccess.class).debug("Update WPS request to: "+ request.url()+"\n"+body);
-                        ContentChanger.updateWPS(body, route);
-                        Logger.getLogger(UpdateAccess.class).info("WPS"+ request.url()+"updated");
-                        response.status(200);
-                        return "WPS updated";
+                        if(ContentGetter.wpsExists(route)){
+                            Logger.getLogger(UpdateAccess.class).debug("About to update WPS "+ request.url()+"\n"+body);
+                            ContentChanger.updateWPS(body, route);
+                            Logger.getLogger(UpdateAccess.class).info("WPS"+ request.url()+"updated");
+                            response.status(200);
+                            return "WPS updated";
+                        }
+                        else{
+                            Logger.getLogger(UpdateAccess.class).debug("About to insert WPS "+ request.url()+"\n"+body);
+                            ContentChanger.insertWPS(body);
+                            Logger.getLogger(UpdateAccess.class).info("WPS"+ request.url()+"inserted");
+                            response.status(200);
+                            return "WPS updated";
+                        }
                     } catch (Exception e) {
-                        Logger.getLogger(UpdateAccess.class).error("Update WPS request",e);
+                        Logger.getLogger(UpdateAccess.class).error("PUT WPS request",e);
                         response.status(500);
                         return  e.getMessage();
                     }
                 } else {
-                    Logger.getLogger(UpdateAccess.class).error("Update WPS request. - Format not supported, use application/xml+rdf");
+                    Logger.getLogger(UpdateAccess.class).error("PUT WPS request. - Format not supported, use application/xml+rdf");
                     response.status(415);
                     return "Format not supported, use application/xml+rdf";
                 }

@@ -167,8 +167,36 @@ public class ContentGetterTest extends TestCase{
            
     }
     
+    public void testProcessExists() 
+    {
+        try {
+            boolean processExists = ContentGetter.processExists(TESTPROCESS_NAME);
+            assertTrue("The process should exist", processExists );
+        } catch (RepositoryException ex) {
+            fail("Method ContentGetter.processExists(TESTPROCESS_NAME) should not raise an exception: "+ex);
+        } catch (IllegalStateException ex) {
+            fail("Method ContentGetter.processExists(TESTPROCESS_NAME) should not raise an exception: "+ex);
+        } catch (Exception ex) {
+            fail("Method ContentGetter.processExists(TESTPROCESS_NAME) should not raise an exception: "+ex);
+        }
+           
+    }
     
-   
+    
+   public void testWPSExists() 
+    {
+        try {
+            boolean wpsExists = ContentGetter.wpsExists(TESTWPS_NAME);
+            assertTrue("The WPS should exist", wpsExists );
+        } catch (RepositoryException ex) {
+            fail("Method ContentGetter.wpsExists(TESTWPS_NAME) should not raise an exception: "+ex);
+        } catch (IllegalStateException ex) {
+            fail("Method ContentGetter.wpsExists(TESTWPS_NAME) should not raise an exception: "+ex);
+        } catch (Exception ex) {
+            fail("Method ContentGetter.wpsExists(TESTWPS_NAME) should not raise an exception: "+ex);
+        }
+           
+    }
   
    
     

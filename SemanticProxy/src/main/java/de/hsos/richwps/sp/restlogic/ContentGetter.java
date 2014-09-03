@@ -9,6 +9,8 @@ import de.hsos.richwps.sp.rdfdb.RDFException;
 import de.hsos.richwps.sp.types.SubjectList;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.openrdf.repository.RepositoryException;
 
 /**
@@ -97,4 +99,57 @@ public class ContentGetter {
         }
         return list.toXMLList();
     }
+
+    /**
+     * Determines whether a process exists in the DB
+     * @param processRoute
+     * @return True if process exists, else false
+     */
+    public static boolean processExists(String processRoute) throws RepositoryException, RDFException, MalformedURLException {
+        try {
+            URL processURL = new URL(processRoute);
+            SubjectList subjList = DBIO.getAllSubjectsForType(new URL(Vocabulary.ProcessClass));
+            for(URL subj : subjList){
+                if(subj.equals(processURL))
+                    return true;
+            }
+            return false;
+        } catch (IllegalStateException ex) {
+            throw new IllegalStateException("Cannot determine whether process ."+processRoute+" exists. "+ex);
+        } catch (RepositoryException ex) {
+            throw new RepositoryException("Cannot determine whether process ."+processRoute+" exists. "+ex);
+        } catch (RDFException ex) {
+            throw new RDFException("Cannot determine whether process ."+processRoute+" exists. "+ex);
+        } catch (MalformedURLException ex) {
+            throw new MalformedURLException("Cannot determine whether process ."+processRoute+" exists. "+ex);
+        }
+    }
+    
+  
+     /**
+     * Determines whether a wps exists in the DB
+     * @param wpsRoute
+     * @return True if WPS exists, else false
+     */
+    public static boolean wpsExists(String wpsRoute) throws RepositoryException, RDFException, MalformedURLException {
+        try {
+            URL wpsURL = new URL(wpsRoute);
+            SubjectList subjList = DBIO.getAllSubjectsForType(new URL(Vocabulary.WPSClass));
+            for(URL subj : subjList){
+                if(subj.equals(wpsURL))
+                    return true;
+            }
+            return false;
+        } catch (IllegalStateException ex) {
+            throw new IllegalStateException("Cannot determine whether WPS "+wpsRoute+" exists. "+ex);
+        } catch (RepositoryException ex) {
+            throw new RepositoryException("Cannot determine whether WPS "+wpsRoute+" exists. "+ex);
+        } catch (RDFException ex) {
+            throw new RDFException("Cannot determine whether WPS "+wpsRoute+" exists. "+ex);
+        } catch (MalformedURLException ex) {
+            throw new MalformedURLException("Cannot determine whether WPS "+wpsRoute+" exists. "+ex);
+        }
+    }
+    
+    
 }
