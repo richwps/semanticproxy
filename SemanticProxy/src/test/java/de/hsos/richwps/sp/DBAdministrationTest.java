@@ -115,7 +115,7 @@ public class DBAdministrationTest extends TestCase{
         
         try{
             long s = DBIO.size();
-            assertEquals("DB should contain 2 entries",s, EXPECTED_SIZE);
+            assertEquals("DB should contain 2 entries",EXPECTED_SIZE,s);
         }catch(RepositoryException re){
             fail("Method size() should not raise an exception: "+re);
             return;
@@ -131,7 +131,7 @@ public class DBAdministrationTest extends TestCase{
         
         try{
             long s = DBIO.size();
-            assertEquals("Size of DB should now be empty",s, 0);
+            assertEquals("Size of DB should now be empty",0, s);
         }catch(RepositoryException re){
             fail("Method size() should not raise an exception: "+re);
             return;

@@ -96,7 +96,7 @@ public class ContentChanger {
 
         if (b) {
             try {
-                DBDelete.deleteProcess(route);
+                DBDelete.deleteProcess(process);
                 return true;
             } catch (RepositoryException re) {
                 throw new RepositoryException("Cannot delete process " + route + ".", re);
@@ -129,7 +129,7 @@ public class ContentChanger {
 
         if (b) {
             try {
-                DBDelete.deleteWPS(route);
+                DBDelete.deleteWPS(wps);
                 return true;
             } catch (RepositoryException re) {
                 throw new RepositoryException("Cannot delete wps " + route + ".", re);
@@ -192,7 +192,7 @@ public class ContentChanger {
      * @return
      * @throws Exception
      */
-    private static ArrayList<Statement> decomposeIntoStatements(String rdfXml) throws IOException, RDFException, Exception {
+    public static ArrayList<Statement> decomposeIntoStatements(String rdfXml) throws IOException, RDFException, Exception {
         RDFParser rdfParser = Rio.createParser(RDFFormat.RDFXML);
         ArrayList<Statement> inputList = new ArrayList<>();
         rdfParser.setRDFHandler(new StatementCollector(inputList));
@@ -247,7 +247,7 @@ public class ContentChanger {
             if (result.result) {
                 try {
                     Statement[] stats = ValidationUtils.getStatementsByPredicateAndObject(Vocabulary.Type, Vocabulary.WPSClass, statList);
-                    URI subject = new URI(stats[0].getSubject().stringValue());
+                    URL subject = new URL(stats[0].getSubject().stringValue());
                     DBDelete.deleteWPS4Update(subject);
                 } catch (RepositoryException re) {
                     throw new RepositoryException("Cannot update wps " + route + ", unable to delete older wps", re);
@@ -320,7 +320,7 @@ public class ContentChanger {
             if (result.result) {
                 try {
                     stats = ValidationUtils.getStatementsByPredicateAndObject(Vocabulary.Type, Vocabulary.WPSClass, statList);
-                    DBDelete.deleteProcess(route);
+                    DBDelete.deleteProcess(new URL(route));
                 } catch (RepositoryException re) {
                     throw new RepositoryException("Cannot update process " + route + ", unable to delete older process", re);
                 } catch (URISyntaxException re) {

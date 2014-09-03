@@ -33,7 +33,7 @@ public class Validator {
         //get the process
         Statement[] stats = ValidationUtils.getStatementsByPredicateAndObject(Vocabulary.Type, Vocabulary.ProcessClass, openList);
         if (stats.length != 1) {
-            return new ValidationResult(false, "Just one process allowed");
+            return new ValidationResult(false, "Exactly one process required");
         }
         shiftStats(openList, analizedList, stats);
 

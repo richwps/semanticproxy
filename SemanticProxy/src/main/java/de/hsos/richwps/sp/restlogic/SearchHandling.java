@@ -10,6 +10,7 @@ import de.hsos.richwps.sp.types.RankedProcess;
 import de.hsos.richwps.sp.types.SubjectList;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.logging.Level;
@@ -34,7 +35,7 @@ public class SearchHandling {
     public static SubjectList processKeywordSearch(String keyword) throws MalformedURLException, RepositoryException, RDFException, Exception {
         try {
             if (!isAlphaNum(keyword)) {
-                throw new MalformedURLException("Keyword not alphanummeric.");
+                throw new InvalidParameterException("Keyword not alphanummeric.");
             }
 
             URL processClass = null;
@@ -112,6 +113,6 @@ public class SearchHandling {
      * @return
      */
     private static boolean isAlphaNum(String word) {
-        return word.matches("[A-Za-z0-9]+");
+        return word.matches("[A-Za-z0-9\\s]+");
     }
 }

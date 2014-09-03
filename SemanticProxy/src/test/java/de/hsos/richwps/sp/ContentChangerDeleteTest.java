@@ -34,7 +34,7 @@ import org.openrdf.repository.RepositoryException;
  *
  * @author fbensman
  */
-public class DBDeleteTest extends TestCase{
+public class ContentChangerDeleteTest extends TestCase{
     
     private static final String RDF_TEST_DIR_NAME = "RDFTestDir";
     private static final String RESOURCES_URL_NAME = "http://localhost:4567/semanticproxy/resources";
@@ -60,7 +60,7 @@ public class DBDeleteTest extends TestCase{
      *
      * @param testName name of the test case
      */
-    public DBDeleteTest( String testName )
+    public ContentChangerDeleteTest( String testName )
     {
         super( testName );
     }
@@ -70,7 +70,7 @@ public class DBDeleteTest extends TestCase{
      */
     public static Test suite()
     {
-        return new TestSuite( DBDeleteTest.class );
+        return new TestSuite( ContentChangerDeleteTest.class );
     }
 
     @Override
@@ -122,99 +122,69 @@ public class DBDeleteTest extends TestCase{
     
     
     /**
-     * Tests DB Delete functions
+     * Tests ContentChanger functions
      * Tests deleting a single process
      */
     public void testDeleteProcess() 
     {
         try {
-            DBDelete.deleteProcess(new URL(processResource.stringValue()));
+            ContentChanger.deleteProcess(processResource.stringValue());
             SubjectList list = DBIO.getAllSubjectsForType(new URL( Vocabulary.ProcessClass ));
             assertTrue("No processes should be found at this time", list.isEmpty() );
         } catch (RepositoryException ex) {
-            fail("Method DBDelete.deleteProcess(processResource.stringValue()) should not raise an exception: "+ex);
+            fail("Method ContentChanger.deleteProcess(processResource.stringValue()) should not raise an exception: "+ex);
         } catch (IllegalStateException ex) {
-            fail("Method DBDelete.deleteProcess(processResource.stringValue()) should not raise an exception: "+ex);
+            fail("Method ContentChanger.deleteProcess(processResource.stringValue()) should not raise an exception: "+ex);
         } catch (Exception ex) {
-            fail("Method DBDelete.deleteProcess(processResource.stringValue()) should not raise an exception: "+ex);
+            fail("Method ContentChanger.deleteProcess(processResource.stringValue()) should not raise an exception: "+ex);
         }
            
     }
     
     /**
-     * Tests DB Delete functions
+     * Tests ContentChanger functions
      * Tests deleting a WPS without any process atached
      */
     public void testDeleteWPS() 
     {
         try {
             testDeleteProcess();
-            DBDelete.deleteWPS(new URL(wpsResource.stringValue()));
+            ContentChanger.deleteWPS(wpsResource.stringValue());
             SubjectList list = DBIO.getAllSubjectsForType(new URL( Vocabulary.WPSClass ));
             assertTrue("No wps should be found at this time", list.isEmpty() );
         } catch (IllegalStateException ex) {
-            fail("Method DBDelete.deleteWPS(wpsResource.stringValue()) should not raise an exception: "+ex);
+            fail("Method ContentChanger.deleteWPS(wpsResource.stringValue()) should not raise an exception: "+ex);
         }catch (RepositoryException ex) {
-            fail("Method DBDelete.deleteWPS(wpsResource.stringValue()) should not raise an exception: "+ex);
+            fail("Method ContentChanger.deleteWPS(wpsResource.stringValue()) should not raise an exception: "+ex);
         } catch (Exception ex) {
-            fail("Method DBDelete.deleteWPS(wpsResource.stringValue()) should not raise an exception: "+ex);
+            fail("Method ContentChanger.deleteWPS(wpsResource.stringValue()) should not raise an exception: "+ex);
         }
     }
     
     
     /**
-     * Tests DB Delete functions
+     * Tests ContentChanger functions
      * Tests deleting a WPS and all its processes
      */
     public void testDeleteWPSAndItsProcesses() 
     {
         try {
-            DBDelete.deleteWPS(new URL(wpsResource.stringValue()));
+            ContentChanger.deleteWPS(wpsResource.stringValue());
             SubjectList list = DBIO.getAllSubjectsForType(new URL( Vocabulary.ProcessClass ));
             assertTrue("No processes should be found at this time", list.isEmpty() );
             list = DBIO.getAllSubjectsForType(new URL( Vocabulary.WPSClass ));
             assertTrue("No wps should be found at this time", list.isEmpty() );
         } catch (IllegalStateException ex) {
-            fail("Method DBDelete.deleteWPS(wpsResource.stringValue()) should not raise an exception: "+ex);
+            fail("Method ContentChanger.deleteWPS(wpsResource.stringValue()) should not raise an exception: "+ex);
         }catch (RepositoryException ex) {
-            fail("Method DBDelete.deleteWPS(wpsResource.stringValue()) should not raise an exception: "+ex);
+            fail("Method ContentChanger.deleteWPS(wpsResource.stringValue()) should not raise an exception: "+ex);
         } catch (Exception ex) {
-            fail("Method DBDelete.deleteWPS(wpsResource.stringValue()) should not raise an exception: "+ex);
+            fail("Method ContentChanger.deleteWPS(wpsResource.stringValue()) should not raise an exception: "+ex);
         }
     }
     
    
-    /**
-     * Tests DB Delete functions
-     * Tests deleting a WPS without all (1) its processes
-     */
-    public void testDeleteWPS4Update() 
-    {
-        try {
-            DBDelete.deleteWPS4Update(new java.net.URL(TESTWPS_NAME));
-            SubjectList list = DBIO.getAllSubjectsForType(new URL( Vocabulary.ProcessClass ));
-            assertTrue("1 process should be found at this time", list.size() == 1 );
-            
-            Statement[] stmtArr = DBIO.getStatementsForSubjAndPred(new java.net.URL(TESTWPS_NAME), new java.net.URL(Vocabulary.Type));
-            assertTrue("1 statements should be found for type", stmtArr.length==1 );
-            
-            stmtArr = DBIO.getStatementsForSubjAndPred(new java.net.URL(TESTWPS_NAME), new java.net.URL(Vocabulary.Endpoint));
-            assertTrue("No statements should be found for endpoint", stmtArr.length==0 );
-            
-            stmtArr = DBIO.getStatementsForSubjAndPred(new java.net.URL(TESTWPS_NAME), new java.net.URL(Vocabulary.Process));
-            assertTrue("1 statements should be found for processes", stmtArr.length==1 );
-            
-            boolean processExists = DBIO.subjectExists(new java.net.URL(TESTPROCESS_NAME));
-            assertTrue("The process is still there ", processExists);
-            
-        } catch (IllegalStateException ex) {
-            fail("Method DBDelete.deleteWPS4Update(new java.net.URI(TESTWPS_NAME)) should not raise an exception: "+ex);
-        }catch (RepositoryException ex) {
-            fail("Method DBDelete.deleteWPS4Update(new java.net.URI(TESTWPS_NAME)) should not raise an exception: "+ex);
-        } catch (Exception ex) {
-            fail("Method DBDelete.deleteWPS4Update(new java.net.URI(TESTWPS_NAME)) should not raise an exception: "+ex);
-        }
-    }
+  
    
     
 }

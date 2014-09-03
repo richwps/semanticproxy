@@ -5,6 +5,7 @@
 package de.hsos.richwps.sp.rdfdb;
 
 import de.hsos.richwps.sp.restlogic.Vocabulary;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Stack;
 import org.openrdf.model.Literal;
@@ -27,17 +28,17 @@ public class DBDelete {
     /**
      * Deletes a process recursively and disconnects it from its parent wps
      *
-     * @param processRoute The RDF resource identifier
+     * @param processURL The RDF resource identifier
      * @throws Exception When there is a problem with the db
      */
-    public static void deleteProcess(String processRoute) throws RepositoryException, IllegalStateException, Exception  {
+    public static void deleteProcess(URL processURL) throws RepositoryException, IllegalStateException, Exception  {
         //get db
         Repository repo = DBAdministration.getRepository();
         if (repo == null) {
             throw new IllegalStateException("Cannot delete process from sesame RDF-DB, not connected.");
         }
 
-        Resource process = (Resource) new URIImpl(processRoute);
+        Resource process = (Resource) new URIImpl(processURL.toString());
         URI hasProcess = new URIImpl(Vocabulary.Process);
 
         RepositoryConnection con = null;
@@ -54,7 +55,7 @@ public class DBDelete {
             con.close();
         }catch(RepositoryException e){
             con.rollback();
-            throw new RepositoryException("Cannot remove links between process " + processRoute + " and its WPS");
+            throw new RepositoryException("Cannot remove links between process " + processURL + " and its WPS");
         }
         try{
             //delete other resources recursively
@@ -140,30 +141,30 @@ public class DBDelete {
     
     /**
      * Deletes a WPS and connected resources even processes
-     * @param wpsRoute RDF resource of the WPS
+     * @param wpsURL RDF resource of the WPS
      * @throws Exception When sth. goes wrong with the db
      */
-    public static void deleteWPS(String wpsRoute) throws RepositoryException, IllegalStateException, Exception  {
+    public static void deleteWPS(URL wpsURL) throws RepositoryException, IllegalStateException, Exception  {
         Repository repo = DBAdministration.getRepository();
         if (repo == null) {
             throw new IllegalStateException("Cannot delete process from sesame RDF-DB, not connected.");
         }
 
-        Resource wps = (Resource) new URIImpl(wpsRoute);
+        Resource wps = (Resource) new URIImpl(wpsURL.toString());
         RepositoryConnection con = null;
         con = repo.getConnection();
         try {
             
             URI subject = new URIImpl(DBAdministration.getResourceURL().toString());
             URI predicate = new URIImpl(Vocabulary.WPS);
-            URI object = new URIImpl(wpsRoute);
+            URI object = new URIImpl(wpsURL.toString());
             //removes link from network to wps
             con.begin();
             con.remove(subject, predicate, object);
             con.commit();
             con.close();
         }catch(RepositoryException e){
-            throw new RepositoryException("Cannot remove links between wps " + wpsRoute + " and the network",e);
+            throw new RepositoryException("Cannot remove links between wps " + wpsURL + " and the network",e);
         }
         try{
             //removes the wps and connnected resources (also processes)
@@ -183,21 +184,21 @@ public class DBDelete {
     
     /**
      * Deletes a WPS for update, by keeping the processes and the type
-     * @param wps WPS to recursiveDelete
+     * @param wpsURL WPS to recursiveDelete
      * @throws Exception Error with db
      */
-    public static void deleteWPS4Update(java.net.URI wps) throws RepositoryException, IllegalStateException, Exception {
+    public static void deleteWPS4Update(java.net.URL wpsURL) throws RepositoryException, IllegalStateException, Exception {
         //get the db
         Repository repo = DBAdministration.getRepository();
         if (repo == null) {
-            throw new IllegalStateException("Cannot delete wps "+wps.toString()+ "for update , not connected.");
+            throw new IllegalStateException("Cannot delete wps "+wpsURL.toString()+ "for update , not connected.");
         }
         Resource[] resArr = new Resource[0];
         RepositoryConnection con = null;
         con = repo.getConnection();
         try {           
-            Resource subject = new URIImpl(wps.toString());
-            //read all statements about wps and put 'em into a list
+            Resource subject = new URIImpl(wpsURL.toString());
+            //read all statements about wpsURL and put 'em into a list
             RepositoryResult<Statement> result = con.getStatements(subject, null, null, false, resArr);
             ArrayList<Statement> list = new ArrayList<Statement>();
             while (result.hasNext()) {
@@ -227,11 +228,11 @@ public class DBDelete {
                 }
             }
         } catch (RepositoryException re) {
-            throw new RepositoryException("Cannot delete wps "+wps.toString()+ "for update." ,re);
+            throw new RepositoryException("Cannot delete wps "+wpsURL.toString()+ "for update." ,re);
         } catch(IllegalStateException ise){
-            throw new IllegalStateException("Cannot delete wps "+wps.toString()+ "for update." ,ise);
+            throw new IllegalStateException("Cannot delete wps "+wpsURL.toString()+ "for update." ,ise);
         }catch(Exception e){
-            throw new Exception("Cannot delete wps "+wps.toString()+ "for update." ,e);
+            throw new Exception("Cannot delete wps "+wpsURL.toString()+ "for update." ,e);
         } finally {
             con.close();
         }
