@@ -58,10 +58,11 @@ public class Configuration {
     private String defaultProcessSelectTopography = null;
     private String defaultProcessCharacteristics = null;
     private String defaultWPSModelValidation = null;
-    private String defaultProcessReadData = null;
-    private String defaultProcessHarmonize = null;
     private String defaultProcessCompare = null;
     private String defaultProcessFormat = null;
+    private String defaultProcessHarmonize = null;
+ 
+    
     //default administration
     private String defaultRDFDir = null;
     private boolean defaultStartClean = false;
@@ -102,10 +103,11 @@ public class Configuration {
         defaultProcessCharacteristics = "RDF" + File.separator + "LKN" + File.separator + "ProcessCharacteristics.rdf";
 
         defaultWPSModelValidation = "RDF" + File.separator + "BAW" + File.separator + "WPSModelValidation.rdf";
-        defaultProcessReadData = "RDF" + File.separator + "BAW" + File.separator + "ProcessReadData.rdf";
-        defaultProcessHarmonize = "RDF" + File.separator + "BAW" + File.separator + "ProcessHarmonize.rdf";
         defaultProcessCompare = "RDF" + File.separator + "BAW" + File.separator + "ProcessCompare.rdf";
         defaultProcessFormat = "RDF" + File.separator + "BAW" + File.separator + "ProcessFormat.rdf";
+        defaultProcessHarmonize = "RDF" + File.separator + "BAW" + File.separator + "ProcessHarmonize.rdf";           
+        
+        
         //admin
         defaultRDFDir = ".";
         defaultStartClean = true;
@@ -223,7 +225,6 @@ public class Configuration {
         tmpPreloadFiles.addProcess(defaultProcessSelectTopography);
         tmpPreloadFiles.addProcess(defaultProcessSelectMSRLD5);
         tmpPreloadFiles.addProcess(defaultProcessCharacteristics);
-        tmpPreloadFiles.addProcess(defaultProcessReadData);
         tmpPreloadFiles.addProcess(defaultProcessHarmonize);
         tmpPreloadFiles.addProcess(defaultProcessCompare);
         tmpPreloadFiles.addProcess(defaultProcessFormat);
