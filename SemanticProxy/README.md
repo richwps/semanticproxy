@@ -36,30 +36,24 @@ Read:
 The Data can be browsed using the links in the RDF data. As starting points may serve the list-URLs or the root-URL specified in the configuration.
 
 Update:
-Sent a new resource to the endpoint of an existing one with the same RDF id via HTTP PUT. The resource has to follow the same rules as for a create.
+Send a new resource to the endpoint of an existing one with the same RDF id via HTTP PUT. The resource has to follow the same rules as for a create.
 
 Delete:
-Sent a HTTP Delete to the URL of the resource to be deleted.
-
-
-
-Installation
-----------------------
-Make sure the SP finds a well configured config.xml file in the CWD. If there is no file, start it once and it will generate a default configuration file. You may edit this to your wishes. See chapter Configuration.
-
-At start a set of RDF data can be loaded automatically. Therefore you need to specify it in the configuration and provide the RDF files. See the sample data.
+Send a HTTP Delete to the URL of the resource to be deleted.
 
 
 
 Configuration
 ----------------------
-The SP uses an XML file for configuration. See chapter installation.
+Make sure the SP finds a well configured config.xml file in the CWD. If there is no file, start it once and it will generate a default configuration file. You may edit this to your wishes.
+At start a set of RDF data can be loaded automatically. Therefore you need to specify it in the configuration and provide the RDF files. See the sample data.
+In the following the configuration options are outlined:
 
 RDFDirectory:
-The directory where to put the db file and logs
+The directory where to put the dDB file and logs
 
 StartClean:
-true or false to indicate whether the db shall be deleted at system start useful for testing
+true or false to indicate whether the DB shall be deleted at system start useful for testing
 
 Owner:
 Person or organization that owns/governs the target infrastructure
@@ -71,7 +65,7 @@ Port:
 Port to use by the web server
 
 PreloadFiles:
-Specifies RDF data to be loaded at system start; Is only done when there is a clean db.
+Specifies RDF data to be loaded at system start; Is only done when there is a fresh DB.
 	WPS:             A file that contains RDF information on a WPS
 	Process:         A file that contains RDF information on a process
 	ReplaceableHost: Attribute; Contains wildcard string to be replaced with the host name
