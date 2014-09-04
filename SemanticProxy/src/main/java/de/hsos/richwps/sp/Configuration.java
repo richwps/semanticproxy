@@ -174,12 +174,18 @@ public class Configuration {
 
         wpsRDFFiles.clear();
         for (int i = 0; i < tmpFileList.sizeOfWPSArray(); i++) {
-            wpsRDFFiles.add(new File(tmpFileList.getWPSArray(i)));
+            String fileName = tmpFileList.getWPSArray(i);
+            fileName = fileName.replace("/", File.separator);
+            fileName = fileName.replace("\\", File.separator);
+            wpsRDFFiles.add(new File(fileName));
         }
 
         processRDFFiles.clear();
         for (int i = 0; i < tmpFileList.sizeOfProcessArray(); i++) {
-            processRDFFiles.add(new File(tmpFileList.getProcessArray(i)));
+            String fileName = tmpFileList.getProcessArray(i);
+            fileName = fileName.replace("/", File.separator);
+            fileName = fileName.replace("\\", File.separator);
+            processRDFFiles.add(new File(fileName));
         }
 
         //HTTP endpoints
