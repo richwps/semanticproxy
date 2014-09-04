@@ -10,13 +10,13 @@ TOC:
 - Installation
 - Configuration
 - Start
-
+- Installation
 
 
 System requirements
 ----------------------
-Java SE 1.7
-JDK 1.7
+* Java SE 1.7
+* JDK 1.7
 
 
 Preceding explanations
@@ -105,3 +105,65 @@ Start
 ----------------------
 1. CD to directory [...]\SemanticProxy
 2. type: java -jar target\SemanticProxy-1.0-SNAPSHOT.jar
+
+# Installation
+
+## Ubuntu
+
+* `sudo adduser semanticproxy --disabled-password`
+* `sudo su - semanticproxy`
+
+* place binaries at /SemanticProxy
+
+* edit `~/startproxy.sh`
+
+.
+
+	#!/bin/bash
+	cd /home/semanticproxy/SemanticProxy
+	nohup java -jar target/SemanticProxy-1.0-SNAPSHOT.jar &
+
+* `chmod u+x startproxy.sh`
+
+As root.
+
+* edit `/etc/init.d/semanticproxy`
+
+.
+	
+	#! /bin/sh
+	### BEGIN INIT INFO
+	# Provides:          Starts semantic proxy.
+	# Required-Start:    
+	# Required-Stop:     
+	# Default-Start:     2 3 4 5
+	# Default-Stop:      0 1 6
+	# Short-Description: Kurze Beschreibung
+	# Description:       Längere Bechreibung
+	### END INIT INFO
+	# Author: Name <email@domain.tld>
+
+	user=semanticproxy
+	bin_dir=/home/semanticproxy
+	start_log=${bin_dir}/init.log
+
+	case "$1" in
+	    start)
+		echo "Starting semanticproxy."
+	        sudo -u ${user} /home/semanticproxy/startproxy.sh >> ${start_log}
+	        ;;
+	    stop)
+		echo "Stoping semanticproxy"
+		pgrep -u semanticproxy java | xargs kill	
+	        ;;
+	    restart)
+		echo "Restarting semanticproxy"
+		pgrep -u semanticproxy java | xargs kill
+		sudo -u ${user} /home/semanticproxy/startproxy.sh >> ${start_log}
+	        ;;
+	esac
+
+	exit 0
+
+* `update-rc.d semanticproxy default`
+
