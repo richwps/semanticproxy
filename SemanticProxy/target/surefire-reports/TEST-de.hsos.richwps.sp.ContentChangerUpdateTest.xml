@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite failures="0" time="40.022" errors="0" skipped="0" tests="2" name="de.hsos.richwps.sp.ContentChangerUpdateTest">
+<testsuite failures="0" time="40.004" errors="0" skipped="0" tests="2" name="de.hsos.richwps.sp.ContentChangerUpdateTest">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files (x86)\Java\jdk1.7.0_03\jre\bin"/>
@@ -60,6 +60,6 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="pentium_pro+mmx pentium_pro pentium+mmx pentium i486 i386 i86"/>
   </properties>
-  <testcase time="19.966" classname="de.hsos.richwps.sp.ContentChangerUpdateTest" name="testUpdateProcess"/>
-  <testcase time="20.055" classname="de.hsos.richwps.sp.ContentChangerUpdateTest" name="testUpdateWPS"/>
+  <testcase time="19.948" classname="de.hsos.richwps.sp.ContentChangerUpdateTest" name="testUpdateProcess"/>
+  <testcase time="20.056" classname="de.hsos.richwps.sp.ContentChangerUpdateTest" name="testUpdateWPS"/>
 </testsuite>

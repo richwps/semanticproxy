@@ -378,6 +378,7 @@ public class Configuration {
         ret += "Network domain:   " + domain + "\n";
         ret += "Network owner:    " + owner + "\n";
         ret += "Port:             " + port + "\n";
+        ret += "Replaceable host: " + replaceableHost + "\n";
         ret += "WPS:\n";
         for (int i = 0; i < wpsRDFFiles.size(); i++) {
             ret += "                  " + wpsRDFFiles.get(i).getAbsolutePath() + "\n";

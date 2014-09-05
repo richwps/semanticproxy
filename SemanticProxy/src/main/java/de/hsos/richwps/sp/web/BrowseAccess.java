@@ -29,20 +29,20 @@ public class BrowseAccess {
     /**
      * Registeres the required routes and handlers for browsing
      * @param applicationURL
-     * @param resources
+     * @param resourcesURL
      * @param vocabularyURL
      * @param networkURL
      * @param processListURL
-     * @param wpsList 
+     * @param wpsListURL 
      */
     public static void activate(URL applicationURL,
-            URL resources,
+            URL resourcesURL,
             URL vocabularyURL,
             URL networkURL,
             URL processListURL,
-            URL wpsList){
+            URL wpsListURL){
         if(instance == null){
-            instance = new BrowseAccess(applicationURL, resources, vocabularyURL, networkURL, processListURL, wpsList); 
+            instance = new BrowseAccess(applicationURL, resourcesURL, vocabularyURL, networkURL, processListURL, wpsListURL); 
         }
     }
     
@@ -51,7 +51,7 @@ public class BrowseAccess {
      * Registeres the required routes an handlers
      */
     private BrowseAccess(URL applicationURL,
-            URL resources,
+            URL resourcesURL,
             URL vocabularyURL,
             URL networkURL,
             URL processListURL,
@@ -199,9 +199,9 @@ public class BrowseAccess {
 
 
         /**
-         * Registers the route for resources
+         * Registers the route for resourcesURL
          */
-        get(new Route(resources.getPath() + "/*") {
+        get(new Route(resourcesURL.getPath() + "/*") {
             @Override
             public Object handle(Request request, Response response) {
                 try {
