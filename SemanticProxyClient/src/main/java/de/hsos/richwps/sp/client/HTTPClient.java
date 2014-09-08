@@ -10,8 +10,8 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.glassfish.jersey.client.ClientProperties;
 
 /**
  * Client for HTTP level access
@@ -34,6 +34,8 @@ public class HTTPClient {
         try {
             //System.out.println("uri: " + url);
             Client client = ClientBuilder.newClient();
+            client.property(ClientProperties.CONNECT_TIMEOUT, 5000);
+            client.property(ClientProperties.READ_TIMEOUT,    5000);
             WebTarget webTarget = client.target(url);
 
             Invocation.Builder invocationBuilder = webTarget.request();
@@ -62,11 +64,13 @@ public class HTTPClient {
         try {
             //System.out.println("uri: " + url);
             Client client = ClientBuilder.newClient();
+            client.property(ClientProperties.CONNECT_TIMEOUT, 5000);
+            client.property(ClientProperties.READ_TIMEOUT,    5000);
             WebTarget webTarget = client.target(url.toString());
             webTarget = webTarget.queryParam("keyword", keyword);
-
             Invocation.Builder invocationBuilder = webTarget.request();
             invocationBuilder.accept("application/xml");
+            
 
 
             Response response = invocationBuilder.get();
@@ -93,6 +97,8 @@ public class HTTPClient {
         try {
             //System.out.println("uri: " + url);
             Client client = ClientBuilder.newClient();
+            client.property(ClientProperties.CONNECT_TIMEOUT, 5000);
+            client.property(ClientProperties.READ_TIMEOUT,    5000);
             WebTarget webTarget = client.target(url.toString());
 
             Invocation.Builder invocationBuilder = webTarget.request();
@@ -121,6 +127,8 @@ public class HTTPClient {
         try {
             //System.out.println("uri: " + url);
             Client client = ClientBuilder.newClient();
+            client.property(ClientProperties.CONNECT_TIMEOUT, 5000);
+            client.property(ClientProperties.READ_TIMEOUT,    5000);
             WebTarget webTarget = client.target(url);
 
             Invocation.Builder invocationBuilder = webTarget.request();
@@ -147,6 +155,8 @@ public class HTTPClient {
     public void putRDFDoc(String xmlrdf, URL url) throws BadRequestException, InternalSPException, CommunicationException {
         try {
             Client client = ClientBuilder.newClient();
+            client.property(ClientProperties.CONNECT_TIMEOUT, 5000);
+            client.property(ClientProperties.READ_TIMEOUT,    5000);
             WebTarget webTarget = client.target(url.toString());
 
             Invocation.Builder invocationBuilder = webTarget.request();
