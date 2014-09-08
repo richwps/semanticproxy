@@ -86,7 +86,7 @@ public class RDFResource {
             }
         }
         if (list.isEmpty()) {
-            return null;
+            return new RDFID[0];
         }
         return list.toArray(new RDFID[list.size()]);
     }

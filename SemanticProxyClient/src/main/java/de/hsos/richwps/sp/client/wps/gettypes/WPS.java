@@ -57,7 +57,7 @@ public class WPS {
      *
      * @return Wrapper for RDF resources that describe processes
      */
-    public Process[] getProcesses() {
+    public Process[] getProcesses() throws Exception{
 
         RDFID[] rdfids = res.findResources(Vocabulary.Process);
         SPClient spc = SPClient.getInstance();
@@ -67,7 +67,7 @@ public class WPS {
                 processes[i] = spc.getProcess(rdfids[i]);
             }
         } catch (Exception e) {
-            return null;
+            throw new Exception("Unable to get processes: ",e);
         }
         return processes;
     }
