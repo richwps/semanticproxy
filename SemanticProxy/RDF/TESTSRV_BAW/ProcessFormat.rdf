@@ -5,7 +5,7 @@
 	
 	<!-- process -->
 	
-	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/baw_test/process/format">
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/process/baw_test/format">
 		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#processclass"/>
 		<rwps:identifier>baw.modelvalidation.format</rwps:identifier>
 		<rwps:title>Format</rwps:title>

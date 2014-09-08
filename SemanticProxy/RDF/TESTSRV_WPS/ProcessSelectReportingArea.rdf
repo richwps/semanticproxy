@@ -14,7 +14,7 @@
 		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/input/wps_test/in_reportingareas"/>
 		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/input/wps_test/in_areaname"/>
 		<rwps:output rdf:resource="http://localhost:4567/semanticproxy/resources/output/wps_test/out_selectedarea"/>
-		<rwps:wps rdf:resource="http://localhost:4567/semanticproxy/resources/wps/LKNWPS"/>
+		<rwps:wps rdf:resource="http://localhost:4567/semanticproxy/resources/wps/WPSWPS"/>
 	</rdf:Description>
 	
 	<!-- complex input -->

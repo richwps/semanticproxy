@@ -15,7 +15,7 @@
 		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/input/wps_test/in_relevanttopographies"/>
 		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/input/wps_test/in_relevanttopographyyears"/>
 		<rwps:output rdf:resource="http://localhost:4567/semanticproxy/resources/output/wps_test/out_intersections"/>
-		<rwps:wps rdf:resource="http://localhost:4567/semanticproxy/resources/wps/LKNWPS"/>
+		<rwps:wps rdf:resource="http://localhost:4567/semanticproxy/resources/wps/WPSWPS"/>
 	</rdf:Description>
 	
 	

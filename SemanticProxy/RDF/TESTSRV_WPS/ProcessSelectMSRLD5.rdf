@@ -16,7 +16,7 @@
 		<rwps:output rdf:resource="http://localhost:4567/semanticproxy/resources/output/wps_test/out_relevantalgae"/>
 		<rwps:output rdf:resource="http://localhost:4567/semanticproxy/resources/output/wps_test/out_relevantseagras"/>
 		<rwps:output rdf:resource="http://localhost:4567/semanticproxy/resources/output/wps_test/out_relevantyears"/>
-		<rwps:wps rdf:resource="http://localhost:4567/semanticproxy/resources/wps/LKNPS"/>
+		<rwps:wps rdf:resource="http://localhost:4567/semanticproxy/resources/wps/WPSWPS"/>
 	</rdf:Description>
 	
 	

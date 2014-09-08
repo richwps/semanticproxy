@@ -18,7 +18,7 @@
 		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/input/wps_test/in_relevantseagras"/>
 		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/input/wps_test/in_relevantyears2"/>
 		<rwps:output rdf:resource="http://localhost:4567/semanticproxy/resources/output/wps_test/out_characteristics"/>
-		<rwps:wps rdf:resource="http://localhost:4567/semanticproxy/resources/wps/LKNWPS"/>
+		<rwps:wps rdf:resource="http://localhost:4567/semanticproxy/resources/wps/WPSWPS"/>
 	</rdf:Description>
 	
 	
