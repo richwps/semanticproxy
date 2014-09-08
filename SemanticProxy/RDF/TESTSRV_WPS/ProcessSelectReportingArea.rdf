@@ -1,0 +1,69 @@
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:rwps="http://localhost:4567/semanticproxy/resources/vocab#">
+	
+	<!-- process -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/process/wps_test/selectReportingArea">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#processclass"/>
+		<rwps:identifier>lkn.macrophyte.selectReportingArea</rwps:identifier>
+		<rwps:title>Select reporting area</rwps:title>
+		<rwps:abstract>Selects reporting areas in macrophyte assessment use case</rwps:abstract>
+		<rwps:processversion>1.0</rwps:processversion>
+		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/input/wps_test/in_reportingareas"/>
+		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/input/wps_test/in_areaname"/>
+		<rwps:output rdf:resource="http://localhost:4567/semanticproxy/resources/output/wps_test/out_selectedarea"/>
+		<rwps:wps rdf:resource="http://localhost:4567/semanticproxy/resources/wps/LKNWPS"/>
+	</rdf:Description>
+	
+	<!-- complex input -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/input/wps_test/in_reportingareas">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#datainputclass"/>
+		<rwps:identifier>in.reportingareas</rwps:identifier>
+		<rwps:title>Reporting areas</rwps:title>
+		<rwps:abstract>Ingoing reporting areas</rwps:abstract>
+		<rwps:minoccurs>1</rwps:minoccurs>
+		<rwps:maxoccurs>1</rwps:maxoccurs>
+		<rwps:metadata>http://www.metadata.de/metadata</rwps:metadata>
+		<rwps:inputformchoice rdf:resource="http://localhost:4567/semanticproxy/resources/complexdata/wps_test/complex_reportingareas"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/complexdata/wps_test/complex_reportingareas">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#complexdataclass"/>
+	</rdf:Description>
+	
+	<!-- literal input -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/input/wps_test/in_areaname">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#datainputclass"/>
+		<rwps:identifier>in.areaname</rwps:identifier>
+		<rwps:title>Name</rwps:title>
+		<rwps:abstract>Ingoing name</rwps:abstract>
+		<rwps:minoccurs>1</rwps:minoccurs>
+		<rwps:maxoccurs>1</rwps:maxoccurs>
+		<rwps:metadata>http://www.metadata.de/metadata</rwps:metadata>
+		<rwps:inputformchoice rdf:resource="http://localhost:4567/semanticproxy/resources/literaldata/wps_test/literal_areaname"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/literaldata/wps_test/literal_areaname">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#literaldataclass"/>
+	</rdf:Description>
+	
+	<!-- complex output -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/output/wps_test/out_selectedarea">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#processoutputclass"/>
+		<rwps:identifier>out.selectedarea</rwps:identifier>
+		<rwps:title>Selected area</rwps:title>
+		<rwps:abstract>Area selected by name</rwps:abstract>
+		<rwps:metadata>http://www.metadata.de/metadata</rwps:metadata>
+		<rwps:outputformchoice rdf:resource="http://localhost:4567/semanticproxy/resources/complexdata/wps_test/complex_selectedarea"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/complexdata/wps_test/complex_selectedarea">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#complexdataclass"/>
+	</rdf:Description>
+
+</rdf:RDF>

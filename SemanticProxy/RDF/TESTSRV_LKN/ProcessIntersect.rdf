@@ -1,0 +1,91 @@
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:rwps="http://localhost:4567/semanticproxy/resources/vocab#">
+	
+	<!-- process -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/process/lkn_test/intersect">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#processclass"/>
+		<rwps:identifier>lkn.macrophyte.intersect</rwps:identifier>
+		<rwps:title>Intersect</rwps:title>
+		<rwps:abstract>Intersects reporting areas and topologies whilst taking account of relevant years</rwps:abstract>
+		<rwps:processversion>1.0</rwps:processversion>
+		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/input/lkn_test/in_reportingarea"/>
+		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/input/lkn_test/in_relevanttopographies"/>
+		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/input/lkn_test/in_relevanttopographyyears"/>
+		<rwps:output rdf:resource="http://localhost:4567/semanticproxy/resources/output/lkn_test/out_intersections"/>
+		<rwps:wps rdf:resource="http://localhost:4567/semanticproxy/resources/wps/LKNWPS"/>
+	</rdf:Description>
+	
+	
+	<!-- complex input -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/input/lkn_test/in_reportingarea">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#datainputclass"/>
+		<rwps:identifier>in.reportingarea</rwps:identifier>
+		<rwps:title>Reporting area</rwps:title>
+		<rwps:abstract>Ingoing reporting area</rwps:abstract>
+		<rwps:minoccurs>1</rwps:minoccurs>
+		<rwps:maxoccurs>1</rwps:maxoccurs>
+		<rwps:metadata>http://www.metadata.de/metadata</rwps:metadata>
+		<rwps:inputformchoice rdf:resource="http://localhost:4567/semanticproxy/resources/complexdata/lkn_test/complex_reportingarea"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/complexdata/lkn_test/complex_reportingarea">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#complexdataclass"/>
+	</rdf:Description>
+	
+	
+	<!-- complex input -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/input/lkn_test/in_relevanttopographies">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#datainputclass"/>
+		<rwps:identifier>in.relevanttopographies</rwps:identifier>
+		<rwps:title>Relevant topographies</rwps:title>
+		<rwps:abstract>Ingoing relevant topographies</rwps:abstract>
+		<rwps:minoccurs>1</rwps:minoccurs>
+		<rwps:maxoccurs>1</rwps:maxoccurs>
+		<rwps:metadata>http://www.metadata.de/metadata</rwps:metadata>
+		<rwps:inputformchoice rdf:resource="http://localhost:4567/semanticproxy/resources/complexdata/lkn_test/complex_relevanttopographies"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/complexdata/lkn_test/complex_relevanttopographies">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#complexdataclass"/>
+	</rdf:Description>
+	
+	
+	<!-- complex input -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/input/lkn_test/in_relevanttopographyyears">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#datainputclass"/>
+		<rwps:identifier>in.relevanttopographyyears</rwps:identifier>
+		<rwps:title>Relevant topography years</rwps:title>
+		<rwps:abstract>Ingoing relevant topography years</rwps:abstract>
+		<rwps:minoccurs>1</rwps:minoccurs>
+		<rwps:maxoccurs>1</rwps:maxoccurs>
+		<rwps:metadata>http://www.metadata.de/metadata</rwps:metadata>
+		<rwps:inputformchoice rdf:resource="http://localhost:4567/semanticproxy/resources/complexdata/lkn_test/complex_relevanttopographyyears"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/complexdata/lkn_test/complex_relevanttopographyyears">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#complexdataclass"/>
+	</rdf:Description>
+	
+	
+	<!-- complex output -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/output/lkn_test/out_intersections">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#processoutputclass"/>
+		<rwps:identifier>out.intersections</rwps:identifier>
+		<rwps:title>Intersection area</rwps:title>
+		<rwps:abstract>Outgoing intersecting area</rwps:abstract>
+		<rwps:metadata>http://www.metadata.de/metadata</rwps:metadata>
+		<rwps:outputformchoice rdf:resource="http://localhost:4567/semanticproxy/resources/complexdata/lkn_test/complex_intersections"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/complexdata/lkn_test/complex_intersections">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#complexdataclass"/>
+	</rdf:Description>
+	
+</rdf:RDF>

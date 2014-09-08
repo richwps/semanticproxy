@@ -1,0 +1,150 @@
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:rwps="http://localhost:4567/semanticproxy/resources/vocab#">
+	
+	<!-- process -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/process/wps_test/characteristics">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#processclass"/>
+		<rwps:identifier>lkn.macrophyte.characteristics</rwps:identifier>
+		<rwps:title>Characteristics</rwps:title>
+		<rwps:abstract>Calculates characteristics for reporting areas</rwps:abstract>
+		<rwps:processversion>1.0</rwps:processversion>
+		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/input/wps_test/in_reportingarea1"/>
+		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/input/wps_test/in_reportingarea2"/>
+		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/input/wps_test/in_existingtopographyyears2"/>
+		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/input/wps_test/in_relevantalgae"/>
+		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/input/wps_test/in_relevantseagras"/>
+		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/input/wps_test/in_relevantyears2"/>
+		<rwps:output rdf:resource="http://localhost:4567/semanticproxy/resources/output/wps_test/out_characteristics"/>
+		<rwps:wps rdf:resource="http://localhost:4567/semanticproxy/resources/wps/LKNWPS"/>
+	</rdf:Description>
+	
+	
+	<!-- complex input -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/input/wps_test/in_reportingarea1">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#datainputclass"/>
+		<rwps:identifier>in.reportingarea1</rwps:identifier>
+		<rwps:title>Reporting area 1</rwps:title>
+		<rwps:abstract>Ingoing reporting area 1</rwps:abstract>
+		<rwps:minoccurs>1</rwps:minoccurs>
+		<rwps:maxoccurs>1</rwps:maxoccurs>
+		<rwps:metadata>http://www.metadata.de/metadata</rwps:metadata>
+		<rwps:inputformchoice rdf:resource="http://localhost:4567/semanticproxy/resources/complexdata/wps_test/complex_reportingarea1"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/complexdata/wps_test/complex_reportingarea1">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#complexdataclass"/>
+	</rdf:Description>
+	
+	
+	<!-- complex input -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/input/wps_test/in_reportingarea2">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#datainputclass"/>
+		<rwps:identifier>in.reportingarea2</rwps:identifier>
+		<rwps:title>Reporting area 2</rwps:title>
+		<rwps:abstract>Ingoing reporting area 2</rwps:abstract>
+		<rwps:minoccurs>1</rwps:minoccurs>
+		<rwps:maxoccurs>1</rwps:maxoccurs>
+		<rwps:metadata>http://www.metadata.de/metadata</rwps:metadata>
+		<rwps:inputformchoice rdf:resource="http://localhost:4567/semanticproxy/resources/complexdata/wps_test/complex_reportingarea2"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/complexdata/wps_test/complex_reportingarea2">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#complexdataclass"/>
+	</rdf:Description>
+	
+	<!-- complex input -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/input/wps_test/in_existingtopographyyears2">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#datainputclass"/>
+		<rwps:identifier>in.existingtopographyyears</rwps:identifier>
+		<rwps:title>Existing topography years</rwps:title>
+		<rwps:abstract>Ingoing existing topography years</rwps:abstract>
+		<rwps:minoccurs>1</rwps:minoccurs>
+		<rwps:maxoccurs>1</rwps:maxoccurs>
+		<rwps:metadata>http://www.metadata.de/metadata</rwps:metadata>
+		<rwps:inputformchoice rdf:resource="http://localhost:4567/semanticproxy/resources/complexdata/wps_test/complex_existingtopographyyears2"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/complexdata/wps_test/complex_existingtopographyyears2">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#complexdataclass"/>
+	</rdf:Description>
+	
+	
+	<!-- complex input -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/input/wps_test/in_relevantalgae">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#datainputclass"/>
+		<rwps:identifier>in.relevantalgae</rwps:identifier>
+		<rwps:title>Relevant algae</rwps:title>
+		<rwps:abstract>Ingoing relevant algae</rwps:abstract>
+		<rwps:minoccurs>1</rwps:minoccurs>
+		<rwps:maxoccurs>1</rwps:maxoccurs>
+		<rwps:metadata>http://www.metadata.de/metadata</rwps:metadata>
+		<rwps:inputformchoice rdf:resource="http://localhost:4567/semanticproxy/resources/complexdata/wps_test/complex_relevantalgae2"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/complexdata/wps_test/complex_relevantalgae2">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#complexdataclass"/>
+	</rdf:Description>
+	
+	
+	<!-- complex input -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/input/wps_test/in_relevantseagras">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#datainputclass"/>
+		<rwps:identifier>in.relevantseagras</rwps:identifier>
+		<rwps:title>Relevant seagras</rwps:title>
+		<rwps:abstract>Ingoing relevant seagras</rwps:abstract>
+		<rwps:minoccurs>1</rwps:minoccurs>
+		<rwps:maxoccurs>1</rwps:maxoccurs>
+		<rwps:metadata>http://www.metadata.de/metadata</rwps:metadata>
+		<rwps:inputformchoice rdf:resource="http://localhost:4567/semanticproxy/resources/complexdata/wps_test/complex_relevantseagras2"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/complexdata/wps_test/complex_relevantseagras2">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#complexdataclass"/>
+	</rdf:Description>
+	
+	
+	<!-- complex input -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/input/wps_test/in_relevantyears2">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#datainputclass"/>
+		<rwps:identifier>in.relevantyears2</rwps:identifier>
+		<rwps:title>Relevant years</rwps:title>
+		<rwps:abstract>Ingoing relevant years</rwps:abstract>
+		<rwps:minoccurs>1</rwps:minoccurs>
+		<rwps:maxoccurs>1</rwps:maxoccurs>
+		<rwps:metadata>http://www.metadata.de/metadata</rwps:metadata>
+		<rwps:inputformchoice rdf:resource="http://localhost:4567/semanticproxy/resources/complexdata/wps_test/complex_relevantyears3"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/complexdata/wps_test/complex_relevantyears3">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#complexdataclass"/>
+	</rdf:Description>
+	
+	
+	<!-- complex output -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/output/wps_test/out_characteristics">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#processoutputclass"/>
+		<rwps:identifier>out.characteristics</rwps:identifier>
+		<rwps:title>Characteristics</rwps:title>
+		<rwps:abstract>Outgoing characteristics</rwps:abstract>
+		<rwps:metadata>http://www.metadata.de/metadata</rwps:metadata>
+		<rwps:outputformchoice rdf:resource="http://localhost:4567/semanticproxy/resources/complexdata/wps_test/complex_characteristics"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/complexdata/wps_test/complex_characteristics">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#complexdataclass"/>
+	</rdf:Description>
+	
+	
+	
+
+</rdf:RDF>

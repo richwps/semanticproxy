@@ -4,16 +4,29 @@
   <Owner>HS-OS</Owner>
   <Domain>RichWPS test domain</Domain>
   <PreloadFiles ReplaceableHost="http://localhost:4567">
-    <WPS>RDF\LKN\WPSMacrophyte.rdf</WPS>
-    <WPS>RDF\BAW\WPSModelValidation.rdf</WPS>
 	<WPS>RDF\TESTSRV_BAW\WPSBAW.rdf</WPS>
+	<Process>RDF\TESTSRV_BAW\ProcessHarmonize.rdf</Process>
+    <Process>RDF\TESTSRV_BAW\ProcessCompare.rdf</Process>
+    <Process>RDF\TESTSRV_BAW\ProcessFormat.rdf</Process>
 	<WPS>RDF\TESTSRV_WPS\WPSWPS.rdf</WPS>
+	<Process>RDF\TESTSRV_WPS\ProcessCharacteristics.rdf</Process>
+	<Process>RDF\TESTSRV_WPS\ProcessSelectReportingArea.rdf</Process>
+    <Process>RDF\TESTSRV_WPS\ProcessIntersect.rdf</Process>
+    <Process>RDF\TESTSRV_WPS\ProcessSelectTopography.rdf</Process>
+    <Process>RDF\TESTSRV_WPS\ProcessSelectMSRLD5.rdf</Process>
 	<WPS>RDF\TESTSRV_LKN\WPSLKN.rdf</WPS>
+	<Process>RDF\TESTSRV_LKN\ProcessCharacteristics.rdf</Process>
+	<Process>RDF\TESTSRV_LKN\ProcessSelectReportingArea.rdf</Process>
+    <Process>RDF\TESTSRV_LKN\ProcessIntersect.rdf</Process>
+    <Process>RDF\TESTSRV_LKN\ProcessSelectTopography.rdf</Process>
+    <Process>RDF\TESTSRV_LKN\ProcessSelectMSRLD5.rdf</Process>
+	<WPS>RDF\LKN\WPSMacrophyte.rdf</WPS>
     <Process>RDF\LKN\ProcessSelectReportingArea.rdf</Process>
     <Process>RDF\LKN\ProcessIntersect.rdf</Process>
     <Process>RDF\LKN\ProcessSelectTopography.rdf</Process>
     <Process>RDF\LKN\ProcessSelectMSRLD5.rdf</Process>
     <Process>RDF\LKN\ProcessCharacteristics.rdf</Process>
+	<WPS>RDF\BAW\WPSModelValidation.rdf</WPS>
     <Process>RDF\BAW\ProcessHarmonize.rdf</Process>
     <Process>RDF\BAW\ProcessCompare.rdf</Process>
     <Process>RDF\BAW\ProcessFormat.rdf</Process>
