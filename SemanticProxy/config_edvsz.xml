@@ -6,7 +6,9 @@
   <PreloadFiles ReplaceableHost="http://localhost:4567">
     <WPS>RDF\LKN\WPSMacrophyte.rdf</WPS>
     <WPS>RDF\BAW\WPSModelValidation.rdf</WPS>
-	<WPS>RDF\LKNWPS\WPSLKN.rdf</WPS>
+	<WPS>RDF\TESTSRV_BAW\WPSBAW.rdf</WPS>
+	<WPS>RDF\TESTSRV_WPS\WPSWPS.rdf</WPS>
+	<WPS>RDF\TESTSRV_LKN\WPSLKN.rdf</WPS>
     <Process>RDF\LKN\ProcessSelectReportingArea.rdf</Process>
     <Process>RDF\LKN\ProcessIntersect.rdf</Process>
     <Process>RDF\LKN\ProcessSelectTopography.rdf</Process>

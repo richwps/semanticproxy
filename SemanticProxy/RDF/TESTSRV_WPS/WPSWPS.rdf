@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:rwps="http://localhost:4567/semanticproxy/resources/vocab#">
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/wps/WPSWPS">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#wpsclass"/>
+		<rwps:endpoint>http://richwps.edvsz.hs-osnabrueck.de/wps/WebProcessingService</rwps:endpoint>
+	</rdf:Description>
+
+</rdf:RDF>
