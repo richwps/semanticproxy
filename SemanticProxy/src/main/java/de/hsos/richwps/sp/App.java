@@ -134,11 +134,16 @@ public class App {
                         try{ 
                             rdf = source.getNextWPS();
                         }catch(ImportException e){
-                            Logger.getLogger(App.class).warn(e.getClass()+"Skipped a WPS of "+source.getInfo(),e);
-                            System.out.println("[WARN] Skipped a WPS of "+source.getInfo());
+                            Logger.getLogger(App.class).warn(e.getClass()+"Aborted reading a WPS of "+source.getInfo(),e);
+                            System.err.println("[WARN] Aborted reading a WPS of "+source.getInfo());
                         }
                         if(rdf != null){
-                            ContentChanger.insertWPS(rdf);
+                            try{
+                                ContentChanger.insertWPS(rdf);
+                            }catch(Exception e){
+                                Logger.getLogger(App.class).warn(e.getClass()+"Aborted inserting WPS \n"+rdf,e);
+                                System.err.println("[WARN] Aborted inserting a WPS \n"+rdf);
+                            }
                         }
                         else{
                             break;
@@ -151,12 +156,16 @@ public class App {
                         try{ 
                             rdf = source.getNextProcess();
                         }catch(ImportException e){
-                            Logger.getLogger(App.class).warn("Skipped a process of "+source.getInfo(),e);
-                            System.out.println("[WARN] Skipped a process of "+source.getInfo());
+                            Logger.getLogger(App.class).warn("Aborted reading a process of "+source.getInfo(),e);
+                            System.err.println("[WARN] Aborted readign a process of "+source.getInfo());
                         }
                         if(rdf != null){
-                            ContentChanger.insertProcess(rdf);
-                            
+                            try{
+                                ContentChanger.insertProcess(rdf);
+                            }catch(Exception e){
+                                Logger.getLogger(App.class).warn(e.getClass()+"Aborted inserting process RDF \n"+rdf,e);
+                                System.err.println("[WARN] Aborted inserting WPS RDF \n"+rdf);
+                            }
                         }
                         else{
                             break;

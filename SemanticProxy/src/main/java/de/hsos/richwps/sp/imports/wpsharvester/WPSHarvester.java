@@ -4,6 +4,7 @@
  */
 package de.hsos.richwps.sp.imports.wpsharvester;
 
+import de.hsos.richwps.sp.App;
 import de.hsos.richwps.sp.imports.IImportSource;
 import de.hsos.richwps.sp.imports.ImportException;
 import java.io.IOException;
@@ -18,6 +19,7 @@ import net.opengis.wps.x100.CapabilitiesDocument;
 import net.opengis.wps.x100.InputDescriptionType;
 import net.opengis.wps.x100.OutputDescriptionType;
 import net.opengis.wps.x100.ProcessDescriptionType;
+import org.apache.log4j.Logger;
 
 import org.n52.wps.client.WPSClientException;
 import org.n52.wps.client.WPSClientSession;
@@ -60,7 +62,7 @@ public class WPSHarvester implements IImportSource {
                 capabilities = requestCapabilities(targetURL.toString());
             } catch (WPSClientException wpse) {
                 wpsIdx++;
-                throw new ImportException("", wpse);
+                throw new ImportException("Unable to contact WPS at "+targetURL, wpse);
             }
         }
 
@@ -77,6 +79,7 @@ public class WPSHarvester implements IImportSource {
             throw new ImportException("", ex);
         }
         wpsIdx++;
+        Logger.getLogger(WPSHarvester.class).info("Requested target WPS "+targetURL+" successfully");
         return xmlRDF;
     }
 
@@ -87,7 +90,7 @@ public class WPSHarvester implements IImportSource {
                 capabilities = requestCapabilities(targetURL.toString());
             } catch (WPSClientException wpse) {
                 processIdx++;
-                throw new ImportException("", wpse);
+                throw new ImportException("Unable to contact WPS at "+targetURL+ " for requesting capabilities", wpse);
             }
         }
         //determine next process
@@ -163,7 +166,7 @@ public class WPSHarvester implements IImportSource {
                     list.add(new URL(metaArr[i].getHref()));
                 } catch (MalformedURLException murle) {
                     processIdx++;
-                    throw new ImportException("Error on reading href attribute from metadata; href=" + metaArr[i].getHref(), murle);
+                    throw new ImportException("Error on reading href attribute from metadata; href=" + metaArr[i].getHref() + "of process "+processIdentifier, murle);
                 }
             }
             process.setMetadataList(list);
@@ -202,7 +205,7 @@ public class WPSHarvester implements IImportSource {
                             metaDataList.add(new URL(metaArr[j].getHref()));
                         } catch (MalformedURLException murle) {
                             processIdx++;
-                            throw new ImportException("Error on reading href attribute from metadata; href=" + metaArr[j].getHref(), murle);
+                            throw new ImportException("Error on reading href attribute from metadata; href=" + metaArr[j].getHref()+" of process "+processIdentifier, murle);
                         }
                     }
                     input.setMetadataList(metaDataList);
@@ -220,7 +223,7 @@ public class WPSHarvester implements IImportSource {
                     input.setPostInputFormChoice(new PostBoundingBoxData(boundingBoxDataRDFID));
                 } else {
                     processIdx++;
-                    throw new ImportException("No data type set for input" + input.getIdentifier());
+                    throw new ImportException("No data type set for input" + input.getIdentifier()+ " of process" +processIdentifier);
                 }
 
                 list.add(input);
@@ -258,7 +261,7 @@ public class WPSHarvester implements IImportSource {
                             metaDataList.add(new URL(metaArr[j].getHref()));
                         } catch (MalformedURLException murle) {
                             processIdx++;
-                            throw new ImportException("Error on reading href attribute from metadata; href=" + metaArr[j].getHref(), murle);
+                            throw new ImportException("Error on reading href attribute from metadata; href=" + metaArr[j].getHref()+" of process "+processIdentifier, murle);
                         }
                     }
                     output.setMetadataList(metaDataList);
@@ -275,7 +278,7 @@ public class WPSHarvester implements IImportSource {
                     output.setPostOutputFormChoice(new PostBoundingBoxData(boundingBoxDataRDFID));
                 } else {
                     processIdx++;
-                    throw new ImportException("No data type set for output" + output.getIdentifier());
+                    throw new ImportException("No data type set for output" + output.getIdentifier()+" of process "+processIdentifier);
                 }
 
                 list.add(output);
@@ -321,9 +324,9 @@ public class WPSHarvester implements IImportSource {
             xmlRDF = builder.toXMLRDF();
         } catch (Exception ex) {
             processIdx++;
-            throw new ImportException("", ex);
+            throw new ImportException("Unable to bilt XMLRDF doc for process "+processIdentifier, ex);
         }
-
+        Logger.getLogger(WPSHarvester.class).info("Request process inforation for process "+processIdentifier+ " of WPS "+targetURL+ " successfully");
         processIdx++;
         return xmlRDF;
     }

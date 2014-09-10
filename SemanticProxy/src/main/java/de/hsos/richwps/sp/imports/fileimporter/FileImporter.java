@@ -4,10 +4,12 @@
  */
 package de.hsos.richwps.sp.imports.fileimporter;
 
+import de.hsos.richwps.sp.App;
 import de.hsos.richwps.sp.InputFile;
 import de.hsos.richwps.sp.imports.IImportSource;
 import de.hsos.richwps.sp.imports.ImportException;
 import java.util.ArrayList;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -48,6 +50,7 @@ public class FileImporter implements IImportSource{
                 content = content.replace(f.getReplacableHost(), newHost);
             }
             wpsIdx++;
+            Logger.getLogger(App.class).info("Read file "+f.getFile().getAbsolutePath()+" successfully");
             return content;
         }
         return null;
@@ -68,6 +71,7 @@ public class FileImporter implements IImportSource{
                 content = content.replace(f.getReplacableHost(), newHost);
             }
             processIdx++;
+            Logger.getLogger(App.class).info("Read file "+f.getFile().getAbsolutePath()+" successfully");
             return content;
         }
         return null;
