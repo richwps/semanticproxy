@@ -20,7 +20,7 @@
 	<WPSServer targetURL="http://richwps.edvsz.hs-osnabrueck.de/baw/WebProcessingService"/>
   </DataSources>
   <HTTPEndpoints>
-    <Host>http://localhost:4567</Host>
+    <Host>http://richwps.edvsz.hs-osnabrueck.de</Host>
     <Application>semanticproxy</Application>
     <Resources>resources</Resources>
     <Vocabulary>vocab</Vocabulary>
