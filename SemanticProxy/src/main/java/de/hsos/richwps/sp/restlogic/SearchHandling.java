@@ -78,18 +78,19 @@ public class SearchHandling {
 
                 //search in abstract
                 stats = DBIO.getStatementsForSubjAndPred(completeList.get(i), processAbstract);
-                if (stats.length != 1) {
+                if (stats.length > 1) {
                     throw new Exception("Malformed resource " + completeList.get(i).toString());
                 }
-                str = stats[0].getObject().stringValue();
-                if (str.toLowerCase().contains(keyword.toLowerCase())) {
-                    match++;
+                else if(stats.length == 1){
+                    str = stats[0].getObject().stringValue();
+                    if (str.toLowerCase().contains(keyword.toLowerCase())) {
+                        match++;
+                    }
+                    if (match > 0) {
+                        RankedProcess rPro = new RankedProcess(completeList.get(i), match);
+                        resultList.add(rPro);
+                    }
                 }
-                if (match > 0) {
-                    RankedProcess rPro = new RankedProcess(completeList.get(i), match);
-                    resultList.add(rPro);
-                }
-
             }
             Collections.sort(resultList);
             SubjectList retList = new SubjectList();

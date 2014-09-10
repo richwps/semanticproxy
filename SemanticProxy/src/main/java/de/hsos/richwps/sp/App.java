@@ -1,5 +1,9 @@
 package de.hsos.richwps.sp;
 
+import de.hsos.richwps.sp.imports.fileimporter.FileImporter;
+import de.hsos.richwps.sp.imports.IImportSource;
+import de.hsos.richwps.sp.imports.ImportException;
+import de.hsos.richwps.sp.imports.wpsharvester.WPSHarvester;
 import de.hsos.richwps.sp.rdfdb.DBAdministration;
 import de.hsos.richwps.sp.rdfdb.DBIO;
 import de.hsos.richwps.sp.restlogic.ContentChanger;
@@ -11,6 +15,7 @@ import de.hsos.richwps.sp.web.SearchAccess;
 import de.hsos.richwps.sp.web.UpdateAccess;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -98,51 +103,96 @@ public class App {
                 Logger.getLogger(App.class).info("Inserting network node");
                 ContentChanger.insertNetwork(config.getOwner(), config.getDomain());
 
-                //insert rdf resources from predefined files
-                ArrayList<File> list = config.getWpsRDFFiles();
-                for (int i = 0; i < list.size(); i++) {
-                    //read rdf file
-                    String content = TextFileReader.readPlainText(list.get(i));
-                    //replace wildcard string with host
-                    if (config.getReplaceableHost() != null) {
-                        if (content.contains(config.getReplaceableHost())) {
-                            content = content.replaceAll(config.getReplaceableHost(), config.getHostURL().toString());
+                //Sources
+                ArrayList<IImportSource> sourceList = new ArrayList<>();
+                
+                //configure file data source
+                ArrayList<File> wpsList = config.getWpsRDFFiles();
+                File[] wpsFiles = wpsList.toArray(new File[wpsList.size()]);
+                ArrayList<File> processList = config.getProcessRDFFiles();
+                File[] processFiles = processList.toArray(new File[processList.size()]);
+                FileImporter fileImporter = new FileImporter(wpsFiles, processFiles, config.getReplaceableHost(), config.getHostURL().toString());
+                sourceList.add(fileImporter);
+                
+                IImportSource harvester = new WPSHarvester(new URL("http://richwps.edvsz.hs-osnabrueck.de/wps/WebProcessingService"), 
+                    new URL(config.getWpsNamingEndpoint().toString()), 
+                    new URL(config.getProcessNamingEndpoint().toString()),
+                    new URL(config.getInputNamingEndpoint().toString()),
+                    new URL(config.getOutputNamingEndpoint().toString()),
+                    new URL(config.getResourcesURL().toString()+ "/literal"),
+                    new URL(config.getResourcesURL().toString()+ "/complex"),
+                    new URL(config.getResourcesURL().toString()+ "/bounding"));
+                sourceList.add(harvester);
+                
+                harvester = new WPSHarvester(new URL("http://richwps.edvsz.hs-osnabrueck.de/lkn/WebProcessingService"), 
+                   new URL(config.getWpsNamingEndpoint().toString()), 
+                    new URL(config.getProcessNamingEndpoint().toString()),
+                    new URL(config.getInputNamingEndpoint().toString()),
+                    new URL(config.getOutputNamingEndpoint().toString()),
+                    new URL(config.getResourcesURL().toString()+ "/literal"),
+                    new URL(config.getResourcesURL().toString()+ "/complex"),
+                    new URL(config.getResourcesURL().toString()+ "/bounding"));
+                sourceList.add(harvester);
+                
+                harvester = new WPSHarvester(new URL("http://richwps.edvsz.hs-osnabrueck.de/baw/WebProcessingService"), 
+                   new URL(config.getWpsNamingEndpoint().toString()), 
+                    new URL(config.getProcessNamingEndpoint().toString()),
+                    new URL(config.getInputNamingEndpoint().toString()),
+                    new URL(config.getOutputNamingEndpoint().toString()),
+                    new URL(config.getResourcesURL().toString()+ "/literal"),
+                    new URL(config.getResourcesURL().toString()+ "/complex"),
+                    new URL(config.getResourcesURL().toString()+ "/bounding"));
+                sourceList.add(harvester);
+                
+                //collect data
+                for(IImportSource source : sourceList){
+                    //collect WPS
+                    
+                    while(true){
+                        String rdf = null;
+                        try{ 
+                            rdf = source.getNextWPS();
+                        }catch(ImportException e){
+                            Logger.getLogger(App.class).warn(e.getClass()+"Skipped a WPS of "+source.getInfo(),e);
+                            System.out.println("[WARN] Skipped a WPS of "+source.getInfo());
+                        }
+                        if(rdf != null){
+                            ContentChanger.insertWPS(rdf);
+                        }
+                        else{
+                            break;
+                        }
+                    }   
+                  
+                    //collect processes
+                    while(true){
+                        String rdf = null;
+                        try{ 
+                            rdf = source.getNextProcess();
+                        }catch(ImportException e){
+                            Logger.getLogger(App.class).warn("Skipped a process of "+source.getInfo(),e);
+                            System.out.println("[WARN] Skipped a process of "+source.getInfo());
+                        }
+                        if(rdf != null){
+                            ContentChanger.insertProcess(rdf);
+                        }
+                        else{
+                            break;
                         }
                     }
-                    //insert (modified) content into db
-                    ContentChanger.insertWPS(content);
-                    System.out.println("File " + list.get(i).getAbsolutePath() + " loaded");
-                    Logger.getLogger(App.class).info("File " + list.get(i).getAbsolutePath() + " loaded");
-                }
-
-                list = config.getProcessRDFFiles();
-                for (int i = 0; i < list.size(); i++) {
-                    //read rdf file
-                    String content = TextFileReader.readPlainText(list.get(i));
-                    //replace wildcard string with host
-                    if (config.getReplaceableHost() != null) {
-                        if (content.contains(config.getReplaceableHost())) {
-                            content = content.replaceAll(config.getReplaceableHost(), config.getHostURL().toString());
-                        }
-                    }
-                    //insert (modified) content into db
-                    ContentChanger.insertProcess(content);
-                    System.out.println("File " + list.get(i).getAbsolutePath() + " loaded");
-                    Logger.getLogger(App.class).info("File " + list.get(i).getAbsolutePath() + " loaded");
                 }
             }
 
-
         } catch (Exception e) {
-            Logger.getLogger(App.class).error(e.getClass()+"+-exception during initialization of DB",e);
+            Logger.getLogger(App.class).error(e.getClass()+"-exception during initialization of DB",e);
             Logger.getLogger(App.class).info("Shutdown due to error");
             System.out.println("Shutdown due to error");
             System.exit(-1);
-        }
+        } 
 
 
         //prepare web frontend
-        
+        //
         // if there is a valid port in the config -> use it...
         // ...else use default port
         if (config.getPort() > 0) {
@@ -153,8 +203,8 @@ public class App {
                 config.getVocabularyURL(), config.getNetworkURL(),
                 config.getProcessListURL(), config.getWpsListURL());
         CreateAccess.activate(config.getProcessListURL(), config.getWpsListURL());
-        DeleteAccess.activate(config.getProcessNamingURL(), config.getWpsNamingURL());
-        UpdateAccess.activate(config.getProcessNamingURL(), config.getWpsNamingURL());
+        DeleteAccess.activate(config.getProcessNamingEndpoint(), config.getWpsNamingEndpoint());
+        UpdateAccess.activate(config.getProcessNamingEndpoint(), config.getWpsNamingEndpoint());
         SearchAccess.activate(config.getSearchURL());
 
         System.out.println("Semantic Proxy is listening");

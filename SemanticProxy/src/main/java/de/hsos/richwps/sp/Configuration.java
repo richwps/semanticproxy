@@ -276,13 +276,7 @@ public class Configuration {
         return startClean;
     }
 
-    public URL getWpsNamingURL() {
-        return wpsNamingEndpoint;
-    }
-
-    public URL getProcessNamingURL() {
-        return processNamingEndpoint;
-    }
+    
 
     public URL getInputNamingEndpoint() {
         return inputNamingEndpoint;

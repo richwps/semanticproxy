@@ -4,6 +4,7 @@
  */
 package de.hsos.richwps.sp;
 
+import de.hsos.richwps.sp.imports.fileimporter.TextFileReader;
 import de.hsos.richwps.sp.rdfdb.DBAdministration;
 import de.hsos.richwps.sp.rdfdb.DBIO;
 import de.hsos.richwps.sp.rdfdb.RDFException;
