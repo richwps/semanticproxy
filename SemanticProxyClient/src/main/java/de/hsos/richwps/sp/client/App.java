@@ -66,6 +66,15 @@ public class App {
                     System.out.println("      -> Title:      " + proc.getTitle());
                     System.out.println("      -> Abstract:   " + proc.getAbstract());
                     System.out.println("      -> Version:    " + proc.getProcessVersion());
+                    {
+                        URL[] metadata = proc.getMetadata();
+                        if (metadata.length==0) {
+                            System.out.println("         -> Metadata:   Not set");
+                        } else {
+                            for(URL md : metadata)
+                                System.out.println("         -> Metadata:   "+md.toString());
+                        }
+                    }
                     System.out.println("      -> Inputs:");
                     Input[] inputs = processes[j].getInputs();
                     for (int k = 0; k < inputs.length; k++) {
@@ -75,10 +84,14 @@ public class App {
                         System.out.println("         -> Abstract:   " + in.getAbstract());
                         System.out.println("         -> MinOccurs:  " + in.getMinOccurs());
                         System.out.println("         -> MaxOccurs:  " + in.getMaxOccurs());
-                        if (in.getMetadata() != null) {
-                            System.out.println("         -> Metadata:   " + in.getMetadata().toString());
-                        } else {
-                            System.out.println("         -> Metadata:   Not set");
+                        {
+                            URL[] metadata = in.getMetadata();
+                            if (metadata.length==0) {
+                                System.out.println("         -> Metadata:   Not set");
+                            } else {
+                                for(URL md : metadata)
+                                    System.out.println("         -> Metadata:   "+md.toString());
+                            }
                         }
                         InAndOutputForm inf = in.getInputFormChoice();
                         if (inf.getDataType() == InAndOutputForm.LITERAL_TYPE) {
@@ -100,10 +113,14 @@ public class App {
                         System.out.println("         -> Identifier: " + out.getIdentifier());
                         System.out.println("         -> Title:      " + out.getTitle());
                         System.out.println("         -> Abstract:   " + out.getAbstract());
-                        if (out.getMetadata() != null) {
-                            System.out.println("         -> Metadata:   " + out.getMetadata().toString());
-                        } else {
-                            System.out.println("         -> Metadata:   Not set");
+                        {
+                            URL[] metadata = out.getMetadata();
+                            if (metadata.length==0) {
+                                System.out.println("         -> Metadata:   Not set");
+                            } else {
+                                for(URL md : metadata)
+                                    System.out.println("         -> Metadata:   "+md.toString());
+                            }
                         }
                         InAndOutputForm inf = out.getOutputFormChoice();
                         if (inf.getDataType() == InAndOutputForm.LITERAL_TYPE) {

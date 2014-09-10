@@ -12,6 +12,10 @@ import de.hsos.richwps.sp.client.rdf.RDFID;
 import de.hsos.richwps.sp.client.rdf.RDFResource;
 import de.hsos.richwps.sp.client.wps.SPClient;
 import de.hsos.richwps.sp.client.wps.Vocabulary;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Wraps an RDFResource object that represents a wps process. This wrapper
@@ -64,13 +68,33 @@ public class Process {
         return getSingleAttribute(Vocabulary.Title);
     }
 
-    public String getAbstract() throws RDFException{
-        return getSingleAttribute(Vocabulary.Abstract);
+    public String getAbstract() throws RDFException {
+        String[] abstracts = res.findLiterals(Vocabulary.Abstract);
+        if(abstracts.length == 0)
+            return "";
+        return abstracts[0];
     }
 
     public String getProcessVersion() throws RDFException{
         return getSingleAttribute(Vocabulary.ProcessVersion);
     }
+    
+    
+    public URL[] getMetadata() throws RDFException {
+            String[] metadata = res.findLiterals(Vocabulary.Metadata);
+            URL[] urls = new URL[metadata.length];
+            for(int i=0; i<metadata.length;i++){
+                try{
+                    urls[i]= new URL(metadata[i]);
+                }catch(MalformedURLException murle){
+                    throw new RDFException("Malformed URL in metadata found: "+metadata[i],murle);
+                }
+            }
+            return urls;
+        }
+    
+   
+    
 
     public Input[] getInputs() throws BadRequestException, InternalSPException, CommunicationException, RDFException {
         RDFID[] rdfids = res.findResources(Vocabulary.Input);
@@ -93,4 +117,5 @@ public class Process {
         }
         return outputs;
     }
+    
 }

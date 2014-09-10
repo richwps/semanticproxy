@@ -14,4 +14,8 @@ public class RDFException extends Exception {
     public RDFException(String msg) {
         super(msg);
     }
+    
+    public RDFException(String msg, Exception parent) {
+        super(msg,parent);
+    }
 }

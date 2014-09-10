@@ -13,6 +13,7 @@ import de.hsos.richwps.sp.client.rdf.RDFID;
 import de.hsos.richwps.sp.client.rdf.RDFResource;
 import de.hsos.richwps.sp.client.wps.SPClient;
 import de.hsos.richwps.sp.client.wps.Vocabulary;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -60,7 +61,10 @@ public class Input {
     }
 
     public String getAbstract() throws RDFException {
-        return getSingleAttribute(Vocabulary.Abstract);
+        String[] abstracts = res.findLiterals(Vocabulary.Abstract);
+        if(abstracts.length == 0)
+            return "";
+        return abstracts[0];
     }
 
     public int getMinOccurs() throws RDFException {
@@ -73,19 +77,17 @@ public class Input {
         return Integer.valueOf(tmp);
     }
 
-    public URL getMetadata() throws RDFException {
-        String tmp = getSingleAttribute(Vocabulary.Metadata);
-        if (tmp == null) {
-            return null;
-        } else {
-            URL md = null;
-            try {
-                md = new URL(tmp);
-            } catch (Exception e) {
-                return null;
+    public URL[] getMetadata() throws RDFException {
+        String[] metadata = res.findLiterals(Vocabulary.Metadata);
+        URL[] urls = new URL[metadata.length];
+        for(int i=0; i<metadata.length;i++){
+            try{
+                urls[i]= new URL(metadata[i]);
+            }catch(MalformedURLException murle){
+                throw new RDFException("Malformed URL in metadata found: "+metadata[i],murle);
             }
-            return md;
         }
+        return urls;
     }
 
     public InAndOutputForm getInputFormChoice() throws RDFException, CommunicationException, BadRequestException, InternalSPException {

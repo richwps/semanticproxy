@@ -25,7 +25,7 @@ public class PostProcess {
     private String bstract = null;
     private String processVersion = null;
     private ArrayList<URL> metadataList = null;
-    private ArrayList<URL> profileList = null;
+    private ArrayList<String> profileList = null;
     private URL wsdl = null;
     private boolean storeSupported = false;
     private boolean useStoreSupported = false;
@@ -80,8 +80,8 @@ public class PostProcess {
             }
         }
         if (profileList != null) {
-            for (URL profile : profileList) {
-                lexp = new LiteralExpression(Vocabulary.Profile, profile.toString());
+            for (String profile : profileList) {
+                lexp = new LiteralExpression(Vocabulary.Profile, profile);
                 literalList.add(lexp);
             }
         }
@@ -176,11 +176,11 @@ public class PostProcess {
         this.metadataList = metadataList;
     }
 
-    public ArrayList<URL> getProfileList() {
+    public ArrayList<String> getProfileList() {
         return profileList;
     }
 
-    public void setProfileList(ArrayList<URL> profileList) {
+    public void setProfileList(ArrayList<String> profileList) {
         this.profileList = profileList;
     }
 

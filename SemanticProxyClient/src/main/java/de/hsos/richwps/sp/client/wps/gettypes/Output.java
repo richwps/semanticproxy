@@ -13,6 +13,7 @@ import de.hsos.richwps.sp.client.rdf.RDFID;
 import de.hsos.richwps.sp.client.rdf.RDFResource;
 import de.hsos.richwps.sp.client.wps.SPClient;
 import de.hsos.richwps.sp.client.wps.Vocabulary;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -62,24 +63,25 @@ public class Output {
         return getSingleAttribute(Vocabulary.Title);
     }
 
-    public String getAbstract() throws RDFException{
-        return getSingleAttribute(Vocabulary.Abstract);
+    public String getAbstract() throws RDFException {
+        String[] abstracts = res.findLiterals(Vocabulary.Abstract);
+        if(abstracts.length == 0)
+            return "";
+        return abstracts[0];
     }
     
    
-    public URL getMetadata()throws RDFException{
-        String tmp = getSingleAttribute(Vocabulary.Metadata);
-        if(tmp == null)
-            return null;
-        else{
-            URL md = null;
+    public URL[] getMetadata() throws RDFException {
+        String[] metadata = res.findLiterals(Vocabulary.Metadata);
+        URL[] urls = new URL[metadata.length];
+        for(int i=0; i<metadata.length;i++){
             try{
-                md = new URL(tmp);
-            }catch(Exception e){
-                return null;
+                urls[i]= new URL(metadata[i]);
+            }catch(MalformedURLException murle){
+                throw new RDFException("Malformed URL in metadata found: "+metadata[i],murle);
             }
-            return md;
         }
+        return urls;
     }
     
     
