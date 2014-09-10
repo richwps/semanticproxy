@@ -5,16 +5,16 @@
   <Domain>RichWPS test domain</Domain>
   <Port>4567</Port>
   <DataSources>
-    <File path="RDF\LKN\WPSMacrophyte.rdf" type="WPS" replacableHost="http://localhost:4567"/>
-    <File path="RDF\BAW\WPSModelValidation.rdf" type="WPS" replacableHost="http://localhost:4567"/>
-    <File path="RDF\LKN\ProcessSelectReportingArea.rdf" type="Process" replacableHost="http://localhost:4567"/>
-    <File path="RDF\LKN\ProcessIntersect.rdf" type="Process" replacableHost="http://localhost:4567"/>
-    <File path="RDF\LKN\ProcessSelectTopography.rdf" type="Process" replacableHost="http://localhost:4567"/>
-    <File path="RDF\LKN\ProcessSelectMSRLD5.rdf" type="Process" replacableHost="http://localhost:4567"/>
-    <File path="RDF\LKN\ProcessCharacteristics.rdf" type="Process" replacableHost="http://localhost:4567"/>
-    <File path="RDF\BAW\ProcessHarmonize.rdf" type="Process" replacableHost="http://localhost:4567"/>
-    <File path="RDF\BAW\ProcessCompare.rdf" type="Process" replacableHost="http://localhost:4567"/>
-    <File path="RDF\BAW\ProcessFormat.rdf" type="Process" replacableHost="http://localhost:4567"/>
+    <File path="RDF\LKN\WPSMacrophyte.rdf" type="WPS" replaceableHost="http://localhost:4567"/>
+    <File path="RDF\BAW\WPSModelValidation.rdf" type="WPS" replaceableHost="http://localhost:4567"/>
+    <File path="RDF\LKN\ProcessSelectReportingArea.rdf" type="Process" replaceableHost="http://localhost:4567"/>
+    <File path="RDF\LKN\ProcessIntersect.rdf" type="Process" replaceableHost="http://localhost:4567"/>
+    <File path="RDF\LKN\ProcessSelectTopography.rdf" type="Process" replaceableHost="http://localhost:4567"/>
+    <File path="RDF\LKN\ProcessSelectMSRLD5.rdf" type="Process" replaceableHost="http://localhost:4567"/>
+    <File path="RDF\LKN\ProcessCharacteristics.rdf" type="Process" replaceableHost="http://localhost:4567"/>
+    <File path="RDF\BAW\ProcessHarmonize.rdf" type="Process" replaceableHost="http://localhost:4567"/>
+    <File path="RDF\BAW\ProcessCompare.rdf" type="Process" replaceableHost="http://localhost:4567"/>
+    <File path="RDF\BAW\ProcessFormat.rdf" type="Process" replaceableHost="http://localhost:4567"/>
 	<WPSServer targetURL="http://richwps.edvsz.hs-osnabrueck.de/wps/WebProcessingService"/>
 	<WPSServer targetURL="http://richwps.edvsz.hs-osnabrueck.de/lkn/WebProcessingService"/>
 	<WPSServer targetURL="http://richwps.edvsz.hs-osnabrueck.de/baw/WebProcessingService"/>

@@ -156,6 +156,7 @@ public class App {
                         }
                         if(rdf != null){
                             ContentChanger.insertProcess(rdf);
+                            
                         }
                         else{
                             break;

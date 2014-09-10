@@ -35,7 +35,7 @@ RichWPS-SemanticProxy configuration schema
         </xs:sequence>
 		<xs:attribute name="type" type="cg:ResourceType" use="required"/>
         <xs:attribute name="path" type="xs:string" use="required"/>
-		<xs:attribute name="ReplaceableHost" type="xs:string" use="optional"/>
+		<xs:attribute name="replaceableHost" type="xs:string" use="optional"/>
     </xs:complexType>
 	<xs:simpleType name="ResourceType">
 		<xs:restriction base="xs:string">

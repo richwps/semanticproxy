@@ -76,9 +76,9 @@ public class InputFile {
         String t = "Type="+typ.name();
         String repHost = null;
         if(replacableHost != null)
-            repHost="ReplacableHost=\""+replacableHost+"\"";
+            repHost="ReplaceableHost=\""+replacableHost+"\"";
         else
-            repHost="ReplacableHost=not set";
+            repHost="ReplaceableHost=not set";
         return path+" "+t+" "+repHost;
     }
     

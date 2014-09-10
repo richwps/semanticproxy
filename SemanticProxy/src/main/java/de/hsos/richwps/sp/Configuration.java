@@ -200,6 +200,8 @@ public class Configuration {
             if(f.isSetReplaceableHost()){
                 inputFile.setReplacableHost(f.getReplaceableHost());
             }
+            else
+                inputFile.setReplacableHost(null);
             inputFiles.add(inputFile);
         }
         
