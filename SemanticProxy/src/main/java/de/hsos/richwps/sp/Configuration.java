@@ -6,13 +6,18 @@ package de.hsos.richwps.sp;
 
 import de.hsos.richwps.sp.config.ConfigurationDocument;
 import de.hsos.richwps.sp.config.HTTPEndpoints;
-import de.hsos.richwps.sp.config.PreloadFiles;
-import de.hsos.richwps.sp.config.RDFNamingEndpoints;
+import de.hsos.richwps.sp.config.DataSources;
+import de.hsos.richwps.sp.config.RDFNaming;
+import de.hsos.richwps.sp.config.ResourceType;
+import de.hsos.richwps.sp.config.WPSServer;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlException;
 
 /**
@@ -21,6 +26,8 @@ import org.apache.xmlbeans.XmlException;
  * @author fbensman
  */
 public class Configuration {
+    private static final int E_WPSVALUE = 1;
+    private static final int E_PROCESVALUE = 2;
 
     private File configSource = null;
     private boolean loaded = false;
@@ -29,9 +36,8 @@ public class Configuration {
     private String domain = null;
     private String owner = null;
     private int port = -1;
-    private ArrayList<File> processRDFFiles = null;
-    private ArrayList<File> wpsRDFFiles = null;
-    private String replaceableHost = null;
+    private ArrayList<InputFile> inputFiles = null;
+    private ArrayList<URL> wpsServers = null;
     //http endpoints
     private URL hostURL = null;
     private URL resourcesURL = null;
@@ -46,6 +52,9 @@ public class Configuration {
     private URL processNamingEndpoint = null;
     private URL inputNamingEndpoint = null;
     private URL outputNamingEndpoint = null;
+    private URL literalNamingEndpoint = null;
+    private URL complexNamingEndpoint = null;
+    private URL boundingBoxNamingEndpoint = null;
     
     
     // ----------   Default values --------------
@@ -82,11 +91,14 @@ public class Configuration {
     private String defaultProcessNamingEndpoint = null;
     private String defaultInputNamingEndpoint = null;
     private String defaultOutputNamingEndpoint = null;
+    private String defaultLiteralNamingEndpoint = null;
+    private String defaultComplexNamingEndpoint = null;
+    private String defaultBoundingBoxNamingEndpoint = null;
     
 
     public Configuration() {
-        wpsRDFFiles = new ArrayList<>();
-        processRDFFiles = new ArrayList<>();
+        inputFiles = new ArrayList<>();
+        wpsServers = new ArrayList<>();
         buildDefaults();
         
     }
@@ -127,6 +139,9 @@ public class Configuration {
         defaultProcessNamingEndpoint = "process";
         defaultInputNamingEndpoint = "input";
         defaultOutputNamingEndpoint = "output";
+        defaultLiteralNamingEndpoint = "literal";
+        defaultComplexNamingEndpoint = "complex";
+        defaultBoundingBoxNamingEndpoint = "boundingbox";
         
     }
     
@@ -157,35 +172,40 @@ public class Configuration {
         String tmpOwner = config.getOwner();
         String tmpDomain = config.getDomain();
         int tmpPort = config.getPort();
-        PreloadFiles tmpFileList = config.getPreloadFiles();
-        String tmpReplaceableHost = tmpFileList.getReplaceableHost();
+        DataSources dataSources = config.getDataSources();
         HTTPEndpoints tmpHTTPEndpoints = config.getHTTPEndpoints();
-        RDFNamingEndpoints tmpRDFNamingEndpoints = config.getRDFNamingEndpoints();
+        RDFNaming tmpRDFNamingEndpoints = config.getRDFNaming();
 
         rdfMemoryDir = new File(tmpRDFDir);
         startClean = tmpStartClean;
         owner = tmpOwner;
         domain = tmpDomain;
         port = tmpPort;
-        if(tmpReplaceableHost != null && ! tmpReplaceableHost.equals(""))
-            replaceableHost = tmpReplaceableHost;
-        else 
-            replaceableHost = null;
-
-        wpsRDFFiles.clear();
-        for (int i = 0; i < tmpFileList.sizeOfWPSArray(); i++) {
-            String fileName = tmpFileList.getWPSArray(i);
-            fileName = fileName.replace("/", File.separator);
-            fileName = fileName.replace("\\", File.separator);
-            wpsRDFFiles.add(new File(fileName));
+       
+        inputFiles.clear();
+        for (de.hsos.richwps.sp.config.File f : dataSources.getFileArray()) {
+            InputFile inputFile = new InputFile();
+            String path = f.getPath();
+            path = path.replace("/", File.separator);
+            path = path.replace("\\", File.separator);
+            inputFile.setFile(new File (path));
+            ResourceType.Enum t = f.getType();
+            if(t.intValue() == E_WPSVALUE){
+                inputFile.setTyp(InputFile.Typ.WPS);
+            }
+            else{
+                inputFile.setTyp(InputFile.Typ.Process);
+            }
+            
+            if(f.isSetReplaceableHost()){
+                inputFile.setReplacableHost(f.getReplaceableHost());
+            }
+            inputFiles.add(inputFile);
         }
-
-        processRDFFiles.clear();
-        for (int i = 0; i < tmpFileList.sizeOfProcessArray(); i++) {
-            String fileName = tmpFileList.getProcessArray(i);
-            fileName = fileName.replace("/", File.separator);
-            fileName = fileName.replace("\\", File.separator);
-            processRDFFiles.add(new File(fileName));
+        
+        wpsServers.clear();
+        for(WPSServer s : dataSources.getWPSServerArray()){
+            wpsServers.add(new URL(s.getTargetURL()));
         }
 
         //HTTP endpoints
@@ -203,6 +223,9 @@ public class Configuration {
         processNamingEndpoint = new URL(resourcesURL.toString() + "/" + tmpRDFNamingEndpoints.getProcessNaming());
         inputNamingEndpoint = new URL(resourcesURL.toString() + "/" + tmpRDFNamingEndpoints.getInputNaming());
         outputNamingEndpoint = new URL(resourcesURL.toString() + "/" + tmpRDFNamingEndpoints.getOutputNaming());
+        literalNamingEndpoint = new URL(resourcesURL.toString() + "/" + tmpRDFNamingEndpoints.getLiteralNaming());
+        complexNamingEndpoint = new URL(resourcesURL.toString() + "/" + tmpRDFNamingEndpoints.getComplexNaming());
+        boundingBoxNamingEndpoint = new URL(resourcesURL.toString() + "/" + tmpRDFNamingEndpoints.getBoundingBoxNaming());
         loaded = true;
         
     }
@@ -216,6 +239,13 @@ public class Configuration {
     public void writeDefaultConfiguration(File file) throws IOException {
         ConfigurationDocument doc = ConfigurationDocument.Factory.newInstance();
         ConfigurationDocument.Configuration config = doc.addNewConfiguration();
+        XmlCursor cursor = doc.newCursor();
+        cursor.toFirstChild();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        String formattedDate = formatter.format(new Date());
+        cursor.insertComment("Configuration file for RichWPS SemanticProxy - auto-generated " + formattedDate);
+        cursor.dispose();
+
 
         config.setRDFDirectory(defaultRDFDir);
         config.setStartClean(defaultStartClean);
@@ -223,17 +253,66 @@ public class Configuration {
         config.setDomain(defaultDomain);
         config.setPort(defaultPort);
         
-        PreloadFiles tmpPreloadFiles = config.addNewPreloadFiles();
-        tmpPreloadFiles.addWPS(defaultWPSMacrophyte);
-        tmpPreloadFiles.addWPS(defaultWPSModelValidation);
-        tmpPreloadFiles.addProcess(defaultProcessSelectReportingArea);
-        tmpPreloadFiles.addProcess(defaultProcessIntersect);
-        tmpPreloadFiles.addProcess(defaultProcessSelectTopography);
-        tmpPreloadFiles.addProcess(defaultProcessSelectMSRLD5);
-        tmpPreloadFiles.addProcess(defaultProcessCharacteristics);
-        tmpPreloadFiles.addProcess(defaultProcessHarmonize);
-        tmpPreloadFiles.addProcess(defaultProcessCompare);
-        tmpPreloadFiles.addProcess(defaultProcessFormat);
+        DataSources dataSources = config.addNewDataSources();
+        de.hsos.richwps.sp.config.File f = dataSources.addNewFile();
+        f.setPath(defaultWPSMacrophyte);
+        f.setType(ResourceType.Enum.forInt(E_WPSVALUE));
+        if(f.isSetReplaceableHost())
+            f.unsetReplaceableHost();
+        
+        f = dataSources.addNewFile();
+        f.setPath(defaultWPSModelValidation);
+        f.setType(ResourceType.Enum.forInt(E_WPSVALUE));
+        if(f.isSetReplaceableHost())
+            f.unsetReplaceableHost();
+        
+        f = dataSources.addNewFile();
+        f.setPath(defaultProcessSelectReportingArea);
+        f.setType(ResourceType.Enum.forInt(E_PROCESVALUE));
+        if(f.isSetReplaceableHost())
+            f.unsetReplaceableHost();
+        
+        f = dataSources.addNewFile();
+        f.setPath(defaultProcessIntersect);
+        f.setType(ResourceType.Enum.forInt(E_PROCESVALUE));
+        if(f.isSetReplaceableHost())
+            f.unsetReplaceableHost();
+        
+        f = dataSources.addNewFile();
+        f.setPath(defaultProcessSelectTopography);
+        f.setType(ResourceType.Enum.forInt(E_PROCESVALUE));
+        if(f.isSetReplaceableHost())
+            f.unsetReplaceableHost();
+        
+        f = dataSources.addNewFile();
+        f.setPath(defaultProcessSelectMSRLD5);
+        f.setType(ResourceType.Enum.forInt(E_PROCESVALUE));
+        if(f.isSetReplaceableHost())
+            f.unsetReplaceableHost();
+        
+        f = dataSources.addNewFile();
+        f.setPath(defaultProcessCharacteristics);
+        f.setType(ResourceType.Enum.forInt(E_PROCESVALUE));
+        if(f.isSetReplaceableHost())
+            f.unsetReplaceableHost();
+     
+        f = dataSources.addNewFile();
+        f.setPath(defaultProcessHarmonize);
+        f.setType(ResourceType.Enum.forInt(E_PROCESVALUE));
+        if(f.isSetReplaceableHost())
+            f.unsetReplaceableHost();
+        
+        f = dataSources.addNewFile();
+        f.setPath(defaultProcessCompare);
+        f.setType(ResourceType.Enum.forInt(E_PROCESVALUE));
+        if(f.isSetReplaceableHost())
+            f.unsetReplaceableHost();
+        
+        f = dataSources.addNewFile();
+        f.setPath(defaultProcessFormat);
+        f.setType(ResourceType.Enum.forInt(E_PROCESVALUE));
+        if(f.isSetReplaceableHost())
+            f.unsetReplaceableHost();
 
         HTTPEndpoints tmpHttpEndpoints = config.addNewHTTPEndpoints();
         tmpHttpEndpoints.setHost(defaultHostURL);
@@ -244,11 +323,14 @@ public class Configuration {
         tmpHttpEndpoints.setProcessList(defaultProcessListURL);
         tmpHttpEndpoints.setSearch(defaultSearchURL);
 
-        RDFNamingEndpoints tmpRDFNamingEndpoints = config.addNewRDFNamingEndpoints();
+        RDFNaming tmpRDFNamingEndpoints = config.addNewRDFNaming();
         tmpRDFNamingEndpoints.setInputNaming(defaultInputNamingEndpoint);
         tmpRDFNamingEndpoints.setOutputNaming(defaultOutputNamingEndpoint);
         tmpRDFNamingEndpoints.setWPSNaming(defaultWpsNamingEndpoint);
         tmpRDFNamingEndpoints.setProcessNaming(defaultProcessNamingEndpoint);
+        tmpRDFNamingEndpoints.setLiteralNaming(defaultLiteralNamingEndpoint);
+        tmpRDFNamingEndpoints.setComplexNaming(defaultComplexNamingEndpoint);
+        tmpRDFNamingEndpoints.setBoundingBoxNaming(defaultBoundingBoxNamingEndpoint);
         try{
             FileWriter writer = new FileWriter(file);
             writer.write(doc.toString());
@@ -326,35 +408,41 @@ public class Configuration {
         return owner;
     }
 
-    public ArrayList<File> getProcessRDFFiles() {
-        return processRDFFiles;
-    }
-
-    public ArrayList<File> getWpsRDFFiles() {
-        return wpsRDFFiles;
-    }
+    
 
     public boolean isLoaded() {
         return loaded;
     }
 
-    public String getReplaceableHost() {
-        return replaceableHost;
-    }
+
 
     public int getPort() {
         return port;
     }
 
-    public void setPort(int port) {
-        this.port = port;
+    public URL getLiteralNamingEndpoint() {
+        return literalNamingEndpoint;
+    }
+
+    public URL getComplexNamingEndpoint() {
+        return complexNamingEndpoint;
+    }
+
+    public URL getBoundingBoxNamingEndpoint() {
+        return boundingBoxNamingEndpoint;
+    }
+
+    public ArrayList<InputFile> getInputFiles() {
+        return inputFiles;
+    }
+
+    public ArrayList<URL> getWpsServers() {
+        return wpsServers;
     }
     
     
-    
 
-    
-    
+
     @Override
     public String toString() {
         if (!loaded) {
@@ -372,15 +460,13 @@ public class Configuration {
         ret += "Network domain:   " + domain + "\n";
         ret += "Network owner:    " + owner + "\n";
         ret += "Port:             " + port + "\n";
-        ret += "Replaceable host: " + replaceableHost + "\n";
-        ret += "WPS:\n";
-        for (int i = 0; i < wpsRDFFiles.size(); i++) {
-            ret += "                  " + wpsRDFFiles.get(i).getAbsolutePath() + "\n";
-        }
-        ret += "Process:\n";
-        for (int i = 0; i < processRDFFiles.size(); i++) {
-            ret += "                  " + processRDFFiles.get(i).getAbsolutePath() + "\n";
-        }
+        ret += "InputFiles:\n";
+        //TODO: insert input files and wps server configs
+        for(InputFile f : inputFiles)
+            ret += " File:       "+f.toString() + "\n";
+        ret += "WPSservers:\n";
+        for(URL wps : wpsServers)
+            ret += " Server:     "+wps.toString() + "\n";
         ret += "Host URL:        " + hostURL.toString() + "\n";
         ret += "Resources URL:   " + resourcesURL.toString() + "\n";
         ret += "Application URL: " + applicationURL.toString() + "\n";
@@ -392,7 +478,10 @@ public class Configuration {
         ret += "WPS naming ep:   " + wpsNamingEndpoint.toString() + "\n";
         ret += "Proc naming ep:  " + processNamingEndpoint.toString() + "\n";
         ret += "Input naming ep: " + inputNamingEndpoint.toString() + "\n";
-        ret += "Output naming ep:" + outputNamingEndpoint.toString();
+        ret += "Output naming ep:" + outputNamingEndpoint.toString() + "\n";
+        ret += "Liter naming ep: " + literalNamingEndpoint.toString() + "\n";
+        ret += "Compl naming ep: " + complexNamingEndpoint.toString() + "\n";
+        ret += "BBox naming ep:  " + boundingBoxNamingEndpoint.toString();
 
         return ret;
 

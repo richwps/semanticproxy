@@ -4,9 +4,10 @@
  */
 package de.hsos.richwps.sp.imports.fileimporter;
 
+import de.hsos.richwps.sp.InputFile;
 import de.hsos.richwps.sp.imports.IImportSource;
 import de.hsos.richwps.sp.imports.ImportException;
-import java.io.File;
+import java.util.ArrayList;
 
 /**
  *
@@ -14,32 +15,37 @@ import java.io.File;
  */
 public class FileImporter implements IImportSource{
 
-    private File[] wpsFiles = null;
-    private File[] processFiles = null;
+    private ArrayList<InputFile> wpsFiles = null;
+    private ArrayList<InputFile> processFiles = null;
     private int wpsIdx = 0;
     private int processIdx = 0;
-    private String oldHost = null;
     private String newHost = null;
     
-    public FileImporter(File[] wpsFiles, File[] processFiles, String oldHost, String newHost){
-        this.wpsFiles = wpsFiles;
-        this.processFiles = processFiles;
-        this.oldHost = oldHost;
+    public FileImporter(InputFile[] files, String newHost){
+        this.wpsFiles = new ArrayList<>();
+        this.processFiles = new ArrayList<>();
+        for(InputFile f : files){
+            if(f.isWPS())
+                wpsFiles.add(f);
+            else 
+                processFiles.add(f);
+        }
         this.newHost = newHost;
     }
     
     
     @Override
     public String getNextWPS() throws ImportException {
-        if(wpsIdx < wpsFiles.length){
+        if(wpsIdx < wpsFiles.size()){
+            InputFile f = wpsFiles.get(wpsIdx);
             String content = null;
             try{
-                content = TextFileReader.readPlainText(wpsFiles[wpsIdx]);
+                content = TextFileReader.readPlainText(f.getFile());
             }catch(Exception ex){
-                throw new ImportException("Cannot read file: "+wpsFiles[wpsIdx].getAbsolutePath(),ex);
+                throw new ImportException("Cannot read file: "+f.getFile().getAbsolutePath(),ex);
             }
-            if(oldHost != null && newHost != null){
-                content = content.replace(oldHost, newHost);
+            if(f.getReplacableHost() != null && newHost != null){
+                content = content.replace(f.getReplacableHost(), newHost);
             }
             wpsIdx++;
             return content;
@@ -50,15 +56,16 @@ public class FileImporter implements IImportSource{
 
     @Override
     public String getNextProcess() throws ImportException {
-        if(processIdx < processFiles.length){
+        if(processIdx < processFiles.size()){
+            InputFile f = processFiles.get(processIdx);
             String content = null;
             try{
-                content = TextFileReader.readPlainText(processFiles[processIdx]);
+                content = TextFileReader.readPlainText(f.getFile());
             }catch(Exception ex){
-                throw new ImportException("Cannot read file: "+processFiles[processIdx].getAbsolutePath(),ex);
+                throw new ImportException("Cannot read file: "+f.getFile().getAbsolutePath(),ex);
             }
-            if(oldHost != null && newHost != null){
-                content = content.replace(oldHost, newHost);
+            if(f.getReplacableHost() != null && newHost != null){
+                content = content.replace(f.getReplacableHost(), newHost);
             }
             processIdx++;
             return content;

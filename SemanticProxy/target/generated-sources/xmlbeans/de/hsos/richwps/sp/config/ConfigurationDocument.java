@@ -17,7 +17,7 @@ package de.hsos.richwps.sp.config;
 public interface ConfigurationDocument extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(ConfigurationDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s4C120769099B3A62A73A92D1B3E5F014").resolveHandle("configurationa60edoctype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(ConfigurationDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s006C85CF124BE17EDDE04ED8ACE8531A").resolveHandle("configurationa60edoctype");
     
     /**
      * Gets the "Configuration" element
@@ -42,7 +42,7 @@ public interface ConfigurationDocument extends org.apache.xmlbeans.XmlObject
     public interface Configuration extends org.apache.xmlbeans.XmlObject
     {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Configuration.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s4C120769099B3A62A73A92D1B3E5F014").resolveHandle("configurationd80celemtype");
+            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Configuration.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s006C85CF124BE17EDDE04ED8ACE8531A").resolveHandle("configurationd80celemtype");
         
         /**
          * Gets the "RDFDirectory" element
@@ -125,51 +125,6 @@ public interface ConfigurationDocument extends org.apache.xmlbeans.XmlObject
         void xsetDomain(org.apache.xmlbeans.XmlString domain);
         
         /**
-         * Gets the "PreloadFiles" element
-         */
-        de.hsos.richwps.sp.config.PreloadFiles getPreloadFiles();
-        
-        /**
-         * Sets the "PreloadFiles" element
-         */
-        void setPreloadFiles(de.hsos.richwps.sp.config.PreloadFiles preloadFiles);
-        
-        /**
-         * Appends and returns a new empty "PreloadFiles" element
-         */
-        de.hsos.richwps.sp.config.PreloadFiles addNewPreloadFiles();
-        
-        /**
-         * Gets the "HTTPEndpoints" element
-         */
-        de.hsos.richwps.sp.config.HTTPEndpoints getHTTPEndpoints();
-        
-        /**
-         * Sets the "HTTPEndpoints" element
-         */
-        void setHTTPEndpoints(de.hsos.richwps.sp.config.HTTPEndpoints httpEndpoints);
-        
-        /**
-         * Appends and returns a new empty "HTTPEndpoints" element
-         */
-        de.hsos.richwps.sp.config.HTTPEndpoints addNewHTTPEndpoints();
-        
-        /**
-         * Gets the "RDFNamingEndpoints" element
-         */
-        de.hsos.richwps.sp.config.RDFNamingEndpoints getRDFNamingEndpoints();
-        
-        /**
-         * Sets the "RDFNamingEndpoints" element
-         */
-        void setRDFNamingEndpoints(de.hsos.richwps.sp.config.RDFNamingEndpoints rdfNamingEndpoints);
-        
-        /**
-         * Appends and returns a new empty "RDFNamingEndpoints" element
-         */
-        de.hsos.richwps.sp.config.RDFNamingEndpoints addNewRDFNamingEndpoints();
-        
-        /**
          * Gets the "Port" element
          */
         int getPort();
@@ -188,6 +143,51 @@ public interface ConfigurationDocument extends org.apache.xmlbeans.XmlObject
          * Sets (as xml) the "Port" element
          */
         void xsetPort(org.apache.xmlbeans.XmlInt port);
+        
+        /**
+         * Gets the "DataSources" element
+         */
+        de.hsos.richwps.sp.config.DataSources getDataSources();
+        
+        /**
+         * Sets the "DataSources" element
+         */
+        void setDataSources(de.hsos.richwps.sp.config.DataSources dataSources);
+        
+        /**
+         * Appends and returns a new empty "DataSources" element
+         */
+        de.hsos.richwps.sp.config.DataSources addNewDataSources();
+        
+        /**
+         * Gets the "HTTPEndpoints" element
+         */
+        de.hsos.richwps.sp.config.HTTPEndpoints getHTTPEndpoints();
+        
+        /**
+         * Sets the "HTTPEndpoints" element
+         */
+        void setHTTPEndpoints(de.hsos.richwps.sp.config.HTTPEndpoints httpEndpoints);
+        
+        /**
+         * Appends and returns a new empty "HTTPEndpoints" element
+         */
+        de.hsos.richwps.sp.config.HTTPEndpoints addNewHTTPEndpoints();
+        
+        /**
+         * Gets the "RDFNaming" element
+         */
+        de.hsos.richwps.sp.config.RDFNaming getRDFNaming();
+        
+        /**
+         * Sets the "RDFNaming" element
+         */
+        void setRDFNaming(de.hsos.richwps.sp.config.RDFNaming rdfNaming);
+        
+        /**
+         * Appends and returns a new empty "RDFNaming" element
+         */
+        de.hsos.richwps.sp.config.RDFNaming addNewRDFNaming();
         
         /**
          * A factory class with static methods for creating instances

@@ -106,43 +106,24 @@ public class App {
                 //Sources
                 ArrayList<IImportSource> sourceList = new ArrayList<>();
                 
-                //configure file data source
-                ArrayList<File> wpsList = config.getWpsRDFFiles();
-                File[] wpsFiles = wpsList.toArray(new File[wpsList.size()]);
-                ArrayList<File> processList = config.getProcessRDFFiles();
-                File[] processFiles = processList.toArray(new File[processList.size()]);
-                FileImporter fileImporter = new FileImporter(wpsFiles, processFiles, config.getReplaceableHost(), config.getHostURL().toString());
+                //configure file inporter
+                InputFile[] files = config.getInputFiles().toArray(new InputFile[config.getInputFiles().size()]);
+                FileImporter fileImporter = new FileImporter(files, config.getHostURL().toString());
                 sourceList.add(fileImporter);
                 
-                IImportSource harvester = new WPSHarvester(new URL("http://richwps.edvsz.hs-osnabrueck.de/wps/WebProcessingService"), 
-                    new URL(config.getWpsNamingEndpoint().toString()), 
-                    new URL(config.getProcessNamingEndpoint().toString()),
-                    new URL(config.getInputNamingEndpoint().toString()),
-                    new URL(config.getOutputNamingEndpoint().toString()),
-                    new URL(config.getResourcesURL().toString()+ "/literal"),
-                    new URL(config.getResourcesURL().toString()+ "/complex"),
-                    new URL(config.getResourcesURL().toString()+ "/bounding"));
-                sourceList.add(harvester);
-                
-                harvester = new WPSHarvester(new URL("http://richwps.edvsz.hs-osnabrueck.de/lkn/WebProcessingService"), 
-                   new URL(config.getWpsNamingEndpoint().toString()), 
-                    new URL(config.getProcessNamingEndpoint().toString()),
-                    new URL(config.getInputNamingEndpoint().toString()),
-                    new URL(config.getOutputNamingEndpoint().toString()),
-                    new URL(config.getResourcesURL().toString()+ "/literal"),
-                    new URL(config.getResourcesURL().toString()+ "/complex"),
-                    new URL(config.getResourcesURL().toString()+ "/bounding"));
-                sourceList.add(harvester);
-                
-                harvester = new WPSHarvester(new URL("http://richwps.edvsz.hs-osnabrueck.de/baw/WebProcessingService"), 
-                   new URL(config.getWpsNamingEndpoint().toString()), 
-                    new URL(config.getProcessNamingEndpoint().toString()),
-                    new URL(config.getInputNamingEndpoint().toString()),
-                    new URL(config.getOutputNamingEndpoint().toString()),
-                    new URL(config.getResourcesURL().toString()+ "/literal"),
-                    new URL(config.getResourcesURL().toString()+ "/complex"),
-                    new URL(config.getResourcesURL().toString()+ "/bounding"));
-                sourceList.add(harvester);
+                //configure harvester
+                for(URL target : config.getWpsServers()){
+                    IImportSource harvester = new WPSHarvester(target, 
+                        new URL(config.getWpsNamingEndpoint().toString()), 
+                        new URL(config.getProcessNamingEndpoint().toString()),
+                        new URL(config.getInputNamingEndpoint().toString()),
+                        new URL(config.getOutputNamingEndpoint().toString()),
+                        new URL(config.getLiteralNamingEndpoint().toString()),
+                        new URL(config.getComplexNamingEndpoint().toString()),
+                        new URL(config.getBoundingBoxNamingEndpoint().toString()));
+                    sourceList.add(harvester);
+                }
+ 
                 
                 //collect data
                 for(IImportSource source : sourceList){

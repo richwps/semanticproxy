@@ -91,7 +91,7 @@ public class ConfigurationTest extends TestCase{
         assertNotNull("ProcessListURL should not be null", config.getProcessListURL());
         assertNotNull("ProcessNamingEndpoint should not be null", config.getProcessNamingEndpoint());
         assertNotNull("ProcessNamingURL should not be null", config.getProcessNamingEndpoint());
-        assertNotNull("ProcessRDFFiles should not be null", config.getProcessRDFFiles());
+        assertNotNull("InputFiles should not be null", config.getInputFiles());
         assertNotNull("RdfMemoryDir should not be null", config.getRdfMemoryDir());
         assertNotNull("ResourcesURL should not be null", config.getResourcesURL());
         assertNotNull("SearchURL should not be null", config.getSearchURL());
@@ -99,8 +99,9 @@ public class ConfigurationTest extends TestCase{
         assertNotNull("WpsListURL should not be null", config.getWpsListURL());
         assertNotNull("WpsNamingEndpoint should not be null", config.getWpsNamingEndpoint());
         assertNotNull("WpsNamingURL should not be null", config.getWpsNamingEndpoint());
-        assertNotNull("WpsRDFFiles should not be null", config.getWpsRDFFiles());
-        assertNull("ReplacableHost should be null", config.getReplaceableHost());
+        assertNotNull("LiteralNaming should not be null", config.getLiteralNamingEndpoint());
+        assertNotNull("ComplexNaming should not be null", config.getComplexNamingEndpoint());
+        assertNotNull("BoundingBoxNaming should not be null", config.getBoundingBoxNamingEndpoint());
         assertEquals("Port should be "+ DEFAULT_PORT,config.getPort(), DEFAULT_PORT);
         
     }

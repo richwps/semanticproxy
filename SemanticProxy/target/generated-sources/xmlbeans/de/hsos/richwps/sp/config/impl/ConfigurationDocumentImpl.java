@@ -96,14 +96,14 @@ public class ConfigurationDocumentImpl extends org.apache.xmlbeans.impl.values.X
             new javax.xml.namespace.QName("http://www.hsos.de/richwps/sp/config", "Owner");
         private static final javax.xml.namespace.QName DOMAIN$6 = 
             new javax.xml.namespace.QName("http://www.hsos.de/richwps/sp/config", "Domain");
-        private static final javax.xml.namespace.QName PRELOADFILES$8 = 
-            new javax.xml.namespace.QName("http://www.hsos.de/richwps/sp/config", "PreloadFiles");
-        private static final javax.xml.namespace.QName HTTPENDPOINTS$10 = 
-            new javax.xml.namespace.QName("http://www.hsos.de/richwps/sp/config", "HTTPEndpoints");
-        private static final javax.xml.namespace.QName RDFNAMINGENDPOINTS$12 = 
-            new javax.xml.namespace.QName("http://www.hsos.de/richwps/sp/config", "RDFNamingEndpoints");
-        private static final javax.xml.namespace.QName PORT$14 = 
+        private static final javax.xml.namespace.QName PORT$8 = 
             new javax.xml.namespace.QName("http://www.hsos.de/richwps/sp/config", "Port");
+        private static final javax.xml.namespace.QName DATASOURCES$10 = 
+            new javax.xml.namespace.QName("http://www.hsos.de/richwps/sp/config", "DataSources");
+        private static final javax.xml.namespace.QName HTTPENDPOINTS$12 = 
+            new javax.xml.namespace.QName("http://www.hsos.de/richwps/sp/config", "HTTPEndpoints");
+        private static final javax.xml.namespace.QName RDFNAMING$14 = 
+            new javax.xml.namespace.QName("http://www.hsos.de/richwps/sp/config", "RDFNaming");
         
         
         /**
@@ -379,156 +379,6 @@ public class ConfigurationDocumentImpl extends org.apache.xmlbeans.impl.values.X
         }
         
         /**
-         * Gets the "PreloadFiles" element
-         */
-        public de.hsos.richwps.sp.config.PreloadFiles getPreloadFiles()
-        {
-            synchronized (monitor())
-            {
-                check_orphaned();
-                de.hsos.richwps.sp.config.PreloadFiles target = null;
-                target = (de.hsos.richwps.sp.config.PreloadFiles)get_store().find_element_user(PRELOADFILES$8, 0);
-                if (target == null)
-                {
-                    return null;
-                }
-                return target;
-            }
-        }
-        
-        /**
-         * Sets the "PreloadFiles" element
-         */
-        public void setPreloadFiles(de.hsos.richwps.sp.config.PreloadFiles preloadFiles)
-        {
-            synchronized (monitor())
-            {
-                check_orphaned();
-                de.hsos.richwps.sp.config.PreloadFiles target = null;
-                target = (de.hsos.richwps.sp.config.PreloadFiles)get_store().find_element_user(PRELOADFILES$8, 0);
-                if (target == null)
-                {
-                    target = (de.hsos.richwps.sp.config.PreloadFiles)get_store().add_element_user(PRELOADFILES$8);
-                }
-                target.set(preloadFiles);
-            }
-        }
-        
-        /**
-         * Appends and returns a new empty "PreloadFiles" element
-         */
-        public de.hsos.richwps.sp.config.PreloadFiles addNewPreloadFiles()
-        {
-            synchronized (monitor())
-            {
-                check_orphaned();
-                de.hsos.richwps.sp.config.PreloadFiles target = null;
-                target = (de.hsos.richwps.sp.config.PreloadFiles)get_store().add_element_user(PRELOADFILES$8);
-                return target;
-            }
-        }
-        
-        /**
-         * Gets the "HTTPEndpoints" element
-         */
-        public de.hsos.richwps.sp.config.HTTPEndpoints getHTTPEndpoints()
-        {
-            synchronized (monitor())
-            {
-                check_orphaned();
-                de.hsos.richwps.sp.config.HTTPEndpoints target = null;
-                target = (de.hsos.richwps.sp.config.HTTPEndpoints)get_store().find_element_user(HTTPENDPOINTS$10, 0);
-                if (target == null)
-                {
-                    return null;
-                }
-                return target;
-            }
-        }
-        
-        /**
-         * Sets the "HTTPEndpoints" element
-         */
-        public void setHTTPEndpoints(de.hsos.richwps.sp.config.HTTPEndpoints httpEndpoints)
-        {
-            synchronized (monitor())
-            {
-                check_orphaned();
-                de.hsos.richwps.sp.config.HTTPEndpoints target = null;
-                target = (de.hsos.richwps.sp.config.HTTPEndpoints)get_store().find_element_user(HTTPENDPOINTS$10, 0);
-                if (target == null)
-                {
-                    target = (de.hsos.richwps.sp.config.HTTPEndpoints)get_store().add_element_user(HTTPENDPOINTS$10);
-                }
-                target.set(httpEndpoints);
-            }
-        }
-        
-        /**
-         * Appends and returns a new empty "HTTPEndpoints" element
-         */
-        public de.hsos.richwps.sp.config.HTTPEndpoints addNewHTTPEndpoints()
-        {
-            synchronized (monitor())
-            {
-                check_orphaned();
-                de.hsos.richwps.sp.config.HTTPEndpoints target = null;
-                target = (de.hsos.richwps.sp.config.HTTPEndpoints)get_store().add_element_user(HTTPENDPOINTS$10);
-                return target;
-            }
-        }
-        
-        /**
-         * Gets the "RDFNamingEndpoints" element
-         */
-        public de.hsos.richwps.sp.config.RDFNamingEndpoints getRDFNamingEndpoints()
-        {
-            synchronized (monitor())
-            {
-                check_orphaned();
-                de.hsos.richwps.sp.config.RDFNamingEndpoints target = null;
-                target = (de.hsos.richwps.sp.config.RDFNamingEndpoints)get_store().find_element_user(RDFNAMINGENDPOINTS$12, 0);
-                if (target == null)
-                {
-                    return null;
-                }
-                return target;
-            }
-        }
-        
-        /**
-         * Sets the "RDFNamingEndpoints" element
-         */
-        public void setRDFNamingEndpoints(de.hsos.richwps.sp.config.RDFNamingEndpoints rdfNamingEndpoints)
-        {
-            synchronized (monitor())
-            {
-                check_orphaned();
-                de.hsos.richwps.sp.config.RDFNamingEndpoints target = null;
-                target = (de.hsos.richwps.sp.config.RDFNamingEndpoints)get_store().find_element_user(RDFNAMINGENDPOINTS$12, 0);
-                if (target == null)
-                {
-                    target = (de.hsos.richwps.sp.config.RDFNamingEndpoints)get_store().add_element_user(RDFNAMINGENDPOINTS$12);
-                }
-                target.set(rdfNamingEndpoints);
-            }
-        }
-        
-        /**
-         * Appends and returns a new empty "RDFNamingEndpoints" element
-         */
-        public de.hsos.richwps.sp.config.RDFNamingEndpoints addNewRDFNamingEndpoints()
-        {
-            synchronized (monitor())
-            {
-                check_orphaned();
-                de.hsos.richwps.sp.config.RDFNamingEndpoints target = null;
-                target = (de.hsos.richwps.sp.config.RDFNamingEndpoints)get_store().add_element_user(RDFNAMINGENDPOINTS$12);
-                return target;
-            }
-        }
-        
-        /**
          * Gets the "Port" element
          */
         public int getPort()
@@ -537,7 +387,7 @@ public class ConfigurationDocumentImpl extends org.apache.xmlbeans.impl.values.X
             {
                 check_orphaned();
                 org.apache.xmlbeans.SimpleValue target = null;
-                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PORT$14, 0);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PORT$8, 0);
                 if (target == null)
                 {
                     return 0;
@@ -555,7 +405,7 @@ public class ConfigurationDocumentImpl extends org.apache.xmlbeans.impl.values.X
             {
                 check_orphaned();
                 org.apache.xmlbeans.XmlInt target = null;
-                target = (org.apache.xmlbeans.XmlInt)get_store().find_element_user(PORT$14, 0);
+                target = (org.apache.xmlbeans.XmlInt)get_store().find_element_user(PORT$8, 0);
                 return target;
             }
         }
@@ -569,10 +419,10 @@ public class ConfigurationDocumentImpl extends org.apache.xmlbeans.impl.values.X
             {
                 check_orphaned();
                 org.apache.xmlbeans.SimpleValue target = null;
-                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PORT$14, 0);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PORT$8, 0);
                 if (target == null)
                 {
-                    target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PORT$14);
+                    target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PORT$8);
                 }
                 target.setIntValue(port);
             }
@@ -587,12 +437,162 @@ public class ConfigurationDocumentImpl extends org.apache.xmlbeans.impl.values.X
             {
                 check_orphaned();
                 org.apache.xmlbeans.XmlInt target = null;
-                target = (org.apache.xmlbeans.XmlInt)get_store().find_element_user(PORT$14, 0);
+                target = (org.apache.xmlbeans.XmlInt)get_store().find_element_user(PORT$8, 0);
                 if (target == null)
                 {
-                    target = (org.apache.xmlbeans.XmlInt)get_store().add_element_user(PORT$14);
+                    target = (org.apache.xmlbeans.XmlInt)get_store().add_element_user(PORT$8);
                 }
                 target.set(port);
+            }
+        }
+        
+        /**
+         * Gets the "DataSources" element
+         */
+        public de.hsos.richwps.sp.config.DataSources getDataSources()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                de.hsos.richwps.sp.config.DataSources target = null;
+                target = (de.hsos.richwps.sp.config.DataSources)get_store().find_element_user(DATASOURCES$10, 0);
+                if (target == null)
+                {
+                    return null;
+                }
+                return target;
+            }
+        }
+        
+        /**
+         * Sets the "DataSources" element
+         */
+        public void setDataSources(de.hsos.richwps.sp.config.DataSources dataSources)
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                de.hsos.richwps.sp.config.DataSources target = null;
+                target = (de.hsos.richwps.sp.config.DataSources)get_store().find_element_user(DATASOURCES$10, 0);
+                if (target == null)
+                {
+                    target = (de.hsos.richwps.sp.config.DataSources)get_store().add_element_user(DATASOURCES$10);
+                }
+                target.set(dataSources);
+            }
+        }
+        
+        /**
+         * Appends and returns a new empty "DataSources" element
+         */
+        public de.hsos.richwps.sp.config.DataSources addNewDataSources()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                de.hsos.richwps.sp.config.DataSources target = null;
+                target = (de.hsos.richwps.sp.config.DataSources)get_store().add_element_user(DATASOURCES$10);
+                return target;
+            }
+        }
+        
+        /**
+         * Gets the "HTTPEndpoints" element
+         */
+        public de.hsos.richwps.sp.config.HTTPEndpoints getHTTPEndpoints()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                de.hsos.richwps.sp.config.HTTPEndpoints target = null;
+                target = (de.hsos.richwps.sp.config.HTTPEndpoints)get_store().find_element_user(HTTPENDPOINTS$12, 0);
+                if (target == null)
+                {
+                    return null;
+                }
+                return target;
+            }
+        }
+        
+        /**
+         * Sets the "HTTPEndpoints" element
+         */
+        public void setHTTPEndpoints(de.hsos.richwps.sp.config.HTTPEndpoints httpEndpoints)
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                de.hsos.richwps.sp.config.HTTPEndpoints target = null;
+                target = (de.hsos.richwps.sp.config.HTTPEndpoints)get_store().find_element_user(HTTPENDPOINTS$12, 0);
+                if (target == null)
+                {
+                    target = (de.hsos.richwps.sp.config.HTTPEndpoints)get_store().add_element_user(HTTPENDPOINTS$12);
+                }
+                target.set(httpEndpoints);
+            }
+        }
+        
+        /**
+         * Appends and returns a new empty "HTTPEndpoints" element
+         */
+        public de.hsos.richwps.sp.config.HTTPEndpoints addNewHTTPEndpoints()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                de.hsos.richwps.sp.config.HTTPEndpoints target = null;
+                target = (de.hsos.richwps.sp.config.HTTPEndpoints)get_store().add_element_user(HTTPENDPOINTS$12);
+                return target;
+            }
+        }
+        
+        /**
+         * Gets the "RDFNaming" element
+         */
+        public de.hsos.richwps.sp.config.RDFNaming getRDFNaming()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                de.hsos.richwps.sp.config.RDFNaming target = null;
+                target = (de.hsos.richwps.sp.config.RDFNaming)get_store().find_element_user(RDFNAMING$14, 0);
+                if (target == null)
+                {
+                    return null;
+                }
+                return target;
+            }
+        }
+        
+        /**
+         * Sets the "RDFNaming" element
+         */
+        public void setRDFNaming(de.hsos.richwps.sp.config.RDFNaming rdfNaming)
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                de.hsos.richwps.sp.config.RDFNaming target = null;
+                target = (de.hsos.richwps.sp.config.RDFNaming)get_store().find_element_user(RDFNAMING$14, 0);
+                if (target == null)
+                {
+                    target = (de.hsos.richwps.sp.config.RDFNaming)get_store().add_element_user(RDFNAMING$14);
+                }
+                target.set(rdfNaming);
+            }
+        }
+        
+        /**
+         * Appends and returns a new empty "RDFNaming" element
+         */
+        public de.hsos.richwps.sp.config.RDFNaming addNewRDFNaming()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                de.hsos.richwps.sp.config.RDFNaming target = null;
+                target = (de.hsos.richwps.sp.config.RDFNaming)get_store().add_element_user(RDFNAMING$14);
+                return target;
             }
         }
     }
