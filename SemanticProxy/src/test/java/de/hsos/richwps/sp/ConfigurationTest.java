@@ -90,7 +90,7 @@ public class ConfigurationTest extends TestCase{
         assertNotNull("Owner should not be null", config.getOwner());
         assertNotNull("ProcessListURL should not be null", config.getProcessListURL());
         assertNotNull("ProcessNamingEndpoint should not be null", config.getProcessNamingEndpoint());
-        assertNotNull("ProcessNamingURL should not be null", config.getProcessNamingURL());
+        assertNotNull("ProcessNamingURL should not be null", config.getProcessNamingEndpoint());
         assertNotNull("ProcessRDFFiles should not be null", config.getProcessRDFFiles());
         assertNotNull("RdfMemoryDir should not be null", config.getRdfMemoryDir());
         assertNotNull("ResourcesURL should not be null", config.getResourcesURL());
@@ -98,7 +98,7 @@ public class ConfigurationTest extends TestCase{
         assertNotNull("VocabularyURL should not be null", config.getVocabularyURL() );
         assertNotNull("WpsListURL should not be null", config.getWpsListURL());
         assertNotNull("WpsNamingEndpoint should not be null", config.getWpsNamingEndpoint());
-        assertNotNull("WpsNamingURL should not be null", config.getWpsNamingURL());
+        assertNotNull("WpsNamingURL should not be null", config.getWpsNamingEndpoint());
         assertNotNull("WpsRDFFiles should not be null", config.getWpsRDFFiles());
         assertNull("ReplacableHost should be null", config.getReplaceableHost());
         assertEquals("Port should be "+ DEFAULT_PORT,config.getPort(), DEFAULT_PORT);
