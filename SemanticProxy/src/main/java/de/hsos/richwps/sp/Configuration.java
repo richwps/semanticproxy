@@ -28,6 +28,7 @@ import org.apache.xmlbeans.XmlException;
 public class Configuration {
     private static final int E_WPSVALUE = 1;
     private static final int E_PROCESVALUE = 2;
+    private static final int E_WFSVALUE = 3;
 
     private File configSource = null;
     private boolean loaded = false;
@@ -70,6 +71,7 @@ public class Configuration {
     private String defaultProcessCompare = null;
     private String defaultProcessFormat = null;
     private String defaultProcessHarmonize = null;
+    private String defaultWFSTest = null;
  
     
     //default administration
@@ -117,7 +119,9 @@ public class Configuration {
         defaultWPSModelValidation = "RDF" + File.separator + "BAW" + File.separator + "WPSModelValidation.rdf";
         defaultProcessCompare = "RDF" + File.separator + "BAW" + File.separator + "ProcessCompare.rdf";
         defaultProcessFormat = "RDF" + File.separator + "BAW" + File.separator + "ProcessFormat.rdf";
-        defaultProcessHarmonize = "RDF" + File.separator + "BAW" + File.separator + "ProcessHarmonize.rdf";           
+        defaultProcessHarmonize = "RDF" + File.separator + "BAW" + File.separator + "ProcessHarmonize.rdf";     
+        
+        defaultWFSTest = "RDF" + File.separator + "WFS" + File.separator + "WFSTest.rdf";  
         
         
         //admin
@@ -193,8 +197,11 @@ public class Configuration {
             if(t.intValue() == E_WPSVALUE){
                 inputFile.setTyp(InputFile.Typ.WPS);
             }
-            else{
+            else if (t.intValue() == E_PROCESVALUE){
                 inputFile.setTyp(InputFile.Typ.Process);
+            }
+            else{
+                inputFile.setTyp(InputFile.Typ.WFS);
             }
             
             if(f.isSetReplaceableHost()){
@@ -313,6 +320,12 @@ public class Configuration {
         f = dataSources.addNewFile();
         f.setPath(defaultProcessFormat);
         f.setType(ResourceType.Enum.forInt(E_PROCESVALUE));
+        if(f.isSetReplaceableHost())
+            f.unsetReplaceableHost();
+        
+        f = dataSources.addNewFile();
+        f.setPath(defaultWFSTest);
+        f.setType(ResourceType.Enum.forInt(E_WFSVALUE));
         if(f.isSetReplaceableHost())
             f.unsetReplaceableHost();
 
@@ -463,7 +476,6 @@ public class Configuration {
         ret += "Network owner:    " + owner + "\n";
         ret += "Port:             " + port + "\n";
         ret += "InputFiles:\n";
-        //TODO: insert input files and wps server configs
         for(InputFile f : inputFiles)
             ret += " File:       "+f.toString() + "\n";
         ret += "WPSservers:\n";

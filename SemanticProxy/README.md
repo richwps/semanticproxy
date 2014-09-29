@@ -67,12 +67,16 @@ Name or description of the target network
 **Port:**
 Port to use by the web server
 
-**PreloadFiles:**
-Specifies RDF data to be loaded at system start; Is only done when there is a fresh DB.
+**DataSources:**
+Specifies data sources to be read at system start; Is only done when there is a fresh DB.
 
-	WPS:             A file that contains RDF information on a WPS
-	Process:         A file that contains RDF information on a process
-	ReplaceableHost: Attribute; Contains wildcard string to be replaced with the host name
+	File:            A file that contains RDF information about a WPS a process or WFS
+	path:            Attribute of File; Path of a file
+	type:            Attribute of File; The type of the resource described in the file (WPS, process, WFS)
+	ReplaceableHost: Attribute of File; Contains wildcard string to be replaced with the host name
+	
+	WPSServer:       URL to a WPS server
+	
 	
 **HTTPEndpoints:**
 Specifies URLs for specialized resources

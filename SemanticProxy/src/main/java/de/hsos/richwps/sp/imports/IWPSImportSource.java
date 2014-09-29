@@ -10,7 +10,7 @@ import java.net.URL;
  * Interface to adapt to data sources for importing RDF descriptions
  * @author fbensman
  */
-public interface IImportSource {
+public interface IWPSImportSource {
     
     /**
      * Gets the RDF description for the next available WPS

@@ -2,7 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.hsos.richwps.sp.imports.fileimporter;
+package de.hsos.richwps.sp.imports.wfsfileimporter;
+
 
 import java.io.File;
 import java.io.FileInputStream;

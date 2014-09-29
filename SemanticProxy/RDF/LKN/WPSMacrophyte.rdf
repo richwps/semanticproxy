@@ -7,6 +7,7 @@
 	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/wps/MacrophyteWPS">
 		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#wpsclass"/>
 		<rwps:endpoint>http://www.lkn.de/geo/wps/macrotphytewps</rwps:endpoint>
+		<rwps:wpstendpoint>http://www.lkn.de/geo/wps/macrotphytewps-t</rwps:wpstendpoint>
 	</rdf:Description>
 
 </rdf:RDF>

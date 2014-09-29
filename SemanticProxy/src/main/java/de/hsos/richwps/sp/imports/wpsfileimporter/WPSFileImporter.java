@@ -2,11 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.hsos.richwps.sp.imports.fileimporter;
+package de.hsos.richwps.sp.imports.wpsfileimporter;
 
 import de.hsos.richwps.sp.App;
 import de.hsos.richwps.sp.InputFile;
-import de.hsos.richwps.sp.imports.IImportSource;
+import de.hsos.richwps.sp.imports.IWPSImportSource;
 import de.hsos.richwps.sp.imports.ImportException;
 import java.util.ArrayList;
 import org.apache.log4j.Logger;
@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
  *
  * @author fbensman
  */
-public class FileImporter implements IImportSource{
+public class WPSFileImporter implements IWPSImportSource{
 
     private ArrayList<InputFile> wpsFiles = null;
     private ArrayList<InputFile> processFiles = null;
@@ -23,13 +23,13 @@ public class FileImporter implements IImportSource{
     private int processIdx = 0;
     private String newHost = null;
     
-    public FileImporter(InputFile[] files, String newHost){
+    public WPSFileImporter(InputFile[] files, String newHost){
         this.wpsFiles = new ArrayList<>();
         this.processFiles = new ArrayList<>();
         for(InputFile f : files){
             if(f.isWPS())
                 wpsFiles.add(f);
-            else 
+            else if(f.isProcess())
                 processFiles.add(f);
         }
         this.newHost = newHost;
@@ -85,7 +85,7 @@ public class FileImporter implements IImportSource{
 
     @Override
     public String getInfo() {
-        return "File importer";
+        return "WPS file importer";
     }
     
 }

@@ -254,7 +254,7 @@ public class DBIO {
         if (repo == null) {
             throw new IllegalStateException("Cannot get all subjects for type " + type + ", not connected.");
         }
-        if (!Vocabulary.isBasicType(type.toString())) {
+        if (!Vocabulary.isBasicWPSType(type.toString())) {
             throw new IllegalArgumentException("Cannot get all subjects for type " + type + ", parameter is not a type.");
         }
         String rdfType = Vocabulary.Type;

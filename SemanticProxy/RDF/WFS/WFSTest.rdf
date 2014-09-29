@@ -1,0 +1,26 @@
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:rwps="http://localhost:4567/semanticproxy/resources/vocab#">
+	
+	<!-- WFS -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/wfs/TestWFS">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#wfsclass"/>
+		<rwps:endpoint>http://www.anywfsurl.de/abc/def</rwps:endpoint>
+		<rwps:wfsversion>1.0</rwps:wfsversion>
+		<rwps:featuretype rdf:resource="http://localhost:4567/semanticproxy/resources/featuretype/feattype1"/>
+		<rwps:featuretype rdf:resource="http://localhost:4567/semanticproxy/resources/featuretype/feattype2"/>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/featuretype/feattype1">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#featuretypeclass"/>
+		<rwps:featuretypename>feature type 1 name</rwps:featuretypename>
+	</rdf:Description>
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/featuretype/feattype2">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#featuretypeclass"/>
+		<rwps:featuretypename>feature type 2 name</rwps:featuretypename>
+	</rdf:Description>
+	
+</rdf:RDF>

@@ -5,12 +5,18 @@
 package de.hsos.richwps.sp.imports.wpsharvester;
 
 import de.hsos.richwps.sp.App;
-import de.hsos.richwps.sp.imports.IImportSource;
+import de.hsos.richwps.sp.imports.IWPSImportSource;
 import de.hsos.richwps.sp.imports.ImportException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
 
 import net.opengis.ows.x11.MetadataType; //da true Metadata net.opengis.ows.x11.MetadataType
 
@@ -20,6 +26,7 @@ import net.opengis.wps.x100.InputDescriptionType;
 import net.opengis.wps.x100.OutputDescriptionType;
 import net.opengis.wps.x100.ProcessDescriptionType;
 import org.apache.log4j.Logger;
+import org.glassfish.jersey.client.ClientProperties;
 
 import org.n52.wps.client.WPSClientException;
 import org.n52.wps.client.WPSClientSession;
@@ -28,7 +35,7 @@ import org.n52.wps.client.WPSClientSession;
  *
  * @author fbensman
  */
-public class WPSHarvester implements IImportSource {
+public class WPSHarvester implements IWPSImportSource {
 
     private URL targetURL = null;
     private CapabilitiesDocument capabilities = null;
@@ -53,22 +60,35 @@ public class WPSHarvester implements IImportSource {
                 boundingBoxDataBaseURL);
     }
 
+    @Override
     public String getNextWPS() throws ImportException {
         if (wpsIdx >= 1) {
             return null;
         }
         if (capabilities == null) {
             try {
+                //requests capabilities from WPS server
                 capabilities = requestCapabilities(targetURL.toString());
             } catch (WPSClientException wpse) {
                 wpsIdx++;
                 throw new ImportException("Unable to contact WPS at "+targetURL, wpse);
             }
         }
+        // checks if WPS supports WPS-T
+        URL wpstURL = null;
+        try {
+            wpstURL = new URL(targetURL.toString().replace("WebProcessingService", "WPS-T"));
+        } catch (MalformedURLException ex) {
+            java.util.logging.Logger.getLogger(WPSHarvester.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        boolean isWPST = checkURL(wpstURL.toString());
 
         RDFDocBuilder builder = new RDFDocBuilder();
         RDFID wpsID = RDFIDBuilder.createID().withWpsURL(targetURL).forWPS();
-        PostWPS wps = new PostWPS(targetURL, wpsID);
+        PostWPS wps = new PostWPS(wpsID);
+        wps.setEndpoint(targetURL);
+        if(isWPST)
+            wps.setWpstEndpoint(wpstURL);
         RDFResource rdfRes = wps.toRDFResource();
         builder.addResource(rdfRes);
         String xmlRDF = null;
@@ -133,7 +153,7 @@ public class WPSHarvester implements IImportSource {
         }
         //Parent WPS
         RDFID wpsRDFID = RDFIDBuilder.createID().withWpsURL(targetURL).forWPS();
-        PostWPS wps = new PostWPS(targetURL, wpsRDFID);
+        PostWPS wps = new PostWPS(wpsRDFID);
         process.setWps(wps);
         //WSDL
         if (pdType.isSetWSDL()) {
@@ -348,6 +368,38 @@ public class WPSHarvester implements IImportSource {
         ProcessDescriptionType processDescription = wpsClient.getProcessDescription(url, processID);
         return processDescription;
     }
+    
+    
+    /**
+     * Issues a GET request to the given URL to test whether the server is
+     * listening on it
+     *
+     * @param url The URL of the resource
+     * @return true if URL available
+     */
+    private boolean checkURL(String url) {
+        try{
+            //System.out.println("uri: " + url);
+            Client client = ClientBuilder.newClient();
+            client.property(ClientProperties.CONNECT_TIMEOUT, 5000);
+            client.property(ClientProperties.READ_TIMEOUT, 5000);
+            WebTarget webTarget = client.target(url);
+
+            Invocation.Builder invocationBuilder = webTarget.request();
+            invocationBuilder.accept("application/xml+rdf");
+
+            Response response = invocationBuilder.get();
+            if(response.getStatus() == 405)
+                return true;
+            else
+                return false;
+        }catch(Exception e){
+            return false;
+        }
+        
+    }
+    
+    
 
     @Override
     public String getInfo() {

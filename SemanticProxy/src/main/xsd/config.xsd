@@ -41,6 +41,7 @@ RichWPS-SemanticProxy configuration schema
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="WPS"/>
 			<xs:enumeration value="Process"/>
+			<xs:enumeration value="WFS"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:complexType name="WPSServer">

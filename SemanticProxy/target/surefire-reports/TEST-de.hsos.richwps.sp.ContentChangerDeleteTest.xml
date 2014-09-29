@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite failures="0" time="0.404" errors="0" skipped="0" tests="3" name="de.hsos.richwps.sp.ContentChangerDeleteTest">
+<testsuite failures="0" time="0.396" errors="0" skipped="0" tests="3" name="de.hsos.richwps.sp.ContentChangerDeleteTest">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files (x86)\Java\jdk1.7.0_03\jre\bin"/>
@@ -15,7 +15,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.os.patch.level" value="Service Pack 1"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
-    <property name="user.dir" value="C:\Users\fbensman\richwps-spv2\SemanticProxy"/>
+    <property name="user.dir" value="C:\Users\fbensman\richwps-sp-github\semanticproxy\SemanticProxy"/>
     <property name="java.runtime.version" value="1.7.0_03-b05"/>
     <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment"/>
     <property name="java.endorsed.dirs" value="C:\Program Files (x86)\Java\jdk1.7.0_03\jre\lib\endorsed"/>
@@ -60,7 +60,7 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="pentium_pro+mmx pentium_pro pentium+mmx pentium i486 i386 i86"/>
   </properties>
-  <testcase time="0.341" classname="de.hsos.richwps.sp.ContentChangerDeleteTest" name="testDeleteWPSAndItsProcesses"/>
-  <testcase time="0.031" classname="de.hsos.richwps.sp.ContentChangerDeleteTest" name="testDeleteProcess"/>
-  <testcase time="0.032" classname="de.hsos.richwps.sp.ContentChangerDeleteTest" name="testDeleteWPS"/>
+  <testcase time="0.339" classname="de.hsos.richwps.sp.ContentChangerDeleteTest" name="testDeleteProcess"/>
+  <testcase time="0.031" classname="de.hsos.richwps.sp.ContentChangerDeleteTest" name="testDeleteWPS"/>
+  <testcase time="0.025" classname="de.hsos.richwps.sp.ContentChangerDeleteTest" name="testDeleteWPSAndItsProcesses"/>
 </testsuite>

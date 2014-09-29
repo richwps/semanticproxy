@@ -269,7 +269,7 @@ public class Validator {
         for (int i = 0; i < openList.size(); i++) {
             Statement st = openList.get(i);
             String pred = st.getPredicate().stringValue();
-            if (Vocabulary.isBasicPredicate(pred)) {
+            if (Vocabulary.isBasicWPSPredicate(pred)) {
                 return new ValidationResult(false, "Unproper use of basic vocabulary");
             }
         }
@@ -332,7 +332,14 @@ public class Validator {
         //get endpoint
         stats = ValidationUtils.getStatementsBySubjectAndPredicate(wpsId, Vocabulary.Endpoint, openList);
         if (stats.length != 1) {
-            return new ValidationResult(false, "More than one wps endpoint found");
+            return new ValidationResult(false, "More than one WPS endpoint found");
+        }
+        shiftStats(openList, analizedList, stats);
+        
+        //get WPS-T endpoint
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(wpsId, Vocabulary.WPSTEndpoint, openList);
+        if (stats.length > 1) {
+            return new ValidationResult(false, "More than one WPS-T endpoint found");
         }
         shiftStats(openList, analizedList, stats);
 
@@ -348,7 +355,7 @@ public class Validator {
         for (int i = 0; i < openList.size(); i++) {
             Statement st = openList.get(i);
             String pred = st.getPredicate().stringValue();
-            if (Vocabulary.isBasicPredicate(pred)) {
+            if (Vocabulary.isBasicWPSPredicate(pred)) {
                 return new ValidationResult(false, "Unproper use of basic vocabulary");
             }
         }
@@ -357,6 +364,106 @@ public class Validator {
         return new ValidationResult(true, "No error");
 
     }
+    
+    
+    
+    
+    /**
+     * Validates a list of statements for insertion of a wps
+     *
+     * @param openList List of statements to validate
+     * @return Result of the validation
+     * @throws Exception
+     */
+    public static ValidationResult checkForInsertWFS(ArrayList<Statement> openList) throws Exception {
+        ArrayList<Statement> analizedList = new ArrayList<>();
+
+        //get the wps
+        Statement[] stats = ValidationUtils.getStatementsByPredicateAndObject(Vocabulary.Type, Vocabulary.WFSClass, openList);
+        if (stats.length != 1) {
+            return new ValidationResult(false, "One WFS required");
+        }
+        shiftStats(openList, analizedList, stats);
+
+        String wfsId = stats[0].getSubject().stringValue();
+
+        //check if WFS already exists
+        try {
+            if (DBIO.subjectExists(new URL(wfsId))) {
+                return new ValidationResult(false, "WFS already exists");
+            }
+        } catch (MalformedURLException | IllegalStateException | RepositoryException | RDFException e) {
+            throw new Exception("Cannot validate RDF for insert WFS.", e);
+        }
+
+        //check if RDF id correct
+        if (!wfsId.startsWith(DBAdministration.getResourceURL().toString())) {
+            return new ValidationResult(false, "WFS "+wfsId+" does not fit into naming schema");
+        }
+
+        //get endpoint
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(wfsId, Vocabulary.Endpoint, openList);
+        if (stats.length != 1) {
+            return new ValidationResult(false, "Wrong count of endpoints found for WFS");
+        }
+        shiftStats(openList, analizedList, stats);
+        
+        
+        //get version
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(wfsId, Vocabulary.WFSVersion, openList);
+        if (stats.length != 1) {
+            return new ValidationResult(false, "Wrong count of version attributes found for WFS");
+        }
+        shiftStats(openList, analizedList, stats);
+
+
+        //check feature types
+        //get all feature types
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(wfsId, Vocabulary.FeatureType, openList);
+       
+        //put featuretype subjects into a String array
+        String[] featureTypeArr = new String[stats.length];
+        for (int i = 0; i < stats.length; i++) {
+            featureTypeArr[i] = stats[i].getObject().stringValue();
+        }
+        shiftStats(openList, analizedList, stats);
+
+        //go through feature types
+        for (int i = 0; i < featureTypeArr.length; i++) {
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(featureTypeArr[i], Vocabulary.Type, openList);
+            if (stats.length != 1) {
+                return new ValidationResult(false, "Wrong count of type statements for FeatureType found "+stats.length);
+            }
+            if (!stats[0].getObject().stringValue().equals(Vocabulary.FeatureTypeClass)) {
+                return new ValidationResult(false, "FeatureType is not of type feature type class");
+            }
+            shiftStats(openList, analizedList, stats);
+
+            String featureType = featureTypeArr[i];
+
+            //get name
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(featureType, Vocabulary.FeatureTypeName, openList);
+            if (stats.length != 1) {
+                return new ValidationResult(false, "Wrong count of name attributes found");
+            }
+            shiftStats(openList, analizedList, stats);
+
+        }
+
+        //check for use of basic vocabulary in remaining statements
+        for (int i = 0; i < openList.size(); i++) {
+            Statement st = openList.get(i);
+            String pred = st.getPredicate().stringValue();
+            if (Vocabulary.isBasicWPSPredicate(pred)) {
+                return new ValidationResult(false, "Unproper use of basic vocabulary");
+            }
+        }
+        openList.addAll(analizedList);
+
+        return new ValidationResult(true, "No error");
+
+    }
+    
 
     /**
      * Validates a list of statements for update of a wps
@@ -410,7 +517,7 @@ public class Validator {
         for (int i = 0; i < openList.size(); i++) {
             Statement st = openList.get(i);
             String pred = st.getPredicate().stringValue();
-            if (Vocabulary.isBasicPredicate(pred)) {
+            if (Vocabulary.isBasicWPSPredicate(pred)) {
                 return new ValidationResult(false, "Unproper use of basic vocabulary");
             }
         }
@@ -673,7 +780,7 @@ public class Validator {
         for (int i = 0; i < openList.size(); i++) {
             Statement st = openList.get(i);
             String pred = st.getPredicate().stringValue();
-            if (Vocabulary.isBasicPredicate(pred)) {
+            if (Vocabulary.isBasicWPSPredicate(pred)) {
                 return new ValidationResult(false, "Unproper use of basic vocabulary");
             }
         }

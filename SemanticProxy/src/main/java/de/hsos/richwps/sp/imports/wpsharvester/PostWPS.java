@@ -8,6 +8,7 @@ package de.hsos.richwps.sp.imports.wpsharvester;
 
 import de.hsos.richwps.sp.restlogic.Vocabulary;
 import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * Mutable class that represents a wps description
@@ -17,10 +18,10 @@ import java.net.URL;
 public class PostWPS {
 
     private URL endpoint = null;
+    private URL wpstEndpoint = null;
     private RDFID rdfId = null;
 
-    public PostWPS(URL endpoint, RDFID rdfId) {
-        this.endpoint = endpoint;
+    public PostWPS(RDFID rdfId) {
         this.rdfId = rdfId;
     }
 
@@ -32,6 +33,25 @@ public class PostWPS {
         this.rdfId = rdfId;
     }
 
+    public URL getEndpoint() {
+        return endpoint;
+    }
+
+    public void setEndpoint(URL endpoint) {
+        this.endpoint = endpoint;
+    }
+
+    public URL getWpstEndpoint() {
+        return wpstEndpoint;
+    }
+
+    public void setWpstEndpoint(URL wpstEndpoint) {
+        this.wpstEndpoint = wpstEndpoint;
+    }
+    
+    
+    
+
     /**
      * Creates an RDFResource from object
      *
@@ -39,8 +59,14 @@ public class PostWPS {
      */
     public RDFResource toRDFResource() {
         RDFResource res = new RDFResource(rdfId);
-        LiteralExpression lexp = new LiteralExpression(Vocabulary.Endpoint, endpoint.toString());
-        res.setFields(new LiteralExpression[]{lexp});
+        ArrayList<LiteralExpression> lexpList = new ArrayList<LiteralExpression>();
+        LiteralExpression lexpEndpoint = new LiteralExpression(Vocabulary.Endpoint, endpoint.toString());
+        lexpList.add(lexpEndpoint);
+        if(wpstEndpoint != null){
+            LiteralExpression lexpWPSTEndpoint = new LiteralExpression(Vocabulary.WPSTEndpoint, wpstEndpoint.toString());
+            lexpList.add(lexpWPSTEndpoint);
+        }
+        res.setFields(lexpList.toArray(new LiteralExpression[lexpList.size()]));
         ResourceExpression rexp = new ResourceExpression(Vocabulary.Type, new RDFID(Vocabulary.WPSClass));
         res.setResources(new ResourceExpression[]{rexp});
         return res;

@@ -143,7 +143,7 @@ public class ContentChanger {
     }
 
     /**
-     * pushes raw rdf into db
+     * pushes WPS RDF into db
      *
      * @param rawRDF
      * @throws Exception
@@ -184,6 +184,52 @@ public class ContentChanger {
             throw new URISyntaxException("Cannot insert wps into db, decomposition error.", use.getMessage());
         }
     }
+    
+    
+    
+    /**
+     * pushes WFS RDF into db
+     *
+     * @param rawRDF
+     * @throws Exception
+     */
+    public static void insertWFS(String rawRDF) throws RDFException, IOException, RepositoryException, URISyntaxException, Exception {
+        ArrayList<Statement> statList = null;
+        ValidationResult result = null;
+        try {
+            statList = decomposeIntoStatements(rawRDF);
+            result = Validator.checkForInsertWFS(statList);
+        } catch (RDFException re) {
+            throw new RDFException("Cannot insert WFS into db, decomposition error.", re);
+        } catch (IOException ioe) {
+            throw new IOException("Cannot insert WFS into db, decomposition error.", ioe);
+        } catch (Exception e) {
+            throw new Exception("Cannot insert WFS into db, decomposition error.", e);
+        }
+        try {
+            if (result.result) {
+                DBIO.insertRDFXMLStringIntoDB(rawRDF);
+                //Create link from network to new WFS
+                Statement[] stats = ValidationUtils.getStatementsByPredicateAndObject(Vocabulary.Type, Vocabulary.WFSClass, statList);
+                Resource subject = new URIImpl(DBAdministration.getResourceURL().toString());
+                org.openrdf.model.URI predicate = new URIImpl(Vocabulary.WFS);
+                org.openrdf.model.URI object = new URIImpl(stats[0].getSubject().stringValue());
+                Statement stmt = new StatementImpl(subject, predicate, object);
+                DBIO.insertStatement(stmt);
+            } else {
+                throw new Exception("Cannot push WFS RDF into db, data malformed: " + result.message);
+            }
+        } catch (RepositoryException re) {
+            throw new RepositoryException("Cannot insert WFS into db, decomposition error.", re);
+        } catch (RDFException rde) {
+            throw new RDFException("Cannot insert WFS into db, decomposition error.", rde);
+        } catch (IOException ioe) {
+            throw new IOException("Cannot insert WFS into db, decomposition error.", ioe);
+        } catch (URISyntaxException use) {
+            throw new URISyntaxException("Cannot insert WFS into db, decomposition error.", use.getMessage());
+        }
+    }
+    
 
     /**
      * Decompoeses an rdf string into separate statements

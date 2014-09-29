@@ -15,6 +15,7 @@ public class InputFile {
     enum Typ{
         WPS,
         Process,
+        WFS,
         Unspec
     }
     
@@ -65,6 +66,11 @@ public class InputFile {
     public boolean isProcess(){
         return typ.equals(Typ.Process);
     }
+    
+    public boolean isWFS(){
+        return typ.equals(Typ.WFS);
+    }
+    
     
     @Override
     public String toString(){

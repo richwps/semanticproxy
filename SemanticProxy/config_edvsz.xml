@@ -18,6 +18,7 @@
 	<WPSServer targetURL="http://richwps.edvsz.hs-osnabrueck.de/wps/WebProcessingService"/>
 	<WPSServer targetURL="http://richwps.edvsz.hs-osnabrueck.de/lkn/WebProcessingService"/>
 	<WPSServer targetURL="http://richwps.edvsz.hs-osnabrueck.de/baw/WebProcessingService"/>
+	<File path="RDF\WFS\WFSTest.rdf" type="WFS" replaceableHost="http://localhost:4567"/>
   </DataSources>
   <HTTPEndpoints>
     <Host>http://richwps.edvsz.hs-osnabrueck.de</Host>

@@ -33,18 +33,23 @@ public class ContentGetterTest extends TestCase{
     private static final String RESOURCES_URL_NAME = "http://localhost:4567/semanticproxy/resources";
     private static final String VOCAB_URL_NAME = "http://localhost:4567/semanticproxy/resources/vocab";
     private static final String OWNER = "Test owner";
-    private static final String DOMAIN ="Test domain";
+    private static final String DOMAIN = "Test domain";
     private static final long INITIAL_SIZE = 3;
-    private static final String TESTFILE_WPS_NAME = "RDF"+ File.separator+"BAW"+File.separator+"WPSModelValidation.rdf";
+    private static final String TESTFILE_WPS_NAME = "RDF" + File.separator + "BAW" + File.separator + "WPSModelValidation.rdf";
     private static final String TESTWPS_NAME = "http://localhost:4567/semanticproxy/resources/wps/ModelValidationWPS";
-    private static final String TESTFILE_PROCESS_NAME = "RDF"+ File.separator+"BAW"+File.separator+"ProcessCompare.rdf";
+    private static final String TESTFILE_PROCESS_NAME = "RDF" + File.separator + "BAW" + File.separator + "ProcessCompare.rdf";
     private static final String TESTPROCESS_NAME = "http://localhost:4567/semanticproxy/resources/process/compare";
-    
+    private static final String TESTFILE_WFS_NAME = "RDF" + File.separator + "WFS" + File.separator + "WFSTest.rdf";
+    private static final String TESTWFS_NAME = "http://localhost:4567/semanticproxy/resources/wfs/TestWFS";
     private File rdfDataDir = null;
     private URL resURL = null;
     private URL vocURL = null;
     private Resource wpsResource = null;
     private Resource processResource = null;
+    private Resource wfsResource = null;
+    private String rawWPSRDF = null;
+    private String rawProcessRDF = null;
+    private String rawWFSRDF = null;
 
     
     
@@ -115,8 +120,8 @@ public class ContentGetterTest extends TestCase{
     
     
     /**
-     * Tests ContentChanger functions
-     * Tests deleting a single process
+     * Tests ContentGetter functions
+     * Tests getting all processes
      */
     public void testGetAllProcesses() 
     {
@@ -134,8 +139,8 @@ public class ContentGetterTest extends TestCase{
     }
     
     /**
-     * Tests ContentChanger functions
-     * Tests deleting a single process
+     * Tests ContentGetter functions
+     * Tests getting all WPSs
      */
     public void testGetAllWPS() 
     {
@@ -152,6 +157,10 @@ public class ContentGetterTest extends TestCase{
            
     }
     
+    /**
+     * Tests ContentGetter functions
+     * Tests getting RDF for a specific resource
+     */
     public void testGetRDFFor() 
     {
         try {
@@ -167,6 +176,11 @@ public class ContentGetterTest extends TestCase{
            
     }
     
+    
+    /**
+     * Tests ContentGetter functions
+     * Tests validation that a process exists
+     */
     public void testProcessExists() 
     {
         try {
@@ -183,6 +197,10 @@ public class ContentGetterTest extends TestCase{
     }
     
     
+    /**
+     * Tests ContentGetter functions
+     * Tests validation that a WPS exists
+     */
    public void testWPSExists() 
     {
         try {

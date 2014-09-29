@@ -15,7 +15,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.os.patch.level" value="Service Pack 1"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
-    <property name="user.dir" value="C:\Users\fbensman\richwps-spv2\SemanticProxy"/>
+    <property name="user.dir" value="C:\Users\fbensman\richwps-sp-github\semanticproxy\SemanticProxy"/>
     <property name="java.runtime.version" value="1.7.0_03-b05"/>
     <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment"/>
     <property name="java.endorsed.dirs" value="C:\Program Files (x86)\Java\jdk1.7.0_03\jre\lib\endorsed"/>
