@@ -336,8 +336,8 @@ public class Validator {
         }
         shiftStats(openList, analizedList, stats);
         
-        //get WPS-T endpoint
-        stats = ValidationUtils.getStatementsBySubjectAndPredicate(wpsId, Vocabulary.WPSTEndpoint, openList);
+        //get RichWPS endpoint
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(wpsId, Vocabulary.RichWPSEndpoint, openList);
         if (stats.length > 1) {
             return new ValidationResult(false, "More than one WPS-T endpoint found");
         }

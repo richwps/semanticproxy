@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class PostWPS {
 
     private URL endpoint = null;
-    private URL wpstEndpoint = null;
+    private URL richWPSEndpoint = null;
     private RDFID rdfId = null;
 
     public PostWPS(RDFID rdfId) {
@@ -41,12 +41,12 @@ public class PostWPS {
         this.endpoint = endpoint;
     }
 
-    public URL getWpstEndpoint() {
-        return wpstEndpoint;
+    public URL getRichWPSEndpoint() {
+        return richWPSEndpoint;
     }
 
-    public void setWpstEndpoint(URL wpstEndpoint) {
-        this.wpstEndpoint = wpstEndpoint;
+    public void setRichWPSEndpoint(URL richWPSEndpoint) {
+        this.richWPSEndpoint = richWPSEndpoint;
     }
     
     
@@ -62,9 +62,9 @@ public class PostWPS {
         ArrayList<LiteralExpression> lexpList = new ArrayList<LiteralExpression>();
         LiteralExpression lexpEndpoint = new LiteralExpression(Vocabulary.Endpoint, endpoint.toString());
         lexpList.add(lexpEndpoint);
-        if(wpstEndpoint != null){
-            LiteralExpression lexpWPSTEndpoint = new LiteralExpression(Vocabulary.WPSTEndpoint, wpstEndpoint.toString());
-            lexpList.add(lexpWPSTEndpoint);
+        if(richWPSEndpoint != null){
+            LiteralExpression lexpRichWPSEndpoint = new LiteralExpression(Vocabulary.RichWPSEndpoint, richWPSEndpoint.toString());
+            lexpList.add(lexpRichWPSEndpoint);
         }
         res.setFields(lexpList.toArray(new LiteralExpression[lexpList.size()]));
         ResourceExpression rexp = new ResourceExpression(Vocabulary.Type, new RDFID(Vocabulary.WPSClass));

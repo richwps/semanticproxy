@@ -40,7 +40,7 @@ public class Vocabulary {
     public static String Endpoint = null;
     //wps
     public static String Process = null;
-    public static String WPSTEndpoint = null;
+    public static String RichWPSEndpoint = null;
     //process
     public static String Identifier = null;
     public static String Title = null;
@@ -125,8 +125,8 @@ public class Vocabulary {
             Process = VOC + "process";
             stmt = new StatementImpl(new URIImpl(Process), new URIImpl(Label), new LiteralImpl("Has as process"));
             writer.handleStatement(stmt);
-            WPSTEndpoint = VOC + "wpstendpoint";
-            stmt = new StatementImpl(new URIImpl(WPSTEndpoint), new URIImpl(Label), new LiteralImpl("Has WPS-T endpoint"));
+            RichWPSEndpoint = VOC + "richwpsendpoint";
+            stmt = new StatementImpl(new URIImpl(RichWPSEndpoint), new URIImpl(Label), new LiteralImpl("Has RichWPS endpoint"));
             writer.handleStatement(stmt);
 
             //process

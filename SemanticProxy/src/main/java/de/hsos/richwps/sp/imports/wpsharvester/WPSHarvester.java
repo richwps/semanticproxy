@@ -74,21 +74,22 @@ public class WPSHarvester implements IWPSImportSource {
                 throw new ImportException("Unable to contact WPS at "+targetURL, wpse);
             }
         }
-        // checks if WPS supports WPS-T
-        URL wpstURL = null;
+        // checks if WPS supports RichWPS
+        URL richWPSURL = null;
         try {
-            wpstURL = new URL(targetURL.toString().replace("WebProcessingService", "WPS-T"));
+            //richWPSURL = new URL(targetURL.toString().replace("WebProcessingService", "RichWPS"));
+            richWPSURL = new URL(targetURL.toString().replace("WebProcessingService", "WPS-T"));
         } catch (MalformedURLException ex) {
             java.util.logging.Logger.getLogger(WPSHarvester.class.getName()).log(Level.SEVERE, null, ex);
         }
-        boolean isWPST = checkURL(wpstURL.toString());
+        boolean isRichWPS = checkURL(richWPSURL.toString());
 
         RDFDocBuilder builder = new RDFDocBuilder();
         RDFID wpsID = RDFIDBuilder.createID().withWpsURL(targetURL).forWPS();
         PostWPS wps = new PostWPS(wpsID);
         wps.setEndpoint(targetURL);
-        if(isWPST)
-            wps.setWpstEndpoint(wpstURL);
+        if(isRichWPS)
+            wps.setRichWPSEndpoint(richWPSURL);
         RDFResource rdfRes = wps.toRDFResource();
         builder.addResource(rdfRes);
         String xmlRDF = null;
