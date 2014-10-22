@@ -77,8 +77,8 @@ public class WPSHarvester implements IWPSImportSource {
         // checks if WPS supports RichWPS
         URL richWPSURL = null;
         try {
-            //richWPSURL = new URL(targetURL.toString().replace("WebProcessingService", "RichWPS"));
-            richWPSURL = new URL(targetURL.toString().replace("WebProcessingService", "WPS-T"));
+            richWPSURL = new URL(targetURL.toString().replace("WebProcessingService", "RichWPS"));
+            //richWPSURL = new URL(targetURL.toString().replace("WebProcessingService", "WPS-T"));
         } catch (MalformedURLException ex) {
             java.util.logging.Logger.getLogger(WPSHarvester.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -391,6 +391,8 @@ public class WPSHarvester implements IWPSImportSource {
 
             Response response = invocationBuilder.get();
             if(response.getStatus() == 405)
+                return true;
+            else if(response.getStatus() == 200)
                 return true;
             else
                 return false;
