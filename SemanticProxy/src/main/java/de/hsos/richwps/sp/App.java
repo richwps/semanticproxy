@@ -179,7 +179,7 @@ public class App {
 
         //loop through importers and import data
         for (IWPSImportSource source : sourceList) {
-
+     
             //collect WPS
             while (true) {
                 String rdf = null;

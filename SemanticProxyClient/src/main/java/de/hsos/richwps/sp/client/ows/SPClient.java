@@ -2,17 +2,17 @@
  * To change this template, choose Tools | Templates
  * and open the template out the editor.
  */
-package de.hsos.richwps.sp.client.wps;
+package de.hsos.richwps.sp.client.ows;
 
-import de.hsos.richwps.sp.client.wps.gettypes.Output;
-import de.hsos.richwps.sp.client.wps.gettypes.Process;
-import de.hsos.richwps.sp.client.wps.gettypes.Network;
-import de.hsos.richwps.sp.client.wps.gettypes.Input;
-import de.hsos.richwps.sp.client.wps.gettypes.WPS;
-import de.hsos.richwps.sp.client.wps.gettypes.ComplexData;
-import de.hsos.richwps.sp.client.wps.gettypes.LiteralData;
-import de.hsos.richwps.sp.client.wps.gettypes.BoundingBoxData;
-import de.hsos.richwps.sp.client.wps.posttypes.PostWPS;
+import de.hsos.richwps.sp.client.ows.gettypes.Output;
+import de.hsos.richwps.sp.client.ows.gettypes.Process;
+import de.hsos.richwps.sp.client.ows.gettypes.Network;
+import de.hsos.richwps.sp.client.ows.gettypes.Input;
+import de.hsos.richwps.sp.client.ows.gettypes.WPS;
+import de.hsos.richwps.sp.client.ows.gettypes.ComplexData;
+import de.hsos.richwps.sp.client.ows.gettypes.LiteralData;
+import de.hsos.richwps.sp.client.ows.gettypes.BoundingBoxData;
+import de.hsos.richwps.sp.client.ows.posttypes.PostWPS;
 import de.hsos.richwps.sp.client.CommunicationException;
 import de.hsos.richwps.sp.client.InternalSPException;
 import de.hsos.richwps.sp.client.RDFException;
@@ -20,13 +20,15 @@ import de.hsos.richwps.sp.client.BadRequestException;
 import de.hsos.richwps.sp.client.rdf.RDFClient;
 import de.hsos.richwps.sp.client.rdf.RDFID;
 import de.hsos.richwps.sp.client.rdf.RDFResource;
-import de.hsos.richwps.sp.client.wps.posttypes.PostBoundingBoxData;
-import de.hsos.richwps.sp.client.wps.posttypes.PostComplexData;
-import de.hsos.richwps.sp.client.wps.posttypes.PostInAndOutputForm;
-import de.hsos.richwps.sp.client.wps.posttypes.PostInput;
-import de.hsos.richwps.sp.client.wps.posttypes.PostLiteralData;
-import de.hsos.richwps.sp.client.wps.posttypes.PostOutput;
-import de.hsos.richwps.sp.client.wps.posttypes.PostProcess;
+import de.hsos.richwps.sp.client.ows.gettypes.FeatureType;
+import de.hsos.richwps.sp.client.ows.gettypes.WFS;
+import de.hsos.richwps.sp.client.ows.posttypes.PostBoundingBoxData;
+import de.hsos.richwps.sp.client.ows.posttypes.PostComplexData;
+import de.hsos.richwps.sp.client.ows.posttypes.PostInAndOutputForm;
+import de.hsos.richwps.sp.client.ows.posttypes.PostInput;
+import de.hsos.richwps.sp.client.ows.posttypes.PostLiteralData;
+import de.hsos.richwps.sp.client.ows.posttypes.PostOutput;
+import de.hsos.richwps.sp.client.ows.posttypes.PostProcess;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -375,5 +377,30 @@ public class SPClient {
         }
 
         rdfClient.putRDF(list.toArray(new RDFResource[list.size()]), new URL(process.getRdfId().rdfID));
+    }
+    
+    
+    
+     /**
+     * Gets an RDFResource with WFS-Wrapper class, uses the specified RDF ID
+     *
+     * @return RDFResource with WFS-Wrapper class
+     * @throws Exception
+     */
+    public WFS getWFS(RDFID rdfID) throws BadRequestException, InternalSPException, CommunicationException, RDFException {
+        RDFResource res = rdfClient.retrieveResource(rdfID);
+        return WFS.createWrapper(res);
+    }
+    
+    
+    /**
+     * Gets an RDFResource with FeatureType-Wrapper class, uses the specified RDF ID
+     *
+     * @return RDFResource with FeatureType-Wrapper class
+     * @throws Exception
+     */
+    public FeatureType getFeatureType(RDFID rdfID) throws BadRequestException, InternalSPException, CommunicationException, RDFException {
+        RDFResource res = rdfClient.retrieveResource(rdfID);
+        return FeatureType.createWrapper(res);
     }
 }

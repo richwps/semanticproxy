@@ -360,14 +360,22 @@ public class WPSHarvester implements IWPSImportSource {
 
     private CapabilitiesDocument requestCapabilities(String url) throws WPSClientException {
         WPSClientSession wpsClient = WPSClientSession.getInstance();
-        wpsClient.connect(url);
-        return wpsClient.getWPSCaps(url);
+        if(wpsClient.connect(url)){
+            CapabilitiesDocument capsDoc = wpsClient.getWPSCaps(url);
+            WPSClientSession.reset();
+            return capsDoc;
+        }
+        throw new WPSClientException("Cannot connect to server at "+url);
     }
 
-    private ProcessDescriptionType requestDescribeProcess(String url, String processID) throws IOException {
+    private ProcessDescriptionType requestDescribeProcess(String url, String processID) throws IOException, WPSClientException {
         WPSClientSession wpsClient = WPSClientSession.getInstance();
-        ProcessDescriptionType processDescription = wpsClient.getProcessDescription(url, processID);
-        return processDescription;
+        if(wpsClient.connect(url)){
+            ProcessDescriptionType processDescription = wpsClient.getProcessDescription(url, processID);
+            WPSClientSession.reset();
+            return processDescription;
+        }
+        throw new WPSClientException("Cannot connect to server at "+url);
     }
     
     

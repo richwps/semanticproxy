@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.hsos.richwps.sp.client.wps;
+package de.hsos.richwps.sp.client.ows;
 
 import java.io.StringWriter;
 import java.net.URL;
@@ -10,6 +10,7 @@ import org.openrdf.model.Statement;
 import org.openrdf.model.impl.LiteralImpl;
 import org.openrdf.model.impl.StatementImpl;
 import org.openrdf.model.impl.URIImpl;
+import org.openrdf.model.vocabulary.XMLSchema;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.RDFWriter;
@@ -34,9 +35,12 @@ public class Vocabulary {
     public static String Domain = null;
     public static String Owner = null;
     public static String WPS = null;
-    //wps
+    public static String WFS = null;
+    //wps und wfs
     public static String Endpoint = null;
+    //wps
     public static String Process = null;
+    public static String RichWPSEndpoint = null;
     //process
     public static String Identifier = null;
     public static String Title = null;
@@ -55,6 +59,13 @@ public class Vocabulary {
     public static String InputFormChoice = null;
     //output
     public static String OutputFormChoice = null;
+    
+    //wfs
+    public static String WFSVersion = null;
+    public static String FeatureType = null;
+    //feature type
+    public static String FeatureTypeName = null;
+    
     //types
     public static String NetworkClass = null;
     public static String WPSClass = null;
@@ -65,6 +76,8 @@ public class Vocabulary {
     public static String LiteralDataClass = null;
     public static String BoundingBoxDataClass = null;
     private static String RDF_XML_Representation = null;
+    public static String WFSClass = null;
+    public static String FeatureTypeClass = null;
 
     /**
      * Initializes the vocabulary resources with the specified URL
@@ -81,10 +94,14 @@ public class Vocabulary {
         //generate RDF vocabulary document
         StringWriter sw = new StringWriter();
         RDFWriter writer = Rio.createWriter(RDFFormat.RDFXML, sw);
-        Statement stmt = null;
+        Statement stmt = null; 
         try {
             writer.startRDF();
-
+            writer.handleNamespace("rdf", org.openrdf.model.vocabulary.RDF.NAMESPACE);
+            writer.handleNamespace("rdfs", org.openrdf.model.vocabulary.RDFS.NAMESPACE);
+            writer.handleNamespace("xsd", XMLSchema.NAMESPACE);
+            writer.handleNamespace("rwps", vocabularyURL.toString()+"#");
+            
             //network
             Domain = VOC + "domain";
             stmt = new StatementImpl(new URIImpl(Domain), new URIImpl(Label), new LiteralImpl("Has domain"));
@@ -95,13 +112,21 @@ public class Vocabulary {
             WPS = VOC + "wps";
             stmt = new StatementImpl(new URIImpl(WPS), new URIImpl(Label), new LiteralImpl("Has as WPS"));
             writer.handleStatement(stmt);
+            WFS = VOC + "wfs";
+            stmt = new StatementImpl(new URIImpl(WFS), new URIImpl(Label), new LiteralImpl("Has as WFS"));
+            writer.handleStatement(stmt);
 
-            //wps
+            //wps and wfs
             Endpoint = VOC + "endpoint";
             stmt = new StatementImpl(new URIImpl(Endpoint), new URIImpl(Label), new LiteralImpl("Has endpoint"));
             writer.handleStatement(stmt);
+            
+            //wps
             Process = VOC + "process";
             stmt = new StatementImpl(new URIImpl(Process), new URIImpl(Label), new LiteralImpl("Has as process"));
+            writer.handleStatement(stmt);
+            RichWPSEndpoint = VOC + "richwpsendpoint";
+            stmt = new StatementImpl(new URIImpl(RichWPSEndpoint), new URIImpl(Label), new LiteralImpl("Has RichWPS endpoint"));
             writer.handleStatement(stmt);
 
             //process
@@ -155,6 +180,20 @@ public class Vocabulary {
             stmt = new StatementImpl(new URIImpl(OutputFormChoice), new URIImpl(Label), new LiteralImpl("OutputFormChoice"));
             writer.handleStatement(stmt);
 
+            //wfs
+            WFSVersion = VOC + "wfsversion";
+            stmt = new StatementImpl(new URIImpl(WFSVersion), new URIImpl(Label), new LiteralImpl("WFSVersion"));
+            writer.handleStatement(stmt);
+            
+            FeatureType = VOC + "featuretype";
+            stmt = new StatementImpl(new URIImpl(FeatureType), new URIImpl(Label), new LiteralImpl("knows feature type"));
+            writer.handleStatement(stmt);
+            
+            //feature type
+            FeatureTypeName = VOC + "featuretypename";
+            stmt = new StatementImpl(new URIImpl(FeatureTypeName), new URIImpl(Label), new LiteralImpl("has name"));
+            writer.handleStatement(stmt);           
+            
             //types
             NetworkClass = VOC + "networkclass";
             stmt = new StatementImpl(new URIImpl(NetworkClass), new URIImpl(Type), new URIImpl(SchemaClass));
@@ -196,7 +235,17 @@ public class Vocabulary {
             writer.handleStatement(stmt);
             stmt = new StatementImpl(new URIImpl(BoundingBoxDataClass), new URIImpl(Label), new LiteralImpl("BoundingBox data"));
             writer.handleStatement(stmt);
-
+            WFSClass = VOC + "wfsclass";
+            stmt = new StatementImpl(new URIImpl(WFSClass), new URIImpl(Type), new URIImpl(SchemaClass));
+            writer.handleStatement(stmt);
+            stmt = new StatementImpl(new URIImpl(WFSClass), new URIImpl(Label), new LiteralImpl("WFS"));
+            writer.handleStatement(stmt);
+            FeatureTypeClass = VOC + "featuretypeclass";
+            stmt = new StatementImpl(new URIImpl(FeatureTypeClass), new URIImpl(Type), new URIImpl(SchemaClass));
+            writer.handleStatement(stmt);
+            stmt = new StatementImpl(new URIImpl(FeatureTypeClass), new URIImpl(Label), new LiteralImpl("FeatureType"));
+            writer.handleStatement(stmt);
+            
 
             writer.endRDF();
             RDF_XML_Representation = sw.toString();
@@ -208,12 +257,12 @@ public class Vocabulary {
 
     /**
      * Checks whether a sample string is known by the vocabulary as a predicate
-     * with literal object
+     * with literal object that describes a WPS
      *
      * @param sample
      * @return
      */
-    public static boolean isBasicPredicate(String sample) {
+    public static boolean isBasicWPSPredicate(String sample) {
         if (sample.equalsIgnoreCase(Identifier)
                 || sample.equalsIgnoreCase(Title)
                 || sample.equalsIgnoreCase(Abstract)
@@ -230,15 +279,19 @@ public class Vocabulary {
         }
         return false;
     }
+    
+    
+    
+    
 
     /**
      * Checks whether a sample string is known by the vocabulary as an object
-     * for the type predicate
+     * for the type predicate that describes a WPS
      *
      * @param sample
      * @return
      */
-    public static boolean isBasicType(String sample) {
+    public static boolean isBasicWPSType(String sample) {
         if (sample.equalsIgnoreCase(NetworkClass)
                 || sample.equalsIgnoreCase(WPSClass)
                 || sample.equalsIgnoreCase(ProcessClass)
@@ -246,11 +299,61 @@ public class Vocabulary {
                 || sample.equalsIgnoreCase(ProcessOutputClass)
                 || sample.equalsIgnoreCase(ComplexDataClass)
                 || sample.equalsIgnoreCase(LiteralDataClass)
-                || sample.equalsIgnoreCase(BoundingBoxDataClass)) {
+                || sample.equalsIgnoreCase(BoundingBoxDataClass))
+        {
             return true;
         }
         return false;
     }
+    
+    
+    
+    
+    
+    /**
+     * Checks whether a sample string is known by the vocabulary as a predicate
+     * with literal object that describes a WFS
+     *
+     * @param sample
+     * @return
+     */
+    public static boolean isBasicWFSPredicate(String sample) {
+        if (sample.equalsIgnoreCase(WFSVersion)
+                || sample.equalsIgnoreCase(Endpoint)
+                || sample.equalsIgnoreCase(FeatureTypeName)) {
+            return true;
+        }
+        return false;
+    }
+    
+    
+    
+    
+
+    /**
+     * Checks whether a sample string is known by the vocabulary as an object
+     * for the type predicate that describes a WFS
+     *
+     * @param sample
+     * @return
+     */
+    public static boolean isBasicWFSType(String sample) {
+        if (sample.equalsIgnoreCase(WFSClass)
+                || sample.equalsIgnoreCase(FeatureTypeClass))
+        {
+            return true;
+        }
+        return false;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     /**
      * Returns an XML/RDF representation of the vocabulary

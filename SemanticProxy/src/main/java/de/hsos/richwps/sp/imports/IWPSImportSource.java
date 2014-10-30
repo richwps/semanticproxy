@@ -26,6 +26,8 @@ public interface IWPSImportSource {
      */
     public String getNextProcess() throws ImportException;
     
+    
+    
     /**
      * Resets streams
      */

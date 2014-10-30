@@ -2,12 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.hsos.richwps.sp.client.wps.gettypes;
+package de.hsos.richwps.sp.client.ows.gettypes;
 
 import de.hsos.richwps.sp.client.RDFException;
 import de.hsos.richwps.sp.client.rdf.RDFID;
 import de.hsos.richwps.sp.client.rdf.RDFResource;
-import de.hsos.richwps.sp.client.wps.Vocabulary;
+import de.hsos.richwps.sp.client.ows.Vocabulary;
 
 /**
  *

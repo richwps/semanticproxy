@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.hsos.richwps.sp.client.wps.gettypes;
+package de.hsos.richwps.sp.client.ows.gettypes;
 
 import de.hsos.richwps.sp.client.CommunicationException;
 import de.hsos.richwps.sp.client.InternalSPException;
@@ -11,8 +11,8 @@ import de.hsos.richwps.sp.client.BadRequestException;
 import de.hsos.richwps.sp.client.rdf.RDFClient;
 import de.hsos.richwps.sp.client.rdf.RDFID;
 import de.hsos.richwps.sp.client.rdf.RDFResource;
-import de.hsos.richwps.sp.client.wps.SPClient;
-import de.hsos.richwps.sp.client.wps.Vocabulary;
+import de.hsos.richwps.sp.client.ows.SPClient;
+import de.hsos.richwps.sp.client.ows.Vocabulary;
 import java.net.MalformedURLException;
 import java.net.URL;
 

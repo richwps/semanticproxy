@@ -5,19 +5,21 @@
 package de.hsos.richwps.sp.client;
 
 import de.hsos.richwps.sp.client.rdf.RDFID;
-import de.hsos.richwps.sp.client.wps.gettypes.Process;
-import de.hsos.richwps.sp.client.wps.gettypes.WPS;
-import de.hsos.richwps.sp.client.wps.gettypes.Input;
-import de.hsos.richwps.sp.client.wps.gettypes.Network;
-import de.hsos.richwps.sp.client.wps.SPClient;
-import de.hsos.richwps.sp.client.wps.gettypes.InAndOutputForm;
-import de.hsos.richwps.sp.client.wps.gettypes.Output;
-import de.hsos.richwps.sp.client.wps.posttypes.PostWPS;
-import de.hsos.richwps.sp.client.wps.Vocabulary;
-import de.hsos.richwps.sp.client.wps.posttypes.PostInput;
-import de.hsos.richwps.sp.client.wps.posttypes.PostLiteralData;
-import de.hsos.richwps.sp.client.wps.posttypes.PostOutput;
-import de.hsos.richwps.sp.client.wps.posttypes.PostProcess;
+import de.hsos.richwps.sp.client.ows.gettypes.Process;
+import de.hsos.richwps.sp.client.ows.gettypes.WPS;
+import de.hsos.richwps.sp.client.ows.gettypes.Input;
+import de.hsos.richwps.sp.client.ows.gettypes.Network;
+import de.hsos.richwps.sp.client.ows.SPClient;
+import de.hsos.richwps.sp.client.ows.gettypes.InAndOutputForm;
+import de.hsos.richwps.sp.client.ows.gettypes.Output;
+import de.hsos.richwps.sp.client.ows.posttypes.PostWPS;
+import de.hsos.richwps.sp.client.ows.Vocabulary;
+import de.hsos.richwps.sp.client.ows.gettypes.FeatureType;
+import de.hsos.richwps.sp.client.ows.gettypes.WFS;
+import de.hsos.richwps.sp.client.ows.posttypes.PostInput;
+import de.hsos.richwps.sp.client.ows.posttypes.PostLiteralData;
+import de.hsos.richwps.sp.client.ows.posttypes.PostOutput;
+import de.hsos.richwps.sp.client.ows.posttypes.PostProcess;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -58,6 +60,10 @@ public class App {
             for (int i = 0; i < wpss.length; i++) {
                 System.out.println("-> WPS:");
                 System.out.println("   -> WPS endpoint: " + wpss[i].getEndpoint());
+                if(wpss[i].getRichWPSEndpoint()!=null)
+                    System.out.println("   -> RichWPS endpoint: " + wpss[i].getRichWPSEndpoint());
+                else
+                    System.out.println("   -> RichWPS endpoint: not set");
                 Process[] processes = wpss[i].getProcesses();
                 System.out.println("   -> Processes:");
                 for (int j = 0; j < processes.length; j++) {
@@ -150,7 +156,9 @@ public class App {
 
             //Post wps
             System.out.println("Post a wps");
-            PostWPS wps = new PostWPS(new URL("http://www.adder.de/wps"), new RDFID("http://localhost:4567/semanticproxy/resources/wps/AdderWPS"));
+            PostWPS wps = new PostWPS(new RDFID("http://localhost:4567/semanticproxy/resources/wps/AdderWPS"));
+            wps.setEndpoint(new URL("http://www.adder.de/wps"));
+            wps.setRichWPSEndpoint(new URL("http://www.adder.de/wps-t"));
             spClient.postWPS(wps);
             System.out.println("Done.\n--");
 
@@ -211,6 +219,26 @@ public class App {
             System.out.println("Delete a WPS");
             spClient.deleteWPS(wps.getRdfId());
             System.out.println("Done.\n--");
+            
+            
+            
+            //get WFSs
+            System.out.println("Get WFSs");
+            WFS[] wfss = net.getWFSs();
+            for (int i = 0; i < wfss.length; i++) {
+                System.out.println("-> WFS:");
+                System.out.println("   -> WFS endpoint: " + wfss[i].getEndpoint());
+                System.out.println("   -> WFS version: " + wfss[i].getWFSVersion());
+                FeatureType[] featureTypes = wfss[i].getFeatureTypes();
+                System.out.println("   -> FeatureTypes:");
+                for (int j = 0; j < featureTypes.length; j++) {
+                    FeatureType feat = featureTypes[j];
+                    System.out.println("      -> Name: " + feat.getName());
+                }
+            }
+            
+            
+            
             
         } catch (BadRequestException e) {
             System.err.println("Caught exception: " + e.getMessage());

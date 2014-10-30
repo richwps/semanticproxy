@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite failures="0" time="20.073" errors="0" skipped="0" tests="4" name="de.hsos.richwps.sp.DBReadTest">
+<testsuite failures="0" time="20.059" errors="0" skipped="0" tests="4" name="de.hsos.richwps.sp.DBReadTest">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files (x86)\Java\jdk1.7.0_03\jre\bin"/>
@@ -60,8 +60,8 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="pentium_pro+mmx pentium_pro pentium+mmx pentium i486 i386 i86"/>
   </properties>
-  <testcase time="20.012" classname="de.hsos.richwps.sp.DBReadTest" name="testGetAllStmtsForSubjectAndPredicate"/>
-  <testcase time="0.032" classname="de.hsos.richwps.sp.DBReadTest" name="testGetAllStmtsForType"/>
-  <testcase time="0.015" classname="de.hsos.richwps.sp.DBReadTest" name="testGetResourceDescription"/>
-  <testcase time="0.013" classname="de.hsos.richwps.sp.DBReadTest" name="testSubjectExists"/>
+  <testcase time="0.014" classname="de.hsos.richwps.sp.DBReadTest" name="testSubjectExists"/>
+  <testcase time="0.016" classname="de.hsos.richwps.sp.DBReadTest" name="testGetAllStmtsForType"/>
+  <testcase time="0.013" classname="de.hsos.richwps.sp.DBReadTest" name="testGetResourceDescription"/>
+  <testcase time="20.016" classname="de.hsos.richwps.sp.DBReadTest" name="testGetAllStmtsForSubjectAndPredicate"/>
 </testsuite>

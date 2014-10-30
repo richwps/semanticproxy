@@ -5,22 +5,20 @@
 package de.hsos.richwps.sp.client.ows.gettypes;
 
 import de.hsos.richwps.sp.client.RDFException;
-import de.hsos.richwps.sp.client.rdf.RDFID;
-import de.hsos.richwps.sp.client.rdf.RDFResource;
 import de.hsos.richwps.sp.client.ows.SPClient;
 import de.hsos.richwps.sp.client.ows.Vocabulary;
+import de.hsos.richwps.sp.client.rdf.RDFID;
+import de.hsos.richwps.sp.client.rdf.RDFResource;
 
 /**
- * Wraps an RDFResource object that represents a wps server. This wrapper
- * abstracts the rdf handling
  *
  * @author fbensman
  */
-public class WPS {
-
+public class WFS {
+    
     private RDFResource res = null;
 
-    private WPS(RDFResource res) {
+    private WFS(RDFResource res) {
         this.res = res;
     }
 
@@ -30,11 +28,11 @@ public class WPS {
      * @param res Resource to wrap
      * @return The wrapper, null if the resource is not a network objekt
      */
-    public static WPS createWrapper(RDFResource res) throws RDFException {
+    public static WFS createWrapper(RDFResource res) throws RDFException {
         RDFID[] type = res.findResources(Vocabulary.Type);
         if (type.length == 1) {
-            if (type[0].rdfID.equals(Vocabulary.WPSClass)) {
-                return new WPS(res);
+            if (type[0].rdfID.equals(Vocabulary.WFSClass)) {
+                return new WFS(res);
             }
         }
         throw new RDFException("Resource " + res.getRdfID().rdfID + "malformed. Found " + type.length + " type-attributes");
@@ -59,32 +57,28 @@ public class WPS {
      * @return The WPS-T endpoint if available else null
      * @throws RDFException 
      */
-    public String getRichWPSEndpoint() throws RDFException{
-        String[] val = res.findLiterals(Vocabulary.RichWPSEndpoint);
-        if(val.length==0)
-            return null;
-        else
-            return val[0];
+    public String getWFSVersion() throws RDFException{
+        return getSingleAttribute(Vocabulary.WFSVersion);
     }
     
     
     /**
-     * Returns the available WPS processes for this WPS server
+     * Returns the available WPS featureTypes for this WPS server
      *
-     * @return Wrapper for RDF resources that describe processes
+     * @return Wrapper for RDF resources that describe featureTypes
      */
-    public Process[] getProcesses() throws Exception{
+    public FeatureType[] getFeatureTypes() throws Exception{
 
-        RDFID[] rdfids = res.findResources(Vocabulary.Process);
+        RDFID[] rdfids = res.findResources(Vocabulary.FeatureType);
         SPClient spc = SPClient.getInstance();
-        Process[] processes = new Process[rdfids.length];
+        FeatureType[] featureTypes = new FeatureType[rdfids.length];
         try {
             for (int i = 0; i < rdfids.length; i++) {
-                processes[i] = spc.getProcess(rdfids[i]);
+                featureTypes[i] = spc.getFeatureType(rdfids[i]);
             }
         } catch (Exception e) {
-            throw new Exception("Unable to get processes: ",e);
+            throw new Exception("Unable to get feature types: ",e);
         }
-        return processes;
+        return featureTypes;
     }
 }
