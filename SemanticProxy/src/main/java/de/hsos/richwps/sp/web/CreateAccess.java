@@ -44,6 +44,7 @@ public class CreateAccess {
 
         /**
          * Register endpoint for process creation
+         * Process list resource
          */
         post(new Route(processListURL.getPath()) {
             @Override
@@ -74,6 +75,7 @@ public class CreateAccess {
 
         /**
          * Register endpoint for wps creation
+         * WPS list resource
          */
         post(new Route(wpsListURL.getPath()) {
             @Override

@@ -48,6 +48,7 @@ public class Configuration {
     private URL wpsListURL = null;
     private URL processListURL = null;
     private URL searchURL = null;
+    private URL idGeneratorURL = null;
     //naming endpoints
     private URL wpsNamingEndpoint = null;
     private URL processNamingEndpoint = null;
@@ -88,6 +89,7 @@ public class Configuration {
     private String defaultWpsListURL = null;
     private String defaultProcessListURL = null;
     private String defaultSearchURL = null;
+    private String defaultIDGeneratorURL = null;
     //default naming endpoints
     private String defaultWpsNamingEndpoint = null;
     private String defaultProcessNamingEndpoint = null;
@@ -138,6 +140,7 @@ public class Configuration {
         defaultWpsListURL = "wpss";
         defaultProcessListURL = "processes";
         defaultSearchURL = "search";
+        defaultIDGeneratorURL = "idgenerator";
         //default naming endpoints
         defaultWpsNamingEndpoint = "wps";
         defaultProcessNamingEndpoint = "process";
@@ -226,6 +229,7 @@ public class Configuration {
         wpsListURL = new URL(resourcesURL.toString() + "/" + tmpHTTPEndpoints.getWPSList());
         processListURL = new URL(resourcesURL.toString() + "/" + tmpHTTPEndpoints.getProcessList());
         searchURL = new URL(applicationURL.toString() + "/" + tmpHTTPEndpoints.getSearch());
+        idGeneratorURL = new URL(applicationURL.toString() + "/"+ tmpHTTPEndpoints.getIDGenerator()); 
 
         //naming endpoints
         wpsNamingEndpoint = new URL(resourcesURL.toString() + "/" + tmpRDFNamingEndpoints.getWPSNaming());
@@ -250,7 +254,7 @@ public class Configuration {
         ConfigurationDocument.Configuration config = doc.addNewConfiguration();
         XmlCursor cursor = doc.newCursor();
         cursor.toFirstChild();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String formattedDate = formatter.format(new Date());
         cursor.insertComment("Configuration file for RichWPS SemanticProxy - auto-generated " + formattedDate);
         cursor.dispose();
@@ -337,6 +341,7 @@ public class Configuration {
         tmpHttpEndpoints.setWPSList(defaultWpsListURL);
         tmpHttpEndpoints.setProcessList(defaultProcessListURL);
         tmpHttpEndpoints.setSearch(defaultSearchURL);
+        tmpHttpEndpoints.setIDGenerator(defaultIDGeneratorURL);
 
         RDFNaming tmpRDFNamingEndpoints = config.addNewRDFNaming();
         tmpRDFNamingEndpoints.setInputNaming(defaultInputNamingEndpoint);
@@ -437,6 +442,10 @@ public class Configuration {
 
     public URL getLiteralNamingEndpoint() {
         return literalNamingEndpoint;
+    }
+
+    public URL getIdGeneratorURL() {
+        return idGeneratorURL;
     }
 
     public URL getComplexNamingEndpoint() {

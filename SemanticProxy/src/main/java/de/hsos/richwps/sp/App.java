@@ -9,10 +9,12 @@ import de.hsos.richwps.sp.imports.wpsharvester.WPSHarvester;
 import de.hsos.richwps.sp.rdfdb.DBAdministration;
 import de.hsos.richwps.sp.rdfdb.DBIO;
 import de.hsos.richwps.sp.restlogic.ContentChanger;
+import de.hsos.richwps.sp.restlogic.IDGenerator;
 import de.hsos.richwps.sp.restlogic.Vocabulary;
 import de.hsos.richwps.sp.web.BrowseAccess;
 import de.hsos.richwps.sp.web.CreateAccess;
 import de.hsos.richwps.sp.web.DeleteAccess;
+import de.hsos.richwps.sp.web.IDGeneratorAccess;
 import de.hsos.richwps.sp.web.SearchAccess;
 import de.hsos.richwps.sp.web.UpdateAccess;
 import java.io.File;
@@ -60,6 +62,12 @@ public class App {
             System.exit(-1);
         }
 
+        // Configure ID generator
+        IDGenerator.configure( config.getWpsNamingEndpoint(),
+                config.getProcessNamingEndpoint(), config.getInputNamingEndpoint(),
+                config.getOutputNamingEndpoint(), config.getLiteralNamingEndpoint(),
+                config.getComplexNamingEndpoint(), config.getBoundingBoxNamingEndpoint());
+        
 
         //Prepare db
         try {
@@ -99,8 +107,6 @@ public class App {
         Logger.getLogger(App.class).info("Semantic Proxy is listening");
     }
 
-    
-    
     /**
      * Loads a configuration from the file config.xml, if the file is missing a
      * default configuration file is created and loaded back
@@ -140,13 +146,12 @@ public class App {
         }
         return config;
     }
-    
-    
-    
 
     /**
-     * Initializes data importers for WPS and WPS processes then collects and inserts data
-     * @param config 
+     * Initializes data importers for WPS and WPS processes then collects and
+     * inserts data
+     *
+     * @param config
      */
     private static void importWPSInformation(Configuration config) {
 
@@ -179,7 +184,7 @@ public class App {
 
         //loop through importers and import data
         for (IWPSImportSource source : sourceList) {
-     
+
             //collect WPS
             while (true) {
                 String rdf = null;
@@ -224,10 +229,8 @@ public class App {
         }
 
     }
-    
-    
-    
-    private static void importWFSInformation(Configuration config){
+
+    private static void importWFSInformation(Configuration config) {
         //Sources
         ArrayList<IWFSImportSource> sourceList = new ArrayList<>();
 
@@ -235,9 +238,9 @@ public class App {
         InputFile[] files = config.getInputFiles().toArray(new InputFile[config.getInputFiles().size()]);
         WFSFileImporter fileImporter = new WFSFileImporter(files, config.getHostURL().toString());
         sourceList.add(fileImporter);
-        
-        for(IWFSImportSource source : sourceList){
-            
+
+        for (IWFSImportSource source : sourceList) {
+
 
             //collect WPS
             while (true) {
@@ -261,12 +264,11 @@ public class App {
             }
         }
     }
-    
 
-    
     /**
      * Configures the web frontend
-     * @param config 
+     *
+     * @param config
      */
     private static void configureWebFrontEnd(Configuration config) {
         // if there is a valid port in the config -> use it...
@@ -282,5 +284,6 @@ public class App {
         DeleteAccess.activate(config.getProcessNamingEndpoint(), config.getWpsNamingEndpoint());
         UpdateAccess.activate(config.getProcessNamingEndpoint(), config.getWpsNamingEndpoint());
         SearchAccess.activate(config.getSearchURL());
+        IDGeneratorAccess.activate(config.getIdGeneratorURL());
     }
 }

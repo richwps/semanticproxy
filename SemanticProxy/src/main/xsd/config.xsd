@@ -58,6 +58,7 @@ RichWPS-SemanticProxy configuration schema
             <xs:element name="WPSList" type="xs:string" default="wpss"/>
             <xs:element name="ProcessList" type="xs:string" default="processes"/>
             <xs:element name="Search" type="xs:string" default="search"/>
+			<xs:element name="IDGenerator" type="xs:string" default="idgenerator"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="RDFNaming">

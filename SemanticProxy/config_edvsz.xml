@@ -30,6 +30,7 @@
     <WPSList>wpss</WPSList>
     <ProcessList>processes</ProcessList>
     <Search>search</Search>
+	<IDGenerator>idgenerator</IDGenerator>
   </HTTPEndpoints>
   <RDFNaming>
     <WPSNaming>wps</WPSNaming>
