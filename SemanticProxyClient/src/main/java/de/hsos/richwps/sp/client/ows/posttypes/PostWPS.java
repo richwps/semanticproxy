@@ -6,11 +6,17 @@ package de.hsos.richwps.sp.client.ows.posttypes;
 
 
 
+import de.hsos.richwps.sp.client.BadRequestException;
+import de.hsos.richwps.sp.client.CommunicationException;
+import de.hsos.richwps.sp.client.InternalSPException;
+import de.hsos.richwps.sp.client.ows.EIDType;
+import de.hsos.richwps.sp.client.ows.SPClient;
 import de.hsos.richwps.sp.client.rdf.LiteralExpression;
 import de.hsos.richwps.sp.client.rdf.RDFID;
 import de.hsos.richwps.sp.client.rdf.RDFResource;
 import de.hsos.richwps.sp.client.rdf.ResourceExpression;
 import de.hsos.richwps.sp.client.ows.Vocabulary;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -25,8 +31,8 @@ public class PostWPS {
     private URL richWPSEndpoint = null;
     private RDFID rdfId = null;
 
-    public PostWPS(RDFID rdfId) {
-        this.rdfId = rdfId;
+    public PostWPS() throws MalformedURLException, BadRequestException, InternalSPException, CommunicationException {
+        this.rdfId = SPClient.getInstance().requestID(EIDType.WPS);
     }
 
     public RDFID getRdfId() {

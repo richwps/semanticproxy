@@ -4,12 +4,18 @@
  */
 package de.hsos.richwps.sp.client.ows.posttypes;
 
+import de.hsos.richwps.sp.client.BadRequestException;
+import de.hsos.richwps.sp.client.CommunicationException;
+import de.hsos.richwps.sp.client.InternalSPException;
+import de.hsos.richwps.sp.client.ows.EIDType;
+import de.hsos.richwps.sp.client.ows.SPClient;
 import de.hsos.richwps.sp.client.rdf.LiteralExpression;
 import de.hsos.richwps.sp.client.rdf.RDFID;
 import de.hsos.richwps.sp.client.rdf.RDFResource;
 import de.hsos.richwps.sp.client.rdf.ResourceExpression;
 import de.hsos.richwps.sp.client.ows.gettypes.InAndOutputForm;
 import de.hsos.richwps.sp.client.ows.Vocabulary;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -27,8 +33,8 @@ public class PostOutput {
     private ArrayList<URL> metadataList = null;
     private PostInAndOutputForm outputFormChoice = null;
 
-    public PostOutput(RDFID rdfId) {
-        this.rdfId = rdfId;
+    public PostOutput() throws MalformedURLException, BadRequestException, InternalSPException, CommunicationException {
+        this.rdfId = SPClient.getInstance().requestID(EIDType.OUTPUT);
 
     }
 

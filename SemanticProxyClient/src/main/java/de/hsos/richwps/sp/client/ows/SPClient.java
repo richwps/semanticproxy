@@ -46,6 +46,7 @@ public class SPClient {
     private String searchURL = "http://localhost:4567/semanticproxy/search";
     private String wpsListURL = "http://localhost:4567/semanticproxy/resources/wpss";
     private String processListURL = "http://localhost:4567/semanticproxy/resources/processes";
+    private String idgeneratorURL = "http://localhost:4567/semanticproxy/idgenerator";
 
     private SPClient() {
         rdfClient = new RDFClient();
@@ -100,11 +101,20 @@ public class SPClient {
     public void setProcessListURL(String processListURL) {
         this.processListURL = processListURL;
     }
+    
+    public String getIdgeneratorURL() {
+        return idgeneratorURL;
+    }
+
+    public void setIdgeneratorURL(String idgeneratorURL) {
+        this.idgeneratorURL = idgeneratorURL;
+    }
 
     public RDFClient getRdfClient() {
         return rdfClient;
     }
 
+    
     
     public boolean isUseCache() {
         return rdfClient.isUseCache();
@@ -234,6 +244,13 @@ public class SPClient {
         }
         return processArr;
     }
+    
+    
+    public RDFID requestID(EIDType t) throws MalformedURLException, BadRequestException, InternalSPException, CommunicationException{
+        URL url = new URL(idgeneratorURL);
+        return rdfClient.requestID(t.name(), url);
+    }
+    
 
     /**
      * Posts the WPS to the SemanticProxy

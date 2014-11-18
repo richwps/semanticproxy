@@ -156,7 +156,7 @@ public class App {
 
             //Post wps
             System.out.println("Post a wps");
-            PostWPS wps = new PostWPS(new RDFID("http://localhost:4567/semanticproxy/resources/wps/AdderWPS"));
+            PostWPS wps = new PostWPS();
             wps.setEndpoint(new URL("http://www.adder.de/wps"));
             wps.setRichWPSEndpoint(new URL("http://www.adder.de/wps-t"));
             spClient.postWPS(wps);
@@ -164,36 +164,36 @@ public class App {
 
             //Post process
             System.out.println("Post a process");
-            PostProcess process = new PostProcess(new RDFID("http://localhost:4567/semanticproxy/resources/process/add"));
+            PostProcess process = new PostProcess();
             process.setIdentifier("calc.proc.add");
             process.setTitle("Invoke addition");
             process.setBstract("Adds two numbers");
             process.setProcessVersion("0.1");
-            PostInput in1 = new PostInput(new RDFID("http://localhost:4567/semanticproxy/resources/input/firstaddend"));
+            PostInput in1 = new PostInput();
             in1.setIdentifier("in.addend1");
             in1.setTitle("Addend 1");
             in1.setBstract("First addend");
             in1.setMinOcc(1);
             in1.setMaxOcc(1);
-            PostLiteralData litData1 = new PostLiteralData(new RDFID("http://localhost:4567/semanticproxy/resources/literal_data/addenddata1"));
+            PostLiteralData litData1 = new PostLiteralData();
             in1.setPostInputFormChoice(litData1);
-            PostInput in2 = new PostInput(new RDFID("http://localhost:4567/semanticproxy/resources/input/secondaddend"));
+            PostInput in2 = new PostInput();
             in2.setIdentifier("in.addend2");
             in2.setTitle("Addend 2");
             in2.setBstract("2nd addend");
             in2.setMinOcc(1);
             in2.setMaxOcc(1);
-            PostLiteralData litData2 = new PostLiteralData(new RDFID("http://localhost:4567/semanticproxy/resources/literal_data/addenddata2"));
+            PostLiteralData litData2 = new PostLiteralData();
             in2.setPostInputFormChoice(litData2);
             ArrayList<PostInput> tmpList = new ArrayList<PostInput>();
             tmpList.add(in1);
             tmpList.add(in2);
             process.setInputs(tmpList);
-            PostOutput out1 = new PostOutput(new RDFID("http://localhost:4567/semanticproxy/resources/output/sum"));
+            PostOutput out1 = new PostOutput();
             out1.setIdentifier("out.sum");
             out1.setTitle("Sum");
             out1.setBstract("The sum");
-            PostLiteralData litData3 = new PostLiteralData(new RDFID("http://localhost:4567/semanticproxy/resources/literal_data/sumdata"));
+            PostLiteralData litData3 = new PostLiteralData();
             out1.setPostOutputFormChoice(litData3);
             ArrayList<PostOutput> tmpList2 = new ArrayList<PostOutput>();
             tmpList2.add(out1);

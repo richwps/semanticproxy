@@ -232,4 +232,26 @@ public class RDFClient {
         String xmlrdf = builder.toXMLRDF();
         httpClient.putRDFDoc(xmlrdf, url);
     }
+
+    
+    /**
+     * Issues a generate ID request via the HTTP client and parses the response
+     * @param type Type of resource to request a ID for
+     * @param idGeneratorURL URL to send the request to
+     * @return The generated RDF ID
+     * @throws MalformedURLException
+     * @throws BadRequestException
+     * @throws InternalSPException
+     * @throws CommunicationException 
+     */
+    public RDFID requestID(String type, URL idGeneratorURL) throws MalformedURLException, BadRequestException, InternalSPException, CommunicationException{
+        String xml = httpClient.requestID(type, idGeneratorURL);
+        try {
+            SubjectList list = SubjectList.fromXML(xml);
+            RDFID id = new RDFID(list.get(0).toString());
+            return id;
+        } catch (MalformedURLException e) {
+            throw new MalformedURLException("Parsing result list failed: " + e.getMessage());
+        }
+    }
 }

@@ -33,13 +33,13 @@ import org.apache.xmlbeans.XmlException;
 public class App {
 
     /**
-     * Main routine, args args are not regarded. This class connects to the db
+     * Main routine, args are not regarded. This class connects to the db
      * and sets up the web frontent, also initial data is loaded.
      *
      * @param args
      */
     public static void main(String[] args) {
-        System.out.println("SemanticProxy is starting...");
+        System.out.println("SemanticProxy is starting..."); 
 
         //configure logging
         PropertyConfigurator.configure("log4j.properties");

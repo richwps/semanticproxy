@@ -10,7 +10,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- *
+ * Generates IDs for requested resources. 
+ * The IDs can be used to issue PUT or POST request on resources.
+ * IDs consist of the preset naming URL and long-number.
  * @author fbensman
  */
 public class IDGenerator {
@@ -36,6 +38,9 @@ public class IDGenerator {
     private long boundingBoxCnt = 0;
     
     
+    /**
+     * Initializes the counters.
+     */
     private IDGenerator(){
         long millies = System.currentTimeMillis();
         wpsCnt = millies;
@@ -49,7 +54,7 @@ public class IDGenerator {
     
     
     /**
-     * Sets all the naming strings for id generation, can only be used once
+     * Sets all the naming strings for id generation, can only be used once.
      * @param aWpsNamingURL
      * @param aProcessNamingURL
      * @param aInputNamingURL
@@ -75,7 +80,10 @@ public class IDGenerator {
         }
     }
     
-    
+    /**
+     * Gets the singleton instance.
+     * @return 
+     */
     public static IDGenerator getInstance(){
         if( !configured)
             return null;
@@ -85,6 +93,12 @@ public class IDGenerator {
     }
     
     
+    /**
+     * Generates an ID for the given type.
+     * @param t given type
+     * @return List of one subject.
+     * @throws MalformedURLException 
+     */
     public synchronized SubjectList generateID(EIDType t) throws MalformedURLException{     
         URL retVal =  null;
 

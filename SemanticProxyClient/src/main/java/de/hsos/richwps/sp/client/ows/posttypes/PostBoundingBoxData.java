@@ -4,10 +4,16 @@
  */
 package de.hsos.richwps.sp.client.ows.posttypes;
 
+import de.hsos.richwps.sp.client.BadRequestException;
+import de.hsos.richwps.sp.client.CommunicationException;
+import de.hsos.richwps.sp.client.InternalSPException;
+import de.hsos.richwps.sp.client.ows.EIDType;
+import de.hsos.richwps.sp.client.ows.SPClient;
 import de.hsos.richwps.sp.client.rdf.RDFID;
 import de.hsos.richwps.sp.client.rdf.RDFResource;
 import de.hsos.richwps.sp.client.rdf.ResourceExpression;
 import de.hsos.richwps.sp.client.ows.Vocabulary;
+import java.net.MalformedURLException;
 
 /**
  * Mutable class that represents a BoundingBoxData description
@@ -22,8 +28,8 @@ public class PostBoundingBoxData extends PostInAndOutputForm {
     }
     private RDFID rdfId = null;
 
-    public PostBoundingBoxData(RDFID rdfId) {
-        this.rdfId = rdfId;
+    public PostBoundingBoxData() throws MalformedURLException, BadRequestException, InternalSPException, CommunicationException {
+        this.rdfId = SPClient.getInstance().requestID(EIDType.BOUNDINGBOX);
 
     }
 

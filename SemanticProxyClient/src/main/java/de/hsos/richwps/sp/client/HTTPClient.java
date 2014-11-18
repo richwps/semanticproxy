@@ -60,6 +60,16 @@ public class HTTPClient {
         }
     }
 
+    
+    /**
+     * Executes a search request to the SemanticProxy and returns the raw result page
+     * @param keyword Term to search
+     * @param url SemanticProxy endpoint to address the query to
+     * @return The raw result page
+     * @throws BadRequestException
+     * @throws InternalSPException
+     * @throws CommunicationException 
+     */
     public String getRawSearchResults(String keyword, URL url) throws BadRequestException, InternalSPException, CommunicationException {
         try {
             //System.out.println("uri: " + url);
@@ -93,6 +103,15 @@ public class HTTPClient {
 
     }
 
+    
+    /**
+     * Executes a POST with an XML+RDF document to the given URL
+     * @param xmlrdf The XML document to post
+     * @param url The URL to send the POST to
+     * @throws BadRequestException
+     * @throws InternalSPException
+     * @throws CommunicationException 
+     */
     public void postRDFDoc(String xmlrdf, URL url) throws BadRequestException, InternalSPException, CommunicationException {
         try {
             //System.out.println("uri: " + url);
@@ -123,6 +142,14 @@ public class HTTPClient {
 
     }
 
+    
+    /**
+     * Sends a delete request to a given resource/URL
+     * @param url URL to delete / to address the delete request to
+     * @throws BadRequestException
+     * @throws InternalSPException
+     * @throws CommunicationException 
+     */
     public void delete(String url) throws BadRequestException, InternalSPException, CommunicationException {
         try {
             //System.out.println("uri: " + url);
@@ -152,6 +179,15 @@ public class HTTPClient {
         }
     }
 
+    
+    /**
+     * Updates a resource or creates it if not present
+     * @param xmlrdf RDF description of the resource to send
+     * @param url Address of the endpoint to send to
+     * @throws BadRequestException
+     * @throws InternalSPException
+     * @throws CommunicationException 
+     */
     public void putRDFDoc(String xmlrdf, URL url) throws BadRequestException, InternalSPException, CommunicationException {
         try {
             Client client = ClientBuilder.newClient();
@@ -179,5 +215,41 @@ public class HTTPClient {
             throw new CommunicationException("Communication to SemanticProxy at " + url + " failed. Original message: " + e.getMessage());
         }
 
+    }
+
+    
+    /**
+     * Executes a GET request to the ID generator on the SemanticProxy
+     * @param type Type of resource to request the ID for
+     * @param idGeneratorURL Endpoint of the ID generator
+     * @return Generated RDF ID
+     */
+    public String requestID(String type, URL idGeneratorURL) throws BadRequestException, InternalSPException, CommunicationException {
+        try {
+            Client client = ClientBuilder.newClient();
+            client.property(ClientProperties.CONNECT_TIMEOUT, 5000);
+            client.property(ClientProperties.READ_TIMEOUT,    5000);
+            WebTarget webTarget = client.target(idGeneratorURL.toString());
+            webTarget = webTarget.queryParam("type", type);
+            Invocation.Builder invocationBuilder = webTarget.request();
+            invocationBuilder.accept("application/xml");
+            
+            Response response = invocationBuilder.get();
+
+            if (response.getStatus() != 200) {
+                if (response.getStatus() == 400) {
+                    throw new BadRequestException(response.readEntity(String.class));
+                }
+                throw new InternalSPException("SemanticProxy returned " + response.getStatus() + " for GET " + idGeneratorURL);
+            }
+            return response.readEntity(String.class);
+
+        } catch (BadRequestException e) {
+            throw e;
+        } catch (InternalSPException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new CommunicationException("Communication to SemanticProxy at " + idGeneratorURL + " failed. Original message: " + e.getMessage());
+        }
     }
 }

@@ -53,10 +53,10 @@ public class IDGeneratorAccess {
                 new Route(generatorEndpoint.getPath()) {
             @Override
             public Object handle(Request request, Response response) {
-                String keyword = (String) request.queryParams("keyword");
-                Logger.getLogger(IDGeneratorAccess.class).info("Generate ID request for keyword, keyword = "+keyword);
+                String keyword = (String) request.queryParams("type");
+                Logger.getLogger(IDGeneratorAccess.class).info("Generate ID request for type, type = "+keyword);
                 if (keyword == null) {
-                    Logger.getLogger(IDGeneratorAccess.class).error("Generate ID request for keyword: Empty query");
+                    Logger.getLogger(IDGeneratorAccess.class).error("Generate ID request for type: Empty query");
                     response.status(400);
                     return "Empty generate ID query.";
                 }
@@ -65,7 +65,7 @@ public class IDGeneratorAccess {
                     try{
                         list = IDGenerator.getInstance().generateID(EIDType.valueOf(keyword.toUpperCase()));
                     }catch(IllegalArgumentException iae){
-                        Logger.getLogger(IDGeneratorAccess.class).error("Generate ID request for keyword: Empty query");
+                        Logger.getLogger(IDGeneratorAccess.class).error("Generate ID request for type: Empty query");
                         response.status(400);
                         return "Invalid generate ID query.";
                     }
