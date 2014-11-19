@@ -134,6 +134,16 @@ public class SPClient {
     
     
     /**
+     * Sets the proxy configuration for the underlying http client
+     * @param httpHost
+     * @param httpPort 
+     */
+    public void setProxyConfiguration(String httpHost, String httpPort){
+        rdfClient.setProxyConfiguration(httpHost, httpPort);
+    }
+    
+    
+    /**
      * Gets an RDFResource with Network-Wrapper class, uses the rootURL
      *
      * @return RDFResource with Network-Wrapper class

@@ -47,6 +47,17 @@ public class RDFClient {
         else
             cache = null;
     }
+    
+    
+    /**
+     * Sets the proxy configuration for the underlying http client
+     * @param httpHost
+     * @param httpPort 
+     */
+    public void setProxyConfiguration(String httpHost, String httpPort){
+        httpClient.setProxyConfiguration(httpHost, httpPort);
+    }
+    
 
     /**
      * Returns the underlying HTTP client

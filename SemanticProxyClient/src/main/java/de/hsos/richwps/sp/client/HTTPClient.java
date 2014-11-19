@@ -22,6 +22,18 @@ public class HTTPClient {
 
     public HTTPClient() {
     }
+    
+    
+    /**
+     * Sets proxy configuration for this http client
+     * @param httpHost
+     * @param httpPort 
+     */
+    public void setProxyConfiguration(String httpHost, String httpPort){
+        System.setProperty("http.proxyHost", httpHost);
+        System.setProperty("http.proxyPort", httpPort);
+    }
+    
 
     /**
      * Gets an rdf resource from the SemanticProxy
