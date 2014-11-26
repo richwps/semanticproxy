@@ -34,9 +34,6 @@ public class SearchHandling {
      */
     public static SubjectList processKeywordSearch(String keyword) throws MalformedURLException, RepositoryException, RDFException, Exception {
         try {
-            if (!isAlphaNum(keyword)) {
-                throw new InvalidParameterException("Keyword not alphanummeric.");
-            }
 
             URL processClass = null;
             URL processIdentifier = null;
