@@ -60,6 +60,17 @@ public class Process {
         throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found "+val.length+" "+pred+"-attributes");
     }
 
+    
+    public WPS getWPS() throws Exception{
+        RDFID[] rdfids = res.findResources(Vocabulary.WPS);
+        SPClient spc = SPClient.getInstance();
+        if(rdfids.length != 1)
+            throw new Exception("Incorrect count of WPS properties"+res.getRdfID().rdfID);
+        WPS wps = spc.getWPS(rdfids[0]);
+        return wps;
+    }
+    
+    
     public String getIdentifier() throws RDFException{
         return getSingleAttribute(Vocabulary.Identifier);
     }

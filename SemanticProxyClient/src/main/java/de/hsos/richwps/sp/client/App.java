@@ -68,6 +68,7 @@ public class App {
                 System.out.println("   -> Processes:");
                 for (int j = 0; j < processes.length; j++) {
                     Process proc = processes[j];
+                    System.out.println("      -> Hosting WPS: " + proc.getWPS().getEndpoint());
                     System.out.println("      -> Identifier: " + proc.getIdentifier());
                     System.out.println("      -> Title:      " + proc.getTitle());
                     System.out.println("      -> Abstract:   " + proc.getAbstract());
