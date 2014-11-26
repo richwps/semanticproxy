@@ -85,11 +85,11 @@ public class SearchHandling {
                     str = stats[0].getObject().stringValue();
                     if (str.toLowerCase().contains(keyword.toLowerCase())) {
                         match++;
-                    }
-                    if (match > 0) {
-                        RankedProcess rPro = new RankedProcess(completeList.get(i), match);
-                        resultList.add(rPro);
-                    }
+                    } 
+                }
+                if (match > 0) {
+                    RankedProcess rPro = new RankedProcess(completeList.get(i), match);
+                    resultList.add(rPro);
                 }
             }
             Collections.sort(resultList);
