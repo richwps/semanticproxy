@@ -55,10 +55,18 @@ public class SearchAccess {
                 if (keyword == null) {
                     Logger.getLogger(SearchAccess.class).error("Search by keyword: Empty search query");
                     response.status(400);
-                    return "Empty search query.";
+                    return "Empty search query";
+                }
+                else if (keyword.length() > 300) {
+                    Logger.getLogger(SearchAccess.class).error("Search by keyword: Query longer than 300 characters");
+                    response.status(400);
+                    return "Query longer than 300 characters";
                 }
                 try {
-                    SubjectList list = SearchHandling.processKeywordSearch(keyword);
+                    String[] keywords = keyword.split("\\s+");
+                    if(keywords.length == 0 )
+                            keywords = new String[] {keyword};
+                    SubjectList list = SearchHandling.processKeywordSearch(keywords);
                     Logger.getLogger(SearchAccess.class).info("Found "+list.size() + " matches");
                     response.status(200);
                     response.type(MIMETYPE_XML);
