@@ -32,7 +32,7 @@ public class SearchHandling {
      * @return List of process RDF IDs ordert descending by count of hits
      * @throws Exception
      */
-    public static SubjectList processKeywordSearch(String[] keywords) throws MalformedURLException, RepositoryException, RDFException, Exception {
+    public static SubjectList processKeywordSearch(String[] keywords) throws MalformedURLException, RepositoryException, RDFException {
         try {
             final URL processClass = new URL(Vocabulary.ProcessClass);
 
@@ -122,7 +122,7 @@ public class SearchHandling {
      * @throws RDFException
      * @throws Exception
      */
-    private static int countOccurenceInProcess(URL proc, String keyword) throws MalformedURLException, RepositoryException, RDFException, Exception {
+    private static int countOccurenceInProcess(URL proc, String keyword) throws MalformedURLException, RepositoryException, RDFException {
 
         final URL processIdentifier = new URL(Vocabulary.Identifier);
         final URL processTitle = new URL(Vocabulary.Title);
@@ -133,7 +133,7 @@ public class SearchHandling {
         //search in identifier
         Statement[] stats = DBIO.getStatementsForSubjAndPred(proc, processIdentifier);
         if (stats.length != 1) {
-            throw new Exception("Malformed resource " + proc.toString());
+            throw new RDFException("Malformed resource " + proc.toString());
         }
         String str = stats[0].getObject().stringValue();
         match += countOccurence(str, keyword);
@@ -141,7 +141,7 @@ public class SearchHandling {
         //search in title
         stats = DBIO.getStatementsForSubjAndPred(proc, processTitle);
         if (stats.length != 1) {
-            throw new Exception("Malformed resource " + proc.toString());
+            throw new RDFException("Malformed resource " + proc.toString());
         }
         str = stats[0].getObject().stringValue();
         match += countOccurence(str, keyword);
@@ -149,7 +149,7 @@ public class SearchHandling {
         //search in abstract
         stats = DBIO.getStatementsForSubjAndPred(proc, processAbstract);
         if (stats.length > 1) {
-            throw new Exception("Malformed resource " + proc.toString());
+            throw new RDFException("Malformed resource " + proc.toString());
         } else if (stats.length == 1) {
             str = stats[0].getObject().stringValue();
             match += countOccurence(str, keyword);

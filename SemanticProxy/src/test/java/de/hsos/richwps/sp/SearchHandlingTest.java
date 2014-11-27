@@ -122,19 +122,19 @@ public class SearchHandlingTest extends TestCase{
     public void testProcessKeywordSearch() 
     {
         try {
-            SubjectList subjectList = SearchHandling.processKeywordSearch("compare");
+            SubjectList subjectList = SearchHandling.processKeywordSearch(new String[] {"compare","model","data"});
             assertTrue("The result list string contains one element", subjectList.size()==1 );
             
         } catch (RepositoryException ex) {
-            fail("Method SearchHandling.processKeywordSearch(\"compare\") should not raise an exception: "+ex);
+            fail("Method SearchHandling.processKeywordSearch(\"compare\", \"model\", \"data\" ) should not raise an exception: "+ex);
         } catch (IllegalStateException ex) {
-            fail("Method SearchHandling.processKeywordSearch(\"compare\") should not raise an exception: "+ex);
+            fail("Method SearchHandling.processKeywordSearch(\"compare\", \"model\", \"data\" ) should not raise an exception: "+ex);
         } catch (Exception ex) {
-            fail("Method SearchHandling.processKeywordSearch(\"compare\") should not raise an exception: "+ex);
+            fail("Method SearchHandling.processKeywordSearch(\"compare\", \"model\", \"data\" ) should not raise an exception: "+ex);
         }
         
         try {
-            SubjectList subjectList = SearchHandling.processKeywordSearch("A not present keyword");
+            SubjectList subjectList = SearchHandling.processKeywordSearch(new String[] {"A not present keyword"});
             assertTrue("The result list string contains no elements", subjectList.isEmpty() );
         } catch (RepositoryException ex) {
             fail("Method SearchHandling.processKeywordSearch(\"A not present keyword\") should not raise an exception: "+ex);
