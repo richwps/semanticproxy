@@ -53,12 +53,19 @@ public class Vocabulary {
     public static String StatusSupported = null;
     public static String Input = null;
     public static String Output = null;
+    public static String QoSTarget = null;
     //input
     public static String MinOccurs = null;
     public static String MaxOccurs = null;
     public static String InputFormChoice = null;
     //output
     public static String OutputFormChoice = null;
+    //QoSTarget
+    public static String Ideal = null;
+    public static String UOM = null;
+    public static String Max = null;
+    public static String Min = null;
+    public static String Variance = null;
     
     //wfs
     public static String WFSVersion = null;
@@ -78,6 +85,7 @@ public class Vocabulary {
     private static String RDF_XML_Representation = null;
     public static String WFSClass = null;
     public static String FeatureTypeClass = null;
+    public static String QoSTargetClass = null;
 
     /**
      * Initializes the vocabulary resources with the specified URL
@@ -163,6 +171,9 @@ public class Vocabulary {
             Output = VOC + "output";
             stmt = new StatementImpl(new URIImpl(Output), new URIImpl(Label), new LiteralImpl("Has output"));
             writer.handleStatement(stmt);
+            QoSTarget = VOC + "qostarget";
+            stmt = new StatementImpl(new URIImpl(QoSTarget), new URIImpl(Label), new LiteralImpl("Occurs at minimum"));
+            writer.handleStatement(stmt);
 
             //input
             MinOccurs = VOC + "minoccurs";
@@ -178,6 +189,23 @@ public class Vocabulary {
             //output
             OutputFormChoice = VOC + "outputformchoice";
             stmt = new StatementImpl(new URIImpl(OutputFormChoice), new URIImpl(Label), new LiteralImpl("OutputFormChoice"));
+            writer.handleStatement(stmt);
+            
+            //QoSTarget
+            Ideal = VOC + "ideal";
+            stmt = new StatementImpl(new URIImpl(Ideal), new URIImpl(Label), new LiteralImpl("has ideal value"));
+            writer.handleStatement(stmt);
+            UOM = VOC + "uom";
+            stmt = new StatementImpl(new URIImpl(QoSTarget), new URIImpl(Label), new LiteralImpl("is measured in"));
+            writer.handleStatement(stmt);
+            Min = VOC + "min";
+            stmt = new StatementImpl(new URIImpl(Min), new URIImpl(Label), new LiteralImpl("is bounded by minimum"));
+            writer.handleStatement(stmt);
+            Max = VOC + "max";
+            stmt = new StatementImpl(new URIImpl(Max), new URIImpl(Label), new LiteralImpl("is bounded by maximum"));
+            writer.handleStatement(stmt);
+            Variance = VOC + "variance";
+            stmt = new StatementImpl(new URIImpl(Variance), new URIImpl(Label), new LiteralImpl("has accepted variance"));
             writer.handleStatement(stmt);
 
             //wfs
@@ -245,6 +273,11 @@ public class Vocabulary {
             writer.handleStatement(stmt);
             stmt = new StatementImpl(new URIImpl(FeatureTypeClass), new URIImpl(Label), new LiteralImpl("FeatureType"));
             writer.handleStatement(stmt);
+            QoSTargetClass = VOC + "qostargetclass";
+            stmt = new StatementImpl(new URIImpl(QoSTargetClass), new URIImpl(Type), new URIImpl(SchemaClass));
+            writer.handleStatement(stmt);
+            stmt = new StatementImpl(new URIImpl(QoSTargetClass), new URIImpl(Label), new LiteralImpl("QoS target"));
+            writer.handleStatement(stmt);
             
 
             writer.endRDF();
@@ -274,13 +307,14 @@ public class Vocabulary {
                 || sample.equalsIgnoreCase(StatusSupported)
                 || sample.equalsIgnoreCase(Endpoint)
                 || sample.equalsIgnoreCase(MinOccurs)
-                || sample.equalsIgnoreCase(MaxOccurs)) {
+                || sample.equalsIgnoreCase(MaxOccurs)
+                || sample.equalsIgnoreCase(QoSTarget)){
             return true;
         }
         return false;
     }
     
-    
+  
     
     
 
@@ -299,7 +333,8 @@ public class Vocabulary {
                 || sample.equalsIgnoreCase(ProcessOutputClass)
                 || sample.equalsIgnoreCase(ComplexDataClass)
                 || sample.equalsIgnoreCase(LiteralDataClass)
-                || sample.equalsIgnoreCase(BoundingBoxDataClass))
+                || sample.equalsIgnoreCase(BoundingBoxDataClass)
+                || sample.equalsIgnoreCase(QoSTargetClass))
         {
             return true;
         }

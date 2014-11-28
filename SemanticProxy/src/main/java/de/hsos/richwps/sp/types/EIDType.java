@@ -15,7 +15,10 @@ public enum EIDType {
     OUTPUT,
     LITERAL,
     COMPLEX,
-    BOUNDINGBOX
+    BOUNDINGBOX,
+    WFS,
+    FEATURETYPE,
+    QOSTARGET
     
 }
 

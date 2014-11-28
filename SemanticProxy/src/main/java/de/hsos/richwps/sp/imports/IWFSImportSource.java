@@ -16,11 +16,6 @@ public interface IWFSImportSource {
      */
     public String getNextWFS() throws ImportException;
     
-    /**
-     * Gets the RDF description for the next available process
-     * @return RDF description of the process; null if there is no more process
-     * @throws ImportException  
-     */
 
     
     /**

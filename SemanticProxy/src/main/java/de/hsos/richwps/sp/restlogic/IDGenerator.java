@@ -27,6 +27,9 @@ public class IDGenerator {
     private static URL literalNamingURL = null;
     private static URL complexNamingURL = null;
     private static URL boundingboxNamingURL = null;
+    private static URL wfsNamingURL = null;
+    private static URL featureTypeNamingURL = null;
+    private static URL qosNamingURL = null;
     
     
     private long wpsCnt = 0;
@@ -36,6 +39,9 @@ public class IDGenerator {
     private long literalCnt = 0;
     private long complexCnt = 0;
     private long boundingBoxCnt = 0;
+    private long wfsCnt = 0;
+    private long featureTypeCnt = 0;
+    private long qosCnt = 0;
     
     
     /**
@@ -50,6 +56,9 @@ public class IDGenerator {
         literalCnt = millies;
         complexCnt = millies;
         boundingBoxCnt = millies;
+        wfsCnt = millies;
+        featureTypeCnt = millies;
+        qosCnt = millies;
     }
     
     
@@ -66,7 +75,8 @@ public class IDGenerator {
     public static void configure(URL aWpsNamingURL, URL aProcessNamingURL, 
             URL aInputNamingURL, URL aOutputNamingURL, 
             URL aLiteralNamingURL, URL aComplexNamingURL, 
-            URL aBoundingboxNaming){
+            URL aBoundingboxNamingURL, URL aWFSNamingURL,
+            URL aFeatureTypeNamingURL, URL aQoSNamingURL){
         if(!configured){
             wpsNamingURL = aWpsNamingURL;
             processNamingURL = aProcessNamingURL;
@@ -74,7 +84,10 @@ public class IDGenerator {
             outputNamingURL = aOutputNamingURL;
             literalNamingURL = aLiteralNamingURL;
             complexNamingURL = aComplexNamingURL;
-            boundingboxNamingURL = aBoundingboxNaming;
+            boundingboxNamingURL = aBoundingboxNamingURL;
+            wfsNamingURL = aWFSNamingURL;
+            featureTypeNamingURL = aFeatureTypeNamingURL;
+            qosNamingURL = aQoSNamingURL;
         
             configured = true;
         }
@@ -129,6 +142,18 @@ public class IDGenerator {
         else if(t == EIDType.BOUNDINGBOX){
             retVal = new URL(boundingboxNamingURL+"/"+boundingBoxCnt);
             boundingBoxCnt ++;
+        }
+        else if(t == EIDType.WFS){
+            retVal = new URL(wfsNamingURL+"/"+wfsCnt);
+            wfsCnt ++;
+        }
+        else if(t == EIDType.FEATURETYPE){
+            retVal = new URL(featureTypeNamingURL+"/"+featureTypeCnt);
+            featureTypeCnt ++;
+        }
+        else if(t == EIDType.QOSTARGET){
+            retVal = new URL(qosNamingURL+"/"+qosCnt);
+            qosCnt ++;
         }
         
         SubjectList list = new SubjectList();

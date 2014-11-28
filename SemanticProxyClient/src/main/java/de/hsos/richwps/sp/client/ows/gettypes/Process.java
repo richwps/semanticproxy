@@ -129,4 +129,15 @@ public class Process {
         return outputs;
     }
     
+    
+    public QoSTarget[] getQoSTargets() throws BadRequestException, InternalSPException, CommunicationException, RDFException {
+        RDFID[] rdfids = res.findResources(Vocabulary.QoSTarget);
+        QoSTarget[] target = new QoSTarget[rdfids.length];
+        SPClient spc = SPClient.getInstance();
+        for (int i = 0; i < rdfids.length; i++) {
+            target[i] = spc.getQoSTarget(rdfids[i]);
+        }
+        return target;
+    }
+    
 }

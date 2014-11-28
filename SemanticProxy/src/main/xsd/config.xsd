@@ -70,6 +70,9 @@ RichWPS-SemanticProxy configuration schema
 			<xs:element name="LiteralNaming" type="xs:string" default="literal"/>
 			<xs:element name="ComplexNaming" type="xs:string" default="complex"/>
 			<xs:element name="BoundingBoxNaming" type="xs:string" default="boundingbox"/>
+			<xs:element name="WFSNaming" type="xs:string" default="wfs"/>
+			<xs:element name="FeatureTypeNaming" type="xs:string" default="featuretype"/>
+			<xs:element name="QoSNaming" type="xs:string" default="qos"/>
         </xs:sequence>
     </xs:complexType>
     

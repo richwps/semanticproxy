@@ -67,7 +67,7 @@ public class ContentChanger {
                 Statement stmt = new StatementImpl(subject, predicate, object);
                 DBIO.insertStatement(stmt);
             } else {
-                throw new Exception("Cannot push process rdf into db, data malformed: " + result.message);
+                throw new Exception("Cannot insert process rdf into db, data malformed: " + result.message);
             }
         } catch (RepositoryException re) {
             throw new RepositoryException("Cannot insert process into db.", re);

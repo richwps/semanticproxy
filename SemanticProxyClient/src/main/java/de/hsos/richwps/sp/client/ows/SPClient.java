@@ -21,6 +21,7 @@ import de.hsos.richwps.sp.client.rdf.RDFClient;
 import de.hsos.richwps.sp.client.rdf.RDFID;
 import de.hsos.richwps.sp.client.rdf.RDFResource;
 import de.hsos.richwps.sp.client.ows.gettypes.FeatureType;
+import de.hsos.richwps.sp.client.ows.gettypes.QoSTarget;
 import de.hsos.richwps.sp.client.ows.gettypes.WFS;
 import de.hsos.richwps.sp.client.ows.posttypes.PostBoundingBoxData;
 import de.hsos.richwps.sp.client.ows.posttypes.PostComplexData;
@@ -29,6 +30,7 @@ import de.hsos.richwps.sp.client.ows.posttypes.PostInput;
 import de.hsos.richwps.sp.client.ows.posttypes.PostLiteralData;
 import de.hsos.richwps.sp.client.ows.posttypes.PostOutput;
 import de.hsos.richwps.sp.client.ows.posttypes.PostProcess;
+import de.hsos.richwps.sp.client.ows.posttypes.PostQoSTarget;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -233,6 +235,20 @@ public class SPClient {
         RDFResource res = rdfClient.retrieveResource(rdfID);
         return BoundingBoxData.createWrapper(res);
     }
+    
+    
+    /**
+     * Gets an RDFResource with QoSTarget-Wrapper class, uses the
+     * specified RDF ID
+     *
+     * @return RDFResource with QoSTarget-Wrapper class
+     * @throws Exception
+     */
+    public QoSTarget getQoSTarget(RDFID rdfID) throws BadRequestException, InternalSPException, CommunicationException, RDFException {
+        RDFResource res = rdfClient.retrieveResource(rdfID);
+        return QoSTarget.createWrapper(res);
+    }
+    
 
     /**
      * Invokes a keyword search for processes out SemanticProxy.
@@ -318,6 +334,9 @@ public class SPClient {
                 list.add(r);
             }
         }
+        for (PostQoSTarget target : process.getQosTargets()) {
+            list.add(target.toRDFResource());
+        }
 
         rdfClient.postRDF(list.toArray(new RDFResource[list.size()]), new URL(processListURL));
     }
@@ -401,6 +420,9 @@ public class SPClient {
                 RDFResource r = ((PostBoundingBoxData) piaof).toRDFResource();
                 list.add(r);
             }
+        }
+        for (PostQoSTarget target : process.getQosTargets()) {
+            list.add(target.toRDFResource());
         }
 
         rdfClient.putRDF(list.toArray(new RDFResource[list.size()]), new URL(process.getRdfId().rdfID));

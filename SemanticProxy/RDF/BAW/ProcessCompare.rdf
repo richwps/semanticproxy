@@ -14,6 +14,7 @@
 		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/input/in_fielddata"/>
 		<rwps:input rdf:resource="http://localhost:4567/semanticproxy/resources/input/in_modeldata"/>
 		<rwps:output rdf:resource="http://localhost:4567/semanticproxy/resources/output/out_differencedata"/>
+		<rwps:qostarget rdf:resource="http://localhost:4567/semanticproxy/resources/qos/processcompareresponsetime"/>
 		<rwps:wps rdf:resource="http://localhost:4567/semanticproxy/resources/wps/ModelValidationWPS"/>
 	</rdf:Description>
 	
@@ -64,4 +65,19 @@
 		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#complexdataclass"/>
 	</rdf:Description>
 
+	<!-- QoS response time -->
+	
+	<rdf:Description rdf:about="http://localhost:4567/semanticproxy/resources/qos/processcompareresponsetime">
+		<rdf:type rdf:resource="http://localhost:4567/semanticproxy/resources/vocab#qostargetclass"/>
+		<rwps:title>Response time</rwps:title>
+		<rwps:abstract>Total amount of time it takes to respond to a request for service</rwps:abstract>
+		<rwps:ideal>1.0</rwps:ideal>
+		<rwps:uom>SECONDS</rwps:uom>
+		<rwps:max>2.0</rwps:max>
+		<rwps:min>0.0</rwps:min>
+		<rwps:variance>0.5</rwps:variance>
+	</rdf:Description>
+	
+	
+	
 </rdf:RDF>

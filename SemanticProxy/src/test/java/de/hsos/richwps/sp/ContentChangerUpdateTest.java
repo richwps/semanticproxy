@@ -153,11 +153,11 @@ public class ContentChangerUpdateTest extends TestCase{
                 assertTrue("Statement connects WPS <- process", stmtArr[0].getObject().stringValue().equals(wpsResource.stringValue()));
             
         } catch (RepositoryException ex) {
-            fail("Method ContentChanger.deleteProcess(processResource.stringValue()) should not raise an exception: "+ex);
+            fail("Method ContentChanger.updateProcess(rawProcessRDF, processResource.stringValue()) should not raise an exception: "+ex);
         } catch (IllegalStateException ex) {
-            fail("Method ContentChanger.deleteProcess(processResource.stringValue()) should not raise an exception: "+ex);
+            fail("Method ContentChanger.updateProcess(rawProcessRDF, processResource.stringValue()) should not raise an exception: "+ex);
         } catch (Exception ex) {
-            fail("Method ContentChanger.deleteProcess(processResource.stringValue()) should not raise an exception: "+ex);
+            fail("Method ContentChanger.updateProcess(rawProcessRDF, processResource.stringValue()) should not raise an exception: "+ex);
         }
            
     }

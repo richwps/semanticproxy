@@ -8,15 +8,9 @@ package de.hsos.richwps.sp.client.ows;
  * Determines the type of the id to generate
  * @author fbensman
  */
-public enum EIDType {
-    WPS,
-    PROCESS,
-    INPUT,
-    OUTPUT,
-    LITERAL,
-    COMPLEX,
-    BOUNDINGBOX,
-    QOSTARGET
+public enum EUOM {
+    SECONDS,
+    UNDEFINED
 }
 
 

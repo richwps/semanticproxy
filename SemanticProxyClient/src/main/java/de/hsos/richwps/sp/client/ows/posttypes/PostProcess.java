@@ -39,11 +39,11 @@ public class PostProcess {
     private boolean useStatusSupported = false;
     private ArrayList<PostInput> inputs = null;
     private ArrayList<PostOutput> outputs = null;
+    private ArrayList<PostQoSTarget> qosTargets = null;
     private PostWPS wps = null;
 
     public PostProcess() throws MalformedURLException, BadRequestException, InternalSPException, CommunicationException {
         this.rdfId = SPClient.getInstance().requestID(EIDType.PROCESS);
-
     }
 
     public RDFID getRdfId() {
@@ -113,6 +113,10 @@ public class PostProcess {
         }
         for (PostOutput r : outputs) {
             rexp = new ResourceExpression(Vocabulary.Output, r.getRdfId());
+            resourceList.add(rexp);
+        }
+        for (PostQoSTarget t : qosTargets){
+            rexp = new ResourceExpression(Vocabulary.QoSTarget, t.getRdfId());
             resourceList.add(rexp);
         }
 
@@ -239,4 +243,14 @@ public class PostProcess {
     public void setWps(PostWPS wps) {
         this.wps = wps;
     }
+
+    public ArrayList<PostQoSTarget> getQosTargets() {
+        return qosTargets;
+    }
+
+    public void setQosTargets(ArrayList<PostQoSTarget> qosTargets) {
+        this.qosTargets = qosTargets;
+    }
+    
+    
 }

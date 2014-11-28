@@ -4,7 +4,7 @@
  */
 package de.hsos.richwps.sp.client;
 
-import de.hsos.richwps.sp.client.rdf.RDFID;
+import de.hsos.richwps.sp.client.ows.EUOM;
 import de.hsos.richwps.sp.client.ows.gettypes.Process;
 import de.hsos.richwps.sp.client.ows.gettypes.WPS;
 import de.hsos.richwps.sp.client.ows.gettypes.Input;
@@ -15,11 +15,13 @@ import de.hsos.richwps.sp.client.ows.gettypes.Output;
 import de.hsos.richwps.sp.client.ows.posttypes.PostWPS;
 import de.hsos.richwps.sp.client.ows.Vocabulary;
 import de.hsos.richwps.sp.client.ows.gettypes.FeatureType;
+import de.hsos.richwps.sp.client.ows.gettypes.QoSTarget;
 import de.hsos.richwps.sp.client.ows.gettypes.WFS;
 import de.hsos.richwps.sp.client.ows.posttypes.PostInput;
 import de.hsos.richwps.sp.client.ows.posttypes.PostLiteralData;
 import de.hsos.richwps.sp.client.ows.posttypes.PostOutput;
 import de.hsos.richwps.sp.client.ows.posttypes.PostProcess;
+import de.hsos.richwps.sp.client.ows.posttypes.PostQoSTarget;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -139,6 +141,21 @@ public class App {
                         }
                         System.out.println("         --");
                     }
+                    
+                    System.out.println("      -> QoS targets:");
+                    QoSTarget[] targets = processes[j].getQoSTargets();
+                    for (int k = 0; k < targets.length; k++) {
+                        QoSTarget target = targets[k];
+                        System.out.println("         -> Title:      " + target.getTitle());
+                        System.out.println("         -> Abstract:   " + target.getAbstract());
+                        System.out.println("         -> Ideal:      " + target.getIdeal());
+                        System.out.println("         -> UOM:        " + target.getUOM());
+                        System.out.println("         -> Max:        " + target.getMax());
+                        System.out.println("         -> Min:        " + target.getMin());
+                        System.out.println("         -> Variance:   " + target.getVariance());
+                        System.out.println("         --");
+                    }
+                    
 
                     System.out.println("   --");
                 }
@@ -199,6 +216,17 @@ public class App {
             ArrayList<PostOutput> tmpList2 = new ArrayList<PostOutput>();
             tmpList2.add(out1);
             process.setOutputs(tmpList2);
+            PostQoSTarget t = new PostQoSTarget();
+            t.setTitle("Antwortzeit");
+            t.setBstract("Zeit die vergeht bis ein Dienst auf eine Anfrage antwortet");
+            t.setIdeal(1.0);
+            t.setUOM(EUOM.SECONDS);
+            t.setMax(2.0);
+            t.setMin(0.0);
+            t.setVariance(0.5);
+            ArrayList<PostQoSTarget> tmpList3 = new ArrayList<PostQoSTarget>();
+            tmpList3.add(t);
+            process.setQosTargets(tmpList3);
             process.setWps(wps);
             spClient.postProcess(process);
             System.out.println("Done.\n--");
@@ -208,7 +236,7 @@ public class App {
             spClient.deleteWPS(wps.getRdfId());
             System.out.println("Done.\n--");
 
-            //repost wps and process
+            //repost wps and process and update process
             System.out.println("Repost wps and process and update process");
             spClient.postWPS(wps);
             spClient.postProcess(process);

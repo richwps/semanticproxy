@@ -66,7 +66,9 @@ public class App {
         IDGenerator.configure( config.getWpsNamingEndpoint(),
                 config.getProcessNamingEndpoint(), config.getInputNamingEndpoint(),
                 config.getOutputNamingEndpoint(), config.getLiteralNamingEndpoint(),
-                config.getComplexNamingEndpoint(), config.getBoundingBoxNamingEndpoint());
+                config.getComplexNamingEndpoint(), config.getBoundingBoxNamingEndpoint(),
+                config.getWfsNamingEndpoint(), config.getFeatureTypeNamingEndpoint(),
+                config.getQosNamingEndpoint());
         
 
         //Prepare db
@@ -87,6 +89,7 @@ public class App {
 
                 //import WPS information
                 importWPSInformation(config);
+                
 
                 //import WFS information
                 importWFSInformation(config);
@@ -242,7 +245,7 @@ public class App {
         for (IWFSImportSource source : sourceList) {
 
 
-            //collect WPS
+            //collect WFS
             while (true) {
                 String rdf = null;
                 try {
@@ -264,6 +267,10 @@ public class App {
             }
         }
     }
+    
+    
+    
+    
 
     /**
      * Configures the web frontend

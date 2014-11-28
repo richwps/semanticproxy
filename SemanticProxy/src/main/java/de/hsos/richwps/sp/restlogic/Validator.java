@@ -137,8 +137,8 @@ public class Validator {
         //hole alle inputs
 
         stats = ValidationUtils.getStatementsBySubjectAndPredicate(processRDFId, Vocabulary.Input, openList);
-        //check ob alle inputs den prozess beschreiben
-        //check für jeden input ob die attribute in richtiger anzahl vorhanden sind
+        //check if all inputs describe the process in question
+        //check for every input if attributes exist in correct number
         String[] inputArr = new String[stats.length];
         for (int i = 0; i < stats.length; i++) {
             inputArr[i] = stats[i].getObject().stringValue();
@@ -149,7 +149,7 @@ public class Validator {
         for (int i = 0; i < inputArr.length; i++) {
             stats = ValidationUtils.getStatementsBySubjectAndPredicate(inputArr[i], Vocabulary.Type, openList);
             if (stats.length != 1) {
-                return new ValidationResult(false, "Wrong count of type statements for input");
+                return new ValidationResult(false, "Incorrect count of type statements for input");
             }
             if (!stats[0].getObject().stringValue().equals(Vocabulary.DataInputClass)) {
                 return new ValidationResult(false, "Input is not of type input class");
@@ -161,14 +161,14 @@ public class Validator {
             //get identifier
             stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataInput, Vocabulary.Identifier, openList);
             if (stats.length != 1) {
-                return new ValidationResult(false, "Wrong count of data input identifier found");
+                return new ValidationResult(false, "Incorrect count of data input identifier found");
             }
             shiftStats(openList, analizedList, stats);
 
             //get title
             stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataInput, Vocabulary.Title, openList);
             if (stats.length != 1) {
-                return new ValidationResult(false, "Wrong count of data input title found");
+                return new ValidationResult(false, "Incorrect count of data input title found");
             }
             shiftStats(openList, analizedList, stats);
 
@@ -183,21 +183,21 @@ public class Validator {
             //get minoccurs
             stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataInput, Vocabulary.MinOccurs, openList);
             if (stats.length != 1) {
-                return new ValidationResult(false, "Wrong count of minoccurs for data input found");
+                return new ValidationResult(false, "Incorrect count of minoccurs for data input found");
             }
             shiftStats(openList, analizedList, stats);
 
             //get maxoccurs
             stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataInput, Vocabulary.MaxOccurs, openList);
             if (stats.length != 1) {
-                return new ValidationResult(false, "Wrong count of maxoccurs for data input found");
+                return new ValidationResult(false, "Incorrect count of maxoccurs for data input found");
             }
             shiftStats(openList, analizedList, stats);
 
             //get input form choice
             stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataInput, Vocabulary.InputFormChoice, openList);
             if (stats.length != 1) {
-                return new ValidationResult(false, "Wrong count of input form choice for data input found");
+                return new ValidationResult(false, "Incorrect count of input form choice for data input found");
             }
             shiftStats(openList, analizedList, stats);
             String dataType = stats[0].getObject().stringValue();
@@ -224,12 +224,13 @@ public class Validator {
         }
         shiftStats(openList, analizedList, stats);
 
-        //check für jeden output ob die attribute in richtiger anzahl vorhanden sind
-        //go through inputs
+        
+        //check for every output if attributes exist in correct number
+        //go through outputs
         for (int i = 0; i < outputArr.length; i++) {
             stats = ValidationUtils.getStatementsBySubjectAndPredicate(outputArr[i], Vocabulary.Type, openList);
             if (stats.length != 1) {
-                return new ValidationResult(false, "Wrong count of type statements for output");
+                return new ValidationResult(false, "Incorrect count of type statements for output");
             }
             if (!stats[0].getObject().stringValue().equals(Vocabulary.ProcessOutputClass)) {
                 return new ValidationResult(false, "Output is not of type output class");
@@ -241,14 +242,14 @@ public class Validator {
             //get identifier
             stats = ValidationUtils.getStatementsBySubjectAndPredicate(processOutput, Vocabulary.Identifier, openList);
             if (stats.length != 1) {
-                return new ValidationResult(false, "Wrong count of data output identifier found");
+                return new ValidationResult(false, "Incorrect count of data output identifier found");
             }
             shiftStats(openList, analizedList, stats);
 
             //get title
             stats = ValidationUtils.getStatementsBySubjectAndPredicate(processOutput, Vocabulary.Title, openList);
             if (stats.length != 1) {
-                return new ValidationResult(false, "Wrong count of data output title found");
+                return new ValidationResult(false, "Incorrect count of data output title found");
             }
             shiftStats(openList, analizedList, stats);
 
@@ -263,13 +264,13 @@ public class Validator {
             //get output form choice
             stats = ValidationUtils.getStatementsBySubjectAndPredicate(processOutput, Vocabulary.OutputFormChoice, openList);
             if (stats.length != 1) {
-                return new ValidationResult(false, "Wrong count of output form choice for data output found");
+                return new ValidationResult(false, "Incorrect count of output form choice for data output found");
             }
             shiftStats(openList, analizedList, stats);
             String dataType = stats[0].getObject().stringValue();
             stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataType, Vocabulary.Type, openList);
             if (stats.length != 1) {
-                return new ValidationResult(false, "Wrong count of types for data type found");
+                return new ValidationResult(false, "Incorrect count of types for data type found");
             }
             String outputFormChoice = stats[0].getObject().stringValue();
             if (!outputFormChoice.equals(Vocabulary.ComplexDataClass)
@@ -280,6 +281,80 @@ public class Validator {
             shiftStats(openList, analizedList, stats);
         }
 
+        
+        //checks...
+        //get all qos targets
+
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processRDFId, Vocabulary.QoSTarget, openList);
+        //check if all qos targets describe the process in question
+        //check for every qos target if attributes exist in correct number
+        String[] qosTargetArr = new String[stats.length];
+        for (int i = 0; i < stats.length; i++) {
+            qosTargetArr[i] = stats[i].getObject().stringValue();
+        }
+        shiftStats(openList, analizedList, stats);
+        
+        for (int i = 0; i < qosTargetArr.length; i++) {
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(qosTargetArr[i], Vocabulary.Type, openList);
+            if (stats.length != 1) {
+                return new ValidationResult(false, "Incorrect count of qos types found");
+            }
+            if (!stats[0].getObject().stringValue().equals(Vocabulary.QoSTargetClass)) {
+                return new ValidationResult(false, "QoSTarget is not of type QoSTargetClass");
+            }
+            shiftStats(openList, analizedList, stats);
+                     
+            
+            //get title
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(qosTargetArr[i], Vocabulary.Title, openList);
+            if (stats.length != 1) {
+                return new ValidationResult(false, "Incorrect count of qos target titles found");
+            }
+            shiftStats(openList, analizedList, stats);
+            
+            //get abstract
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(qosTargetArr[i], Vocabulary.Abstract, openList);
+            if (stats.length > 1) {
+                return new ValidationResult(false, "Incorrect count of qos target abstracts found");
+            }
+            shiftStats(openList, analizedList, stats);
+            
+            //get ideal
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(qosTargetArr[i], Vocabulary.Ideal, openList);
+            if (stats.length != 1) {
+                return new ValidationResult(false, "Incorrect count of qos target ideals found");
+            }
+            shiftStats(openList, analizedList, stats);
+            
+            //get uom
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(qosTargetArr[i], Vocabulary.UOM, openList);
+            if (stats.length != 1) {
+                return new ValidationResult(false, "Incorrect count of qos target UOMs found");
+            }
+            shiftStats(openList, analizedList, stats);
+            
+            //get max
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(qosTargetArr[i], Vocabulary.Max, openList);
+            if (stats.length != 1) {
+                return new ValidationResult(false, "Incorrect count of qos target max found");
+            }
+            shiftStats(openList, analizedList, stats);
+            
+            //get min
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(qosTargetArr[i], Vocabulary.Min, openList);
+            if (stats.length != 1) {
+                return new ValidationResult(false, "Incorrect count of qos target min found");
+            }
+            shiftStats(openList, analizedList, stats);
+            
+            //get variance
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(qosTargetArr[i], Vocabulary.Variance, openList);
+            if (stats.length != 1) {
+                return new ValidationResult(false, "Incorrect count of qos target variance found");
+            }
+            shiftStats(openList, analizedList, stats);
+        }
+        
 
         //check for use of basic vocabulary in remaining statements
         for (int i = 0; i < openList.size(); i++) {
@@ -420,7 +495,7 @@ public class Validator {
         //get endpoint
         stats = ValidationUtils.getStatementsBySubjectAndPredicate(wfsId, Vocabulary.Endpoint, openList);
         if (stats.length != 1) {
-            return new ValidationResult(false, "Wrong count of endpoints found for WFS");
+            return new ValidationResult(false, "Incorrect count of endpoints found for WFS");
         }
         shiftStats(openList, analizedList, stats);
         
@@ -428,7 +503,7 @@ public class Validator {
         //get version
         stats = ValidationUtils.getStatementsBySubjectAndPredicate(wfsId, Vocabulary.WFSVersion, openList);
         if (stats.length != 1) {
-            return new ValidationResult(false, "Wrong count of version attributes found for WFS");
+            return new ValidationResult(false, "Incorrect count of version attributes found for WFS");
         }
         shiftStats(openList, analizedList, stats);
 
@@ -448,7 +523,7 @@ public class Validator {
         for (int i = 0; i < featureTypeArr.length; i++) {
             stats = ValidationUtils.getStatementsBySubjectAndPredicate(featureTypeArr[i], Vocabulary.Type, openList);
             if (stats.length != 1) {
-                return new ValidationResult(false, "Wrong count of type statements for FeatureType found "+stats.length);
+                return new ValidationResult(false, "Incorrect count of type statements for FeatureType found "+stats.length);
             }
             if (!stats[0].getObject().stringValue().equals(Vocabulary.FeatureTypeClass)) {
                 return new ValidationResult(false, "FeatureType is not of type feature type class");
@@ -460,7 +535,7 @@ public class Validator {
             //get name
             stats = ValidationUtils.getStatementsBySubjectAndPredicate(featureType, Vocabulary.FeatureTypeName, openList);
             if (stats.length != 1) {
-                return new ValidationResult(false, "Wrong count of name attributes found");
+                return new ValidationResult(false, "Incorrect count of name attributes found");
             }
             shiftStats(openList, analizedList, stats);
 
@@ -658,7 +733,7 @@ public class Validator {
         for (int i = 0; i < inputArr.length; i++) {
             stats = ValidationUtils.getStatementsBySubjectAndPredicate(inputArr[i], Vocabulary.Type, openList);
             if (stats.length != 1) {
-                return new ValidationResult(false, "Wrong count of type statements for input");
+                return new ValidationResult(false, "Incorrect count of type statements for input");
             }
             if (!stats[0].getObject().stringValue().equals(Vocabulary.DataInputClass)) {
                 return new ValidationResult(false, "Input is not of type input class");
@@ -670,14 +745,14 @@ public class Validator {
             //get identifier
             stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataInput, Vocabulary.Identifier, openList);
             if (stats.length != 1) {
-                return new ValidationResult(false, "Wrong count of data input identifier found");
+                return new ValidationResult(false, "Incorrect count of data input identifier found");
             }
             shiftStats(openList, analizedList, stats);
 
             //get title
             stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataInput, Vocabulary.Title, openList);
             if (stats.length != 1) {
-                return new ValidationResult(false, "Wrong count of data input title found");
+                return new ValidationResult(false, "Incorrect count of data input title found");
             }
             shiftStats(openList, analizedList, stats);
 
@@ -692,21 +767,21 @@ public class Validator {
             //get minoccurs
             stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataInput, Vocabulary.MinOccurs, openList);
             if (stats.length != 1) {
-                return new ValidationResult(false, "Wrong count of minoccurs for data input found");
+                return new ValidationResult(false, "Incorrect count of minoccurs for data input found");
             }
             shiftStats(openList, analizedList, stats);
 
             //get maxoccurs
             stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataInput, Vocabulary.MaxOccurs, openList);
             if (stats.length != 1) {
-                return new ValidationResult(false, "Wrong count of maxoccurs for data input found");
+                return new ValidationResult(false, "Incorrect count of maxoccurs for data input found");
             }
             shiftStats(openList, analizedList, stats);
 
             //get input form choice
             stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataInput, Vocabulary.InputFormChoice, openList);
             if (stats.length != 1) {
-                return new ValidationResult(false, "Wrong count of input form choice for data input found");
+                return new ValidationResult(false, "Incorrect count of input form choice for data input found");
             }
             shiftStats(openList, analizedList, stats);
             String dataType = stats[0].getObject().stringValue();
@@ -723,7 +798,7 @@ public class Validator {
             shiftStats(openList, analizedList, stats);
         }
 
-        //mach das gleiche für die outputs
+        //do the same for outputs
 
         stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.Output, openList);
 
@@ -738,7 +813,7 @@ public class Validator {
         for (int i = 0; i < outputArr.length; i++) {
             stats = ValidationUtils.getStatementsBySubjectAndPredicate(outputArr[i], Vocabulary.Type, openList);
             if (stats.length != 1) {
-                return new ValidationResult(false, "Wrong count of type statements for output");
+                return new ValidationResult(false, "Incorrect count of type statements for output");
             }
             if (!stats[0].getObject().stringValue().equals(Vocabulary.ProcessOutputClass)) {
                 return new ValidationResult(false, "Output is not of type output class");
@@ -750,14 +825,14 @@ public class Validator {
             //get identifier
             stats = ValidationUtils.getStatementsBySubjectAndPredicate(processOutput, Vocabulary.Identifier, openList);
             if (stats.length != 1) {
-                return new ValidationResult(false, "Wrong count of data output identifier found");
+                return new ValidationResult(false, "Incorrect count of data output identifier found");
             }
             shiftStats(openList, analizedList, stats);
 
             //get title
             stats = ValidationUtils.getStatementsBySubjectAndPredicate(processOutput, Vocabulary.Title, openList);
             if (stats.length != 1) {
-                return new ValidationResult(false, "Wrong count of data output title found");
+                return new ValidationResult(false, "Incorrect count of data output title found");
             }
             shiftStats(openList, analizedList, stats);
 
@@ -772,13 +847,13 @@ public class Validator {
             //get output form choice
             stats = ValidationUtils.getStatementsBySubjectAndPredicate(processOutput, Vocabulary.OutputFormChoice, openList);
             if (stats.length != 1) {
-                return new ValidationResult(false, "Wrong count of output form choice for data output found");
+                return new ValidationResult(false, "Incorrect count of output form choice for data output found");
             }
             shiftStats(openList, analizedList, stats);
             String dataType = stats[0].getObject().stringValue();
             stats = ValidationUtils.getStatementsBySubjectAndPredicate(dataType, Vocabulary.Type, openList);
             if (stats.length != 1) {
-                return new ValidationResult(false, "Wrong count of types for data type found");
+                return new ValidationResult(false, "Incorrect count of types for data type found");
             }
             String outputFormChoice = stats[0].getObject().stringValue();
             if (!outputFormChoice.equals(Vocabulary.ComplexDataClass)
@@ -789,6 +864,80 @@ public class Validator {
             shiftStats(openList, analizedList, stats);
         }
 
+        
+        //checks...
+        //get all qos targets
+
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.QoSTarget, openList);
+        //check if all qos targets describe the process in question
+        //check for every qos target if attributes exist in correct number
+        String[] qosTargetArr = new String[stats.length];
+        for (int i = 0; i < stats.length; i++) {
+            qosTargetArr[i] = stats[i].getObject().stringValue();
+        }
+        shiftStats(openList, analizedList, stats);
+        
+        for (int i = 0; i < qosTargetArr.length; i++) {
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(qosTargetArr[i], Vocabulary.Type, openList);
+            if (stats.length != 1) {
+                return new ValidationResult(false, "Incorrect count of qos types found");
+            }
+            if (!stats[0].getObject().stringValue().equals(Vocabulary.QoSTargetClass)) {
+                return new ValidationResult(false, "QoSTarget is not of type QoSTargetClass");
+            }
+            shiftStats(openList, analizedList, stats);
+            
+            //get title
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(qosTargetArr[i], Vocabulary.Title, openList);
+            if (stats.length != 1) {
+                return new ValidationResult(false, "Incorrect count of qos target titles found");
+            }
+            shiftStats(openList, analizedList, stats);
+            
+            //get abstract
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(qosTargetArr[i], Vocabulary.Abstract, openList);
+            if (stats.length > 1) {
+                return new ValidationResult(false, "Incorrect count of qos target abstracts found");
+            }
+            shiftStats(openList, analizedList, stats);
+            
+            //get ideal
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(qosTargetArr[i], Vocabulary.Ideal, openList);
+            if (stats.length != 1) {
+                return new ValidationResult(false, "Incorrect count of qos target ideals found");
+            }
+            shiftStats(openList, analizedList, stats);
+            
+            //get uom
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(qosTargetArr[i], Vocabulary.UOM, openList);
+            if (stats.length != 1) {
+                return new ValidationResult(false, "Incorrect count of qos target UOMs found");
+            }
+            shiftStats(openList, analizedList, stats);
+            
+            //get max
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(qosTargetArr[i], Vocabulary.Max, openList);
+            if (stats.length != 1) {
+                return new ValidationResult(false, "Incorrect count of qos target max found");
+            }
+            shiftStats(openList, analizedList, stats);
+            
+            //get min
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(qosTargetArr[i], Vocabulary.Min, openList);
+            if (stats.length != 1) {
+                return new ValidationResult(false, "Incorrect count of qos target min found");
+            }
+            shiftStats(openList, analizedList, stats);
+            
+            //get variance
+            stats = ValidationUtils.getStatementsBySubjectAndPredicate(qosTargetArr[i], Vocabulary.Variance, openList);
+            if (stats.length != 1) {
+                return new ValidationResult(false, "Incorrect count of qos target variance found");
+            }
+            shiftStats(openList, analizedList, stats);
+        }
+        
+        
         //check für jedes verbleibende stmt ob es etwas beschreibt das in einer der beiden listen vorhanden ist...
 
 
