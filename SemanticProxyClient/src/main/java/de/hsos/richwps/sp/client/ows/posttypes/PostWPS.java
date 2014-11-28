@@ -34,6 +34,16 @@ public class PostWPS {
     public PostWPS() throws MalformedURLException, BadRequestException, InternalSPException, CommunicationException {
         this.rdfId = SPClient.getInstance().requestID(EIDType.WPS);
     }
+    
+    
+    /**
+     * Constructs a PostWPS with a given RDFID
+     * @param rdfid 
+     */
+    public PostWPS(RDFID rdfid) {
+        this.rdfId = rdfid;
+    }
+    
 
     public RDFID getRdfId() {
         return rdfId;

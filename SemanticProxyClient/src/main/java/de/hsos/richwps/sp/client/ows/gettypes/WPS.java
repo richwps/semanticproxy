@@ -49,6 +49,15 @@ public class WPS {
     }
 
     
+    /**
+     * Returns the RDFID for this process
+     * @return 
+     */
+    public RDFID getRDFID(){
+        return res.getRdfID();
+    }
+    
+    
     public String getEndpoint() throws RDFException {
         return getSingleAttribute(Vocabulary.Endpoint);
     }
