@@ -29,6 +29,8 @@ public class Validator {
      */
     public static ValidationResult checkForInsertProcess(ArrayList<Statement> openList) throws Exception {
         ArrayList<Statement> analizedList = new ArrayList<>();
+        String processIdentifier = null;
+        String processRDFId = null;
 
         //get the process
         Statement[] stats = ValidationUtils.getStatementsByPredicateAndObject(Vocabulary.Type, Vocabulary.ProcessClass, openList);
@@ -37,12 +39,12 @@ public class Validator {
         }
         shiftStats(openList, analizedList, stats);
 
-        String processId = stats[0].getSubject().stringValue();
+        processRDFId = stats[0].getSubject().stringValue();
         
 
         //check if process already exists
         try {
-            if (DBIO.subjectExists(new URL(processId))) {
+            if (DBIO.subjectExists(new URL(processRDFId))) {
                 return new ValidationResult(false, "Process already exists");
             }
         } catch (MalformedURLException | IllegalStateException | RepositoryException | RDFException e) {
@@ -50,26 +52,27 @@ public class Validator {
         }
 
         //check if name correct
-        if (!processId.startsWith(DBAdministration.getResourceURL().toString())) {
+        if (!processRDFId.startsWith(DBAdministration.getResourceURL().toString())) {
             return new ValidationResult(false, "Process does not fit into naming schema");
         }
 
         //get identifier
-        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.Identifier, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processRDFId, Vocabulary.Identifier, openList);
         if (stats.length != 1) {
             return new ValidationResult(false, "More than one process identifier found");
         }
+        processIdentifier = stats[0].getObject().stringValue();
         shiftStats(openList, analizedList, stats);
 
         //get title
-        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.Title, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processRDFId, Vocabulary.Title, openList);
         if (stats.length != 1) {
             return new ValidationResult(false, "More than one process title found");
         }
         shiftStats(openList, analizedList, stats);
 
         //get abstract
-        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.Abstract, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processRDFId, Vocabulary.Abstract, openList);
         if (stats.length > 1) {
             return new ValidationResult(false, "More than one 0 or 1 abstracts found");
         }
@@ -77,50 +80,63 @@ public class Validator {
 
 
         //get metadata
-        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.Metadata, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processRDFId, Vocabulary.Metadata, openList);
         shiftStats(openList, analizedList, stats);
 
 
         //get process version
-        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.ProcessVersion, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processRDFId, Vocabulary.ProcessVersion, openList);
         if (stats.length != 1) {
             return new ValidationResult(false, "1 process version required");
         }
         shiftStats(openList, analizedList, stats);
 
         //get wsdl
-        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.WSDL, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processRDFId, Vocabulary.WSDL, openList);
         if (stats.length > 1) {
             return new ValidationResult(false, "0 or 1 wsdl allowed");
         }
         shiftStats(openList, analizedList, stats);
 
         //get store supported
-        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.StoreSupported, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processRDFId, Vocabulary.StoreSupported, openList);
         if (stats.length > 1) {
             return new ValidationResult(false, "0 or 1 store supported allowed");
         }
         shiftStats(openList, analizedList, stats);
 
         //get status supported
-        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.StatusSupported, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processRDFId, Vocabulary.StatusSupported, openList);
         if (stats.length > 1) {
             return new ValidationResult(false, "0 or 1 status supported allowed");
         }
         shiftStats(openList, analizedList, stats);
 
-        //get wps uplink
-        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.WPS, openList);
+        //get wps uplink count
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processRDFId, Vocabulary.WPS, openList);
         if (stats.length != 1) {
             return new ValidationResult(false, "One wps required");
         }
+        URL wps = new URL(stats[0].getObject().stringValue());
         shiftStats(openList, analizedList, stats);
+        
+        //check if this process with this wps and identifier already exists
+        Statement[] tmp = DBIO.getStatementsForSubjAndPred(wps, new URL(Vocabulary.Process));
+        for(int i=0; i<tmp.length; i++){
+            URL process = new URL(tmp[i].getObject().stringValue());
+            stats = DBIO.getStatementsForSubjAndPred(process, new URL(Vocabulary.Identifier));
+            if(stats[0].getObject().stringValue().equals(processIdentifier)){
+                return new ValidationResult(false, "A process with this WPS and identifier is already registered");
+            }
+        }
+        
+        
 
 
         //checks...
         //hole alle inputs
 
-        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.Input, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processRDFId, Vocabulary.Input, openList);
         //check ob alle inputs den prozess beschreiben
         //check für jeden input ob die attribute in richtiger anzahl vorhanden sind
         String[] inputArr = new String[stats.length];
@@ -200,7 +216,7 @@ public class Validator {
 
         //same thing for the outputs
 
-        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processId, Vocabulary.Output, openList);
+        stats = ValidationUtils.getStatementsBySubjectAndPredicate(processRDFId, Vocabulary.Output, openList);
 
         String[] outputArr = new String[stats.length];
         for (int i = 0; i < stats.length; i++) {
