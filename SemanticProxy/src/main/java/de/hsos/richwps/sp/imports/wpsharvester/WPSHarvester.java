@@ -43,6 +43,8 @@ public class WPSHarvester implements IWPSImportSource {
     private CapabilitiesDocument capabilities = null;
     private int wpsIdx = 0;
     private int processIdx = 0;
+    //ID of the WPS behind the target URL
+    private RDFID wpsID = null;
 
     public WPSHarvester(URL targetURL ) {
         this.targetURL = targetURL;
@@ -73,7 +75,7 @@ public class WPSHarvester implements IWPSImportSource {
         boolean isRichWPS = checkURL(richWPSURL.toString());
 
         RDFDocBuilder builder = new RDFDocBuilder();
-        RDFID wpsID = new RDFID (IDGenerator.getInstance().generateID(EIDType.WPS).toString());
+        wpsID = new RDFID (IDGenerator.getInstance().generateID(EIDType.WPS).toString());
         PostWPS wps = new PostWPS(wpsID);
         wps.setEndpoint(targetURL);
         if(isRichWPS)
@@ -141,8 +143,7 @@ public class WPSHarvester implements IWPSImportSource {
             process.setStoreSupported(pdType.getStoreSupported());
         }
         //Parent WPS
-        RDFID wpsRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.WPS).toString());
-        PostWPS wps = new PostWPS(wpsRDFID);
+        PostWPS wps = new PostWPS(wpsID);
         process.setWps(wps);
         //WSDL
         if (pdType.isSetWSDL()) {
@@ -335,7 +336,7 @@ public class WPSHarvester implements IWPSImportSource {
             processIdx++;
             throw new ImportException("Unable to bilt XMLRDF doc for process "+processIdentifier, ex);
         }
-        Logger.getLogger(WPSHarvester.class).info("Request process inforation for process "+processIdentifier+ " of WPS "+targetURL+ " successfully");
+        Logger.getLogger(WPSHarvester.class).info("Request process information for process "+processIdentifier+ " of WPS "+targetURL+ " successfully");
         processIdx++;
         return xmlRDF;
     }
