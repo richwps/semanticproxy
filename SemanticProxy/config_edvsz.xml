@@ -42,5 +42,8 @@
     <LiteralNaming>literal</LiteralNaming>
     <ComplexNaming>complex</ComplexNaming>
     <BoundingBoxNaming>boundingbox</BoundingBoxNaming>
+    <WFSNaming>wfs</WFSNaming>
+    <FeatureTypeNaming>featuretype</FeatureTypeNaming>
+    <QoSNaming>qos</QoSNaming>
   </RDFNaming>
 </Configuration>
