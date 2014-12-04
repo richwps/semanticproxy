@@ -16,11 +16,13 @@
     <File path="RDF\BAW\ProcessCompare.rdf" type="Process" replaceableHost="http://localhost:4567"/>
     <File path="RDF\BAW\ProcessFormat.rdf" type="Process" replaceableHost="http://localhost:4567"/>
     -->
-  <WPSServer targetURL="http://richwps.edvsz.hs-osnabrueck.de/wps/WebProcessingService"/>
+    <WPSServer targetURL="http://richwps.edvsz.hs-osnabrueck.de/wps/WebProcessingService"/>
 	<WPSServer targetURL="http://richwps.edvsz.hs-osnabrueck.de/lkn/WebProcessingService"/>
 	<WPSServer targetURL="http://richwps.edvsz.hs-osnabrueck.de/baw/WebProcessingService"/>
- <WPSServer targetURL="http://richwps.edvsz.hs-osnabrueck.de/lkn2/WebProcessingService"/>
-  <File path="RDF\WFS\WFSTest.rdf" type="WFS" replaceableHost="http://localhost:4567"/>
+    <WPSServer targetURL="http://richwps.edvsz.hs-osnabrueck.de/lkn2/WebProcessingService"/>
+    <WFSServer targetURL="http://mdi-sh.org/geoserver_lkn/ows"/>
+	<WFSServer targetURL="http://map.ices.dk/geoserver/sf/ows"/>
+     <!--   <File path="RDF\WFS\WFSTest.rdf" type="WFS" replaceableHost="http://localhost:4567"/> -->
   </DataSources>
   <HTTPEndpoints>
     <Host>http://richwps.edvsz.hs-osnabrueck.de</Host>

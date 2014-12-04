@@ -5,11 +5,12 @@ import de.hsos.richwps.sp.imports.wpsfileimporter.WPSFileImporter;
 import de.hsos.richwps.sp.imports.IWPSImportSource;
 import de.hsos.richwps.sp.imports.ImportException;
 import de.hsos.richwps.sp.imports.wfsfileimporter.WFSFileImporter;
+import de.hsos.richwps.sp.imports.wfsharvester.WFSHarvester;
 import de.hsos.richwps.sp.imports.wpsharvester.WPSHarvester;
 import de.hsos.richwps.sp.rdfdb.DBAdministration;
 import de.hsos.richwps.sp.rdfdb.DBIO;
 import de.hsos.richwps.sp.restlogic.ContentChanger;
-import de.hsos.richwps.sp.restlogic.IDGenerator;
+import de.hsos.richwps.sp.types.IDGenerator;
 import de.hsos.richwps.sp.restlogic.Vocabulary;
 import de.hsos.richwps.sp.web.BrowseAccess;
 import de.hsos.richwps.sp.web.CreateAccess;
@@ -33,13 +34,13 @@ import org.apache.xmlbeans.XmlException;
 public class App {
 
     /**
-     * Main routine, args are not regarded. This class connects to the db
-     * and sets up the web frontent, also initial data is loaded.
+     * Main routine, args are not regarded. This class connects to the db and
+     * sets up the web frontent, also initial data is loaded.
      *
      * @param args
      */
     public static void main(String[] args) {
-        System.out.println("SemanticProxy is starting..."); 
+        System.out.println("SemanticProxy is starting...");
 
         //configure logging
         PropertyConfigurator.configure("log4j.properties");
@@ -63,13 +64,13 @@ public class App {
         }
 
         // Configure ID generator
-        IDGenerator.configure( config.getWpsNamingEndpoint(),
+        IDGenerator.configure(config.getWpsNamingEndpoint(),
                 config.getProcessNamingEndpoint(), config.getInputNamingEndpoint(),
                 config.getOutputNamingEndpoint(), config.getLiteralNamingEndpoint(),
                 config.getComplexNamingEndpoint(), config.getBoundingBoxNamingEndpoint(),
                 config.getWfsNamingEndpoint(), config.getFeatureTypeNamingEndpoint(),
                 config.getQosNamingEndpoint());
-        
+
 
         //Prepare db
         try {
@@ -89,7 +90,7 @@ public class App {
 
                 //import WPS information
                 importWPSInformation(config);
-                
+
 
                 //import WFS information
                 importWFSInformation(config);
@@ -167,23 +168,11 @@ public class App {
         sourceList.add(fileImporter);
 
         //configure harvester
-        try {
-            for (URL target : config.getWpsServers()) {
-                IWPSImportSource harvester = new WPSHarvester(target,
-                        new URL(config.getWpsNamingEndpoint().toString()),
-                        new URL(config.getProcessNamingEndpoint().toString()),
-                        new URL(config.getInputNamingEndpoint().toString()),
-                        new URL(config.getOutputNamingEndpoint().toString()),
-                        new URL(config.getLiteralNamingEndpoint().toString()),
-                        new URL(config.getComplexNamingEndpoint().toString()),
-                        new URL(config.getBoundingBoxNamingEndpoint().toString()));
-                sourceList.add(harvester);
-            }
-        } catch (MalformedURLException murle) {
-            Logger.getLogger(App.class).warn(murle.getClass() + "Aborted configuration of WPS harvester \n", murle);
-            System.err.println("[WARN] Aborted configuration of WPS harvester \n");
+        for (URL target : config.getWpsServers()) {
+            IWPSImportSource harvester = new WPSHarvester(target);
+            sourceList.add(harvester);
         }
-
+       
 
         //loop through importers and import data
         for (IWPSImportSource source : sourceList) {
@@ -242,6 +231,15 @@ public class App {
         WFSFileImporter fileImporter = new WFSFileImporter(files, config.getHostURL().toString());
         sourceList.add(fileImporter);
 
+
+        //configure WFS harvester
+  
+        for (URL target : config.getWfsServers()) {
+            IWFSImportSource harvester = new WFSHarvester(target);
+            sourceList.add(harvester);
+        }
+        
+
         for (IWFSImportSource source : sourceList) {
 
 
@@ -267,10 +265,6 @@ public class App {
             }
         }
     }
-    
-    
-    
-    
 
     /**
      * Configures the web frontend

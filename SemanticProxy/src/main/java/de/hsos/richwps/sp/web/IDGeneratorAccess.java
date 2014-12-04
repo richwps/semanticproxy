@@ -4,7 +4,7 @@
  */
 package de.hsos.richwps.sp.web;
 
-import de.hsos.richwps.sp.restlogic.IDGenerator;
+import de.hsos.richwps.sp.restlogic.IDGeneratorRestAccess;
 import de.hsos.richwps.sp.types.EIDType;
 import de.hsos.richwps.sp.types.SubjectList;
 import java.net.URL;
@@ -63,7 +63,7 @@ public class IDGeneratorAccess {
                 try {
                     SubjectList list = null;
                     try{
-                        list = IDGenerator.getInstance().generateID(EIDType.valueOf(keyword.toUpperCase()));
+                        list = IDGeneratorRestAccess.retrieveID(EIDType.valueOf(keyword.toUpperCase()));
                     }catch(IllegalArgumentException iae){
                         Logger.getLogger(IDGeneratorAccess.class).error("Generate ID request for type: Empty query");
                         response.status(400);

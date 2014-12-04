@@ -28,6 +28,7 @@ RichWPS-SemanticProxy configuration schema
         <xs:sequence>
             <xs:element name="File" type="cg:File" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="WPSServer" type="cg:WPSServer" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="WFSServer" type="cg:WFSServer" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 	<xs:complexType name="File">
@@ -45,6 +46,11 @@ RichWPS-SemanticProxy configuration schema
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:complexType name="WPSServer">
+        <xs:sequence>
+        </xs:sequence>
+		<xs:attribute name="targetURL" type="xs:anyURI" use="required"/>
+    </xs:complexType>
+	<xs:complexType name="WFSServer">
         <xs:sequence>
         </xs:sequence>
 		<xs:attribute name="targetURL" type="xs:anyURI" use="required"/>

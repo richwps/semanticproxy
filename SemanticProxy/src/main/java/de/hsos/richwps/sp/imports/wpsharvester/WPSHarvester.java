@@ -7,6 +7,8 @@ package de.hsos.richwps.sp.imports.wpsharvester;
 import de.hsos.richwps.sp.App;
 import de.hsos.richwps.sp.imports.IWPSImportSource;
 import de.hsos.richwps.sp.imports.ImportException;
+import de.hsos.richwps.sp.types.EIDType;
+import de.hsos.richwps.sp.types.IDGenerator;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -42,22 +44,8 @@ public class WPSHarvester implements IWPSImportSource {
     private int wpsIdx = 0;
     private int processIdx = 0;
 
-    public WPSHarvester(URL targetURL,
-            URL wpsBaseURL,
-            URL processBaseURL,
-            URL inputBaseURL,
-            URL outputBaseURL,
-            URL literalDataBaseURL,
-            URL complexDataBaseURL,
-            URL boundingBoxDataBaseURL) {
+    public WPSHarvester(URL targetURL ) {
         this.targetURL = targetURL;
-        RDFIDBuilder.init(wpsBaseURL, 
-                processBaseURL, 
-                inputBaseURL, 
-                outputBaseURL, 
-                literalDataBaseURL, 
-                complexDataBaseURL, 
-                boundingBoxDataBaseURL);
     }
 
     @Override
@@ -85,7 +73,7 @@ public class WPSHarvester implements IWPSImportSource {
         boolean isRichWPS = checkURL(richWPSURL.toString());
 
         RDFDocBuilder builder = new RDFDocBuilder();
-        RDFID wpsID = RDFIDBuilder.createID().withWpsURL(targetURL).forWPS();
+        RDFID wpsID = new RDFID (IDGenerator.getInstance().generateID(EIDType.WPS).toString());
         PostWPS wps = new PostWPS(wpsID);
         wps.setEndpoint(targetURL);
         if(isRichWPS)
@@ -131,7 +119,7 @@ public class WPSHarvester implements IWPSImportSource {
 
         //Define process
         //
-        RDFID processID = RDFIDBuilder.createID().withWpsURL(targetURL).withProcessIdentifier(processIdentifier).forProcess();
+        RDFID processID = new RDFID(IDGenerator.getInstance().generateID(EIDType.PROCESS).toString());
         PostProcess process = new PostProcess(processID);
         process.setIdentifier(processIdentifier);
         //Abstract
@@ -153,7 +141,7 @@ public class WPSHarvester implements IWPSImportSource {
             process.setStoreSupported(pdType.getStoreSupported());
         }
         //Parent WPS
-        RDFID wpsRDFID = RDFIDBuilder.createID().withWpsURL(targetURL).forWPS();
+        RDFID wpsRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.WPS).toString());
         PostWPS wps = new PostWPS(wpsRDFID);
         process.setWps(wps);
         //WSDL
@@ -200,7 +188,7 @@ public class WPSHarvester implements IWPSImportSource {
             ArrayList<PostInput> list = new ArrayList<>();
             for (int i = 0; i < idTypeArr.length; i++) {
                 InputDescriptionType in = idTypeArr[i];
-                RDFID inputID = RDFIDBuilder.createID().withWpsURL(targetURL).withProcessIdentifier(processIdentifier).withInputIdentifier(in.getIdentifier().getStringValue()).forInput();
+                RDFID inputID = new RDFID(IDGenerator.getInstance().generateID(EIDType.INPUT).toString());
                 PostInput input = new PostInput(inputID);
                 //Identifier
                 input.setIdentifier(in.getIdentifier().getStringValue());
@@ -234,13 +222,13 @@ public class WPSHarvester implements IWPSImportSource {
 
                 //Datatype (Literal, Complex or BoundingBox)
                 if (in.isSetLiteralData()) {
-                    RDFID literalDataRDFID = RDFIDBuilder.createID().withWpsURL(targetURL).withProcessIdentifier(processIdentifier).withInputIdentifier(in.getIdentifier().getStringValue()).forLiteral();
+                    RDFID literalDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.LITERAL).toString());
                     input.setPostInputFormChoice(new PostLiteralData(literalDataRDFID));
                 } else if (in.isSetComplexData()) {
-                    RDFID complexDataRDFID = RDFIDBuilder.createID().withWpsURL(targetURL).withProcessIdentifier(processIdentifier).withInputIdentifier(in.getIdentifier().getStringValue()).forComplex();
+                    RDFID complexDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.COMPLEX).toString());
                     input.setPostInputFormChoice(new PostComplexData(complexDataRDFID));
                 } else if (in.isSetBoundingBoxData()) {
-                    RDFID boundingBoxDataRDFID = RDFIDBuilder.createID().withWpsURL(targetURL).withProcessIdentifier(processIdentifier).withInputIdentifier(in.getIdentifier().getStringValue()).forBoundingBox();
+                    RDFID boundingBoxDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.BOUNDINGBOX).toString());
                     input.setPostInputFormChoice(new PostBoundingBoxData(boundingBoxDataRDFID));
                 } else {
                     processIdx++;
@@ -260,7 +248,7 @@ public class WPSHarvester implements IWPSImportSource {
             ArrayList<PostOutput> list = new ArrayList<>();
             for (int i = 0; i < idTypeArr.length; i++) {
                 OutputDescriptionType out = idTypeArr[i];
-                RDFID outputRDFID = RDFIDBuilder.createID().withWpsURL(targetURL).withProcessIdentifier(processIdentifier).withOutputIdentifier(out.getIdentifier().getStringValue()).forOutput();
+                RDFID outputRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.OUTPUT).toString());
                 PostOutput output = new PostOutput(outputRDFID);
                 //Identifier
                 output.setIdentifier(out.getIdentifier().getStringValue());
@@ -289,13 +277,13 @@ public class WPSHarvester implements IWPSImportSource {
                 }
                 //Occs
                 if (out.isSetLiteralOutput()) {
-                    RDFID literalDataRDFID = RDFIDBuilder.createID().withWpsURL(targetURL).withProcessIdentifier(processIdentifier).withOutputIdentifier(out.getIdentifier().getStringValue()).forLiteral();
+                    RDFID literalDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.LITERAL).toString());
                     output.setPostOutputFormChoice(new PostLiteralData(literalDataRDFID));
                 } else if (out.isSetComplexOutput()) {
-                    RDFID complexDataRDFID = RDFIDBuilder.createID().withWpsURL(targetURL).withProcessIdentifier(processIdentifier).withOutputIdentifier(out.getIdentifier().getStringValue()).forComplex();
+                    RDFID complexDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.COMPLEX).toString());
                     output.setPostOutputFormChoice(new PostComplexData(complexDataRDFID));
                 } else if (out.isSetBoundingBoxOutput()) {
-                    RDFID boundingBoxDataRDFID = RDFIDBuilder.createID().withWpsURL(targetURL).withProcessIdentifier(processIdentifier).withInputIdentifier(out.getIdentifier().getStringValue()).forBoundingBox();
+                    RDFID boundingBoxDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.BOUNDINGBOX).toString());
                     output.setPostOutputFormChoice(new PostBoundingBoxData(boundingBoxDataRDFID));
                 } else {
                     processIdx++;

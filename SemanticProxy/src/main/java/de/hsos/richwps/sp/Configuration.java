@@ -9,6 +9,7 @@ import de.hsos.richwps.sp.config.HTTPEndpoints;
 import de.hsos.richwps.sp.config.DataSources;
 import de.hsos.richwps.sp.config.RDFNaming;
 import de.hsos.richwps.sp.config.ResourceType;
+import de.hsos.richwps.sp.config.WFSServer;
 import de.hsos.richwps.sp.config.WPSServer;
 import java.io.File;
 import java.net.URL;
@@ -26,11 +27,16 @@ import org.apache.xmlbeans.XmlException;
  * @author fbensman
  */
 public class Configuration {
+    //Enums for type recognitions in file sources
     private static final int E_WPSVALUE = 1;
     private static final int E_PROCESVALUE = 2;
     private static final int E_WFSVALUE = 3;
 
+    //file to load this config from
     private File configSource = null;
+    
+    //--- Configuration items ---
+    
     private boolean loaded = false;
     private File rdfMemoryDir = null;
     private boolean startClean = true;
@@ -39,6 +45,7 @@ public class Configuration {
     private int port = -1;
     private ArrayList<InputFile> inputFiles = null;
     private ArrayList<URL> wpsServers = null;
+    private ArrayList<URL> wfsServers = null;
     //http endpoints
     private URL hostURL = null;
     private URL resourcesURL = null;
@@ -108,6 +115,7 @@ public class Configuration {
     public Configuration() {
         inputFiles = new ArrayList<>();
         wpsServers = new ArrayList<>();
+        wfsServers = new ArrayList<>();
         buildDefaults();
         
     }
@@ -225,6 +233,10 @@ public class Configuration {
         wpsServers.clear();
         for(WPSServer s : dataSources.getWPSServerArray()){
             wpsServers.add(new URL(s.getTargetURL()));
+        }
+        wfsServers.clear();
+        for(WFSServer s : dataSources.getWFSServerArray()){
+            wfsServers.add(new URL(s.getTargetURL()));
         }
 
         //HTTP endpoints
@@ -477,6 +489,12 @@ public class Configuration {
         return wpsServers;
     }
 
+    public ArrayList<URL> getWfsServers() {
+        return wfsServers;
+    }
+    
+    
+
     public URL getWfsNamingEndpoint() {
         return wfsNamingEndpoint;
     }
@@ -515,6 +533,9 @@ public class Configuration {
         ret += "WPSservers:\n";
         for(URL wps : wpsServers)
             ret += " Server:     "+wps.toString() + "\n";
+        ret += "WFSservers:\n";
+        for(URL wfs : wfsServers)
+            ret += " Server:     "+wfs.toString() + "\n";
         ret += "Host URL:        " + hostURL.toString() + "\n";
         ret += "Resources URL:   " + resourcesURL.toString() + "\n";
         ret += "Application URL: " + applicationURL.toString() + "\n";
