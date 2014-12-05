@@ -5,18 +5,27 @@
 package de.hsos.richwps.sp.imports.wpsharvester;
 
 import de.hsos.richwps.sp.restlogic.Vocabulary;
+import java.math.BigInteger;
+import java.util.ArrayList;
+
 
 
 
 
 
 /**
- * Mutable class that represents a Complex description
+ * Mutable class that represents a complex description
  *
  * @author fbensman
  */
 public class PostComplexData extends PostInAndOutputForm {
 
+    private BigInteger maxMegaBytes = null;
+    private PostComplexDataCombination defaultDataCombination = null;
+    private ArrayList<PostComplexDataCombination> supportedDataCombinations = null;
+    
+    
+    
     @Override
     public int getDataType() {
         return COMPLEX_TYPE;
@@ -25,8 +34,34 @@ public class PostComplexData extends PostInAndOutputForm {
 
     public PostComplexData(RDFID rdfId) {
         this.rdfId = rdfId;
-
     }
+
+    public BigInteger getMaxMegaBytes() {
+        return maxMegaBytes;
+    }
+
+    public void setMaxMegaBytes(BigInteger maxMegaBytes) {
+        this.maxMegaBytes = maxMegaBytes;
+    }
+
+    public PostComplexDataCombination getDefaultDataCombination() {
+        return defaultDataCombination;
+    }
+
+    public void setDefaultDataCombination(PostComplexDataCombination defaultDataCombination) {
+        this.defaultDataCombination = defaultDataCombination;
+    }
+
+    public ArrayList<PostComplexDataCombination> getSupportedDataCombinations() {
+        return supportedDataCombinations;
+    }
+
+    public void setSupportedDataCombinations(ArrayList<PostComplexDataCombination> supportedDataCombinations) {
+        this.supportedDataCombinations = supportedDataCombinations;
+    }
+
+
+    
 
     /**
      * Creates an RDFResource from object
@@ -35,10 +70,34 @@ public class PostComplexData extends PostInAndOutputForm {
      */
     public RDFResource toRDFResource() {
         RDFResource res = new RDFResource(rdfId);
+        ArrayList<LiteralExpression>lexpList = new ArrayList<>();
+        ArrayList<ResourceExpression>rexpList = new ArrayList<>();
 
+        if(maxMegaBytes != null ){
+            LiteralExpression lexp = new LiteralExpression(Vocabulary.MaximumMegabytes, maxMegaBytes.toString());
+            lexpList.add(lexp);
+        }
+        
         ResourceExpression rexp = new ResourceExpression(Vocabulary.Type, new RDFID(Vocabulary.ComplexDataClass));
-        res.setResources(new ResourceExpression[]{rexp});
+        rexpList.add(rexp);
+        
+        if(defaultDataCombination != null ){
+            rexp = new ResourceExpression(Vocabulary.DefaultComplexDataCombination, defaultDataCombination.getRdfId());
+            rexpList.add(rexp);
+        }
+        else{
+            throw new NullPointerException("Default data combination must not be null");
+        }
+        
+        if(supportedDataCombinations != null){
+            for(PostComplexDataCombination com : supportedDataCombinations){
+                rexp = new ResourceExpression(Vocabulary.SupportedComplexDataCombination, com.getRdfId());
+                rexpList.add(rexp);
+            }
+        }
 
+        res.setResources(rexpList.toArray(new ResourceExpression[rexpList.size()]));
+        res.setFields(lexpList.toArray(new LiteralExpression[lexpList.size()]));
         return res;
     }
 

@@ -60,6 +60,10 @@ public class RDFDocBuilder {
             for (int j = 0; j < rdfRes.getResources().length; j++) {
                 ResourceExpression rexp = rdfRes.getResources()[j];
                 Resource subj = new URIImpl(rdfRes.getRdfID().rdfID);
+                if(rexp.predicate == null){
+                    int abc=0; 
+                    abc++;
+                }
                 org.openrdf.model.URI pred = new URIImpl(rexp.predicate);
                 org.openrdf.model.URI obj = new URIImpl(rexp.rdfID.rdfID);
                 stmts.add(new StatementImpl(subj, pred, obj));

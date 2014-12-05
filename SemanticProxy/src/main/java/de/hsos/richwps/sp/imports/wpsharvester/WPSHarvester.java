@@ -4,7 +4,6 @@
  */
 package de.hsos.richwps.sp.imports.wpsharvester;
 
-import de.hsos.richwps.sp.App;
 import de.hsos.richwps.sp.imports.IWPSImportSource;
 import de.hsos.richwps.sp.imports.ImportException;
 import de.hsos.richwps.sp.types.EIDType;
@@ -46,7 +45,7 @@ public class WPSHarvester implements IWPSImportSource {
     //ID of the WPS behind the target URL
     private RDFID wpsID = null;
 
-    public WPSHarvester(URL targetURL ) {
+    public WPSHarvester(URL targetURL) {
         this.targetURL = targetURL;
     }
 
@@ -61,7 +60,7 @@ public class WPSHarvester implements IWPSImportSource {
                 capabilities = requestCapabilities(targetURL.toString());
             } catch (WPSClientException wpse) {
                 wpsIdx++;
-                throw new ImportException("Unable to contact WPS at "+targetURL, wpse);
+                throw new ImportException("Unable to contact WPS at " + targetURL, wpse);
             }
         }
         // checks if WPS supports RichWPS
@@ -75,11 +74,12 @@ public class WPSHarvester implements IWPSImportSource {
         boolean isRichWPS = checkURL(richWPSURL.toString());
 
         RDFDocBuilder builder = new RDFDocBuilder();
-        wpsID = new RDFID (IDGenerator.getInstance().generateID(EIDType.WPS).toString());
+        wpsID = new RDFID(IDGenerator.getInstance().generateID(EIDType.WPS).toString());
         PostWPS wps = new PostWPS(wpsID);
         wps.setEndpoint(targetURL);
-        if(isRichWPS)
+        if (isRichWPS) {
             wps.setRichWPSEndpoint(richWPSURL);
+        }
         RDFResource rdfRes = wps.toRDFResource();
         builder.addResource(rdfRes);
         String xmlRDF = null;
@@ -90,7 +90,7 @@ public class WPSHarvester implements IWPSImportSource {
             throw new ImportException("", ex);
         }
         wpsIdx++;
-        Logger.getLogger(WPSHarvester.class).info("Requested target WPS "+targetURL+" successfully");
+        Logger.getLogger(WPSHarvester.class).info("Requested target WPS " + targetURL + " successfully");
         return xmlRDF;
     }
 
@@ -101,7 +101,7 @@ public class WPSHarvester implements IWPSImportSource {
                 capabilities = requestCapabilities(targetURL.toString());
             } catch (WPSClientException wpse) {
                 processIdx++;
-                throw new ImportException("Unable to contact WPS at "+targetURL+ " for requesting capabilities", wpse);
+                throw new ImportException("Unable to contact WPS at " + targetURL + " for requesting capabilities", wpse);
             }
         }
         //determine next process
@@ -116,7 +116,7 @@ public class WPSHarvester implements IWPSImportSource {
             pdType = requestDescribeProcess(targetURL.toString(), processIdentifier);
         } catch (Exception ex) {
             processIdx++;
-            throw new ImportException("On DescribeProcess of "+processIdentifier, ex);
+            throw new ImportException("On DescribeProcess of " + processIdentifier, ex);
         }
 
         //Define process
@@ -176,7 +176,7 @@ public class WPSHarvester implements IWPSImportSource {
                     list.add(new URL(metaArr[i].getHref()));
                 } catch (MalformedURLException murle) {
                     processIdx++;
-                    throw new ImportException("Error on reading href attribute from metadata; href=" + metaArr[i].getHref() + "of process "+processIdentifier, murle);
+                    throw new ImportException("Error on reading href attribute from metadata; href=" + metaArr[i].getHref() + "of process " + processIdentifier, murle);
                 }
             }
             process.setMetadataList(list);
@@ -215,7 +215,7 @@ public class WPSHarvester implements IWPSImportSource {
                             metaDataList.add(new URL(metaArr[j].getHref()));
                         } catch (MalformedURLException murle) {
                             processIdx++;
-                            throw new ImportException("Error on reading href attribute from metadata; href=" + metaArr[j].getHref()+" of process "+processIdentifier, murle);
+                            throw new ImportException("Error on reading href attribute from metadata; href=" + metaArr[j].getHref() + " of process " + processIdentifier, murle);
                         }
                     }
                     input.setMetadataList(metaDataList);
@@ -227,13 +227,60 @@ public class WPSHarvester implements IWPSImportSource {
                     input.setPostInputFormChoice(new PostLiteralData(literalDataRDFID));
                 } else if (in.isSetComplexData()) {
                     RDFID complexDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.COMPLEX).toString());
-                    input.setPostInputFormChoice(new PostComplexData(complexDataRDFID));
+                    PostComplexData complexData = new PostComplexData(complexDataRDFID);
+                    //MaximumMegabytes
+                    if (in.getComplexData().isSetMaximumMegabytes()) {
+                        complexData.setMaxMegaBytes(in.getComplexData().getMaximumMegabytes());
+                    }
+                    //Default data combination
+                    {
+                        PostComplexDataCombination defaultCDC = new PostComplexDataCombination(new RDFID(IDGenerator.getInstance().generateID(EIDType.COMPLEXCOMBINATION).toString()));
+                        //Encoding
+                        if (in.getComplexData().getDefault().getFormat().isSetEncoding()) {
+                            String encoding = in.getComplexData().getDefault().getFormat().getEncoding();
+                            defaultCDC.setEncoding(encoding);
+                        }
+                        //MimeType
+                        String mimeType = in.getComplexData().getDefault().getFormat().getMimeType();
+                        defaultCDC.setMimeType(mimeType);
+                        //Schema
+                        if (in.getComplexData().getDefault().getFormat().isSetSchema()) {
+                            String schema = in.getComplexData().getDefault().getFormat().getSchema();
+                            defaultCDC.setSchema(schema);
+                        }
+                        complexData.setDefaultDataCombination(defaultCDC);
+                    }
+                    //Supported data combinations
+                    {
+                        ArrayList<PostComplexDataCombination> supportedList = new ArrayList<>();
+                        for (int j = 0; j < in.getComplexData().getSupported().getFormatArray().length; j++) {
+                            PostComplexDataCombination supportedCDC = new PostComplexDataCombination(new RDFID(IDGenerator.getInstance().generateID(EIDType.COMPLEXCOMBINATION).toString()));
+                            //Encoding
+                            if (in.getComplexData().getDefault().getFormat().isSetEncoding()) {
+                                String encoding = in.getComplexData().getSupported().getFormatArray(j).getEncoding();
+                                supportedCDC.setEncoding(encoding);
+                            }
+                            //MimeType
+                            String mimeType = in.getComplexData().getSupported().getFormatArray(j).getMimeType();
+                            supportedCDC.setMimeType(mimeType);
+                            //Schema
+                            if (in.getComplexData().getDefault().getFormat().isSetSchema()) {
+                                String schema = in.getComplexData().getSupported().getFormatArray(j).getSchema();
+                                supportedCDC.setSchema(schema);
+                            }
+                            supportedList.add(supportedCDC);
+                        }
+                        complexData.setSupportedDataCombinations(supportedList);
+                    }
+                    input.setPostInputFormChoice(complexData);
+
+
                 } else if (in.isSetBoundingBoxData()) {
                     RDFID boundingBoxDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.BOUNDINGBOX).toString());
                     input.setPostInputFormChoice(new PostBoundingBoxData(boundingBoxDataRDFID));
                 } else {
                     processIdx++;
-                    throw new ImportException("No data type set for input" + input.getIdentifier()+ " of process" +processIdentifier);
+                    throw new ImportException("No data type set for input" + input.getIdentifier() + " of process" + processIdentifier);
                 }
 
                 list.add(input);
@@ -271,7 +318,7 @@ public class WPSHarvester implements IWPSImportSource {
                             metaDataList.add(new URL(metaArr[j].getHref()));
                         } catch (MalformedURLException murle) {
                             processIdx++;
-                            throw new ImportException("Error on reading href attribute from metadata; href=" + metaArr[j].getHref()+" of process "+processIdentifier, murle);
+                            throw new ImportException("Error on reading href attribute from metadata; href=" + metaArr[j].getHref() + " of process " + processIdentifier, murle);
                         }
                     }
                     output.setMetadataList(metaDataList);
@@ -282,13 +329,56 @@ public class WPSHarvester implements IWPSImportSource {
                     output.setPostOutputFormChoice(new PostLiteralData(literalDataRDFID));
                 } else if (out.isSetComplexOutput()) {
                     RDFID complexDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.COMPLEX).toString());
-                    output.setPostOutputFormChoice(new PostComplexData(complexDataRDFID));
+                    
+                    PostComplexData complexData = new PostComplexData(complexDataRDFID);
+                    //Default data combination
+                    {
+                        PostComplexDataCombination defaultCDC = new PostComplexDataCombination(new RDFID(IDGenerator.getInstance().generateID(EIDType.COMPLEXCOMBINATION).toString()));
+                        //Encoding
+                        if (out.getComplexOutput().getDefault().getFormat().isSetEncoding()) {
+                            String encoding = out.getComplexOutput().getDefault().getFormat().getEncoding();
+                            defaultCDC.setEncoding(encoding);
+                        }
+                        //MimeType
+                        String mimeType = out.getComplexOutput().getDefault().getFormat().getMimeType();
+                        defaultCDC.setMimeType(mimeType);
+                        //Schema
+                        if (out.getComplexOutput().getDefault().getFormat().isSetSchema()) {
+                            String schema = out.getComplexOutput().getDefault().getFormat().getSchema();
+                            defaultCDC.setSchema(schema);
+                        }
+                        complexData.setDefaultDataCombination(defaultCDC);
+                    }
+                    //Supported data combinations
+                    {
+                        ArrayList<PostComplexDataCombination> supportedList = new ArrayList<>();
+                        for (int j = 0; j < out.getComplexOutput().getSupported().getFormatArray().length; j++) {
+                            PostComplexDataCombination supportedCDC = new PostComplexDataCombination(new RDFID(IDGenerator.getInstance().generateID(EIDType.COMPLEXCOMBINATION).toString()));
+                            //Encoding
+                            if (out.getComplexOutput().getDefault().getFormat().isSetEncoding()) {
+                                String encoding = out.getComplexOutput().getSupported().getFormatArray(j).getEncoding();
+                                supportedCDC.setEncoding(encoding);
+                            }
+                            //MimeType
+                            String mimeType = out.getComplexOutput().getSupported().getFormatArray(j).getMimeType();
+                            supportedCDC.setMimeType(mimeType);
+                            //Schema
+                            if (out.getComplexOutput().getDefault().getFormat().isSetSchema()) {
+                                String schema = out.getComplexOutput().getSupported().getFormatArray(j).getSchema();
+                                supportedCDC.setSchema(schema);
+                            }
+                            supportedList.add(supportedCDC);
+                        }
+                        complexData.setSupportedDataCombinations(supportedList);
+                    }
+                    output.setPostOutputFormChoice(complexData);
+                    
                 } else if (out.isSetBoundingBoxOutput()) {
                     RDFID boundingBoxDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.BOUNDINGBOX).toString());
                     output.setPostOutputFormChoice(new PostBoundingBoxData(boundingBoxDataRDFID));
                 } else {
                     processIdx++;
-                    throw new ImportException("No data type set for output" + output.getIdentifier()+" of process "+processIdentifier);
+                    throw new ImportException("No data type set for output" + output.getIdentifier() + " of process " + processIdentifier);
                 }
 
                 list.add(output);
@@ -307,8 +397,15 @@ public class WPSHarvester implements IWPSImportSource {
                 RDFResource r = ((PostLiteralData) piaof).toRDFResource();
                 builder.addResource(r);
             } else if (piaof.getDataType() == PostInAndOutputForm.COMPLEX_TYPE) {
-                RDFResource r = ((PostComplexData) piaof).toRDFResource();
+                PostComplexData complex = (PostComplexData) piaof;
+                RDFResource r = complex.toRDFResource();
                 builder.addResource(r);
+                r = complex.getDefaultDataCombination().toRDFResource();
+                builder.addResource(r);
+                for(PostComplexDataCombination pcdc : complex.getSupportedDataCombinations()){
+                    r = pcdc.toRDFResource();
+                    builder.addResource(r);
+                }
             } else {
                 RDFResource r = ((PostBoundingBoxData) piaof).toRDFResource();
                 builder.addResource(r);
@@ -321,8 +418,15 @@ public class WPSHarvester implements IWPSImportSource {
                 RDFResource r = ((PostLiteralData) piaof).toRDFResource();
                 builder.addResource(r);
             } else if (piaof.getDataType() == PostInAndOutputForm.COMPLEX_TYPE) {
-                RDFResource r = ((PostComplexData) piaof).toRDFResource();
+                PostComplexData complex = (PostComplexData) piaof;
+                RDFResource r = complex.toRDFResource();
                 builder.addResource(r);
+                r = complex.getDefaultDataCombination().toRDFResource();
+                builder.addResource(r);
+                for(PostComplexDataCombination pcdc : complex.getSupportedDataCombinations()){
+                    r = pcdc.toRDFResource();
+                    builder.addResource(r);
+                }
             } else {
                 RDFResource r = ((PostBoundingBoxData) piaof).toRDFResource();
                 builder.addResource(r);
@@ -334,9 +438,9 @@ public class WPSHarvester implements IWPSImportSource {
             xmlRDF = builder.toXMLRDF();
         } catch (Exception ex) {
             processIdx++;
-            throw new ImportException("Unable to bilt XMLRDF doc for process "+processIdentifier, ex);
+            throw new ImportException("Unable to build XMLRDF doc for process " + processIdentifier, ex);
         }
-        Logger.getLogger(WPSHarvester.class).info("Request process information for process "+processIdentifier+ " of WPS "+targetURL+ " successfully");
+        Logger.getLogger(WPSHarvester.class).info("Request process information for process " + processIdentifier + " of WPS " + targetURL + " successfully");
         processIdx++;
         return xmlRDF;
     }
@@ -349,25 +453,24 @@ public class WPSHarvester implements IWPSImportSource {
 
     private CapabilitiesDocument requestCapabilities(String url) throws WPSClientException {
         WPSClientSession wpsClient = WPSClientSession.getInstance();
-        if(wpsClient.connect(url)){
+        if (wpsClient.connect(url)) {
             CapabilitiesDocument capsDoc = wpsClient.getWPSCaps(url);
             WPSClientSession.reset();
             return capsDoc;
         }
-        throw new WPSClientException("Cannot connect to server at "+url);
+        throw new WPSClientException("Cannot connect to server at " + url);
     }
 
     private ProcessDescriptionType requestDescribeProcess(String url, String processID) throws IOException, WPSClientException {
         WPSClientSession wpsClient = WPSClientSession.getInstance();
-        if(wpsClient.connect(url)){
+        if (wpsClient.connect(url)) {
             ProcessDescriptionType processDescription = wpsClient.getProcessDescription(url, processID);
             WPSClientSession.reset();
             return processDescription;
         }
-        throw new WPSClientException("Cannot connect to server at "+url);
+        throw new WPSClientException("Cannot connect to server at " + url);
     }
-    
-    
+
     /**
      * Issues a GET request to the given URL to test whether the server is
      * listening on it
@@ -376,7 +479,7 @@ public class WPSHarvester implements IWPSImportSource {
      * @return true if URL available
      */
     private boolean checkURL(String url) {
-        try{
+        try {
             //System.out.println("uri: " + url);
             Client client = ClientBuilder.newClient();
             client.property(ClientProperties.CONNECT_TIMEOUT, 5000);
@@ -387,22 +490,21 @@ public class WPSHarvester implements IWPSImportSource {
             invocationBuilder.accept("application/xml+rdf");
 
             Response response = invocationBuilder.get();
-            if(response.getStatus() == 405)
+            if (response.getStatus() == 405) {
                 return true;
-            else if(response.getStatus() == 200)
+            } else if (response.getStatus() == 200) {
                 return true;
-            else
+            } else {
                 return false;
-        }catch(Exception e){
+            }
+        } catch (Exception e) {
             return false;
         }
-        
+
     }
-    
-    
 
     @Override
     public String getInfo() {
-        return "WPS Harvester, target WPS at "+targetURL;
+        return "WPS Harvester, target WPS at " + targetURL;
     }
 }

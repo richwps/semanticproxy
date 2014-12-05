@@ -60,6 +60,14 @@ public class Vocabulary {
     public static String InputFormChoice = null;
     //output
     public static String OutputFormChoice = null;
+    //complex data
+    public static String MaximumMegabytes = null;
+    public static String DefaultComplexDataCombination = null;
+    public static String SupportedComplexDataCombination = null;
+    //ComplexDataCombinationType
+    public static String Encoding = null;
+    public static String MimeType = null;
+    public static String Schema = null;
     //QoSTarget
     public static String Ideal = null;
     public static String UOM = null;
@@ -82,10 +90,12 @@ public class Vocabulary {
     public static String ComplexDataClass = null;
     public static String LiteralDataClass = null;
     public static String BoundingBoxDataClass = null;
-    private static String RDF_XML_Representation = null;
+    public static String ComplexDataCombinationClass = null;
     public static String WFSClass = null;
     public static String FeatureTypeClass = null;
     public static String QoSTargetClass = null;
+    
+    private static String RDF_XML_Representation = null;
 
     /**
      * Initializes the vocabulary resources with the specified URL
@@ -191,6 +201,28 @@ public class Vocabulary {
             stmt = new StatementImpl(new URIImpl(OutputFormChoice), new URIImpl(Label), new LiteralImpl("OutputFormChoice"));
             writer.handleStatement(stmt);
             
+            //complex
+            MaximumMegabytes = VOC + "maximummegabytes";
+            stmt = new StatementImpl(new URIImpl(MaximumMegabytes), new URIImpl(Label), new LiteralImpl("MaximumMegaBytes"));
+            writer.handleStatement(stmt);
+            DefaultComplexDataCombination = VOC + "defaultcomplexdatacombination";
+            stmt = new StatementImpl(new URIImpl(DefaultComplexDataCombination), new URIImpl(Label), new LiteralImpl("DefaultComplexDataCombination"));
+            writer.handleStatement(stmt);
+            SupportedComplexDataCombination = VOC + "supportedcomplexdatacombination";
+            stmt = new StatementImpl(new URIImpl(SupportedComplexDataCombination), new URIImpl(Label), new LiteralImpl("SupportedComplexDataCombination"));
+            writer.handleStatement(stmt);
+            
+            //ComplexDataCombination
+            Encoding = VOC + "encoding";
+            stmt = new StatementImpl(new URIImpl(Encoding), new URIImpl(Label), new LiteralImpl("Encoding"));
+            writer.handleStatement(stmt);
+            MimeType = VOC + "mimetype";
+            stmt = new StatementImpl(new URIImpl(MimeType), new URIImpl(Label), new LiteralImpl("MimeType"));
+            writer.handleStatement(stmt);
+            Schema = VOC + "schema";
+            stmt = new StatementImpl(new URIImpl(Schema), new URIImpl(Label), new LiteralImpl("Schema"));
+            writer.handleStatement(stmt);
+            
             //QoSTarget
             Ideal = VOC + "ideal";
             stmt = new StatementImpl(new URIImpl(Ideal), new URIImpl(Label), new LiteralImpl("has ideal value"));
@@ -262,6 +294,11 @@ public class Vocabulary {
             stmt = new StatementImpl(new URIImpl(BoundingBoxDataClass), new URIImpl(Type), new URIImpl(SchemaClass));
             writer.handleStatement(stmt);
             stmt = new StatementImpl(new URIImpl(BoundingBoxDataClass), new URIImpl(Label), new LiteralImpl("BoundingBox data"));
+            writer.handleStatement(stmt);
+            ComplexDataCombinationClass = VOC + "complexdatacombinationclass";
+            stmt = new StatementImpl(new URIImpl(ComplexDataCombinationClass), new URIImpl(Type), new URIImpl(SchemaClass));
+            writer.handleStatement(stmt);
+            stmt = new StatementImpl(new URIImpl(ComplexDataCombinationClass), new URIImpl(Label), new LiteralImpl("ComplexDataCombinationClass"));
             writer.handleStatement(stmt);
             WFSClass = VOC + "wfsclass";
             stmt = new StatementImpl(new URIImpl(WFSClass), new URIImpl(Type), new URIImpl(SchemaClass));

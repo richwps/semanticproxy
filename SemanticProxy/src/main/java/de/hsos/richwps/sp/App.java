@@ -68,8 +68,8 @@ public class App {
                 config.getProcessNamingEndpoint(), config.getInputNamingEndpoint(),
                 config.getOutputNamingEndpoint(), config.getLiteralNamingEndpoint(),
                 config.getComplexNamingEndpoint(), config.getBoundingBoxNamingEndpoint(),
-                config.getWfsNamingEndpoint(), config.getFeatureTypeNamingEndpoint(),
-                config.getQosNamingEndpoint());
+                config.getComplexDataCombinationNaming(),config.getWfsNamingEndpoint(), 
+                config.getFeatureTypeNamingEndpoint(), config.getQosNamingEndpoint());
 
 
         //Prepare db
@@ -172,7 +172,7 @@ public class App {
             IWPSImportSource harvester = new WPSHarvester(target);
             sourceList.add(harvester);
         }
-       
+
 
         //loop through importers and import data
         for (IWPSImportSource source : sourceList) {
@@ -185,6 +185,7 @@ public class App {
                 } catch (ImportException e) {
                     Logger.getLogger(App.class).warn(e.getClass() + "Aborted reading a WPS of " + source.getInfo(), e);
                     System.err.println("[WARN] Aborted reading a WPS of " + source.getInfo());
+                    continue;
                 }
                 if (rdf != null) {
                     try {
@@ -206,6 +207,7 @@ public class App {
                 } catch (ImportException e) {
                     Logger.getLogger(App.class).warn("Aborted reading a process of " + source.getInfo(), e);
                     System.err.println("[WARN] Aborted reading a process of " + source.getInfo());
+                    continue;
                 }
                 if (rdf != null) {
                     try {
@@ -233,12 +235,12 @@ public class App {
 
 
         //configure WFS harvester
-  
+
         for (URL target : config.getWfsServers()) {
             IWFSImportSource harvester = new WFSHarvester(target);
             sourceList.add(harvester);
         }
-        
+
 
         for (IWFSImportSource source : sourceList) {
 

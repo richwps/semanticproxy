@@ -64,6 +64,7 @@ public class Configuration {
     private URL literalNamingEndpoint = null;
     private URL complexNamingEndpoint = null;
     private URL boundingBoxNamingEndpoint = null;
+    private URL complexDataCombinationNaming = null;
     private URL wfsNamingEndpoint = null;
     private URL featureTypeNamingEndpoint = null;
     private URL qosNamingEndpoint = null;
@@ -107,6 +108,7 @@ public class Configuration {
     private String defaultLiteralNamingEndpoint = null;
     private String defaultComplexNamingEndpoint = null;
     private String defaultBoundingBoxNamingEndpoint = null;
+    private String defaultComplexDataCombinationNaming = null;
     private String defaultWFSNamingEndpoint = null;
     private String defaultFeatureTypeNamingEndpoint = null;
     private String defaultQoSNamingEndpoint = null;
@@ -162,6 +164,7 @@ public class Configuration {
         defaultLiteralNamingEndpoint = "literal";
         defaultComplexNamingEndpoint = "complex";
         defaultBoundingBoxNamingEndpoint = "boundingbox";
+        defaultComplexDataCombinationNaming = "complexdatacombination";
         defaultWFSNamingEndpoint = "wfs";
         defaultFeatureTypeNamingEndpoint = "featuretype";
         defaultQoSNamingEndpoint = "qos";
@@ -258,6 +261,7 @@ public class Configuration {
         literalNamingEndpoint = new URL(resourcesURL.toString() + "/" + tmpRDFNamingEndpoints.getLiteralNaming());
         complexNamingEndpoint = new URL(resourcesURL.toString() + "/" + tmpRDFNamingEndpoints.getComplexNaming());
         boundingBoxNamingEndpoint = new URL(resourcesURL.toString() + "/" + tmpRDFNamingEndpoints.getBoundingBoxNaming());
+        complexDataCombinationNaming = new URL(resourcesURL.toString() + "/" + tmpRDFNamingEndpoints.getComplexDataCombinationNaming());
         wfsNamingEndpoint = new URL(resourcesURL.toString() + "/" + tmpRDFNamingEndpoints.getWFSNaming());
         featureTypeNamingEndpoint = new URL(resourcesURL.toString() + "/" + tmpRDFNamingEndpoints.getFeatureTypeNaming());
         qosNamingEndpoint = new URL(resourcesURL.toString() + "/" + tmpRDFNamingEndpoints.getQoSNaming());
@@ -373,6 +377,7 @@ public class Configuration {
         tmpRDFNamingEndpoints.setLiteralNaming(defaultLiteralNamingEndpoint);
         tmpRDFNamingEndpoints.setComplexNaming(defaultComplexNamingEndpoint);
         tmpRDFNamingEndpoints.setBoundingBoxNaming(defaultBoundingBoxNamingEndpoint);
+        tmpRDFNamingEndpoints.setComplexDataCombinationNaming(defaultComplexDataCombinationNaming);
         tmpRDFNamingEndpoints.setWFSNaming(defaultWFSNamingEndpoint);
         tmpRDFNamingEndpoints.setFeatureTypeNaming(defaultFeatureTypeNamingEndpoint);
         tmpRDFNamingEndpoints.setQoSNaming(defaultQoSNamingEndpoint);
@@ -506,6 +511,11 @@ public class Configuration {
     public URL getQosNamingEndpoint() {
         return qosNamingEndpoint;
     }
+
+    public URL getComplexDataCombinationNaming() {
+        return complexDataCombinationNaming;
+    }
+    
     
     
 
@@ -551,6 +561,7 @@ public class Configuration {
         ret += "Liter naming ep: " + literalNamingEndpoint.toString() + "\n";
         ret += "Compl naming ep: " + complexNamingEndpoint.toString() + "\n";
         ret += "BBox naming ep:  " + boundingBoxNamingEndpoint.toString() + "\n";
+        ret += "CDC naming ep:   " + complexDataCombinationNaming.toString() + "\n";
         ret += "WFS naming ep:   " + wfsNamingEndpoint.toString() + "\n";
         ret += "FeatTy naming ep:" + featureTypeNamingEndpoint.toString() + "\n";
         ret += "QoS naming ep:   " + qosNamingEndpoint.toString();

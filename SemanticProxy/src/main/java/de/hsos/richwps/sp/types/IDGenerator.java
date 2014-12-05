@@ -31,6 +31,7 @@ public class IDGenerator {
     private static URL literalNamingURL = null;
     private static URL complexNamingURL = null;
     private static URL boundingboxNamingURL = null;
+    private static URL complexCombinationNamingURL = null;
     private static URL wfsNamingURL = null;
     private static URL featureTypeNamingURL = null;
     private static URL qosNamingURL = null;
@@ -41,6 +42,7 @@ public class IDGenerator {
     private long literalCnt = 0;
     private long complexCnt = 0;
     private long boundingBoxCnt = 0;
+    private long complexCombinationCnt = 0;
     private long wfsCnt = 0;
     private long featureTypeCnt = 0;
     private long qosCnt = 0;
@@ -57,6 +59,7 @@ public class IDGenerator {
         literalCnt = millies;
         complexCnt = millies;
         boundingBoxCnt = millies;
+        complexCombinationCnt = millies;
         wfsCnt = millies;
         featureTypeCnt = millies;
         qosCnt = millies;
@@ -76,8 +79,9 @@ public class IDGenerator {
     public static void configure(URL aWpsNamingURL, URL aProcessNamingURL,
             URL aInputNamingURL, URL aOutputNamingURL,
             URL aLiteralNamingURL, URL aComplexNamingURL,
-            URL aBoundingboxNamingURL, URL aWFSNamingURL,
-            URL aFeatureTypeNamingURL, URL aQoSNamingURL) {
+            URL aBoundingboxNamingURL, URL aComplexDataCombinationURL,
+            URL aWFSNamingURL, URL aFeatureTypeNamingURL,
+            URL aQoSNamingURL) {
         if (!configured) {
             wpsNamingURL = aWpsNamingURL;
             processNamingURL = aProcessNamingURL;
@@ -86,6 +90,7 @@ public class IDGenerator {
             literalNamingURL = aLiteralNamingURL;
             complexNamingURL = aComplexNamingURL;
             boundingboxNamingURL = aBoundingboxNamingURL;
+            complexCombinationNamingURL = aComplexDataCombinationURL; 
             wfsNamingURL = aWFSNamingURL;
             featureTypeNamingURL = aFeatureTypeNamingURL;
             qosNamingURL = aQoSNamingURL;
@@ -141,6 +146,9 @@ public class IDGenerator {
             } else if (t == EIDType.BOUNDINGBOX) {
                 retVal = new URL(boundingboxNamingURL + "/" + boundingBoxCnt);
                 boundingBoxCnt++;
+            } else if (t == EIDType.COMPLEXCOMBINATION) {
+                retVal = new URL(complexCombinationNamingURL + "/" + complexCombinationCnt);
+                complexCombinationCnt++;
             } else if (t == EIDType.WFS) {
                 retVal = new URL(wfsNamingURL + "/" + wfsCnt);
                 wfsCnt++;
