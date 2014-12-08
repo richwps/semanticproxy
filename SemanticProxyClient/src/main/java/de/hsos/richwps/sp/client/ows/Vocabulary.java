@@ -23,7 +23,7 @@ import org.openrdf.rio.Rio;
  */
 public class Vocabulary {
 
-   private static final String RDF = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+    private static final String RDF = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
     private static final String RDFS = "http://www.w3.org/2000/01/rdf-schema#";
     public static String VOC = "http://localhost:4567/semanticproxy/resources/vocab#";
     //predicate ids
@@ -62,8 +62,8 @@ public class Vocabulary {
     public static String OutputFormChoice = null;
     //complex data
     public static String MaximumMegabytes = null;
-    public static String DefaultFormat = null;
-    public static String SupportedFormats = null;
+    public static String DefaultComplexDataCombination = null;
+    public static String SupportedComplexDataCombination = null;
     //ComplexDataCombinationType
     public static String Encoding = null;
     public static String MimeType = null;
@@ -205,22 +205,22 @@ public class Vocabulary {
             MaximumMegabytes = VOC + "maximummegabytes";
             stmt = new StatementImpl(new URIImpl(MaximumMegabytes), new URIImpl(Label), new LiteralImpl("MaximumMegaBytes"));
             writer.handleStatement(stmt);
-            DefaultFormat = VOC + "defaultformat";
-            stmt = new StatementImpl(new URIImpl(DefaultFormat), new URIImpl(Label), new LiteralImpl("has default format"));
+            DefaultComplexDataCombination = VOC + "defaultcomplexdatacombination";
+            stmt = new StatementImpl(new URIImpl(DefaultComplexDataCombination), new URIImpl(Label), new LiteralImpl("DefaultComplexDataCombination"));
             writer.handleStatement(stmt);
-            SupportedFormats = VOC + "supportedformats";
-            stmt = new StatementImpl(new URIImpl(SupportedFormats), new URIImpl(Label), new LiteralImpl("supports formats"));
+            SupportedComplexDataCombination = VOC + "supportedcomplexdatacombination";
+            stmt = new StatementImpl(new URIImpl(SupportedComplexDataCombination), new URIImpl(Label), new LiteralImpl("SupportedComplexDataCombination"));
             writer.handleStatement(stmt);
             
             //ComplexDataCombination
             Encoding = VOC + "encoding";
-            stmt = new StatementImpl(new URIImpl(Encoding), new URIImpl(Label), new LiteralImpl("uses encoding"));
+            stmt = new StatementImpl(new URIImpl(Encoding), new URIImpl(Label), new LiteralImpl("Encoding"));
             writer.handleStatement(stmt);
             MimeType = VOC + "mimetype";
-            stmt = new StatementImpl(new URIImpl(MimeType), new URIImpl(Label), new LiteralImpl("has mimetype"));
+            stmt = new StatementImpl(new URIImpl(MimeType), new URIImpl(Label), new LiteralImpl("MimeType"));
             writer.handleStatement(stmt);
             Schema = VOC + "schema";
-            stmt = new StatementImpl(new URIImpl(Schema), new URIImpl(Label), new LiteralImpl("has schema"));
+            stmt = new StatementImpl(new URIImpl(Schema), new URIImpl(Label), new LiteralImpl("Schema"));
             writer.handleStatement(stmt);
             
             //QoSTarget
