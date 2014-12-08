@@ -17,7 +17,7 @@ import org.openrdf.rio.RDFWriter;
 import org.openrdf.rio.Rio;
 
 /**
- * Contains various definitions for vocabulary integrity
+ * Contains various definitions for vocabulary integrity 
  *
  * @author fbensman
  */
@@ -62,8 +62,8 @@ public class Vocabulary {
     public static String OutputFormChoice = null;
     //complex data
     public static String MaximumMegabytes = null;
-    public static String DefaultComplexDataCombination = null;
-    public static String SupportedComplexDataCombination = null;
+    public static String DefaultFormat = null;
+    public static String SupportedFormats = null;
     //ComplexDataCombinationType
     public static String Encoding = null;
     public static String MimeType = null;
@@ -205,11 +205,11 @@ public class Vocabulary {
             MaximumMegabytes = VOC + "maximummegabytes";
             stmt = new StatementImpl(new URIImpl(MaximumMegabytes), new URIImpl(Label), new LiteralImpl("MaximumMegaBytes"));
             writer.handleStatement(stmt);
-            DefaultComplexDataCombination = VOC + "defaultcomplexdatacombination";
-            stmt = new StatementImpl(new URIImpl(DefaultComplexDataCombination), new URIImpl(Label), new LiteralImpl("DefaultComplexDataCombination"));
+            DefaultFormat = VOC + "defaultformat";
+            stmt = new StatementImpl(new URIImpl(DefaultFormat), new URIImpl(Label), new LiteralImpl("has default format"));
             writer.handleStatement(stmt);
-            SupportedComplexDataCombination = VOC + "supportedcomplexdatacombination";
-            stmt = new StatementImpl(new URIImpl(SupportedComplexDataCombination), new URIImpl(Label), new LiteralImpl("SupportedComplexDataCombination"));
+            SupportedFormats = VOC + "supportedformats";
+            stmt = new StatementImpl(new URIImpl(SupportedFormats), new URIImpl(Label), new LiteralImpl("supports formats"));
             writer.handleStatement(stmt);
             
             //ComplexDataCombination

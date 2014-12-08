@@ -21,8 +21,8 @@ import java.util.ArrayList;
 public class PostComplexData extends PostInAndOutputForm {
 
     private BigInteger maxMegaBytes = null;
-    private PostComplexDataCombination defaultDataCombination = null;
-    private ArrayList<PostComplexDataCombination> supportedDataCombinations = null;
+    private PostComplexDataCombination defaultFormat = null;
+    private ArrayList<PostComplexDataCombination> supportedFormats = null;
     
     
     
@@ -44,21 +44,23 @@ public class PostComplexData extends PostInAndOutputForm {
         this.maxMegaBytes = maxMegaBytes;
     }
 
-    public PostComplexDataCombination getDefaultDataCombination() {
-        return defaultDataCombination;
+    public PostComplexDataCombination getDefaultFormat() {
+        return defaultFormat;
     }
 
-    public void setDefaultDataCombination(PostComplexDataCombination defaultDataCombination) {
-        this.defaultDataCombination = defaultDataCombination;
+    public void setDefaultFormat(PostComplexDataCombination defaultFormat) {
+        this.defaultFormat = defaultFormat;
     }
 
-    public ArrayList<PostComplexDataCombination> getSupportedDataCombinations() {
-        return supportedDataCombinations;
+    public ArrayList<PostComplexDataCombination> getSupportedFormats() {
+        return supportedFormats;
     }
 
-    public void setSupportedDataCombinations(ArrayList<PostComplexDataCombination> supportedDataCombinations) {
-        this.supportedDataCombinations = supportedDataCombinations;
+    public void setSupportedFormats(ArrayList<PostComplexDataCombination> supportedFormats) {
+        this.supportedFormats = supportedFormats;
     }
+
+   
 
 
     
@@ -81,17 +83,17 @@ public class PostComplexData extends PostInAndOutputForm {
         ResourceExpression rexp = new ResourceExpression(Vocabulary.Type, new RDFID(Vocabulary.ComplexDataClass));
         rexpList.add(rexp);
         
-        if(defaultDataCombination != null ){
-            rexp = new ResourceExpression(Vocabulary.DefaultComplexDataCombination, defaultDataCombination.getRdfId());
+        if(defaultFormat != null ){
+            rexp = new ResourceExpression(Vocabulary.DefaultFormat, defaultFormat.getRdfId());
             rexpList.add(rexp);
         }
         else{
             throw new NullPointerException("Default data combination must not be null");
         }
         
-        if(supportedDataCombinations != null){
-            for(PostComplexDataCombination com : supportedDataCombinations){
-                rexp = new ResourceExpression(Vocabulary.SupportedComplexDataCombination, com.getRdfId());
+        if(supportedFormats != null){
+            for(PostComplexDataCombination com : supportedFormats){
+                rexp = new ResourceExpression(Vocabulary.SupportedFormats, com.getRdfId());
                 rexpList.add(rexp);
             }
         }

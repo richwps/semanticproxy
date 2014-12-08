@@ -13,7 +13,6 @@ import de.hsos.richwps.sp.client.rdf.RDFID;
 import de.hsos.richwps.sp.client.rdf.RDFResource;
 import de.hsos.richwps.sp.client.rdf.ResourceExpression;
 import de.hsos.richwps.sp.client.ows.Vocabulary;
-import de.hsos.richwps.sp.client.ows.gettypes.ComplexDataCombination;
 import de.hsos.richwps.sp.client.rdf.LiteralExpression;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
@@ -92,7 +91,7 @@ public class PostComplexData extends PostInAndOutputForm {
         rexpList.add(rexp);
         
         if(defaultFormat != null ){
-            rexp = new ResourceExpression(Vocabulary.DefaultComplexDataCombination, defaultFormat.getRdfId());
+            rexp = new ResourceExpression(Vocabulary.DefaultFormat, defaultFormat.getRdfId());
             rexpList.add(rexp);
         }
         else{
@@ -101,7 +100,7 @@ public class PostComplexData extends PostInAndOutputForm {
         
         if(supportedFormats != null){
             for(PostComplexDataCombination com : supportedFormats){
-                rexp = new ResourceExpression(Vocabulary.SupportedComplexDataCombination, com.getRdfId());
+                rexp = new ResourceExpression(Vocabulary.SupportedFormats, com.getRdfId());
                 rexpList.add(rexp);
             }
         }

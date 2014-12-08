@@ -185,205 +185,209 @@ public class WPSHarvester implements IWPSImportSource {
         //input list
         {
             ProcessDescriptionType.DataInputs inputs = pdType.getDataInputs();
-            InputDescriptionType[] idTypeArr = inputs.getInputArray();
-            ArrayList<PostInput> list = new ArrayList<>();
-            for (int i = 0; i < idTypeArr.length; i++) {
-                InputDescriptionType in = idTypeArr[i];
-                RDFID inputID = new RDFID(IDGenerator.getInstance().generateID(EIDType.INPUT).toString());
-                PostInput input = new PostInput(inputID);
-                //Identifier
-                input.setIdentifier(in.getIdentifier().getStringValue());
-                //Title
-                input.setTitle(in.getTitle().getStringValue());
-                //Abstract
-                if (in.isSetAbstract()) {
-                    input.setBstract(in.getAbstract().getStringValue());
-                }
-                //Occs
-                input.setMinOcc(in.getMinOccurs().intValue());
-                input.setMaxOcc(in.getMaxOccurs().intValue());
-
-                //Metadata
-                {
-                    MetadataType[] metaArr = in.getMetadataArray();
-                    ArrayList<URL> metaDataList = new ArrayList<>();
-
-                    for (int j = 0; j < metaArr.length; j++) {
-                        System.out.println("Test output metadata about: " + metaArr[j].getAbout());
-                        System.out.println("Test output metadata title: " + metaArr[j].getTitle());
-                        try {
-                            metaDataList.add(new URL(metaArr[j].getHref()));
-                        } catch (MalformedURLException murle) {
-                            processIdx++;
-                            throw new ImportException("Error on reading href attribute from metadata; href=" + metaArr[j].getHref() + " of process " + processIdentifier, murle);
-                        }
+            if(inputs != null){ 
+                InputDescriptionType[] idTypeArr = inputs.getInputArray();
+                ArrayList<PostInput> list = new ArrayList<>();
+                for (int i = 0; i < idTypeArr.length; i++) {
+                    InputDescriptionType in = idTypeArr[i];
+                    RDFID inputID = new RDFID(IDGenerator.getInstance().generateID(EIDType.INPUT).toString());
+                    PostInput input = new PostInput(inputID);
+                    //Identifier
+                    input.setIdentifier(in.getIdentifier().getStringValue());
+                    //Title
+                    input.setTitle(in.getTitle().getStringValue());
+                    //Abstract
+                    if (in.isSetAbstract()) {
+                        input.setBstract(in.getAbstract().getStringValue());
                     }
-                    input.setMetadataList(metaDataList);
-                }
+                    //Occs
+                    input.setMinOcc(in.getMinOccurs().intValue());
+                    input.setMaxOcc(in.getMaxOccurs().intValue());
 
-                //Datatype (Literal, Complex or BoundingBox)
-                if (in.isSetLiteralData()) {
-                    RDFID literalDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.LITERAL).toString());
-                    input.setPostInputFormChoice(new PostLiteralData(literalDataRDFID));
-                } else if (in.isSetComplexData()) {
-                    RDFID complexDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.COMPLEX).toString());
-                    PostComplexData complexData = new PostComplexData(complexDataRDFID);
-                    //MaximumMegabytes
-                    if (in.getComplexData().isSetMaximumMegabytes()) {
-                        complexData.setMaxMegaBytes(in.getComplexData().getMaximumMegabytes());
-                    }
-                    //Default data combination
+                    //Metadata
                     {
-                        PostComplexDataCombination defaultCDC = new PostComplexDataCombination(new RDFID(IDGenerator.getInstance().generateID(EIDType.COMPLEXCOMBINATION).toString()));
-                        //Encoding
-                        if (in.getComplexData().getDefault().getFormat().isSetEncoding()) {
-                            String encoding = in.getComplexData().getDefault().getFormat().getEncoding();
-                            defaultCDC.setEncoding(encoding);
+                        MetadataType[] metaArr = in.getMetadataArray();
+                        ArrayList<URL> metaDataList = new ArrayList<>();
+
+                        for (int j = 0; j < metaArr.length; j++) {
+                            System.out.println("Test output metadata about: " + metaArr[j].getAbout());
+                            System.out.println("Test output metadata title: " + metaArr[j].getTitle());
+                            try {
+                                metaDataList.add(new URL(metaArr[j].getHref()));
+                            } catch (MalformedURLException murle) {
+                                processIdx++;
+                                throw new ImportException("Error on reading href attribute from metadata; href=" + metaArr[j].getHref() + " of process " + processIdentifier, murle);
+                            }
                         }
-                        //MimeType
-                        String mimeType = in.getComplexData().getDefault().getFormat().getMimeType();
-                        defaultCDC.setMimeType(mimeType);
-                        //Schema
-                        if (in.getComplexData().getDefault().getFormat().isSetSchema()) {
-                            String schema = in.getComplexData().getDefault().getFormat().getSchema();
-                            defaultCDC.setSchema(schema);
-                        }
-                        complexData.setDefaultDataCombination(defaultCDC);
+                        input.setMetadataList(metaDataList);
                     }
-                    //Supported data combinations
-                    {
-                        ArrayList<PostComplexDataCombination> supportedList = new ArrayList<>();
-                        for (int j = 0; j < in.getComplexData().getSupported().getFormatArray().length; j++) {
-                            PostComplexDataCombination supportedCDC = new PostComplexDataCombination(new RDFID(IDGenerator.getInstance().generateID(EIDType.COMPLEXCOMBINATION).toString()));
+
+                    //Datatype (Literal, Complex or BoundingBox)
+                    if (in.isSetLiteralData()) {
+                        RDFID literalDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.LITERAL).toString());
+                        input.setPostInputFormChoice(new PostLiteralData(literalDataRDFID));
+                    } else if (in.isSetComplexData()) {
+                        RDFID complexDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.COMPLEX).toString());
+                        PostComplexData complexData = new PostComplexData(complexDataRDFID);
+                        //MaximumMegabytes
+                        if (in.getComplexData().isSetMaximumMegabytes()) {
+                            complexData.setMaxMegaBytes(in.getComplexData().getMaximumMegabytes());
+                        }
+                        //Default data combination
+                        {
+                            PostComplexDataCombination defaultCDC = new PostComplexDataCombination(new RDFID(IDGenerator.getInstance().generateID(EIDType.COMPLEXCOMBINATION).toString()));
                             //Encoding
                             if (in.getComplexData().getDefault().getFormat().isSetEncoding()) {
-                                String encoding = in.getComplexData().getSupported().getFormatArray(j).getEncoding();
-                                supportedCDC.setEncoding(encoding);
+                                String encoding = in.getComplexData().getDefault().getFormat().getEncoding();
+                                defaultCDC.setEncoding(encoding);
                             }
                             //MimeType
-                            String mimeType = in.getComplexData().getSupported().getFormatArray(j).getMimeType();
-                            supportedCDC.setMimeType(mimeType);
+                            String mimeType = in.getComplexData().getDefault().getFormat().getMimeType();
+                            defaultCDC.setMimeType(mimeType);
                             //Schema
                             if (in.getComplexData().getDefault().getFormat().isSetSchema()) {
-                                String schema = in.getComplexData().getSupported().getFormatArray(j).getSchema();
-                                supportedCDC.setSchema(schema);
+                                String schema = in.getComplexData().getDefault().getFormat().getSchema();
+                                defaultCDC.setSchema(schema);
                             }
-                            supportedList.add(supportedCDC);
+                            complexData.setDefaultFormat(defaultCDC);
                         }
-                        complexData.setSupportedDataCombinations(supportedList);
+                        //Supported data combinations
+                        {
+                            ArrayList<PostComplexDataCombination> supportedList = new ArrayList<>();
+                            for (int j = 0; j < in.getComplexData().getSupported().getFormatArray().length; j++) {
+                                PostComplexDataCombination supportedCDC = new PostComplexDataCombination(new RDFID(IDGenerator.getInstance().generateID(EIDType.COMPLEXCOMBINATION).toString()));
+                                //Encoding
+                                if (in.getComplexData().getDefault().getFormat().isSetEncoding()) {
+                                    String encoding = in.getComplexData().getSupported().getFormatArray(j).getEncoding();
+                                    supportedCDC.setEncoding(encoding);
+                                }
+                                //MimeType
+                                String mimeType = in.getComplexData().getSupported().getFormatArray(j).getMimeType();
+                                supportedCDC.setMimeType(mimeType);
+                                //Schema
+                                if (in.getComplexData().getDefault().getFormat().isSetSchema()) {
+                                    String schema = in.getComplexData().getSupported().getFormatArray(j).getSchema();
+                                    supportedCDC.setSchema(schema);
+                                }
+                                supportedList.add(supportedCDC);
+                            }
+                            complexData.setSupportedFormats(supportedList);
+                        }
+                        input.setPostInputFormChoice(complexData);
+
+
+                    } else if (in.isSetBoundingBoxData()) {
+                        RDFID boundingBoxDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.BOUNDINGBOX).toString());
+                        input.setPostInputFormChoice(new PostBoundingBoxData(boundingBoxDataRDFID));
+                    } else {
+                        processIdx++;
+                        throw new ImportException("No data type set for input" + input.getIdentifier() + " of process" + processIdentifier);
                     }
-                    input.setPostInputFormChoice(complexData);
 
-
-                } else if (in.isSetBoundingBoxData()) {
-                    RDFID boundingBoxDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.BOUNDINGBOX).toString());
-                    input.setPostInputFormChoice(new PostBoundingBoxData(boundingBoxDataRDFID));
-                } else {
-                    processIdx++;
-                    throw new ImportException("No data type set for input" + input.getIdentifier() + " of process" + processIdentifier);
+                    list.add(input);
                 }
-
-                list.add(input);
+                process.setInputs(list);
             }
-            process.setInputs(list);
         }
 
 
         //output list
         {
             ProcessDescriptionType.ProcessOutputs outputs = pdType.getProcessOutputs();
-            OutputDescriptionType[] idTypeArr = outputs.getOutputArray();
-            ArrayList<PostOutput> list = new ArrayList<>();
-            for (int i = 0; i < idTypeArr.length; i++) {
-                OutputDescriptionType out = idTypeArr[i];
-                RDFID outputRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.OUTPUT).toString());
-                PostOutput output = new PostOutput(outputRDFID);
-                //Identifier
-                output.setIdentifier(out.getIdentifier().getStringValue());
-                //Title
-                output.setTitle(out.getTitle().getStringValue());
-                //Abstract
-                if (out.isSetAbstract()) {
-                    output.setBstract(out.getAbstract().getStringValue());
-                }
-                //Metadata
-                {
-                    MetadataType[] metaArr = out.getMetadataArray();
-                    ArrayList<URL> metaDataList = new ArrayList<>();
+            if(outputs != null){
+                OutputDescriptionType[] idTypeArr = outputs.getOutputArray();
+                ArrayList<PostOutput> list = new ArrayList<>();
+                for (int i = 0; i < idTypeArr.length; i++) {
+                    OutputDescriptionType out = idTypeArr[i];
+                    RDFID outputRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.OUTPUT).toString());
+                    PostOutput output = new PostOutput(outputRDFID);
+                    //Identifier
+                    output.setIdentifier(out.getIdentifier().getStringValue());
+                    //Title
+                    output.setTitle(out.getTitle().getStringValue());
+                    //Abstract
+                    if (out.isSetAbstract()) {
+                        output.setBstract(out.getAbstract().getStringValue());
+                    }
+                    //Metadata
+                    {
+                        MetadataType[] metaArr = out.getMetadataArray();
+                        ArrayList<URL> metaDataList = new ArrayList<>();
 
-                    for (int j = 0; j < metaArr.length; j++) {
-                        System.out.println("Test output metadata about: " + metaArr[j].getAbout());
-                        System.out.println("Test output metadata title: " + metaArr[j].getTitle());
-                        try {
-                            metaDataList.add(new URL(metaArr[j].getHref()));
-                        } catch (MalformedURLException murle) {
-                            processIdx++;
-                            throw new ImportException("Error on reading href attribute from metadata; href=" + metaArr[j].getHref() + " of process " + processIdentifier, murle);
+                        for (int j = 0; j < metaArr.length; j++) {
+                            System.out.println("Test output metadata about: " + metaArr[j].getAbout());
+                            System.out.println("Test output metadata title: " + metaArr[j].getTitle());
+                            try {
+                                metaDataList.add(new URL(metaArr[j].getHref()));
+                            } catch (MalformedURLException murle) {
+                                processIdx++;
+                                throw new ImportException("Error on reading href attribute from metadata; href=" + metaArr[j].getHref() + " of process " + processIdentifier, murle);
+                            }
                         }
+                        output.setMetadataList(metaDataList);
                     }
-                    output.setMetadataList(metaDataList);
-                }
-                //Occs
-                if (out.isSetLiteralOutput()) {
-                    RDFID literalDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.LITERAL).toString());
-                    output.setPostOutputFormChoice(new PostLiteralData(literalDataRDFID));
-                } else if (out.isSetComplexOutput()) {
-                    RDFID complexDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.COMPLEX).toString());
-                    
-                    PostComplexData complexData = new PostComplexData(complexDataRDFID);
-                    //Default data combination
-                    {
-                        PostComplexDataCombination defaultCDC = new PostComplexDataCombination(new RDFID(IDGenerator.getInstance().generateID(EIDType.COMPLEXCOMBINATION).toString()));
-                        //Encoding
-                        if (out.getComplexOutput().getDefault().getFormat().isSetEncoding()) {
-                            String encoding = out.getComplexOutput().getDefault().getFormat().getEncoding();
-                            defaultCDC.setEncoding(encoding);
-                        }
-                        //MimeType
-                        String mimeType = out.getComplexOutput().getDefault().getFormat().getMimeType();
-                        defaultCDC.setMimeType(mimeType);
-                        //Schema
-                        if (out.getComplexOutput().getDefault().getFormat().isSetSchema()) {
-                            String schema = out.getComplexOutput().getDefault().getFormat().getSchema();
-                            defaultCDC.setSchema(schema);
-                        }
-                        complexData.setDefaultDataCombination(defaultCDC);
-                    }
-                    //Supported data combinations
-                    {
-                        ArrayList<PostComplexDataCombination> supportedList = new ArrayList<>();
-                        for (int j = 0; j < out.getComplexOutput().getSupported().getFormatArray().length; j++) {
-                            PostComplexDataCombination supportedCDC = new PostComplexDataCombination(new RDFID(IDGenerator.getInstance().generateID(EIDType.COMPLEXCOMBINATION).toString()));
+                    //Occs
+                    if (out.isSetLiteralOutput()) {
+                        RDFID literalDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.LITERAL).toString());
+                        output.setPostOutputFormChoice(new PostLiteralData(literalDataRDFID));
+                    } else if (out.isSetComplexOutput()) {
+                        RDFID complexDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.COMPLEX).toString());
+
+                        PostComplexData complexData = new PostComplexData(complexDataRDFID);
+                        //Default data combination
+                        {
+                            PostComplexDataCombination defaultCDC = new PostComplexDataCombination(new RDFID(IDGenerator.getInstance().generateID(EIDType.COMPLEXCOMBINATION).toString()));
                             //Encoding
                             if (out.getComplexOutput().getDefault().getFormat().isSetEncoding()) {
-                                String encoding = out.getComplexOutput().getSupported().getFormatArray(j).getEncoding();
-                                supportedCDC.setEncoding(encoding);
+                                String encoding = out.getComplexOutput().getDefault().getFormat().getEncoding();
+                                defaultCDC.setEncoding(encoding);
                             }
                             //MimeType
-                            String mimeType = out.getComplexOutput().getSupported().getFormatArray(j).getMimeType();
-                            supportedCDC.setMimeType(mimeType);
+                            String mimeType = out.getComplexOutput().getDefault().getFormat().getMimeType();
+                            defaultCDC.setMimeType(mimeType);
                             //Schema
                             if (out.getComplexOutput().getDefault().getFormat().isSetSchema()) {
-                                String schema = out.getComplexOutput().getSupported().getFormatArray(j).getSchema();
-                                supportedCDC.setSchema(schema);
+                                String schema = out.getComplexOutput().getDefault().getFormat().getSchema();
+                                defaultCDC.setSchema(schema);
                             }
-                            supportedList.add(supportedCDC);
+                            complexData.setDefaultFormat(defaultCDC);
                         }
-                        complexData.setSupportedDataCombinations(supportedList);
-                    }
-                    output.setPostOutputFormChoice(complexData);
-                    
-                } else if (out.isSetBoundingBoxOutput()) {
-                    RDFID boundingBoxDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.BOUNDINGBOX).toString());
-                    output.setPostOutputFormChoice(new PostBoundingBoxData(boundingBoxDataRDFID));
-                } else {
-                    processIdx++;
-                    throw new ImportException("No data type set for output" + output.getIdentifier() + " of process " + processIdentifier);
-                }
+                        //Supported data combinations
+                        {
+                            ArrayList<PostComplexDataCombination> supportedList = new ArrayList<>();
+                            for (int j = 0; j < out.getComplexOutput().getSupported().getFormatArray().length; j++) {
+                                PostComplexDataCombination supportedCDC = new PostComplexDataCombination(new RDFID(IDGenerator.getInstance().generateID(EIDType.COMPLEXCOMBINATION).toString()));
+                                //Encoding
+                                if (out.getComplexOutput().getDefault().getFormat().isSetEncoding()) {
+                                    String encoding = out.getComplexOutput().getSupported().getFormatArray(j).getEncoding();
+                                    supportedCDC.setEncoding(encoding);
+                                }
+                                //MimeType
+                                String mimeType = out.getComplexOutput().getSupported().getFormatArray(j).getMimeType();
+                                supportedCDC.setMimeType(mimeType);
+                                //Schema
+                                if (out.getComplexOutput().getDefault().getFormat().isSetSchema()) {
+                                    String schema = out.getComplexOutput().getSupported().getFormatArray(j).getSchema();
+                                    supportedCDC.setSchema(schema);
+                                }
+                                supportedList.add(supportedCDC);
+                            }
+                            complexData.setSupportedFormats(supportedList);
+                        }
+                        output.setPostOutputFormChoice(complexData);
 
-                list.add(output);
+                    } else if (out.isSetBoundingBoxOutput()) {
+                        RDFID boundingBoxDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.BOUNDINGBOX).toString());
+                        output.setPostOutputFormChoice(new PostBoundingBoxData(boundingBoxDataRDFID));
+                    } else {
+                        processIdx++;
+                        throw new ImportException("No data type set for output" + output.getIdentifier() + " of process " + processIdentifier);
+                    }
+
+                    list.add(output);
+                }
+                process.setOutputs(list);
             }
-            process.setOutputs(list);
         }
 
 
@@ -400,9 +404,9 @@ public class WPSHarvester implements IWPSImportSource {
                 PostComplexData complex = (PostComplexData) piaof;
                 RDFResource r = complex.toRDFResource();
                 builder.addResource(r);
-                r = complex.getDefaultDataCombination().toRDFResource();
+                r = complex.getDefaultFormat().toRDFResource();
                 builder.addResource(r);
-                for(PostComplexDataCombination pcdc : complex.getSupportedDataCombinations()){
+                for(PostComplexDataCombination pcdc : complex.getSupportedFormats()){
                     r = pcdc.toRDFResource();
                     builder.addResource(r);
                 }
@@ -421,9 +425,9 @@ public class WPSHarvester implements IWPSImportSource {
                 PostComplexData complex = (PostComplexData) piaof;
                 RDFResource r = complex.toRDFResource();
                 builder.addResource(r);
-                r = complex.getDefaultDataCombination().toRDFResource();
+                r = complex.getDefaultFormat().toRDFResource();
                 builder.addResource(r);
-                for(PostComplexDataCombination pcdc : complex.getSupportedDataCombinations()){
+                for(PostComplexDataCombination pcdc : complex.getSupportedFormats()){
                     r = pcdc.toRDFResource();
                     builder.addResource(r);
                 }

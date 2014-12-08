@@ -82,7 +82,7 @@ public class ComplexData extends InAndOutputForm {
      * @throws CommunicationException 
      */
     public ComplexDataCombination getDefaultFormat() throws RDFException, BadRequestException, InternalSPException, CommunicationException{
-        RDFID[] rdfids = res.findResources(Vocabulary.DefaultComplexDataCombination);
+        RDFID[] rdfids = res.findResources(Vocabulary.DefaultFormat);
         if(rdfids.length != 1)
             throw new RDFException("Incorrect count of defaults found in "+ res.getRdfID().rdfID+ ", found: "+rdfids.length);                 
         SPClient spc = SPClient.getInstance();
@@ -101,7 +101,7 @@ public class ComplexData extends InAndOutputForm {
      * @throws CommunicationException 
      */
     public ComplexDataCombination[] getSupportedFormats() throws RDFException, BadRequestException, InternalSPException, CommunicationException{
-        RDFID[] rdfids = res.findResources(Vocabulary.SupportedComplexDataCombination);
+        RDFID[] rdfids = res.findResources(Vocabulary.SupportedFormats);
         ComplexDataCombination[] cdcArr = new ComplexDataCombination[rdfids.length];
         SPClient spc = SPClient.getInstance();
 
