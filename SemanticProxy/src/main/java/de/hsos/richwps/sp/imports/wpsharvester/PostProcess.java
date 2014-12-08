@@ -35,7 +35,10 @@ public class PostProcess {
 
     public PostProcess(RDFID rdfId) {
         this.rdfId = rdfId;
-
+        metadataList = new ArrayList<>();
+        profileList = new ArrayList<>();
+        inputs = new ArrayList<>();
+        outputs = new ArrayList<>();
     }
 
     public RDFID getRdfId() {

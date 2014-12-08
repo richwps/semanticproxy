@@ -204,7 +204,7 @@ public class App {
                 String rdf = null;
                 try {
                     rdf = source.getNextProcess();
-                } catch (ImportException e) {
+                } catch (ImportException e ) {
                     Logger.getLogger(App.class).warn("Aborted reading a process of " + source.getInfo(), e);
                     System.err.println("[WARN] Aborted reading a process of " + source.getInfo());
                     continue;
