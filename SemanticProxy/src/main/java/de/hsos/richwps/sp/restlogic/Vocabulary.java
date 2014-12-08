@@ -62,8 +62,8 @@ public class Vocabulary {
     public static String OutputFormChoice = null;
     //complex data
     public static String MaximumMegabytes = null;
-    public static String DefaultComplexDataCombination = null;
-    public static String SupportedComplexDataCombination = null;
+    public static String DefaultFormat = null;
+    public static String SupportedFormats = null;
     //ComplexDataCombinationType
     public static String Encoding = null;
     public static String MimeType = null;
@@ -205,22 +205,22 @@ public class Vocabulary {
             MaximumMegabytes = VOC + "maximummegabytes";
             stmt = new StatementImpl(new URIImpl(MaximumMegabytes), new URIImpl(Label), new LiteralImpl("MaximumMegaBytes"));
             writer.handleStatement(stmt);
-            DefaultComplexDataCombination = VOC + "defaultcomplexdatacombination";
-            stmt = new StatementImpl(new URIImpl(DefaultComplexDataCombination), new URIImpl(Label), new LiteralImpl("DefaultComplexDataCombination"));
+            DefaultFormat = VOC + "defaultformat";
+            stmt = new StatementImpl(new URIImpl(DefaultFormat), new URIImpl(Label), new LiteralImpl("has default format"));
             writer.handleStatement(stmt);
-            SupportedComplexDataCombination = VOC + "supportedcomplexdatacombination";
-            stmt = new StatementImpl(new URIImpl(SupportedComplexDataCombination), new URIImpl(Label), new LiteralImpl("SupportedComplexDataCombination"));
+            SupportedFormats = VOC + "supportedformats";
+            stmt = new StatementImpl(new URIImpl(SupportedFormats), new URIImpl(Label), new LiteralImpl("supports formats"));
             writer.handleStatement(stmt);
             
             //ComplexDataCombination
             Encoding = VOC + "encoding";
-            stmt = new StatementImpl(new URIImpl(Encoding), new URIImpl(Label), new LiteralImpl("Encoding"));
+            stmt = new StatementImpl(new URIImpl(Encoding), new URIImpl(Label), new LiteralImpl("uses encoding"));
             writer.handleStatement(stmt);
             MimeType = VOC + "mimetype";
-            stmt = new StatementImpl(new URIImpl(MimeType), new URIImpl(Label), new LiteralImpl("MimeType"));
+            stmt = new StatementImpl(new URIImpl(MimeType), new URIImpl(Label), new LiteralImpl("has mimetype"));
             writer.handleStatement(stmt);
             Schema = VOC + "schema";
-            stmt = new StatementImpl(new URIImpl(Schema), new URIImpl(Label), new LiteralImpl("Schema"));
+            stmt = new StatementImpl(new URIImpl(Schema), new URIImpl(Label), new LiteralImpl("has schema"));
             writer.handleStatement(stmt);
             
             //QoSTarget
