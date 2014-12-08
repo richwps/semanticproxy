@@ -19,11 +19,14 @@ import de.hsos.richwps.sp.client.ows.gettypes.ComplexDataCombination;
 import de.hsos.richwps.sp.client.ows.gettypes.FeatureType;
 import de.hsos.richwps.sp.client.ows.gettypes.QoSTarget;
 import de.hsos.richwps.sp.client.ows.gettypes.WFS;
+import de.hsos.richwps.sp.client.ows.posttypes.PostComplexData;
+import de.hsos.richwps.sp.client.ows.posttypes.PostComplexDataCombination;
 import de.hsos.richwps.sp.client.ows.posttypes.PostInput;
 import de.hsos.richwps.sp.client.ows.posttypes.PostLiteralData;
 import de.hsos.richwps.sp.client.ows.posttypes.PostOutput;
 import de.hsos.richwps.sp.client.ows.posttypes.PostProcess;
 import de.hsos.richwps.sp.client.ows.posttypes.PostQoSTarget;
+import java.math.BigInteger;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -147,12 +150,14 @@ public class App {
                             System.out.println("         -> Type:       Literal");
                         } else if (inf.getDataType() == InAndOutputForm.COMPLEX_TYPE) {
                             System.out.println("         -> Type:       Complex");
-                            System.out.println("         -> Type:       Complex");
                             ComplexData complex = (ComplexData)inf;
                             if(complex.getMaximumMegabytes() == null)
                                 System.out.println("           -> MMBytes:    not set");
                             else
                                 System.out.println("           -> MMBytes:    "+complex.getMaximumMegabytes());
+                            System.out.println("           -> Def format: "+complex.getDefaultFormat().getEncoding()+" "+complex.getDefaultFormat().getMimeType()+" "+complex.getDefaultFormat().getSchema());
+                            for(ComplexDataCombination cdc : complex.getSupportedFormats())
+                                System.out.println("           -> Sup format: "+cdc.getEncoding()+" "+cdc.getMimeType()+" "+cdc.getSchema());
                         } else {
                             System.out.println("         -> Type:       BoundingBox");
                         }
@@ -218,8 +223,21 @@ public class App {
             in2.setBstract("2nd addend");
             in2.setMinOcc(1);
             in2.setMaxOcc(1);
-            PostLiteralData litData2 = new PostLiteralData();
-            in2.setPostInputFormChoice(litData2);
+            {
+                PostComplexData comData = new PostComplexData();
+                comData.setMaximumMegaBytes(BigInteger.valueOf(42));
+                    PostComplexDataCombination defFormat = new PostComplexDataCombination();
+                    defFormat.setEncoding("encoding");
+                    defFormat.setMimeType("image/jpg");
+                    defFormat.setSchema("http://www.daFormate.de/lkjeddfsdf.xsd");
+                comData.setDefaultFormat(defFormat);
+                ArrayList<PostComplexDataCombination> list = new ArrayList<PostComplexDataCombination>();
+                list.add(defFormat);
+                list.add(defFormat);
+                list.add(defFormat);
+                comData.setSupportedFormats(list);
+                in2.setPostInputFormChoice(comData);
+            }
             ArrayList<PostInput> tmpList = new ArrayList<PostInput>();
             tmpList.add(in1);
             tmpList.add(in2);
@@ -228,8 +246,21 @@ public class App {
             out1.setIdentifier("out.sum");
             out1.setTitle("Sum");
             out1.setBstract("The sum");
-            PostLiteralData litData3 = new PostLiteralData();
-            out1.setPostOutputFormChoice(litData3);
+            {
+                PostComplexData comData = new PostComplexData();
+                comData.setMaximumMegaBytes(BigInteger.valueOf(42));
+                    PostComplexDataCombination defFormat = new PostComplexDataCombination();
+                    defFormat.setEncoding("");
+                    defFormat.setMimeType("image/jpg");
+                    defFormat.setSchema("http://www.daFormate.de/lkjeddfsdf.xsd");
+                comData.setDefaultFormat(defFormat);
+                ArrayList<PostComplexDataCombination> list = new ArrayList<PostComplexDataCombination>();
+                list.add(defFormat);
+                list.add(defFormat);
+                list.add(defFormat);
+                comData.setSupportedFormats(list);
+                out1.setPostOutputFormChoice(comData);
+            }
             ArrayList<PostOutput> tmpList2 = new ArrayList<PostOutput>();
             tmpList2.add(out1);
             process.setOutputs(tmpList2);

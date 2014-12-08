@@ -56,6 +56,7 @@ public class ComplexData extends InAndOutputForm {
    
     /**
      * Returns the MaximumMegabytes for this ComplexData, can be null
+     * If the object belongs to an output getMaximumMegabytes returns always null
      * @return
      * @throws RDFException 
      */

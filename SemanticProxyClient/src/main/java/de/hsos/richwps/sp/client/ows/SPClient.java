@@ -26,6 +26,7 @@ import de.hsos.richwps.sp.client.ows.gettypes.QoSTarget;
 import de.hsos.richwps.sp.client.ows.gettypes.WFS;
 import de.hsos.richwps.sp.client.ows.posttypes.PostBoundingBoxData;
 import de.hsos.richwps.sp.client.ows.posttypes.PostComplexData;
+import de.hsos.richwps.sp.client.ows.posttypes.PostComplexDataCombination;
 import de.hsos.richwps.sp.client.ows.posttypes.PostInAndOutputForm;
 import de.hsos.richwps.sp.client.ows.posttypes.PostInput;
 import de.hsos.richwps.sp.client.ows.posttypes.PostLiteralData;
@@ -318,6 +319,20 @@ public class SPClient {
      * @throws MalformedURLException
      */
     public void postProcess(PostProcess process) throws RDFException, BadRequestException, InternalSPException, CommunicationException, MalformedURLException {
+        
+        ArrayList<RDFResource> list = buildRDFProcessDoc(process);
+        rdfClient.postRDF(list.toArray(new RDFResource[list.size()]), new URL(processListURL));
+    }
+    
+    
+    
+    /**
+     * Composes all statements for the process-RDF-document
+     * @param process
+     * @return 
+     */
+    private static ArrayList<RDFResource> buildRDFProcessDoc(PostProcess process){
+        
         ArrayList<RDFResource> list = new ArrayList<RDFResource>();
 
         list.add(process.toRDFResource());
@@ -327,9 +342,16 @@ public class SPClient {
             if (piaof.getDataType() == PostInAndOutputForm.LITERAL_TYPE) {
                 RDFResource r = ((PostLiteralData) piaof).toRDFResource();
                 list.add(r);
-            } else if (piaof.getDataType() == PostInAndOutputForm.COMPLEX_TYPE) {
-                RDFResource r = ((PostComplexData) piaof).toRDFResource();
+            } else if (piaof.getDataType() == PostInAndOutputForm.COMPLEX_TYPE) {        
+                PostComplexData complex = (PostComplexData) piaof;
+                RDFResource r = complex.toRDFResource();
                 list.add(r);
+                r = complex.getDefaultFormat().toRDFResource();
+                list.add(r);
+                for(PostComplexDataCombination pcdc : complex.getSupportedFormats()){
+                    r = pcdc.toRDFResource();
+                    list.add(r);
+                }
             } else {
                 RDFResource r = ((PostBoundingBoxData) piaof).toRDFResource();
                 list.add(r);
@@ -342,8 +364,15 @@ public class SPClient {
                 RDFResource r = ((PostLiteralData) piaof).toRDFResource();
                 list.add(r);
             } else if (piaof.getDataType() == PostInAndOutputForm.COMPLEX_TYPE) {
-                RDFResource r = ((PostComplexData) piaof).toRDFResource();
+                PostComplexData complex = (PostComplexData) piaof;
+                RDFResource r = complex.toRDFResource();
                 list.add(r);
+                r = complex.getDefaultFormat().toRDFResource();
+                list.add(r);
+                for(PostComplexDataCombination pcdc : complex.getSupportedFormats()){
+                    r = pcdc.toRDFResource();
+                    list.add(r);
+                }
             } else {
                 RDFResource r = ((PostBoundingBoxData) piaof).toRDFResource();
                 list.add(r);
@@ -352,9 +381,11 @@ public class SPClient {
         for (PostQoSTarget target : process.getQosTargets()) {
             list.add(target.toRDFResource());
         }
-
-        rdfClient.postRDF(list.toArray(new RDFResource[list.size()]), new URL(processListURL));
+        
+        return list;
     }
+    
+    
 
     /**
      * Deletes a WPS from the SemanticProxy
@@ -405,41 +436,7 @@ public class SPClient {
      * @throws MalformedURLException
      */
     public void updateProcess(PostProcess process) throws RDFException, BadRequestException, InternalSPException, CommunicationException, MalformedURLException {
-        ArrayList<RDFResource> list = new ArrayList<RDFResource>();
-
-        list.add(process.toRDFResource());
-        for (PostInput in : process.getInputs()) {
-            list.add(in.toRDFResource());
-            PostInAndOutputForm piaof = in.getPostInputFormChoice();
-            if (piaof.getDataType() == PostInAndOutputForm.LITERAL_TYPE) {
-                RDFResource r = ((PostLiteralData) piaof).toRDFResource();
-                list.add(r);
-            } else if (piaof.getDataType() == PostInAndOutputForm.COMPLEX_TYPE) {
-                RDFResource r = ((PostComplexData) piaof).toRDFResource();
-                list.add(r);
-            } else {
-                RDFResource r = ((PostBoundingBoxData) piaof).toRDFResource();
-                list.add(r);
-            }
-        }
-        for (PostOutput out : process.getOutputs()) {
-            list.add(out.toRDFResource());
-            PostInAndOutputForm piaof = out.getPostOutputFormChoice();
-            if (piaof.getDataType() == PostInAndOutputForm.LITERAL_TYPE) {
-                RDFResource r = ((PostLiteralData) piaof).toRDFResource();
-                list.add(r);
-            } else if (piaof.getDataType() == PostInAndOutputForm.COMPLEX_TYPE) {
-                RDFResource r = ((PostComplexData) piaof).toRDFResource();
-                list.add(r);
-            } else {
-                RDFResource r = ((PostBoundingBoxData) piaof).toRDFResource();
-                list.add(r);
-            }
-        }
-        for (PostQoSTarget target : process.getQosTargets()) {
-            list.add(target.toRDFResource());
-        }
-
+        ArrayList<RDFResource> list = buildRDFProcessDoc(process);
         rdfClient.putRDF(list.toArray(new RDFResource[list.size()]), new URL(process.getRdfId().rdfID));
     }
     
