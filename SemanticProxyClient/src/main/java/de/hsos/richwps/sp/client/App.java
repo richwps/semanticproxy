@@ -14,6 +14,8 @@ import de.hsos.richwps.sp.client.ows.gettypes.InAndOutputForm;
 import de.hsos.richwps.sp.client.ows.gettypes.Output;
 import de.hsos.richwps.sp.client.ows.posttypes.PostWPS;
 import de.hsos.richwps.sp.client.ows.Vocabulary;
+import de.hsos.richwps.sp.client.ows.gettypes.ComplexData;
+import de.hsos.richwps.sp.client.ows.gettypes.ComplexDataCombination;
 import de.hsos.richwps.sp.client.ows.gettypes.FeatureType;
 import de.hsos.richwps.sp.client.ows.gettypes.QoSTarget;
 import de.hsos.richwps.sp.client.ows.gettypes.WFS;
@@ -107,6 +109,15 @@ public class App {
                             System.out.println("         -> Type:       Literal");
                         } else if (inf.getDataType() == InAndOutputForm.COMPLEX_TYPE) {
                             System.out.println("         -> Type:       Complex");
+                            ComplexData complex = (ComplexData)inf;
+                            if(complex.getMaximumMegabytes() == null)
+                                System.out.println("           -> MMBytes:    not set");
+                            else
+                                System.out.println("           -> MMBytes:    "+complex.getMaximumMegabytes());
+                            System.out.println("           -> Def format: "+complex.getDefaultFormat().getEncoding()+" "+complex.getDefaultFormat().getMimeType()+" "+complex.getDefaultFormat().getSchema());
+                            for(ComplexDataCombination cdc : complex.getSupportedFormats())
+                                System.out.println("           -> Sup format: "+cdc.getEncoding()+" "+cdc.getMimeType()+" "+cdc.getSchema());
+                            
                         } else if (inf.getDataType() == InAndOutputForm.BOUNDING_BOX_TYPE){
                             System.out.println("         -> Type:       BoundingBox");
                         }
@@ -136,6 +147,12 @@ public class App {
                             System.out.println("         -> Type:       Literal");
                         } else if (inf.getDataType() == InAndOutputForm.COMPLEX_TYPE) {
                             System.out.println("         -> Type:       Complex");
+                            System.out.println("         -> Type:       Complex");
+                            ComplexData complex = (ComplexData)inf;
+                            if(complex.getMaximumMegabytes() == null)
+                                System.out.println("           -> MMBytes:    not set");
+                            else
+                                System.out.println("           -> MMBytes:    "+complex.getMaximumMegabytes());
                         } else {
                             System.out.println("         -> Type:       BoundingBox");
                         }

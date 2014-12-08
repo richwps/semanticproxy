@@ -17,6 +17,7 @@ import de.hsos.richwps.sp.client.CommunicationException;
 import de.hsos.richwps.sp.client.InternalSPException;
 import de.hsos.richwps.sp.client.RDFException;
 import de.hsos.richwps.sp.client.BadRequestException;
+import de.hsos.richwps.sp.client.ows.gettypes.ComplexDataCombination;
 import de.hsos.richwps.sp.client.rdf.RDFClient;
 import de.hsos.richwps.sp.client.rdf.RDFID;
 import de.hsos.richwps.sp.client.rdf.RDFResource;
@@ -235,6 +236,20 @@ public class SPClient {
         RDFResource res = rdfClient.retrieveResource(rdfID);
         return BoundingBoxData.createWrapper(res);
     }
+    
+    
+    /**
+     * Gets an RDFResource with ComplexDataCombination-Wrapper class, uses the specified
+     * RDF ID
+     *
+     * @return RDFResource with ComplexDataCombination-Wrapper class
+     * @throws Exception
+     */
+    public ComplexDataCombination getComplexDataCombination(RDFID rdfID) throws BadRequestException, InternalSPException, CommunicationException, RDFException {
+        RDFResource res = rdfClient.retrieveResource(rdfID);
+        return ComplexDataCombination.createWrapper(res);
+    }
+    
     
     
     /**

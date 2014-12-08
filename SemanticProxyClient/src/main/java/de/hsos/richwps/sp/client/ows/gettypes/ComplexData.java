@@ -4,10 +4,15 @@
  */
 package de.hsos.richwps.sp.client.ows.gettypes;
 
+import de.hsos.richwps.sp.client.BadRequestException;
+import de.hsos.richwps.sp.client.CommunicationException;
+import de.hsos.richwps.sp.client.InternalSPException;
 import de.hsos.richwps.sp.client.RDFException;
+import de.hsos.richwps.sp.client.ows.SPClient;
 import de.hsos.richwps.sp.client.rdf.RDFID;
 import de.hsos.richwps.sp.client.rdf.RDFResource;
 import de.hsos.richwps.sp.client.ows.Vocabulary;
+import java.math.BigInteger;
 
 /**
  *
@@ -46,5 +51,65 @@ public class ComplexData extends InAndOutputForm {
     public int getDataType() {
         return COMPLEX_TYPE;
     }
-    //TODO: Make further attributes accessible
+   
+
+   
+    /**
+     * Returns the MaximumMegabytes for this ComplexData, can be null
+     * @return
+     * @throws RDFException 
+     */
+    public BigInteger getMaximumMegabytes() throws RDFException{
+        String[] val = res.findLiterals(Vocabulary.MaximumMegabytes);
+        if(val.length == 1){
+            return new BigInteger(val[0]);
+        }
+        else if (val.length > 1) {
+            throw new RDFException("Resource "+ res.getRdfID().rdfID +"malformed. Found "+val.length+" "+Vocabulary.MaximumMegabytes+"-attributes");
+        }
+        else //0
+            return null;
+    }
+    
+    
+    /**
+     * Returns the default format for this ComplexData
+     * @return
+     * @throws RDFException
+     * @throws BadRequestException
+     * @throws InternalSPException
+     * @throws CommunicationException 
+     */
+    public ComplexDataCombination getDefaultFormat() throws RDFException, BadRequestException, InternalSPException, CommunicationException{
+        RDFID[] rdfids = res.findResources(Vocabulary.DefaultComplexDataCombination);
+        if(rdfids.length != 1)
+            throw new RDFException("Incorrect count of defaults found in "+ res.getRdfID().rdfID+ ", found: "+rdfids.length);                 
+        SPClient spc = SPClient.getInstance();
+        ComplexDataCombination defaultCDC = spc.getComplexDataCombination(rdfids[0]);
+        
+        return defaultCDC;
+    }
+    
+    
+    /**
+     * Returns the supported formats for this ComplexData
+     * @return
+     * @throws RDFException
+     * @throws BadRequestException
+     * @throws InternalSPException
+     * @throws CommunicationException 
+     */
+    public ComplexDataCombination[] getSupportedFormats() throws RDFException, BadRequestException, InternalSPException, CommunicationException{
+        RDFID[] rdfids = res.findResources(Vocabulary.SupportedComplexDataCombination);
+        ComplexDataCombination[] cdcArr = new ComplexDataCombination[rdfids.length];
+        SPClient spc = SPClient.getInstance();
+
+        for (int i = 0; i < rdfids.length; i++) {
+            cdcArr[i] = spc.getComplexDataCombination(rdfids[i]);
+        }
+
+        return cdcArr;
+    }
+    
+    
 }
