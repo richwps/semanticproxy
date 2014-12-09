@@ -362,7 +362,7 @@ public class Vocabulary {
      * @param sample
      * @return
      */
-    public static boolean isBasicWPSType(String sample) {
+    public static boolean isType(String sample) {
         if (sample.equalsIgnoreCase(NetworkClass)
                 || sample.equalsIgnoreCase(WPSClass)
                 || sample.equalsIgnoreCase(ProcessClass)
@@ -371,7 +371,8 @@ public class Vocabulary {
                 || sample.equalsIgnoreCase(ComplexDataClass)
                 || sample.equalsIgnoreCase(LiteralDataClass)
                 || sample.equalsIgnoreCase(BoundingBoxDataClass)
-                || sample.equalsIgnoreCase(QoSTargetClass))
+                || sample.equalsIgnoreCase(QoSTargetClass)
+                || sample.equalsIgnoreCase(WFSClass))
         {
             return true;
         }
@@ -382,41 +383,12 @@ public class Vocabulary {
     
     
     
-    /**
-     * Checks whether a sample string is known by the vocabulary as a predicate
-     * with literal object that describes a WFS
-     *
-     * @param sample
-     * @return
-     */
-    public static boolean isBasicWFSPredicate(String sample) {
-        if (sample.equalsIgnoreCase(WFSVersion)
-                || sample.equalsIgnoreCase(Endpoint)
-                || sample.equalsIgnoreCase(FeatureTypeName)) {
-            return true;
-        }
-        return false;
-    }
-    
+  
     
     
     
 
-    /**
-     * Checks whether a sample string is known by the vocabulary as an object
-     * for the type predicate that describes a WFS
-     *
-     * @param sample
-     * @return
-     */
-    public static boolean isBasicWFSType(String sample) {
-        if (sample.equalsIgnoreCase(WFSClass)
-                || sample.equalsIgnoreCase(FeatureTypeClass))
-        {
-            return true;
-        }
-        return false;
-    }
+ 
     
     
     

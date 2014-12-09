@@ -282,7 +282,8 @@ public class App {
         //install http endpoints for web comunication
         BrowseAccess.activate(config.getApplicationURL(), config.getResourcesURL(),
                 config.getVocabularyURL(), config.getNetworkURL(),
-                config.getProcessListURL(), config.getWpsListURL());
+                config.getProcessListURL(), config.getWpsListURL(),
+                config.getWfsListURL());
         CreateAccess.activate(config.getProcessListURL(), config.getWpsListURL());
         DeleteAccess.activate(config.getProcessNamingEndpoint(), config.getWpsNamingEndpoint());
         UpdateAccess.activate(config.getProcessNamingEndpoint(), config.getWpsNamingEndpoint());

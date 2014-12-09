@@ -31,6 +31,7 @@
     <Vocabulary>vocab</Vocabulary>
     <WPSList>wpss</WPSList>
     <ProcessList>processes</ProcessList>
+	<WFSList>wfss</WFSList>
     <Search>search</Search>
 	<IDGenerator>idgenerator</IDGenerator>
   </HTTPEndpoints>

@@ -54,6 +54,7 @@ public class Configuration {
     private URL networkURL = null;
     private URL wpsListURL = null;
     private URL processListURL = null;
+    private URL wfsListURL = null;
     private URL searchURL = null;
     private URL idGeneratorURL = null;
     //naming endpoints
@@ -98,6 +99,7 @@ public class Configuration {
     private String defaultVocabularyURL = null;
     private String defaultWpsListURL = null;
     private String defaultProcessListURL = null;
+    private String defaultWfsListURL = null;
     private String defaultSearchURL = null;
     private String defaultIDGeneratorURL = null;
     //default naming endpoints
@@ -154,6 +156,7 @@ public class Configuration {
         defaultVocabularyURL = "vocab";
         defaultWpsListURL = "wpss";
         defaultProcessListURL = "processes";
+        defaultWfsListURL = "wfss";
         defaultSearchURL = "search";
         defaultIDGeneratorURL = "idgenerator";
         //default naming endpoints
@@ -250,6 +253,7 @@ public class Configuration {
         networkURL = resourcesURL;
         wpsListURL = new URL(resourcesURL.toString() + "/" + tmpHTTPEndpoints.getWPSList());
         processListURL = new URL(resourcesURL.toString() + "/" + tmpHTTPEndpoints.getProcessList());
+        wfsListURL = new URL(resourcesURL.toString() + "/" +tmpHTTPEndpoints.getWFSList());
         searchURL = new URL(applicationURL.toString() + "/" + tmpHTTPEndpoints.getSearch());
         idGeneratorURL = new URL(applicationURL.toString() + "/"+ tmpHTTPEndpoints.getIDGenerator()); 
 
@@ -366,6 +370,7 @@ public class Configuration {
         tmpHttpEndpoints.setVocabulary(defaultVocabularyURL);
         tmpHttpEndpoints.setWPSList(defaultWpsListURL);
         tmpHttpEndpoints.setProcessList(defaultProcessListURL);
+        tmpHttpEndpoints.setWFSList(defaultWfsListURL);
         tmpHttpEndpoints.setSearch(defaultSearchURL);
         tmpHttpEndpoints.setIDGenerator(defaultIDGeneratorURL);
 
@@ -515,6 +520,10 @@ public class Configuration {
     public URL getComplexDataCombinationNaming() {
         return complexDataCombinationNaming;
     }
+
+    public URL getWfsListURL() {
+        return wfsListURL;
+    }
     
     
     
@@ -553,6 +562,7 @@ public class Configuration {
         ret += "Network URL:     " + networkURL.toString() + "\n";
         ret += "wpsList URL:     " + wpsListURL.toString() + "\n";
         ret += "processList URL: " + processListURL.toString() + "\n";
+        ret += "wfsList URL:     " + wfsListURL.toString() + "\n";
         ret += "search URL:      " + searchURL.toString() + "\n";
         ret += "WPS naming ep:   " + wpsNamingEndpoint.toString() + "\n";
         ret += "Proc naming ep:  " + processNamingEndpoint.toString() + "\n";

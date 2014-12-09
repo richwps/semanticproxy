@@ -34,15 +34,17 @@ public class BrowseAccess {
      * @param networkURL
      * @param processListURL
      * @param wpsListURL 
+     * @param wfsListURL 
      */
     public static void activate(URL applicationURL,
             URL resourcesURL,
             URL vocabularyURL,
             URL networkURL,
             URL processListURL,
-            URL wpsListURL){
+            URL wpsListURL,
+            URL wfsListURL){
         if(instance == null){
-            instance = new BrowseAccess(applicationURL, resourcesURL, vocabularyURL, networkURL, processListURL, wpsListURL); 
+            instance = new BrowseAccess(applicationURL, resourcesURL, vocabularyURL, networkURL, processListURL, wpsListURL, wfsListURL); 
         }
     }
     
@@ -55,7 +57,8 @@ public class BrowseAccess {
             URL vocabularyURL,
             URL networkURL,
             URL processListURL,
-            URL wpsList) {
+            URL wpsListURL,
+            URL wfsListURL) {
 
         /**
          * Registers the route for root for user convenience
@@ -179,7 +182,7 @@ public class BrowseAccess {
         /**
          * Registers the route for wps list
          */
-        get(new Route(wpsList.getPath()) {
+        get(new Route(wpsListURL.getPath()) {
             @Override
             public Object handle(Request request, Response response) {
                 try {
@@ -196,6 +199,30 @@ public class BrowseAccess {
 
             }
         });
+        
+        
+        
+        /**
+         * Registers the route for wfs list
+         */
+        get(new Route(wfsListURL.getPath()) {
+            @Override
+            public Object handle(Request request, Response response) {
+                try {
+                    Logger.getLogger(BrowseAccess.class).info("Get wfs list request.");
+                    String str = ContentGetter.getAllWFS();
+                    response.status(200);
+                    response.type(MIMETYPE_XML);
+                    return str;
+                } catch (Exception e) {
+                    Logger.getLogger(BrowseAccess.class).error("Get wfs list request",e);
+                    response.status(500);
+                    return e.getMessage();
+                }
+
+            }
+        });
+        
 
 
         /**

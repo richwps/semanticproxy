@@ -99,6 +99,32 @@ public class ContentGetter {
         }
         return list.toXMLList();
     }
+    
+    
+    /**
+     * Returns all wfs in db
+     *
+     * @return XML list of wps uris
+     * @throws Exception When the the db cannot be connected
+     */
+    public static String getAllWFS() throws MalformedURLException, RepositoryException, RDFException {
+        URL wfsTypeURL = null;
+        SubjectList list = null;
+        try {
+            wfsTypeURL = new URL(Vocabulary.WFSClass);
+            list = DBIO.getAllSubjectsForType(wfsTypeURL);
+        } catch (MalformedURLException ex) {
+            throw new MalformedURLException("Cannot get all processes.");
+        } catch (IllegalStateException ex) {
+            throw new IllegalStateException("Cannot get all processes.", ex);
+        } catch (RepositoryException ex) {
+            throw new RepositoryException("Cannot get all processes.", ex);
+        } catch (RDFException ex) {
+            throw new RDFException("Cannot get all processes.", ex);
+        }
+        return list.toXMLList();
+    }
+    
 
     /**
      * Determines whether a process exists in the DB
