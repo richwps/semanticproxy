@@ -47,6 +47,8 @@ public class WPSHarvester implements IWPSImportSource {
 
     public WPSHarvester(URL targetURL) {
         this.targetURL = targetURL;
+        
+        
     }
 
     @Override

@@ -27,10 +27,14 @@ public class WFSHarvester implements IWFSImportSource {
     private String newHost = null;
     private BasicWFSClient wfsClient = null;
     private URL targetURL = null;
+  
 
     public WFSHarvester(URL targetURL) {
         this.targetURL = targetURL;
+ 
         wfsClient = new BasicWFSClient(targetURL, "1.0.0");
+        
+        
     }
 
     @Override

@@ -43,6 +43,7 @@ public class Configuration {
     private String domain = null;
     private String owner = null;
     private int port = -1;
+    private HTTPProxySettings proxySettings = null;
     private ArrayList<InputFile> inputFiles = null;
     private ArrayList<URL> wpsServers = null;
     private ArrayList<URL> wfsServers = null;
@@ -200,6 +201,7 @@ public class Configuration {
         String tmpOwner = config.getOwner();
         String tmpDomain = config.getDomain();
         int tmpPort = config.getPort();
+        de.hsos.richwps.sp.config.HTTPProxySettings tmpProxySettings = config.getHTTPProxySettings();
         DataSources dataSources = config.getDataSources();
         HTTPEndpoints tmpHTTPEndpoints = config.getHTTPEndpoints();
         RDFNaming tmpRDFNamingEndpoints = config.getRDFNaming();
@@ -209,6 +211,8 @@ public class Configuration {
         owner = tmpOwner;
         domain = tmpDomain;
         port = tmpPort;
+        if(tmpProxySettings != null)
+            proxySettings = new HTTPProxySettings(tmpProxySettings.getHost(), tmpProxySettings.getPort());
        
         inputFiles.clear();
         for (de.hsos.richwps.sp.config.File f : dataSources.getFileArray()) {
@@ -524,6 +528,12 @@ public class Configuration {
     public URL getWfsListURL() {
         return wfsListURL;
     }
+
+    public HTTPProxySettings getProxySettings() {
+        return proxySettings;
+    }
+    
+    
     
     
     
@@ -546,6 +556,7 @@ public class Configuration {
         ret += "Network domain:   " + domain + "\n";
         ret += "Network owner:    " + owner + "\n";
         ret += "Port:             " + port + "\n";
+        ret += "Proxy settings:   " + proxySettings + "\n";
         ret += "InputFiles:\n";
         for(InputFile f : inputFiles)
             ret += " File:       "+f.toString() + "\n";

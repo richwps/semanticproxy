@@ -88,6 +88,14 @@ public class App {
                 Logger.getLogger(App.class).info("Inserting network node");
                 ContentChanger.insertNetwork(config.getOwner(), config.getDomain());
 
+                //configure global http proxy
+                if(config.getProxySettings() != null){
+                    if(config.getProxySettings().getHost() !=null && config.getProxySettings().getPort() > 0){
+                        System.setProperty("http.proxyHost", config.getProxySettings().getHost());
+                        System.setProperty("http.proxyPort", Integer.toString(config.getProxySettings().getPort()) );
+                    }
+                }
+                
                 //import WPS information
                 importWPSInformation(config);
 

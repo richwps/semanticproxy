@@ -18,12 +18,19 @@ RichWPS-SemanticProxy configuration schema
                 <xs:element name="Owner" type="xs:string"/>
                 <xs:element name="Domain" type="xs:string"/>
 				<xs:element name="Port" type="xs:int"/>
+				<xs:element name="HTTPProxySettings" type="cg:HTTPProxySettings" minOccurs="0" maxOccurs="1"/>
                 <xs:element name="DataSources" type="cg:DataSources"/>
                 <xs:element name="HTTPEndpoints" type="cg:HTTPEndpoints"/>
                 <xs:element name="RDFNaming" type="cg:RDFNaming"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+	<xs:complexType name="HTTPProxySettings">
+        <xs:sequence>
+        </xs:sequence>
+		<xs:attribute name="host" type="xs:string" use="required"/>
+        <xs:attribute name="port" type="xs:int" use="required"/>
+    </xs:complexType>
     <xs:complexType name="DataSources">	      
         <xs:sequence>
             <xs:element name="File" type="cg:File" minOccurs="0" maxOccurs="unbounded"/>
