@@ -46,14 +46,15 @@ public class App {
     public static void main(String[] args) {
         System.out.println("Semantic Proxy Client is starting...");
         try {
-            Vocabulary.init(new URL("http://localhost:4567/semanticproxy/resources/vocab"));
+            //Vocabulary.init(new URL("http://localhost:4567/semanticproxy/resources/vocab"));
 
             //client setup
             SPClient spClient = SPClient.getInstance();
-            spClient.setRootURL("http://localhost:4567/semanticproxy/resources");
-            spClient.setSearchURL("http://localhost:4567/semanticproxy/search");
-            spClient.setWpsListURL("http://localhost:4567/semanticproxy/resources/wpss");
-            spClient.setProcessListURL("http://localhost:4567/semanticproxy/resources/processes");
+            spClient.autoInitClient(new URL("http://localhost:4567/semanticproxy"));
+//            spClient.setRootURL("http://localhost:4567/semanticproxy/resources");
+//            spClient.setSearchURL("http://localhost:4567/semanticproxy/search");
+//            spClient.setWpsListURL("http://localhost:4567/semanticproxy/resources/wpss");
+//            spClient.setProcessListURL("http://localhost:4567/semanticproxy/resources/processes");
 
 
             //Testing/Demonstration

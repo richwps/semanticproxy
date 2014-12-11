@@ -5,6 +5,7 @@
 package de.hsos.richwps.sp.client;
 
 import java.net.URL;
+import javax.activation.MimeType;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -264,4 +265,32 @@ public class HTTPClient {
             throw new CommunicationException("Communication to SemanticProxy at " + idGeneratorURL + " failed. Original message: " + e.getMessage());
         }
     }
+    
+    
+    
+    public String getHeader(String key, URL url) throws BadRequestException, CommunicationException {
+        try {
+            //System.out.println("uri: " + url);
+            Client client = ClientBuilder.newClient();
+            client.property(ClientProperties.CONNECT_TIMEOUT, 5000);
+            client.property(ClientProperties.READ_TIMEOUT,    5000);
+            WebTarget webTarget = client.target(url.toString());
+            Invocation.Builder invocationBuilder = webTarget.request();
+            //invocationBuilder.accept("text/html");
+            
+            Response response = invocationBuilder.get();
+
+            if (response.getStatus() != 200) {
+                throw new BadRequestException(response.readEntity(String.class));
+            }
+            return response.getHeaderString("Link");
+
+        } catch (BadRequestException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new CommunicationException("Communication to SemanticProxy at " + url + " failed. Original message: " + e.getMessage());
+        }
+
+    }
+    
 }

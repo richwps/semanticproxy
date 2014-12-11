@@ -17,6 +17,7 @@ import de.hsos.richwps.sp.client.CommunicationException;
 import de.hsos.richwps.sp.client.InternalSPException;
 import de.hsos.richwps.sp.client.RDFException;
 import de.hsos.richwps.sp.client.BadRequestException;
+import de.hsos.richwps.sp.client.LinkHeader;
 import de.hsos.richwps.sp.client.ows.gettypes.ComplexDataCombination;
 import de.hsos.richwps.sp.client.rdf.RDFClient;
 import de.hsos.richwps.sp.client.rdf.RDFID;
@@ -68,16 +69,36 @@ public class SPClient {
         return instance;
     }
 
+    /**
+     * Initializes the routes by requesting them from the specified
+     * SemanticProxy.
+     *
+     * @param applicationURL e.g. ...host:port/semanticproxy
+     */
+    public void autoInitClient(URL applicationURL) throws BadRequestException, CommunicationException, MalformedURLException, Exception {
+        String rawLinkHeader = rdfClient.getHttpClient().getHeader("Link", applicationURL);
+        LinkHeader linkHeader = LinkHeader.createFromRawString(rawLinkHeader);
+        rootURL = linkHeader.get("resources");
+        searchURL = linkHeader.get("search");
+        wpsListURL = linkHeader.get("wpslist");
+        processListURL = linkHeader.get("processlist");
+        idgeneratorURL = linkHeader.get("idgenerator");
+        String vocabularyURL = linkHeader.get("vocabulary");
+        Vocabulary.init(new URL(vocabularyURL));
+    }
+
     public String getRootURL() {
         return rootURL;
     }
 
     /**
-     * Sets the URL of the root element of the SemanticProxy, usually this is
-     * the network resource.
+     * Sets the URL of the root element of the SemanticProxy
      *
      * @param rootURL
+     * @deprecated There is a newer way for automatic route initialization, use
+     * autoInitClient instead
      */
+    @Deprecated
     public void setRootURL(String rootURL) {
         this.rootURL = rootURL;
     }
@@ -86,6 +107,13 @@ public class SPClient {
         return searchURL;
     }
 
+    /**
+     * Sets the URL of the search engine of the SemanticProxy
+     *
+     * @param searchURL
+     * @deprecated There is a newer way for automatic route initialization, use autoInitClient instead
+     */
+    @Deprecated
     public void setSearchURL(String searchURL) {
         this.searchURL = searchURL;
     }
@@ -94,6 +122,13 @@ public class SPClient {
         return wpsListURL;
     }
 
+    
+    /**
+     * Sets the URL of the wps list resource
+     * @param wpsListURL
+     * @deprecated There is a newer way for automatic route initialization, use autoInitClient instead
+     */
+    @Deprecated
     public void setWpsListURL(String wpsListURL) {
         this.wpsListURL = wpsListURL;
     }
@@ -102,14 +137,27 @@ public class SPClient {
         return processListURL;
     }
 
+    /**
+     * Sets the URL of the process list resource
+     * @param processListURL
+     * @deprecated There is a newer way for automatic route initialization, use autoInitClient instead
+     */
+    @Deprecated
     public void setProcessListURL(String processListURL) {
         this.processListURL = processListURL;
     }
-    
+
     public String getIdgeneratorURL() {
         return idgeneratorURL;
     }
 
+    
+    /**
+     * Sets the URL of the id generator
+     * @param idgeneratorURL
+     * @deprecated There is a newer way for automatic route initialization, use autoInitClient instead
+     */
+    @Deprecated
     public void setIdgeneratorURL(String idgeneratorURL) {
         this.idgeneratorURL = idgeneratorURL;
     }
@@ -118,8 +166,6 @@ public class SPClient {
         return rdfClient;
     }
 
-    
-    
     public boolean isUseCache() {
         return rdfClient.isUseCache();
     }
@@ -127,26 +173,24 @@ public class SPClient {
     public void setUseCache(boolean useCache) {
         rdfClient.setUseCache(useCache);
     }
-    
-    
+
     /**
      * Clears internal cache
      */
-    public void clearCache(){
+    public void clearCache() {
         rdfClient.clearCache();
     }
-    
-    
+
     /**
      * Sets the proxy configuration for the underlying http client
+     *
      * @param httpHost
-     * @param httpPort 
+     * @param httpPort
      */
-    public void setProxyConfiguration(String httpHost, String httpPort){
+    public void setProxyConfiguration(String httpHost, String httpPort) {
         rdfClient.setProxyConfiguration(httpHost, httpPort);
     }
-    
-    
+
     /**
      * Gets an RDFResource with Network-Wrapper class, uses the rootURL
      *
@@ -237,11 +281,10 @@ public class SPClient {
         RDFResource res = rdfClient.retrieveResource(rdfID);
         return BoundingBoxData.createWrapper(res);
     }
-    
-    
+
     /**
-     * Gets an RDFResource with ComplexDataCombination-Wrapper class, uses the specified
-     * RDF ID
+     * Gets an RDFResource with ComplexDataCombination-Wrapper class, uses the
+     * specified RDF ID
      *
      * @return RDFResource with ComplexDataCombination-Wrapper class
      * @throws Exception
@@ -250,12 +293,10 @@ public class SPClient {
         RDFResource res = rdfClient.retrieveResource(rdfID);
         return ComplexDataCombination.createWrapper(res);
     }
-    
-    
-    
+
     /**
-     * Gets an RDFResource with QoSTarget-Wrapper class, uses the
-     * specified RDF ID
+     * Gets an RDFResource with QoSTarget-Wrapper class, uses the specified RDF
+     * ID
      *
      * @return RDFResource with QoSTarget-Wrapper class
      * @throws Exception
@@ -264,7 +305,6 @@ public class SPClient {
         RDFResource res = rdfClient.retrieveResource(rdfID);
         return QoSTarget.createWrapper(res);
     }
-    
 
     /**
      * Invokes a keyword search for processes out SemanticProxy.
@@ -286,13 +326,11 @@ public class SPClient {
         }
         return processArr;
     }
-    
-    
-    public RDFID requestID(EIDType t) throws MalformedURLException, BadRequestException, InternalSPException, CommunicationException{
+
+    public RDFID requestID(EIDType t) throws MalformedURLException, BadRequestException, InternalSPException, CommunicationException {
         URL url = new URL(idgeneratorURL);
         return rdfClient.requestID(t.name(), url);
     }
-    
 
     /**
      * Posts the WPS to the SemanticProxy
@@ -319,20 +357,19 @@ public class SPClient {
      * @throws MalformedURLException
      */
     public void postProcess(PostProcess process) throws RDFException, BadRequestException, InternalSPException, CommunicationException, MalformedURLException {
-        
+
         ArrayList<RDFResource> list = buildRDFProcessDoc(process);
         rdfClient.postRDF(list.toArray(new RDFResource[list.size()]), new URL(processListURL));
     }
-    
-    
-    
+
     /**
      * Composes all statements for the process-RDF-document
+     *
      * @param process
-     * @return 
+     * @return
      */
-    private static ArrayList<RDFResource> buildRDFProcessDoc(PostProcess process){
-        
+    private static ArrayList<RDFResource> buildRDFProcessDoc(PostProcess process) {
+
         ArrayList<RDFResource> list = new ArrayList<RDFResource>();
 
         list.add(process.toRDFResource());
@@ -342,13 +379,13 @@ public class SPClient {
             if (piaof.getDataType() == PostInAndOutputForm.LITERAL_TYPE) {
                 RDFResource r = ((PostLiteralData) piaof).toRDFResource();
                 list.add(r);
-            } else if (piaof.getDataType() == PostInAndOutputForm.COMPLEX_TYPE) {        
+            } else if (piaof.getDataType() == PostInAndOutputForm.COMPLEX_TYPE) {
                 PostComplexData complex = (PostComplexData) piaof;
                 RDFResource r = complex.toRDFResource();
                 list.add(r);
                 r = complex.getDefaultFormat().toRDFResource();
                 list.add(r);
-                for(PostComplexDataCombination pcdc : complex.getSupportedFormats()){
+                for (PostComplexDataCombination pcdc : complex.getSupportedFormats()) {
                     r = pcdc.toRDFResource();
                     list.add(r);
                 }
@@ -369,7 +406,7 @@ public class SPClient {
                 list.add(r);
                 r = complex.getDefaultFormat().toRDFResource();
                 list.add(r);
-                for(PostComplexDataCombination pcdc : complex.getSupportedFormats()){
+                for (PostComplexDataCombination pcdc : complex.getSupportedFormats()) {
                     r = pcdc.toRDFResource();
                     list.add(r);
                 }
@@ -381,11 +418,9 @@ public class SPClient {
         for (PostQoSTarget target : process.getQosTargets()) {
             list.add(target.toRDFResource());
         }
-        
+
         return list;
     }
-    
-    
 
     /**
      * Deletes a WPS from the SemanticProxy
@@ -439,10 +474,8 @@ public class SPClient {
         ArrayList<RDFResource> list = buildRDFProcessDoc(process);
         rdfClient.putRDF(list.toArray(new RDFResource[list.size()]), new URL(process.getRdfId().rdfID));
     }
-    
-    
-    
-     /**
+
+    /**
      * Gets an RDFResource with WFS-Wrapper class, uses the specified RDF ID
      *
      * @return RDFResource with WFS-Wrapper class
@@ -452,10 +485,10 @@ public class SPClient {
         RDFResource res = rdfClient.retrieveResource(rdfID);
         return WFS.createWrapper(res);
     }
-    
-    
+
     /**
-     * Gets an RDFResource with FeatureType-Wrapper class, uses the specified RDF ID
+     * Gets an RDFResource with FeatureType-Wrapper class, uses the specified
+     * RDF ID
      *
      * @return RDFResource with FeatureType-Wrapper class
      * @throws Exception
