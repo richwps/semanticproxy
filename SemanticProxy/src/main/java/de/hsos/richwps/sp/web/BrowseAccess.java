@@ -42,9 +42,10 @@ public class BrowseAccess {
             URL processListURL,
             URL wpsListURL,
             URL wfsListURL,
+            URL searchURL,
             URL idgeneratorURL) {
         if (instance == null) {
-            instance = new BrowseAccess(applicationURL, resourcesURL, vocabularyURL , processListURL, wpsListURL, wfsListURL, idgeneratorURL);
+            instance = new BrowseAccess(applicationURL, resourcesURL, vocabularyURL , processListURL, wpsListURL, wfsListURL, searchURL, idgeneratorURL);
         }
     }
 
@@ -57,10 +58,11 @@ public class BrowseAccess {
             URL processListURL,
             URL wpsListURL,
             URL wfsListURL,
+            URL searchURL,
             URL idgeneratorURL) {
         
         //init link header
-        linkHeader = createLinkHeader(applicationURL, resourcesURL, vocabularyURL, processListURL, wpsListURL, wfsListURL, idgeneratorURL);
+        linkHeader = createLinkHeader(applicationURL, resourcesURL, vocabularyURL, processListURL, wpsListURL, wfsListURL, searchURL, idgeneratorURL);
 
         /**
          * Registers the route for root for user convenience
@@ -266,6 +268,7 @@ public class BrowseAccess {
             URL processListURL,
             URL wpsListURL,
             URL wfsListURL,
+            URL searchURL,
             URL idGeneratorURL) {
         String h = "";
         h+="<"+applicationURL.toString()+">; rel=\"application\",";
@@ -274,6 +277,7 @@ public class BrowseAccess {
         h+="<"+processListURL.toString()+">; rel=\"processlist\",";
         h+="<"+wpsListURL.toString()+">; rel=\"wpslist\",";
         h+="<"+wfsListURL.toString()+">; rel=\"wfslist\",";
+        h+="<"+searchURL.toString()+">; rel=\"search\",";
         h+="<"+idGeneratorURL.toString()+">; rel=\"idgenerator\"";
         
         return h;
