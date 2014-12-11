@@ -88,7 +88,7 @@ public class App {
                 Logger.getLogger(App.class).info("Inserting network node");
                 ContentChanger.insertNetwork(config.getOwner(), config.getDomain());
 
-                //configure global http proxy
+                //configure global http proxy settings
                 if(config.getProxySettings() != null){
                     if(config.getProxySettings().getHost() !=null && config.getProxySettings().getPort() > 0){
                         System.setProperty("http.proxyHost", config.getProxySettings().getHost());
@@ -289,9 +289,8 @@ public class App {
         }
         //install http endpoints for web comunication
         BrowseAccess.activate(config.getApplicationURL(), config.getResourcesURL(),
-                config.getVocabularyURL(), config.getNetworkURL(),
-                config.getProcessListURL(), config.getWpsListURL(),
-                config.getWfsListURL());
+                config.getVocabularyURL(), config.getProcessListURL(), 
+                config.getWpsListURL(),config.getWfsListURL(), config.getIdGeneratorURL());
         CreateAccess.activate(config.getProcessListURL(), config.getWpsListURL());
         DeleteAccess.activate(config.getProcessNamingEndpoint(), config.getWpsNamingEndpoint());
         UpdateAccess.activate(config.getProcessNamingEndpoint(), config.getWpsNamingEndpoint());

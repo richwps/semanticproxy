@@ -22,43 +22,45 @@ public class BrowseAccess {
     //private static final String MIMETYPE_RDF = "application/rdf+xml";
     private static final String MIMETYPE_HTML = "text/html";
     private static final String MIMETYPE_XML = "application/xml";
-    
+    private static String linkHeader = null;
     private static BrowseAccess instance = null;
-    
-    
+
     /**
      * Registeres the required routes and handlers for browsing
+     *
      * @param applicationURL
      * @param resourcesURL
      * @param vocabularyURL
      * @param networkURL
      * @param processListURL
-     * @param wpsListURL 
-     * @param wfsListURL 
+     * @param wpsListURL
+     * @param wfsListURL
      */
     public static void activate(URL applicationURL,
             URL resourcesURL,
             URL vocabularyURL,
-            URL networkURL,
             URL processListURL,
             URL wpsListURL,
-            URL wfsListURL){
-        if(instance == null){
-            instance = new BrowseAccess(applicationURL, resourcesURL, vocabularyURL, networkURL, processListURL, wpsListURL, wfsListURL); 
+            URL wfsListURL,
+            URL idgeneratorURL) {
+        if (instance == null) {
+            instance = new BrowseAccess(applicationURL, resourcesURL, vocabularyURL , processListURL, wpsListURL, wfsListURL, idgeneratorURL);
         }
     }
-    
-    
+
     /**
      * Registeres the required routes an handlers
      */
     private BrowseAccess(URL applicationURL,
             URL resourcesURL,
             URL vocabularyURL,
-            URL networkURL,
             URL processListURL,
             URL wpsListURL,
-            URL wfsListURL) {
+            URL wfsListURL,
+            URL idgeneratorURL) {
+        
+        //init link header
+        linkHeader = createLinkHeader(applicationURL, resourcesURL, vocabularyURL, processListURL, wpsListURL, wfsListURL, idgeneratorURL);
 
         /**
          * Registers the route for root for user convenience
@@ -66,7 +68,7 @@ public class BrowseAccess {
         get(new Route("/") {
             @Override
             public Object handle(Request request, Response response) {
-                response.type(MIMETYPE_HTML);              
+                response.type(MIMETYPE_HTML);
                 String str = "<html>\n"
                         + "<head>\n"
                         + "<title>Sparc root</title>\n"
@@ -80,6 +82,8 @@ public class BrowseAccess {
         });
 
 
+
+
         /**
          * Registers the route for user information
          */
@@ -87,6 +91,8 @@ public class BrowseAccess {
             @Override
             public Object handle(Request request, Response response) {
                 response.type(MIMETYPE_HTML);
+                response.header("Link", linkHeader);
+               
                 String str = "<html>\n"
                         + "<head>\n"
                         + "<title>SemanticProxy</title>\n"
@@ -113,10 +119,10 @@ public class BrowseAccess {
                     Logger.getLogger(BrowseAccess.class).info("Get vocabulary request");
                     String str = Vocabulary.getRDF_XML_Representation();
                     response.status(200);
-                    response.type(MIMETYPE_RDF); 
+                    response.type(MIMETYPE_RDF);
                     return str;
                 } catch (Exception e) {
-                    Logger.getLogger(BrowseAccess.class).error("Get vocabulary request",e);
+                    Logger.getLogger(BrowseAccess.class).error("Get vocabulary request", e);
                     response.status(500);
                     return e.getMessage();
                 }
@@ -128,9 +134,9 @@ public class BrowseAccess {
 
 
         /**
-         * Registers the route for network
+         * Registers the route for root
          */
-        get(new Route(networkURL.getPath()) {
+        get(new Route(resourcesURL.getPath()) {
             @Override
             public Object handle(Request request, Response response) {
 
@@ -146,7 +152,7 @@ public class BrowseAccess {
                     response.type(MIMETYPE_RDF); //normally +rdf, but download in chrome is annoying
                     return rdf;
                 } catch (Exception e) {
-                    Logger.getLogger(BrowseAccess.class).error("Get resources/network request",e);
+                    Logger.getLogger(BrowseAccess.class).error("Get resources/network request", e);
                     response.status(500);
                     return e.getMessage();
                 }
@@ -170,7 +176,7 @@ public class BrowseAccess {
                     response.type(MIMETYPE_XML);
                     return str;
                 } catch (Exception e) {
-                    Logger.getLogger(BrowseAccess.class).error("Get process list request",e);
+                    Logger.getLogger(BrowseAccess.class).error("Get process list request", e);
                     response.status(500);
                     return e.getMessage();
                 }
@@ -192,16 +198,16 @@ public class BrowseAccess {
                     response.type(MIMETYPE_XML);
                     return str;
                 } catch (Exception e) {
-                    Logger.getLogger(BrowseAccess.class).error("Get wps list request",e);
+                    Logger.getLogger(BrowseAccess.class).error("Get wps list request", e);
                     response.status(500);
                     return e.getMessage();
                 }
 
             }
         });
-        
-        
-        
+
+
+
         /**
          * Registers the route for wfs list
          */
@@ -215,14 +221,14 @@ public class BrowseAccess {
                     response.type(MIMETYPE_XML);
                     return str;
                 } catch (Exception e) {
-                    Logger.getLogger(BrowseAccess.class).error("Get wfs list request",e);
+                    Logger.getLogger(BrowseAccess.class).error("Get wfs list request", e);
                     response.status(500);
                     return e.getMessage();
                 }
 
             }
         });
-        
+
 
 
         /**
@@ -232,10 +238,10 @@ public class BrowseAccess {
             @Override
             public Object handle(Request request, Response response) {
                 try {
-                    Logger.getLogger(BrowseAccess.class).info("Get resource: "+request.url());
+                    Logger.getLogger(BrowseAccess.class).info("Get resource: " + request.url());
                     String rdf = ContentGetter.getRDFFor(request.url());
                     if (rdf == null) {
-                        Logger.getLogger(BrowseAccess.class).error("Resource not found: "+request.url());
+                        Logger.getLogger(BrowseAccess.class).error("Resource not found: " + request.url());
                         response.status(404);
                         return "Resource not found";
                     }
@@ -243,7 +249,7 @@ public class BrowseAccess {
                     response.type(MIMETYPE_RDF); //normally +rdf, but download in chrome is annoying
                     return rdf;
                 } catch (Exception e) {
-                    Logger.getLogger(BrowseAccess.class).error("Get resource: "+request.url(),e);
+                    Logger.getLogger(BrowseAccess.class).error("Get resource: " + request.url(), e);
                     response.status(500);
                     return e.getMessage();
                 }
@@ -251,6 +257,25 @@ public class BrowseAccess {
             }
         });
 
+    }
 
+ 
+    private String createLinkHeader(URL applicationURL,
+            URL resourcesURL,
+            URL vocabularyURL,
+            URL processListURL,
+            URL wpsListURL,
+            URL wfsListURL,
+            URL idGeneratorURL) {
+        String h = "";
+        h+="<"+applicationURL.toString()+">; rel=\"application\",";
+        h+="<"+resourcesURL.toString()+">; rel=\"resources\",";
+        h+="<"+vocabularyURL.toString()+">; rel=\"vocabulary\",";
+        h+="<"+processListURL.toString()+">; rel=\"processlist\",";
+        h+="<"+wpsListURL.toString()+">; rel=\"wpslist\",";
+        h+="<"+wfsListURL.toString()+">; rel=\"wfslist\",";
+        h+="<"+idGeneratorURL.toString()+">; rel=\"idgenerator\"";
+        
+        return h;
     }
 }

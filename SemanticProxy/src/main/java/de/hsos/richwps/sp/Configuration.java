@@ -52,7 +52,6 @@ public class Configuration {
     private URL resourcesURL = null;
     private URL applicationURL = null;
     private URL vocabularyURL = null;
-    private URL networkURL = null;
     private URL wpsListURL = null;
     private URL processListURL = null;
     private URL wfsListURL = null;
@@ -254,7 +253,6 @@ public class Configuration {
         applicationURL = new URL(hostURL.toString() + "/" + tmpHTTPEndpoints.getApplication());
         resourcesURL = new URL(applicationURL.toString() + "/" + tmpHTTPEndpoints.getResources());
         vocabularyURL = new URL(resourcesURL.toString() + "/" + tmpHTTPEndpoints.getVocabulary());
-        networkURL = resourcesURL;
         wpsListURL = new URL(resourcesURL.toString() + "/" + tmpHTTPEndpoints.getWPSList());
         processListURL = new URL(resourcesURL.toString() + "/" + tmpHTTPEndpoints.getProcessList());
         wfsListURL = new URL(resourcesURL.toString() + "/" +tmpHTTPEndpoints.getWFSList());
@@ -435,9 +433,6 @@ public class Configuration {
         return vocabularyURL;
     }
 
-    public URL getNetworkURL() {
-        return networkURL;
-    }
 
     public URL getWpsListURL() {
         return wpsListURL;
@@ -570,7 +565,6 @@ public class Configuration {
         ret += "Resources URL:   " + resourcesURL.toString() + "\n";
         ret += "Application URL: " + applicationURL.toString() + "\n";
         ret += "Vocabulary URL:  " + vocabularyURL.toString() + "\n";
-        ret += "Network URL:     " + networkURL.toString() + "\n";
         ret += "wpsList URL:     " + wpsListURL.toString() + "\n";
         ret += "processList URL: " + processListURL.toString() + "\n";
         ret += "wfsList URL:     " + wfsListURL.toString() + "\n";

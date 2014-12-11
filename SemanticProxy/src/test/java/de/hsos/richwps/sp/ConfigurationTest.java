@@ -85,7 +85,6 @@ public class ConfigurationTest extends TestCase{
         assertNotNull("Domain should not be null", config.getDomain());
         assertNotNull("HostURL should not be null", config.getHostURL());
         assertNotNull("InputNamingEndpoint should not be null", config.getInputNamingEndpoint());
-        assertNotNull("NetworkURL should not be null", config.getNetworkURL());
         assertNotNull("OutputNamingEndpoint should not be null", config.getOutputNamingEndpoint());
         assertNotNull("Owner should not be null", config.getOwner());
         assertNotNull("ProcessListURL should not be null", config.getProcessListURL());
