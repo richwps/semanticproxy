@@ -27,10 +27,12 @@ Described are resources within spatial data infrastructures:
 
 1. WPS services
 2. WPS processes
+3. WFS
+4. FeatureTypes
 
 Formats can be looked up in the sample files.
 
-The SemanticProxy (SP) permits CRUD access to these resources via the REST interface. Since the SP implements the linked data prinicples, all resources must reside within the domain name associated with the server and respect the provided vocabulary.
+The SemanticProxy (SP) permits CRUD access to the first two via the REST interface and read-only access to the second two. Since the SP implements the linked data prinicples, all resources must reside within the domain name associated with the server and respect the provided vocabulary.
 
 **Create:**
 A description of the resource can be sent to the list-URL of the resource kind, specified in the documentation using HTTP POST. The sample data can serve as reference. Posted data will be checked for consistence.
@@ -43,6 +45,7 @@ Send a new resource to the endpoint of an existing one with the same RDF id via 
 
 **Delete:**
 Send a HTTP Delete to the URL of the resource to be deleted.
+
 
 
 
@@ -67,6 +70,13 @@ Name or description of the target network
 **Port:**
 Port to use by the web server
 
+**HTTPProxySettings:**
+Defines ip and port of proxy server. Optional.
+
+	host:		IP of proxy server
+	port:		Port of proxy server
+
+
 **DataSources:**
 Specifies data sources to be read at system start; Is only done when there is a fresh DB.
 
@@ -75,8 +85,11 @@ Specifies data sources to be read at system start; Is only done when there is a 
 	type:            Attribute of File; The type of the resource described in the file (WPS, process, WFS)
 	ReplaceableHost: Attribute of File; Contains wildcard string to be replaced with the host name
 	
-	WPSServer:       URL to a WPS server
+	WPSServer:		URL to a WPS server
+	targetURL:		Attribute of WPSServer; URL of the WPS server
 	
+	WFSServer:		URL to a WFS server
+	targetURL:		Attribute of WFSServer; URL of the WFS server
 	
 **HTTPEndpoints:**
 Specifies URLs for specialized resources
@@ -88,6 +101,7 @@ Specifies URLs for specialized resources
 	WPSList:     Path segment of the overview of WPS, servers for create endpoint
 	ProcessList: Like WPSList, just for processes
 	Search:      Path segment of the search engine
+	IDGenerator: Path segment of the ID generator
 
 Resulting endpoints
 
@@ -95,7 +109,9 @@ Resulting endpoints
 * host/application/resources/vocabulary
 * host/application/resources/wpslist
 * host/application/resources/processlist
-* host/application/resources/search
+* host/application/resources/wfslist
+* host/application/search
+* host/application/idgenerator
 	
 RDFNamingEndpoints:
 Specifies the URLs used for naming of resources
@@ -104,6 +120,14 @@ Specifies the URLs used for naming of resources
 	ProcessNaming
 	InputNaming
 	OutputNaming
+	LiteralNaming
+	ComplexNaming
+	BoundingBoxNaming
+	ComplexDataCombinationNaming
+	WFSNaming
+	FeatureTypeNaming
+	QoSNaming
+	
 e.g. host/application/resources/<input>/inputA
 
 
