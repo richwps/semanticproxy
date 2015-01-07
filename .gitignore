@@ -9,7 +9,7 @@
 *.ear
 
 # Sesame repository files
-*.data
+SemanticProxy/memorystore.*
 SemanticProxy/lock
 
 # Configuration file
