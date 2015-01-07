@@ -20,5 +20,8 @@ hs_err_pid*
 
 
 # Target
-/SemanticProxy/target/
-/SemanticProxyClient/target/
+SemanticProxy/target/
+SemanticProxyClient/target/
+
+# Log files
+SemanticProxy/SemanticProxy.log*
