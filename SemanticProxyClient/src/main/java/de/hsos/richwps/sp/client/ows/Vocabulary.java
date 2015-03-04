@@ -17,7 +17,7 @@ import org.openrdf.rio.RDFWriter;
 import org.openrdf.rio.Rio;
 
 /**
- * Contains various definitions for vocabulary integrity
+ * Contains various definitions for vocabulary integrity 
  *
  * @author fbensman
  */
@@ -68,6 +68,14 @@ public class Vocabulary {
     public static String Encoding = null;
     public static String MimeType = null;
     public static String Schema = null;
+    //literal data
+    public static String LiteralDataType = null;
+    public static String ValuesRefernce = null;
+    public static String ValuesForm = null;
+    public static String AnyValue = null;
+    public static String AllowedValues = null;
+    public static String DefaultValue = null;
+    
     //QoSTarget
     public static String Ideal = null;
     public static String UOM = null;
@@ -223,6 +231,27 @@ public class Vocabulary {
             stmt = new StatementImpl(new URIImpl(Schema), new URIImpl(Label), new LiteralImpl("Schema"));
             writer.handleStatement(stmt);
             
+            //literal
+            LiteralDataType = VOC + "literaldatatype";
+            stmt = new StatementImpl(new URIImpl(LiteralDataType), new URIImpl(Label), new LiteralImpl("has data type"));
+            writer.handleStatement(stmt);
+            ValuesRefernce = VOC + "valuesreference";
+            stmt = new StatementImpl(new URIImpl(ValuesRefernce), new URIImpl(Label), new LiteralImpl("has reference"));
+            writer.handleStatement(stmt);
+            ValuesForm = VOC + "valuesform";
+            stmt = new StatementImpl(new URIImpl(ValuesForm), new URIImpl(Label), new LiteralImpl("has form"));
+            writer.handleStatement(stmt);
+            AnyValue = VOC + "anyvalue";
+            stmt = new StatementImpl(new URIImpl(AnyValue), new URIImpl(Label), new LiteralImpl("allows any value"));
+            writer.handleStatement(stmt);
+            AllowedValues = VOC + "allowedvalues";
+            stmt = new StatementImpl(new URIImpl(AllowedValues), new URIImpl(Label), new LiteralImpl("allows a predefined set of values"));
+            writer.handleStatement(stmt);
+            DefaultValue = VOC + "defaultvalue";
+            stmt = new StatementImpl(new URIImpl(DefaultValue), new URIImpl(Label), new LiteralImpl("has default value"));
+            writer.handleStatement(stmt);
+
+            
             //QoSTarget
             Ideal = VOC + "ideal";
             stmt = new StatementImpl(new URIImpl(Ideal), new URIImpl(Label), new LiteralImpl("has ideal value"));
@@ -362,7 +391,7 @@ public class Vocabulary {
      * @param sample
      * @return
      */
-    public static boolean isBasicWPSType(String sample) {
+    public static boolean isType(String sample) {
         if (sample.equalsIgnoreCase(NetworkClass)
                 || sample.equalsIgnoreCase(WPSClass)
                 || sample.equalsIgnoreCase(ProcessClass)
@@ -371,7 +400,8 @@ public class Vocabulary {
                 || sample.equalsIgnoreCase(ComplexDataClass)
                 || sample.equalsIgnoreCase(LiteralDataClass)
                 || sample.equalsIgnoreCase(BoundingBoxDataClass)
-                || sample.equalsIgnoreCase(QoSTargetClass))
+                || sample.equalsIgnoreCase(QoSTargetClass)
+                || sample.equalsIgnoreCase(WFSClass))
         {
             return true;
         }
@@ -382,41 +412,12 @@ public class Vocabulary {
     
     
     
-    /**
-     * Checks whether a sample string is known by the vocabulary as a predicate
-     * with literal object that describes a WFS
-     *
-     * @param sample
-     * @return
-     */
-    public static boolean isBasicWFSPredicate(String sample) {
-        if (sample.equalsIgnoreCase(WFSVersion)
-                || sample.equalsIgnoreCase(Endpoint)
-                || sample.equalsIgnoreCase(FeatureTypeName)) {
-            return true;
-        }
-        return false;
-    }
-    
+  
     
     
     
 
-    /**
-     * Checks whether a sample string is known by the vocabulary as an object
-     * for the type predicate that describes a WFS
-     *
-     * @param sample
-     * @return
-     */
-    public static boolean isBasicWFSType(String sample) {
-        if (sample.equalsIgnoreCase(WFSClass)
-                || sample.equalsIgnoreCase(FeatureTypeClass))
-        {
-            return true;
-        }
-        return false;
-    }
+ 
     
     
     

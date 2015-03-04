@@ -13,10 +13,10 @@ import de.hsos.richwps.sp.client.ows.SPClient;
 import de.hsos.richwps.sp.client.ows.gettypes.InAndOutputForm;
 import de.hsos.richwps.sp.client.ows.gettypes.Output;
 import de.hsos.richwps.sp.client.ows.posttypes.PostWPS;
-import de.hsos.richwps.sp.client.ows.Vocabulary;
 import de.hsos.richwps.sp.client.ows.gettypes.ComplexData;
 import de.hsos.richwps.sp.client.ows.gettypes.ComplexDataCombination;
 import de.hsos.richwps.sp.client.ows.gettypes.FeatureType;
+import de.hsos.richwps.sp.client.ows.gettypes.LiteralData;
 import de.hsos.richwps.sp.client.ows.gettypes.QoSTarget;
 import de.hsos.richwps.sp.client.ows.gettypes.WFS;
 import de.hsos.richwps.sp.client.ows.posttypes.PostComplexData;
@@ -68,10 +68,11 @@ public class App {
             for (int i = 0; i < wpss.length; i++) {
                 System.out.println("-> WPS:");
                 System.out.println("   -> WPS endpoint: " + wpss[i].getEndpoint());
-                if(wpss[i].getRichWPSEndpoint()!=null)
+                if (wpss[i].getRichWPSEndpoint() != null) {
                     System.out.println("   -> RichWPS endpoint: " + wpss[i].getRichWPSEndpoint());
-                else
+                } else {
                     System.out.println("   -> RichWPS endpoint: not set");
+                }
                 Process[] processes = wpss[i].getProcesses();
                 System.out.println("   -> Processes:");
                 for (int j = 0; j < processes.length; j++) {
@@ -83,11 +84,12 @@ public class App {
                     System.out.println("      -> Version:    " + proc.getProcessVersion());
                     {
                         URL[] metadata = proc.getMetadata();
-                        if (metadata.length==0) {
+                        if (metadata.length == 0) {
                             System.out.println("         -> Metadata:   Not set");
                         } else {
-                            for(URL md : metadata)
-                                System.out.println("         -> Metadata:   "+md.toString());
+                            for (URL md : metadata) {
+                                System.out.println("         -> Metadata:   " + md.toString());
+                            }
                         }
                     }
                     System.out.println("      -> Inputs:");
@@ -101,32 +103,59 @@ public class App {
                         System.out.println("         -> MaxOccurs:  " + in.getMaxOccurs());
                         {
                             URL[] metadata = in.getMetadata();
-                            if (metadata.length==0) {
+                            if (metadata.length == 0) {
                                 System.out.println("         -> Metadata:   Not set");
                             } else {
-                                for(URL md : metadata)
-                                    System.out.println("         -> Metadata:   "+md.toString());
+                                for (URL md : metadata) {
+                                    System.out.println("         -> Metadata:   " + md.toString());
+                                }
                             }
                         }
                         InAndOutputForm inf = in.getInputFormChoice();
                         if (inf.getDataType() == InAndOutputForm.LITERAL_TYPE) {
                             System.out.println("         -> Type:       Literal");
+                            LiteralData literal = (LiteralData) inf;
+                            if (literal.getLitealDataType() != null) {
+                                System.out.println("           -> DataType:        " + literal.getLitealDataType());
+                            } else {
+                                System.out.println("           -> DataType:        not set");
+                            }
+                            System.out.println("           -> AnyValue:        " + literal.isSetAnyValue());
+                            System.out.println("           -> AllowedValues:   " + literal.isSetAllowedValues());
+                            if (literal.getDefaultValue() != null) {
+                                System.out.println("           -> DefaultValue:    " + literal.getDefaultValue());
+                            } else {
+                                System.out.println("           -> DefaultValue:    not set");
+                            }
+                            if (literal.getValuesReference() != null) {
+                                System.out.println("           -> ValuesReference: " + literal.getValuesReference());
+                            } else {
+                                System.out.println("           -> ValuesReference: not set");
+                            }
+                            if (literal.getValuesForm() != null) {
+                                System.out.println("           -> ValuesForm:      " + literal.getValuesForm());
+                            } else {
+                                System.out.println("           -> Valuesform:      not set");
+                            }
+
                         } else if (inf.getDataType() == InAndOutputForm.COMPLEX_TYPE) {
                             System.out.println("         -> Type:       Complex");
-                            ComplexData complex = (ComplexData)inf;
-                            if(complex.getMaximumMegabytes() == null)
+                            ComplexData complex = (ComplexData) inf;
+                            if (complex.getMaximumMegabytes() == null) {
                                 System.out.println("           -> MMBytes:    not set");
-                            else
-                                System.out.println("           -> MMBytes:    "+complex.getMaximumMegabytes());
-                            System.out.println("           -> Def format: "+complex.getDefaultFormat().getEncoding()+" "+complex.getDefaultFormat().getMimeType()+" "+complex.getDefaultFormat().getSchema());
-                            for(ComplexDataCombination cdc : complex.getSupportedFormats())
-                                System.out.println("           -> Sup format: "+cdc.getEncoding()+" "+cdc.getMimeType()+" "+cdc.getSchema());
-                            
-                        } else if (inf.getDataType() == InAndOutputForm.BOUNDING_BOX_TYPE){
+                            } else {
+                                System.out.println("           -> MMBytes:    " + complex.getMaximumMegabytes());
+                            }
+                            System.out.println("           -> Def format: " + complex.getDefaultFormat().getEncoding() + " " + complex.getDefaultFormat().getMimeType() + " " + complex.getDefaultFormat().getSchema());
+                            for (ComplexDataCombination cdc : complex.getSupportedFormats()) {
+                                System.out.println("           -> Sup format: " + cdc.getEncoding() + " " + cdc.getMimeType() + " " + cdc.getSchema());
+                            }
+
+                        } else if (inf.getDataType() == InAndOutputForm.BOUNDING_BOX_TYPE) {
                             System.out.println("         -> Type:       BoundingBox");
-                        }
-                        else
+                        } else {
                             System.out.println("         -> Type:       No appropriate type");
+                        }
                         System.out.println("         --");
                     }
 
@@ -139,32 +168,59 @@ public class App {
                         System.out.println("         -> Abstract:   " + out.getAbstract());
                         {
                             URL[] metadata = out.getMetadata();
-                            if (metadata.length==0) {
+                            if (metadata.length == 0) {
                                 System.out.println("         -> Metadata:   Not set");
                             } else {
-                                for(URL md : metadata)
-                                    System.out.println("         -> Metadata:   "+md.toString());
+                                for (URL md : metadata) {
+                                    System.out.println("         -> Metadata:   " + md.toString());
+                                }
                             }
                         }
                         InAndOutputForm inf = out.getOutputFormChoice();
                         if (inf.getDataType() == InAndOutputForm.LITERAL_TYPE) {
                             System.out.println("         -> Type:       Literal");
+                            LiteralData literal = (LiteralData) inf;
+                            if (literal.getLitealDataType() != null) {
+                                System.out.println("           -> DataType:        " + literal.getLitealDataType());
+                            } else {
+                                System.out.println("           -> DataType:        not set");
+                            }
+                            System.out.println("           -> AnyValue:        " + literal.isSetAnyValue());
+                            System.out.println("           -> AllowedValues:   " + literal.isSetAllowedValues());
+                            if (literal.getDefaultValue() != null) {
+                                System.out.println("           -> DefaultValue:    " + literal.getDefaultValue());
+                            } else {
+                                System.out.println("           -> DefaultValue:    not set");
+                            }
+                            if (literal.getValuesReference() != null) {
+                                System.out.println("           -> ValuesReference: " + literal.getValuesReference());
+                            } else {
+                                System.out.println("           -> ValuesReference: not set");
+                            }
+                            if (literal.getValuesForm() != null) {
+                                System.out.println("           -> ValuesForm:      " + literal.getValuesForm());
+                            } else {
+                                System.out.println("           -> Valuesform:      not set");
+                            }
+
                         } else if (inf.getDataType() == InAndOutputForm.COMPLEX_TYPE) {
                             System.out.println("         -> Type:       Complex");
-                            ComplexData complex = (ComplexData)inf;
-                            if(complex.getMaximumMegabytes() == null)
+                            ComplexData complex = (ComplexData) inf;
+                            if (complex.getMaximumMegabytes() == null) {
                                 System.out.println("           -> MMBytes:    not set");
-                            else
-                                System.out.println("           -> MMBytes:    "+complex.getMaximumMegabytes());
-                            System.out.println("           -> Def format: "+complex.getDefaultFormat().getEncoding()+" "+complex.getDefaultFormat().getMimeType()+" "+complex.getDefaultFormat().getSchema());
-                            for(ComplexDataCombination cdc : complex.getSupportedFormats())
-                                System.out.println("           -> Sup format: "+cdc.getEncoding()+" "+cdc.getMimeType()+" "+cdc.getSchema());
+                            } else {
+                                System.out.println("           -> MMBytes:    " + complex.getMaximumMegabytes());
+                            }
+                            System.out.println("           -> Def format: " + complex.getDefaultFormat().getEncoding() + " " + complex.getDefaultFormat().getMimeType() + " " + complex.getDefaultFormat().getSchema());
+                            for (ComplexDataCombination cdc : complex.getSupportedFormats()) {
+                                System.out.println("           -> Sup format: " + cdc.getEncoding() + " " + cdc.getMimeType() + " " + cdc.getSchema());
+                            }
                         } else {
                             System.out.println("         -> Type:       BoundingBox");
                         }
                         System.out.println("         --");
                     }
-                    
+
                     System.out.println("      -> QoS targets:");
                     QoSTarget[] targets = processes[j].getQoSTargets();
                     for (int k = 0; k < targets.length; k++) {
@@ -178,7 +234,7 @@ public class App {
                         System.out.println("         -> Variance:   " + target.getVariance());
                         System.out.println("         --");
                     }
-                    
+
 
                     System.out.println("   --");
                 }
@@ -227,10 +283,10 @@ public class App {
             {
                 PostComplexData comData = new PostComplexData();
                 comData.setMaximumMegaBytes(BigInteger.valueOf(42));
-                    PostComplexDataCombination defFormat = new PostComplexDataCombination();
-                    defFormat.setEncoding("encoding");
-                    defFormat.setMimeType("image/jpg");
-                    defFormat.setSchema("http://www.daFormate.de/lkjeddfsdf.xsd");
+                PostComplexDataCombination defFormat = new PostComplexDataCombination();
+                defFormat.setEncoding("encoding");
+                defFormat.setMimeType("image/jpg");
+                defFormat.setSchema("http://www.daFormate.de/lkjeddfsdf.xsd");
                 comData.setDefaultFormat(defFormat);
                 ArrayList<PostComplexDataCombination> list = new ArrayList<PostComplexDataCombination>();
                 list.add(defFormat);
@@ -250,10 +306,10 @@ public class App {
             {
                 PostComplexData comData = new PostComplexData();
                 comData.setMaximumMegaBytes(BigInteger.valueOf(42));
-                    PostComplexDataCombination defFormat = new PostComplexDataCombination();
-                    defFormat.setEncoding("");
-                    defFormat.setMimeType("image/jpg");
-                    defFormat.setSchema("http://www.daFormate.de/lkjeddfsdf.xsd");
+                PostComplexDataCombination defFormat = new PostComplexDataCombination();
+                defFormat.setEncoding("");
+                defFormat.setMimeType("image/jpg");
+                defFormat.setSchema("http://www.daFormate.de/lkjeddfsdf.xsd");
                 comData.setDefaultFormat(defFormat);
                 ArrayList<PostComplexDataCombination> list = new ArrayList<PostComplexDataCombination>();
                 list.add(defFormat);
@@ -297,9 +353,9 @@ public class App {
             System.out.println("Delete a WPS");
             spClient.deleteWPS(wps.getRdfId());
             System.out.println("Done.\n--");
-            
-            
-            
+
+
+
             //get WFSs
             System.out.println("Get WFSs");
             WFS[] wfss = net.getWFSs();
@@ -314,10 +370,10 @@ public class App {
                     System.out.println("      -> Name: " + feat.getName());
                 }
             }
-            
-            
-            
-            
+
+
+
+
         } catch (BadRequestException e) {
             System.err.println("Caught exception: " + e.getMessage());
             e.printStackTrace();
