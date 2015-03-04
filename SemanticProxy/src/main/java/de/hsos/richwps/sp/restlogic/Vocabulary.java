@@ -69,6 +69,7 @@ public class Vocabulary {
     public static String MimeType = null;
     public static String Schema = null;
     //literal data
+    public static String LiteralDataType = null;
     public static String ValuesRefernce = null;
     public static String ValuesForm = null;
     public static String AnyValue = null;
@@ -231,6 +232,9 @@ public class Vocabulary {
             writer.handleStatement(stmt);
             
             //literal
+            LiteralDataType = VOC + "literaldatatype";
+            stmt = new StatementImpl(new URIImpl(LiteralDataType), new URIImpl(Label), new LiteralImpl("has data type"));
+            writer.handleStatement(stmt);
             ValuesRefernce = VOC + "valuesreference";
             stmt = new StatementImpl(new URIImpl(ValuesRefernce), new URIImpl(Label), new LiteralImpl("has reference"));
             writer.handleStatement(stmt);

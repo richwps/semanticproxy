@@ -20,6 +20,8 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
 import net.opengis.ows.x11.MetadataType; //da true Metadata net.opengis.ows.x11.MetadataType
+import net.opengis.ows11.DomainMetadataType;
+//import net.opengis.ows11.MetadataType;
 
 
 import net.opengis.wps.x100.CapabilitiesDocument;
@@ -230,6 +232,11 @@ public class WPSHarvester implements IWPSImportSource {
                         RDFID literalDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.LITERAL).toString());
                         PostLiteralData literalData = new PostLiteralData(literalDataRDFID);
                         
+                        if(in.getLiteralData().isSetDataType()){
+                            String reference = in.getLiteralData().getDataType().getReference();
+                            literalData.setLiteralDataType(reference);
+                        }
+                        
                         if(in.getLiteralData().isSetValuesReference()){
                             if(in.getLiteralData().getValuesReference().isSetReference()){
                                 String valuesReference = in.getLiteralData().getValuesReference().getReference();
@@ -353,8 +360,16 @@ public class WPSHarvester implements IWPSImportSource {
                     }
                     //Occs
                     if (out.isSetLiteralOutput()) {
+                        
                         RDFID literalDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.LITERAL).toString());
-                        output.setPostOutputFormChoice(new PostLiteralData(literalDataRDFID));
+                        PostLiteralData literalData = new PostLiteralData(literalDataRDFID);
+                        
+                        if(out.getLiteralOutput().isSetDataType()){
+                            String reference = out.getLiteralOutput().getDataType().getReference();
+                            literalData.setLiteralDataType(reference);     
+                        }
+                       
+                        output.setPostOutputFormChoice(literalData);
                     } else if (out.isSetComplexOutput()) {
                         RDFID complexDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.COMPLEX).toString());
 

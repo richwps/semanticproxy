@@ -15,6 +15,7 @@ import java.util.ArrayList;
 public class PostLiteralData extends PostInAndOutputForm {
 
     private RDFID rdfId = null;
+    private String literalDataType = null;
     private String valuesReference = null;
     private String valuesForm = null;
     private boolean anyValue = false;
@@ -25,6 +26,15 @@ public class PostLiteralData extends PostInAndOutputForm {
     public int getDataType() {
         return LITERAL_TYPE;
     }
+
+    public String getLiteralDataType() {
+        return literalDataType;
+    }
+
+    public void setLiteralDataType(String literalDataType) {
+        this.literalDataType = literalDataType;
+    }
+
 
     public PostLiteralData(RDFID rdfId) {
         this.rdfId = rdfId;
@@ -86,6 +96,12 @@ public class PostLiteralData extends PostInAndOutputForm {
 
         ResourceExpression rexp = new ResourceExpression(Vocabulary.Type, new RDFID(Vocabulary.LiteralDataClass));
         rexpList.add(rexp);
+        
+        
+        if (literalDataType != null) {
+            LiteralExpression lexp = new LiteralExpression(Vocabulary.LiteralDataType, literalDataType);
+            lexpList.add(lexp);
+        }
 
         if (valuesReference != null) {
             LiteralExpression lexp = new LiteralExpression(Vocabulary.ValuesRefernce, valuesReference);
