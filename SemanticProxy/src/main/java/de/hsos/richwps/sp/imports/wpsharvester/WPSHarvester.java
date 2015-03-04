@@ -226,8 +226,31 @@ public class WPSHarvester implements IWPSImportSource {
 
                     //Datatype (Literal, Complex or BoundingBox)
                     if (in.isSetLiteralData()) {
+                        
                         RDFID literalDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.LITERAL).toString());
-                        input.setPostInputFormChoice(new PostLiteralData(literalDataRDFID));
+                        PostLiteralData literalData = new PostLiteralData(literalDataRDFID);
+                        
+                        if(in.getLiteralData().isSetValuesReference()){
+                            if(in.getLiteralData().getValuesReference().isSetReference()){
+                                String valuesReference = in.getLiteralData().getValuesReference().getReference();
+                                literalData.setValuesReference(valuesReference);
+                                if(in.getLiteralData().getValuesReference().isSetValuesForm()){
+                                    String valuesForm = in.getLiteralData().getValuesReference().getValuesForm();
+                                    literalData.setValuesForm(valuesForm);
+                                }
+                            }
+                        }
+                        literalData.setAnyValue(in.getLiteralData().isSetAnyValue());
+                        literalData.setAllowedValues(in.getLiteralData().isSetAllowedValues());
+                         
+                        if(in.getLiteralData().isSetDefaultValue()){
+                            String defaultValue = in.getLiteralData().getDefaultValue();
+                            literalData.setDefaultValue(defaultValue);
+                        }
+
+                        input.setPostInputFormChoice(literalData);
+                        
+                        
                     } else if (in.isSetComplexData()) {
                         RDFID complexDataRDFID = new RDFID(IDGenerator.getInstance().generateID(EIDType.COMPLEX).toString());
                         PostComplexData complexData = new PostComplexData(complexDataRDFID);

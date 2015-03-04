@@ -68,6 +68,13 @@ public class Vocabulary {
     public static String Encoding = null;
     public static String MimeType = null;
     public static String Schema = null;
+    //literal data
+    public static String ValuesRefernce = null;
+    public static String ValuesForm = null;
+    public static String AnyValue = null;
+    public static String AllowedValues = null;
+    public static String DefaultValue = null;
+    
     //QoSTarget
     public static String Ideal = null;
     public static String UOM = null;
@@ -222,6 +229,24 @@ public class Vocabulary {
             Schema = VOC + "schema";
             stmt = new StatementImpl(new URIImpl(Schema), new URIImpl(Label), new LiteralImpl("Schema"));
             writer.handleStatement(stmt);
+            
+            //literal
+            ValuesRefernce = VOC + "valuesreference";
+            stmt = new StatementImpl(new URIImpl(ValuesRefernce), new URIImpl(Label), new LiteralImpl("has reference"));
+            writer.handleStatement(stmt);
+            ValuesForm = VOC + "valuesform";
+            stmt = new StatementImpl(new URIImpl(ValuesForm), new URIImpl(Label), new LiteralImpl("has form"));
+            writer.handleStatement(stmt);
+            AnyValue = VOC + "anyvalue";
+            stmt = new StatementImpl(new URIImpl(AnyValue), new URIImpl(Label), new LiteralImpl("allows any value"));
+            writer.handleStatement(stmt);
+            AllowedValues = VOC + "allowedvalues";
+            stmt = new StatementImpl(new URIImpl(AllowedValues), new URIImpl(Label), new LiteralImpl("allows a predefined set of values"));
+            writer.handleStatement(stmt);
+            DefaultValue = VOC + "defaultvalue";
+            stmt = new StatementImpl(new URIImpl(DefaultValue), new URIImpl(Label), new LiteralImpl("has default value"));
+            writer.handleStatement(stmt);
+
             
             //QoSTarget
             Ideal = VOC + "ideal";
