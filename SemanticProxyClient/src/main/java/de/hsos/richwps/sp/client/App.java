@@ -26,6 +26,7 @@ import de.hsos.richwps.sp.client.ows.posttypes.PostLiteralData;
 import de.hsos.richwps.sp.client.ows.posttypes.PostOutput;
 import de.hsos.richwps.sp.client.ows.posttypes.PostProcess;
 import de.hsos.richwps.sp.client.ows.posttypes.PostQoSTarget;
+import de.hsos.richwps.sp.client.rdf.RDFID;
 import java.math.BigInteger;
 import java.net.URL;
 import java.util.ArrayList;
@@ -55,7 +56,6 @@ public class App {
 //            spClient.setSearchURL("http://localhost:4567/semanticproxy/search");
 //            spClient.setWpsListURL("http://localhost:4567/semanticproxy/resources/wpss");
 //            spClient.setProcessListURL("http://localhost:4567/semanticproxy/resources/processes");
-
 
             //Testing/Demonstration
             Network net = spClient.getNetwork();
@@ -345,6 +345,10 @@ public class App {
             System.out.println("Repost wps and process and update process");
             spClient.postWPS(wps);
             spClient.postProcess(process);
+            //retrieve the RDFID of the process from SP and use it for update
+            RDFID newProcessRDFID = spClient.lookupProcess(process.getWps().getEndpoint(), process.getIdentifier());
+            process.setRDFID(newProcessRDFID);
+            
             process.setBstract("This is a newer version of the process");
             spClient.updateProcess(process);
             System.out.println("Done.\n--");
@@ -370,9 +374,6 @@ public class App {
                     System.out.println("      -> Name: " + feat.getName());
                 }
             }
-
-
-
 
         } catch (BadRequestException e) {
             System.err.println("Caught exception: " + e.getMessage());

@@ -23,4 +23,9 @@ public class RDFID {
     public RDFID(RDFID clone) {
         this.rdfID = clone.rdfID;
     }
+    
+    @Override
+    public String toString(){
+        return rdfID;
+    }
 }

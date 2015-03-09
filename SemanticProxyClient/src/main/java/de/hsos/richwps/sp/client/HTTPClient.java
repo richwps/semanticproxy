@@ -23,18 +23,17 @@ public class HTTPClient {
 
     public HTTPClient() {
     }
-    
-    
+
     /**
      * Sets proxy configuration for this http client
+     *
      * @param httpHost
-     * @param httpPort 
+     * @param httpPort
      */
-    public void setProxyConfiguration(String httpHost, String httpPort){
+    public void setProxyConfiguration(String httpHost, String httpPort) {
         System.setProperty("http.proxyHost", httpHost);
         System.setProperty("http.proxyPort", httpPort);
     }
-    
 
     /**
      * Gets an rdf resource from the SemanticProxy
@@ -48,7 +47,7 @@ public class HTTPClient {
             //System.out.println("uri: " + url);
             Client client = ClientBuilder.newClient();
             client.property(ClientProperties.CONNECT_TIMEOUT, 5000);
-            client.property(ClientProperties.READ_TIMEOUT,    5000);
+            client.property(ClientProperties.READ_TIMEOUT, 5000);
             WebTarget webTarget = client.target(url);
 
             Invocation.Builder invocationBuilder = webTarget.request();
@@ -73,27 +72,28 @@ public class HTTPClient {
         }
     }
 
-    
     /**
-     * Executes a search request to the SemanticProxy and returns the raw result page
+     * Executes a search request to the SemanticProxy and returns the raw result
+     * page
+     *
      * @param keyword Term to search
      * @param url SemanticProxy endpoint to address the query to
      * @return The raw result page
      * @throws BadRequestException
      * @throws InternalSPException
-     * @throws CommunicationException 
+     * @throws CommunicationException
      */
     public String getRawSearchResults(String keyword, URL url) throws BadRequestException, InternalSPException, CommunicationException {
         try {
             //System.out.println("uri: " + url);
             Client client = ClientBuilder.newClient();
             client.property(ClientProperties.CONNECT_TIMEOUT, 5000);
-            client.property(ClientProperties.READ_TIMEOUT,    5000);
+            client.property(ClientProperties.READ_TIMEOUT, 5000);
             WebTarget webTarget = client.target(url.toString());
             webTarget = webTarget.queryParam("keyword", keyword);
             Invocation.Builder invocationBuilder = webTarget.request();
             invocationBuilder.accept("application/xml");
-            
+
 
 
             Response response = invocationBuilder.get();
@@ -118,19 +118,62 @@ public class HTTPClient {
 
     
     /**
+     * Executes a lookup request to the SemanticProxy and returns the raw result
+     * page
+     * @param wpsEndpoint
+     * @param processIdentifier
+     * @param lookupEndpoint
+     * @return
+     * @throws BadRequestException
+     * @throws InternalSPException
+     * @throws CommunicationException 
+     */
+    public String getRawLookupResults(URL wpsEndpoint, String processIdentifier, URL lookupEndpoint) throws BadRequestException, InternalSPException, CommunicationException {
+        try {
+            Client client = ClientBuilder.newClient();
+            client.property(ClientProperties.CONNECT_TIMEOUT, 5000);
+            client.property(ClientProperties.READ_TIMEOUT, 5000);
+            WebTarget webTarget = client.target(lookupEndpoint.toString());
+            webTarget = webTarget.queryParam("wps", wpsEndpoint.toString());
+            webTarget = webTarget.queryParam("process", processIdentifier);
+            Invocation.Builder invocationBuilder = webTarget.request();
+            invocationBuilder.accept("application/xml");
+
+            Response response = invocationBuilder.get();
+
+            if (response.getStatus() != 200) {
+                if (response.getStatus() == 400) {
+                    throw new BadRequestException(response.readEntity(String.class));
+                }
+                throw new InternalSPException("SemanticProxy returned " + response.getStatus() + " for lookup. WPS was " + wpsEndpoint + " process identifier was " + processIdentifier + " lookup URL was " + lookupEndpoint);
+            }
+            return response.readEntity(String.class);
+
+        } catch (BadRequestException e) {
+            throw e;
+        } catch (InternalSPException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new CommunicationException("Communication to SemanticProxy at " + lookupEndpoint + " failed. Original message: " + e.getMessage());
+        }
+
+    }
+
+    /**
      * Executes a POST with an XML+RDF document to the given URL
+     *
      * @param xmlrdf The XML document to post
      * @param url The URL to send the POST to
      * @throws BadRequestException
      * @throws InternalSPException
-     * @throws CommunicationException 
+     * @throws CommunicationException
      */
     public void postRDFDoc(String xmlrdf, URL url) throws BadRequestException, InternalSPException, CommunicationException {
         try {
             //System.out.println("uri: " + url);
             Client client = ClientBuilder.newClient();
             client.property(ClientProperties.CONNECT_TIMEOUT, 5000);
-            client.property(ClientProperties.READ_TIMEOUT,    5000);
+            client.property(ClientProperties.READ_TIMEOUT, 5000);
             WebTarget webTarget = client.target(url.toString());
 
             Invocation.Builder invocationBuilder = webTarget.request();
@@ -155,20 +198,20 @@ public class HTTPClient {
 
     }
 
-    
     /**
      * Sends a delete request to a given resource/URL
+     *
      * @param url URL to delete / to address the delete request to
      * @throws BadRequestException
      * @throws InternalSPException
-     * @throws CommunicationException 
+     * @throws CommunicationException
      */
     public void delete(String url) throws BadRequestException, InternalSPException, CommunicationException {
         try {
             //System.out.println("uri: " + url);
             Client client = ClientBuilder.newClient();
             client.property(ClientProperties.CONNECT_TIMEOUT, 5000);
-            client.property(ClientProperties.READ_TIMEOUT,    5000);
+            client.property(ClientProperties.READ_TIMEOUT, 5000);
             WebTarget webTarget = client.target(url);
 
             Invocation.Builder invocationBuilder = webTarget.request();
@@ -192,20 +235,20 @@ public class HTTPClient {
         }
     }
 
-    
     /**
      * Updates a resource or creates it if not present
+     *
      * @param xmlrdf RDF description of the resource to send
      * @param url Address of the endpoint to send to
      * @throws BadRequestException
      * @throws InternalSPException
-     * @throws CommunicationException 
+     * @throws CommunicationException
      */
     public void putRDFDoc(String xmlrdf, URL url) throws BadRequestException, InternalSPException, CommunicationException {
         try {
             Client client = ClientBuilder.newClient();
             client.property(ClientProperties.CONNECT_TIMEOUT, 5000);
-            client.property(ClientProperties.READ_TIMEOUT,    5000);
+            client.property(ClientProperties.READ_TIMEOUT, 5000);
             WebTarget webTarget = client.target(url.toString());
 
             Invocation.Builder invocationBuilder = webTarget.request();
@@ -230,9 +273,9 @@ public class HTTPClient {
 
     }
 
-    
     /**
      * Executes a GET request to the ID generator on the SemanticProxy
+     *
      * @param type Type of resource to request the ID for
      * @param idGeneratorURL Endpoint of the ID generator
      * @return Generated RDF ID
@@ -241,12 +284,12 @@ public class HTTPClient {
         try {
             Client client = ClientBuilder.newClient();
             client.property(ClientProperties.CONNECT_TIMEOUT, 5000);
-            client.property(ClientProperties.READ_TIMEOUT,    5000);
+            client.property(ClientProperties.READ_TIMEOUT, 5000);
             WebTarget webTarget = client.target(idGeneratorURL.toString());
             webTarget = webTarget.queryParam("type", type);
             Invocation.Builder invocationBuilder = webTarget.request();
             invocationBuilder.accept("application/xml");
-            
+
             Response response = invocationBuilder.get();
 
             if (response.getStatus() != 200) {
@@ -265,19 +308,17 @@ public class HTTPClient {
             throw new CommunicationException("Communication to SemanticProxy at " + idGeneratorURL + " failed. Original message: " + e.getMessage());
         }
     }
-    
-    
-    
+
     public String getHeader(String key, URL url) throws BadRequestException, CommunicationException {
         try {
             //System.out.println("uri: " + url);
             Client client = ClientBuilder.newClient();
             client.property(ClientProperties.CONNECT_TIMEOUT, 5000);
-            client.property(ClientProperties.READ_TIMEOUT,    5000);
+            client.property(ClientProperties.READ_TIMEOUT, 5000);
             WebTarget webTarget = client.target(url.toString());
             Invocation.Builder invocationBuilder = webTarget.request();
             //invocationBuilder.accept("text/html");
-            
+
             Response response = invocationBuilder.get();
 
             if (response.getStatus() != 200) {
@@ -292,5 +333,4 @@ public class HTTPClient {
         }
 
     }
-    
 }

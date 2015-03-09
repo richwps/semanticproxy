@@ -52,6 +52,7 @@ public class SPClient {
     private String wpsListURL = "http://localhost:4567/semanticproxy/resources/wpss";
     private String processListURL = "http://localhost:4567/semanticproxy/resources/processes";
     private String idgeneratorURL = "http://localhost:4567/semanticproxy/idgenerator";
+    private String lookupURL = "http://localhost:4567/semanticproxy/lookup";
 
     private SPClient() {
         rdfClient = new RDFClient();
@@ -83,6 +84,7 @@ public class SPClient {
         wpsListURL = linkHeader.get("wpslist");
         processListURL = linkHeader.get("processlist");
         idgeneratorURL = linkHeader.get("idgenerator");
+        lookupURL = linkHeader.get("lookup");
         String vocabularyURL = linkHeader.get("vocabulary");
         Vocabulary.init(new URL(vocabularyURL));
     }
@@ -161,6 +163,13 @@ public class SPClient {
     public void setIdgeneratorURL(String idgeneratorURL) {
         this.idgeneratorURL = idgeneratorURL;
     }
+
+    public String getLookupURL() {
+        return lookupURL;
+    }
+    
+    
+    
 
     public RDFClient getRdfClient() {
         return rdfClient;
@@ -496,5 +505,16 @@ public class SPClient {
     public FeatureType getFeatureType(RDFID rdfID) throws BadRequestException, InternalSPException, CommunicationException, RDFException {
         RDFResource res = rdfClient.retrieveResource(rdfID);
         return FeatureType.createWrapper(res);
+    }
+
+    
+    /**
+     * Retrieves the RDFID of the process specified from the semantic proxy
+     * @param endpoint Endpoint of the hosting WPS instance
+     * @param identifier Identifier of the process
+     * @return RDFID of the process if it exists, else null
+     */
+    public RDFID lookupProcess(URL endpoint, String identifier) throws MalformedURLException, BadRequestException, InternalSPException, CommunicationException {
+        return rdfClient.lookupProcess(endpoint, identifier, new URL(lookupURL));
     }
 }

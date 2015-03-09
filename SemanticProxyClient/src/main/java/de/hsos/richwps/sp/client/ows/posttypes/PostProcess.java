@@ -46,8 +46,17 @@ public class PostProcess {
         this.rdfId = SPClient.getInstance().requestID(EIDType.PROCESS);
     }
 
+    public PostProcess(RDFID rdfid){
+        this.rdfId = rdfid;
+    }
+    
+    
     public RDFID getRdfId() {
         return rdfId;
+    }
+    
+    public void setRDFID(RDFID rdfid){
+        this.rdfId = rdfid;
     }
 
     /**

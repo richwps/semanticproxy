@@ -193,6 +193,35 @@ public class RDFClient {
         }
     }
 
+    
+    /**
+     * Issues a lookup request to the SemanticProxy
+     * @param wpsEndpoint Endpoint of hosting WPS instance
+     * @param processIdentifier Identifier of process
+     * @param lookupEndpoint URL endpoint of SP to send the request to
+     * @return RDFID of process found, null if no process was found
+     * @throws BadRequestException
+     * @throws InternalSPException
+     * @throws CommunicationException
+     * @throws MalformedURLException 
+     */
+    public RDFID lookupProcess(URL wpsEndpoint, String processIdentifier, URL lookupEndpoint) throws BadRequestException, InternalSPException, CommunicationException, MalformedURLException {
+
+        String xml = httpClient.getRawLookupResults(wpsEndpoint, processIdentifier, lookupEndpoint);
+        try {
+            SubjectList list = SubjectList.fromXML(xml);
+            if(list.size()==0)
+                return null;
+            else{
+                return new RDFID(list.get(0).toString());
+            }
+            
+        } catch (MalformedURLException e) {
+            throw new MalformedURLException("Parsing result list failed: " + e.getMessage());
+        }
+    }
+    
+    
     /**
      * Issues a post request for multiple RDF resources
      *
