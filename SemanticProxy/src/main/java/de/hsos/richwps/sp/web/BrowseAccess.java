@@ -43,9 +43,10 @@ public class BrowseAccess {
             URL wpsListURL,
             URL wfsListURL,
             URL searchURL,
-            URL idgeneratorURL) {
+            URL idgeneratorURL,
+            URL lookupURL) {
         if (instance == null) {
-            instance = new BrowseAccess(applicationURL, resourcesURL, vocabularyURL , processListURL, wpsListURL, wfsListURL, searchURL, idgeneratorURL);
+            instance = new BrowseAccess(applicationURL, resourcesURL, vocabularyURL , processListURL, wpsListURL, wfsListURL, searchURL, idgeneratorURL, lookupURL);
         }
     }
 
@@ -59,10 +60,11 @@ public class BrowseAccess {
             URL wpsListURL,
             URL wfsListURL,
             URL searchURL,
-            URL idgeneratorURL) {
+            URL idgeneratorURL,
+            URL lookupURL) {
         
         //init link header
-        linkHeader = createLinkHeader(applicationURL, resourcesURL, vocabularyURL, processListURL, wpsListURL, wfsListURL, searchURL, idgeneratorURL);
+        linkHeader = createLinkHeader(applicationURL, resourcesURL, vocabularyURL, processListURL, wpsListURL, wfsListURL, searchURL, idgeneratorURL, lookupURL);
 
         /**
          * Registers the route for root for user convenience
@@ -269,7 +271,8 @@ public class BrowseAccess {
             URL wpsListURL,
             URL wfsListURL,
             URL searchURL,
-            URL idGeneratorURL) {
+            URL idGeneratorURL,
+            URL lookupURL) {
         String h = "";
         h+="<"+applicationURL.toString()+">; rel=\"application\",";
         h+="<"+resourcesURL.toString()+">; rel=\"resources\",";
@@ -278,7 +281,8 @@ public class BrowseAccess {
         h+="<"+wpsListURL.toString()+">; rel=\"wpslist\",";
         h+="<"+wfsListURL.toString()+">; rel=\"wfslist\",";
         h+="<"+searchURL.toString()+">; rel=\"search\",";
-        h+="<"+idGeneratorURL.toString()+">; rel=\"idgenerator\"";
+        h+="<"+idGeneratorURL.toString()+">; rel=\"idgenerator\",";
+        h+="<"+lookupURL.toString()+">; rel=\"lookup\"";
         
         return h;
     }

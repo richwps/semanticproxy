@@ -291,13 +291,13 @@ public class App {
         BrowseAccess.activate(config.getApplicationURL(), config.getResourcesURL(),
                 config.getVocabularyURL(), config.getProcessListURL(), 
                 config.getWpsListURL(),config.getWfsListURL(),
-                config.getSearchURL(), config.getIdGeneratorURL());
+                config.getSearchURL(), config.getIdGeneratorURL(), config.getLookupURL());
         CreateAccess.activate(config.getProcessListURL(), config.getWpsListURL());
         DeleteAccess.activate(config.getProcessNamingEndpoint(), config.getWpsNamingEndpoint());
         UpdateAccess.activate(config.getProcessNamingEndpoint(), config.getWpsNamingEndpoint());
         SearchAccess.activate(config.getSearchURL());
         try{
-            LookupAccess.activate(new URL("http://localhost:4567/semanticproxy/lookup"));
+            LookupAccess.activate(config.getLookupURL());
         }catch(Exception e){/*consume*/}
         IDGeneratorAccess.activate(config.getIdGeneratorURL());
     }

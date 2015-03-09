@@ -57,6 +57,7 @@ public class Configuration {
     private URL wfsListURL = null;
     private URL searchURL = null;
     private URL idGeneratorURL = null;
+    private URL lookupURL = null;
     //naming endpoints
     private URL wpsNamingEndpoint = null;
     private URL processNamingEndpoint = null;
@@ -102,6 +103,7 @@ public class Configuration {
     private String defaultWfsListURL = null;
     private String defaultSearchURL = null;
     private String defaultIDGeneratorURL = null;
+    private String defaultLookupURL = null;
     //default naming endpoints
     private String defaultWpsNamingEndpoint = null;
     private String defaultProcessNamingEndpoint = null;
@@ -159,6 +161,7 @@ public class Configuration {
         defaultWfsListURL = "wfss";
         defaultSearchURL = "search";
         defaultIDGeneratorURL = "idgenerator";
+        defaultLookupURL = "lookup";
         //default naming endpoints
         defaultWpsNamingEndpoint = "wps";
         defaultProcessNamingEndpoint = "process";
@@ -258,6 +261,7 @@ public class Configuration {
         wfsListURL = new URL(resourcesURL.toString() + "/" +tmpHTTPEndpoints.getWFSList());
         searchURL = new URL(applicationURL.toString() + "/" + tmpHTTPEndpoints.getSearch());
         idGeneratorURL = new URL(applicationURL.toString() + "/"+ tmpHTTPEndpoints.getIDGenerator()); 
+        lookupURL = new URL(applicationURL.toString() + "/"+ tmpHTTPEndpoints.getLookup());
 
         //naming endpoints
         wpsNamingEndpoint = new URL(resourcesURL.toString() + "/" + tmpRDFNamingEndpoints.getWPSNaming());
@@ -375,6 +379,7 @@ public class Configuration {
         tmpHttpEndpoints.setWFSList(defaultWfsListURL);
         tmpHttpEndpoints.setSearch(defaultSearchURL);
         tmpHttpEndpoints.setIDGenerator(defaultIDGeneratorURL);
+        tmpHttpEndpoints.setLookup(defaultLookupURL);
 
         RDFNaming tmpRDFNamingEndpoints = config.addNewRDFNaming();
         tmpRDFNamingEndpoints.setInputNaming(defaultInputNamingEndpoint);
@@ -445,6 +450,11 @@ public class Configuration {
     public URL getSearchURL() {
         return searchURL;
     }
+
+    public URL getLookupURL() {
+        return lookupURL;
+    }
+    
 
     public URL getWpsNamingEndpoint() {
         return wpsNamingEndpoint;
@@ -569,6 +579,7 @@ public class Configuration {
         ret += "processList URL: " + processListURL.toString() + "\n";
         ret += "wfsList URL:     " + wfsListURL.toString() + "\n";
         ret += "search URL:      " + searchURL.toString() + "\n";
+        ret += "Lookup URL:      " + lookupURL.toString() + "\n";
         ret += "WPS naming ep:   " + wpsNamingEndpoint.toString() + "\n";
         ret += "Proc naming ep:  " + processNamingEndpoint.toString() + "\n";
         ret += "Input naming ep: " + inputNamingEndpoint.toString() + "\n";

@@ -34,6 +34,7 @@
 	<WFSList>wfss</WFSList>
     <Search>search</Search>
 	<IDGenerator>idgenerator</IDGenerator>
+	<Lookup>lookup</Lookup>
   </HTTPEndpoints>
   <RDFNaming>
     <WPSNaming>wps</WPSNaming>
