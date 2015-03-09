@@ -42,6 +42,9 @@ public class DBReadTest extends TestCase{
     private static final String TESTFILE_NAME = "RDF"+ File.separator+"BAW"+File.separator+"ProcessCompare.rdf";
     private static final String TESTPROCESS_NAME = "http://localhost:4567/semanticproxy/resources/process/compare";
     
+    private static final String TESTPROCESS_IDENTIFIER = "baw.modelvalidation.compare";
+    private static final String TESTWPS_ENDPOINT = "http://www.baw.de/geo/wps/modelfieldcomparator";
+    
     private File rdfDataDir = null;
     private URL resURL = null;
     private URL vocURL = null;
@@ -164,6 +167,61 @@ public class DBReadTest extends TestCase{
             fail("Method DBIO.getStatementsForSubjAndPred(new URL(TESTPROCESS_NAME),new URL(Vocabulary.Identifier) should not raise an exception: "+ex);
         }
     }
+    
+    
+    /**
+     * Tests basis DB IO functions
+     */
+    public void testGetAllStmtsForPredicateAndLiteralObject() 
+    {
+        try {
+            Statement[] stmtArr = DBIO.getStatementsForPredAndLiteralObj(new URL(Vocabulary.Identifier),TESTPROCESS_IDENTIFIER);
+            assertEquals("1 statement should be found for process identifier predicate and literal object", 1, stmtArr.length);
+        } catch (IllegalStateException ex) {
+            fail("Method DBIO.getStatementsForPredAndLiteralObj(new URL(Vocabulary.Identifier),TESTPROCESS_IDENTIFIER) should not raise an exception: "+ex);
+        } catch (MalformedURLException ex) {
+            fail("Method DBIO.getStatementsForPredAndLiteralObj(new URL(Vocabulary.Identifier),TESTPROCESS_IDENTIFIER) should not raise an exception: "+ex);
+        } catch (RepositoryException ex) {
+            fail("Method DBIO.getStatementsForPredAndLiteralObj(new URL(Vocabulary.Identifier),TESTPROCESS_IDENTIFIER) should not raise an exception: "+ex);
+        }
+    }
+    
+    
+    /**
+     * Tests basis DB IO functions
+     */
+    public void testGetAllStmtsForPredicateAndResourceObject() 
+    {
+        try {
+            Statement[] stmtArr = DBIO.getStatementsForPredAndResourceObj(new URL(Vocabulary.Type),new URL(Vocabulary.ProcessClass));
+            assertEquals("1 statement should be found for given process and predicate", 1, stmtArr.length);
+        } catch (IllegalStateException ex) {
+            fail("Method DBIO.getStatementsForPredAndResourceObj(new URL(Vocabulary.Process),new URL(TESTPROCESS_NAME)) should not raise an exception: "+ex);
+        } catch (MalformedURLException ex) {
+            fail("Method DBIO.getStatementsForPredAndResourceObj(new URL(Vocabulary.Process),new URL(TESTPROCESS_NAME)) should not raise an exception: "+ex);
+        } catch (RepositoryException ex) {
+            fail("Method DBIO.getStatementsForPredAndResourceObj(new URL(Vocabulary.Process),new URL(TESTPROCESS_NAME)) should not raise an exception: "+ex);
+        }
+    }
+    
+    
+    /**
+     * Tests basis DB IO functions
+     */
+    public void testStatementExists() 
+    {
+        try {
+            boolean stmtExists = DBIO.statementExists(new URL(TESTPROCESS_NAME), new URL(Vocabulary.Identifier), TESTPROCESS_IDENTIFIER);
+            assertTrue("The statement should exist", stmtExists);
+        } catch (IllegalStateException ex) {
+            fail("Method DDBIO.statementExists(new URL(TESTPROCESS_NAME), new URL(Vocabulary.Identifier), TESTPROCESS_IDENTIFIER) should not raise an exception: "+ex);
+        } catch (MalformedURLException ex) {
+            fail("Method DBIO.statementExists(new URL(TESTPROCESS_NAME), new URL(Vocabulary.Identifier), TESTPROCESS_IDENTIFIER) should not raise an exception: "+ex);
+        } catch (RepositoryException ex) {
+            fail("Method DBIO.statementExists(new URL(TESTPROCESS_NAME), new URL(Vocabulary.Identifier), TESTPROCESS_IDENTIFIER) should not raise an exception: "+ex);
+        }
+    }
+    
     
      /**
      * Tests basis DB IO functions
