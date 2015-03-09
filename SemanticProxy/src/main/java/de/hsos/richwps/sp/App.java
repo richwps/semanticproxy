@@ -16,11 +16,11 @@ import de.hsos.richwps.sp.web.BrowseAccess;
 import de.hsos.richwps.sp.web.CreateAccess;
 import de.hsos.richwps.sp.web.DeleteAccess;
 import de.hsos.richwps.sp.web.IDGeneratorAccess;
+import de.hsos.richwps.sp.web.LookupAccess;
 import de.hsos.richwps.sp.web.SearchAccess;
 import de.hsos.richwps.sp.web.UpdateAccess;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import org.apache.log4j.Logger;
@@ -296,6 +296,9 @@ public class App {
         DeleteAccess.activate(config.getProcessNamingEndpoint(), config.getWpsNamingEndpoint());
         UpdateAccess.activate(config.getProcessNamingEndpoint(), config.getWpsNamingEndpoint());
         SearchAccess.activate(config.getSearchURL());
+        try{
+            LookupAccess.activate(new URL("http://localhost:4567/semanticproxy/lookup"));
+        }catch(Exception e){/*consume*/}
         IDGeneratorAccess.activate(config.getIdGeneratorURL());
     }
 }

@@ -15,11 +15,13 @@ import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import org.openrdf.model.Literal;
 import org.openrdf.model.Model;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.Value;
 import org.openrdf.model.impl.LinkedHashModel;
+import org.openrdf.model.impl.LiteralImpl;
 import org.openrdf.model.impl.URIImpl;
 import org.openrdf.model.vocabulary.RDF;
 import org.openrdf.model.vocabulary.RDFS;
@@ -237,6 +239,120 @@ public class DBIO {
 
     }
 
+    
+    
+    /**
+     * Returns all statements with the predicate and literal object.
+     *
+     * @param predicate
+     * @param object
+     * @return
+     * @throws Exception
+     */
+    public static Statement[] getStatementsForPredAndLiteralObj(URL predicate, String object) throws IllegalStateException, RepositoryException {
+        Repository repo = DBAdministration.getRepository();
+        if (repo == null) {
+            throw new IllegalStateException("Cannot get statements for " + predicate.toString() + " and " + object.toString() + ", not connected.");
+        }
+
+        RepositoryConnection con = null;
+        try {
+            con = repo.getConnection();
+            org.openrdf.model.URI sesamPredicate = new URIImpl(predicate.toString());
+            Literal sesamLiteralObject = new LiteralImpl(object);
+            
+            //query all statement about the resource
+            RepositoryResult<Statement> result = con.getStatements(null, sesamPredicate, sesamLiteralObject, true);
+
+            ArrayList<Statement> list = new ArrayList<>();
+            //put statements into a list
+
+            while (result.hasNext()) {
+                list.add(result.next());
+            }
+            result.close();
+
+            return list.toArray(new Statement[list.size()]);
+        } catch (RepositoryException re) {
+            throw new RepositoryException("Cannot get resource description for " + predicate.toString() + "and "+object+".", re);
+        }
+
+
+    }
+    
+    
+    
+    /**
+     * Returns all statements with the predicate and resource object.
+     *
+     * @param predicate
+     * @param object
+     * @return
+     * @throws Exception
+     */
+    public static Statement[] getStatementsForPredAndResourceObj(URL predicate, URL object) throws IllegalStateException, RepositoryException {
+        Repository repo = DBAdministration.getRepository();
+        if (repo == null) {
+            throw new IllegalStateException("Cannot get statements for " + predicate.toString() + " and " + object.toString() + ", not connected.");
+        }
+
+        RepositoryConnection con = null;
+        try {
+            con = repo.getConnection();
+            org.openrdf.model.URI sesamPredicate = new URIImpl(predicate.toString());
+            org.openrdf.model.URI sesamResourceObject = new URIImpl(object.toString());
+            
+            //query all statement about the resource
+            RepositoryResult<Statement> result = con.getStatements(null, sesamPredicate, sesamResourceObject, true);
+
+            ArrayList<Statement> list = new ArrayList<>();
+            //put statements into a list
+
+            while (result.hasNext()) {
+                list.add(result.next());
+            }
+            result.close();
+
+            return list.toArray(new Statement[list.size()]);
+        } catch (RepositoryException re) {
+            throw new RepositoryException("Cannot get resource description for " + predicate.toString() + "and "+object+".", re);
+        }
+
+
+    }
+    
+    
+    
+    /**
+     * Checks whether a statement for the given parameters exists in DB
+     * @param subject
+     * @param predicate
+     * @param object
+     * @return true if statement exist, otherwise false
+     * @throws IllegalStateException
+     * @throws RepositoryException 
+     */
+    public static boolean statementExists(URL subject, URL predicate, String object) throws IllegalStateException, RepositoryException {
+        Repository repo = DBAdministration.getRepository();
+        if (repo == null) {
+            throw new IllegalStateException("Cannot check if statement exists " +subject.toString()+", "+ predicate.toString() + ", " + object.toString() + ", not connected.");
+        }
+
+        RepositoryConnection con = null;
+        try {
+            con = repo.getConnection();
+            org.openrdf.model.Resource sesamSubject = new URIImpl(subject.toString());
+            org.openrdf.model.URI sesamPredicate = new URIImpl(predicate.toString());
+            Literal sesamObject = new LiteralImpl(object);
+            
+            boolean hasStmt = con.hasStatement(sesamSubject, sesamPredicate, sesamObject, false);
+            
+            return hasStmt;
+        } catch (RepositoryException re) {
+            throw new RepositoryException("Cannot get resource description for " + predicate.toString() + "and "+object+".", re);
+        }
+    }
+    
     
 
     

@@ -14,7 +14,9 @@ import spark.Route;
 import static spark.Spark.get;
 
 /**
- *
+ * This is the web interface for search queries.
+ * A query shoud look like: .../application/search?s=keyword
+ * This interface returns a URL list of found process resources
  * @author fbensman
  */
 public class SearchAccess {
@@ -39,12 +41,12 @@ public class SearchAccess {
     
     
     /**
-     * Registeres the required routes an handlers
+     * Registeres the required routes and handlers
      */
     private SearchAccess(URL searchURL) {
 
         /**
-         * Registers the route for root for user convenience
+         * Registers the route for search access
          */
         get(
                 new Route(searchURL.getPath()) {

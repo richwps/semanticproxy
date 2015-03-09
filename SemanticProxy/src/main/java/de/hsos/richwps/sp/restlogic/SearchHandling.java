@@ -25,8 +25,8 @@ import org.openrdf.repository.RepositoryException;
 public class SearchHandling {
 
     /**
-     * Executes a keyword search for processes. Searches for exact match of
-     * keyword in identifier, title and abstract attributes
+     * Executes a keyword search for processes. Searches for exact match of all
+     * keywords in identifier, title and abstract attributes, sorts result list by hits.
      *
      * @param keyword
      * @return List of process RDF IDs ordert descending by count of hits
